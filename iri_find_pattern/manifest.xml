@@ -1,0 +1,22 @@
+<package>
+  <description brief="iri_find_pattern">
+
+     iri_find_pattern
+
+  </description>
+  <author></author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_find_pattern</url>
+  <depend package="sensor_msgs"/>
+  <depend package="opencv2"/>
+  <depend package="cv_bridge"/>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+  <depend package="image_transport"/>
+  <depend package="tf"/>
+  <depend package="eigen"/>
+
+</package>
+
+
