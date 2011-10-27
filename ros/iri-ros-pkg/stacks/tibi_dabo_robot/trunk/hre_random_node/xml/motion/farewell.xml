@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<hri_config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="hri_cfg_file.xsd">
+   <left_arm_seq>left_arm_farewell.xml</left_arm_seq>
+   <right_arm_seq>right_arm_farewell.xml</right_arm_seq>
+   <head_seq>head_farewell.xml</head_seq>
+   <face_expression></face_expression>
+   <tts_text>Adéu! Moltes gràcies a tóts i tótes per haver vingut. Ha sigut un plaer estar amb vosaltres. Espero tornar-vos a veure aviat! \item=Smack</tts_text>
+</hri_config>

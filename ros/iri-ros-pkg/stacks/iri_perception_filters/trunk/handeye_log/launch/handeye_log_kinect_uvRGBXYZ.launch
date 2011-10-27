@@ -1,0 +1,13 @@
+<!-- -*- mode: XML -*- -->
+
+<launch>
+    <param name="/handeye_log/flags/img_intensity" value="false" />
+    <param name="/handeye_log/flags/img_depth" value="false" />
+    <param name="/handeye_log/flags/matlab_pcl2" value="true" />
+    <param name="/handeye_log/flags/tf_pattern" value="false" />
+    <param name="/handeye_log/flags/tf_robot" value="false" />
+    <param name="/handeye_log/flags/tf_robot_inverse" value="false" />
+    <node pkg="handeye_log" type="handeye_log" name="handeye" output="screen" respawn="false">
+        <remap from="/input/pcl2/raw" to="/camera/rgb/points" />
+    </node>
+</launch>

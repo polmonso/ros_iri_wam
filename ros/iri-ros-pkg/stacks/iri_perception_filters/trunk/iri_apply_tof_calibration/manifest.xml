@@ -1,0 +1,16 @@
+<package>
+  <description brief="iri_apply_tof_calibration">
+
+     iri_apply_tof_calibration
+
+  </description>
+  <author>Sergi Foix</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_apply_tof_calibration</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+
+</package>
+
+

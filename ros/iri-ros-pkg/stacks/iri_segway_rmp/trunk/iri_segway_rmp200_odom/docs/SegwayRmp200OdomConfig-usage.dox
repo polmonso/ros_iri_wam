@@ -1,0 +1,6 @@
+\subsubsection usage Usage
+\verbatim
+<node name="SegwayRmp200OdomAlg" pkg="iri_segway_rmp200_odom" type="SegwayRmp200OdomAlg">
+</node>
+\endverbatim
+

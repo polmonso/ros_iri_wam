@@ -1,0 +1,15 @@
+<package>
+  <description brief="teo_rosbag_filters">
+      Package to store some post-processing filters doing during TEO
+      development. They could be useful in another moment.
+
+       - clean_odom_tf: remove from the bag all tf with odom as parent
+                        frame_id.
+  </description>
+  <author>Jose Luis Rivero (jrivero@iri.upc.edu)</author>
+  <license>BSD</license>
+  <url></url>
+  <depend package="roscpp"/>
+  <depend package="rosbag"/>
+  <depend package="tf"/>
+</package>

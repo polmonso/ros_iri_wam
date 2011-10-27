@@ -1,0 +1,19 @@
+<package>
+  <description brief="hre_random_node">
+
+     hre_random_node
+
+  </description>
+  <author>Sergi Hernandez Juan</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/hre_random_node</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="tibi_dabo_msgs"/>
+  <depend package="actionlib"/>
+  <depend package="move_base_msgs"/>
+
+</package>
+
+

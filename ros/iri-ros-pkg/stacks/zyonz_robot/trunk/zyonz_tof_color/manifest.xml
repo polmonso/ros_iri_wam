@@ -1,0 +1,22 @@
+<package>
+  <description brief="zyonz_tof_color_node">
+
+     zyonz_tof_color_node
+
+  </description>
+  <author>Guillem Alenyà - IRI Robotics Lab</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://wikiri.upc.edu</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_driver"/>
+  <depend package="std_srvs"/>
+  <depend package="sensor_msgs"/>
+  <depend package="eigen"/>
+  <depend package="cv_bridge"/>
+  <depend package="opencv2"/>
+  <depend package="iri_pcl_filters"/>
+  <depend package="pmdcamera_node"/>
+</package>
+
+

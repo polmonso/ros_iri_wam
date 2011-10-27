@@ -1,0 +1,13 @@
+<!-- -->
+<launch>
+  <node pkg="iri_hokuyo_laser" type="iri_hokuyo_laser"
+        name="front_laser"
+        machine="laurel"
+        respawn="true">
+        <param name="frame_id" value="$(env ROBOT)/front_laser" />
+    <param name="use_ethernet" value="True" />
+    <param name="ip_address" value="192.168.0.11" />
+    <param name="angle_min" value="-1.5" />
+    <param name="angle_max" value="1.5" />
+  </node>
+</launch>

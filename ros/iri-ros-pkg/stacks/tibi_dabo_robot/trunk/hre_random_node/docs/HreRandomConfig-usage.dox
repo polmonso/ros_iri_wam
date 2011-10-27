@@ -1,0 +1,11 @@
+\subsubsection usage Usage
+\verbatim
+<node name="HreRandomAlgorithm" pkg="hre_random_node" type="HreRandomAlgorithm">
+  <param name="op_mode" type="int" value="0" />
+  <param name="seq_file" type="str" value="" />
+  <param name="home_interval" type="int" value="3" />
+  <param name="speech_interval" type="int" value="1" />
+  <param name="repeat_interval" type="int" value="3" />
+</node>
+\endverbatim
+

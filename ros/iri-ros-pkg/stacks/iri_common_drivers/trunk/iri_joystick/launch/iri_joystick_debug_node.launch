@@ -1,0 +1,18 @@
+<!-- %Tag(FULL)%-->
+<launch>
+
+
+ <!-- iri joy node -->
+  <node respawn="true"
+        pkg="iri_joystick"
+        type="iri_joystick_node"
+        name="joy"
+        launch-prefix="xterm -e ddd --args">
+
+    <param name="dev" type="string" value="/dev/input/js0" />
+    <param name="deadzone" value="0.12" />
+  </node>
+
+
+</launch>
+<!-- %EndTag(FULL)%-->

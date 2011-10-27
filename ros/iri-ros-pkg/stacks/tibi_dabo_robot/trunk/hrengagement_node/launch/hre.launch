@@ -1,0 +1,64 @@
+<!-- -->
+
+<launch>
+
+  <arg name="launch_rviz" default="False" />
+
+  <!-- load robot defined machines -->
+  <include file="$(find tibi_dabo_base)/machines/tibi_dabo.machines" />
+
+  <!-- FME scenario -->
+  <include file="$(find tibi_dabo_base)/launch/$(env MAP).launch" />
+
+  <!-- static transform for map -->
+  <node  pkg="tf"
+        type="static_transform_publisher" 
+        name="env_to_odom"
+        args="8 10 0 0 0 0 /environment /$(env ROBOT)/odom 100" />
+
+<!--   <node  pkg="rosbag"  -->
+<!--         type="rosbag"  -->
+<!--         name="rosbag"  -->
+<!--         args="play clock -l /home/jnperez/rosbags/hre-test-01-2011-10-03-11-46-07-fixed.bag"  -->
+<!--         output="screen" /> -->
+
+  <!-- No Collision Launch File -->
+  <include file="$(find iri_no_collision)/launch/iri_no_collision.launch">
+    <arg name="launch_rviz" value="False" />
+    <arg name="launch_rviz_client" value="False" />
+  </include>
+
+  <!-- HRI File -->
+  <include file="$(find tibi_dabo_hri_node)/launch/tibi_dabo_hri.launch"/>
+
+  <!-- People Tracker Launch File -->
+  <include file="$(find iri_people_tracking)/launch/people_tracking.launch">
+    <arg name="launch_rviz" value="False" />
+    <arg name="launch_laser" value="False" />
+  </include>
+<!--   <node  pkg="rosbag" type="rosbag" name="rosbag" args="play -l /home/jnperez/rosbags/twoPersons.bag" /> -->
+
+  <group ns="$(env ROBOT)">
+
+    <!-- hre -->
+    <node pkg ="hrengagement_node"
+          type="hrengagement_node"
+          name="hrengagement_node"
+          machine="visio"
+          output="screen">
+      <remap from="/$(env ROBOT)/hrengagement_node/people_tracker"
+               to="/$(env ROBOT)/iri_people_tracking/peopleSet" />
+      <remap from="/$(env ROBOT)/hri"
+               to="/$(env ROBOT)/tibi_dabo_hri_node/hri" />
+      <remap from="/$(env ROBOT)/MoveBase"
+               to="/$(env ROBOT)/iri_no_collision/MoveBase" />
+      <param name="~tf_prefix" value="/$(env ROBOT)" />
+    </node>
+
+  </group>
+
+  <!-- rviz configurated -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hrengagement_node)/config/hrengagement.vcg" 
+        if="$(arg launch_rviz)" />
+
+</launch>

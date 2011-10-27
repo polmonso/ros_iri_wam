@@ -1,0 +1,19 @@
+<launch>
+  <master auto="start"/>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <remap from="cmd_vel" to="/teo/segway/cmd_vel" />
+    <remap from="odom" to="/teo/odom" />
+
+    <rosparam file="$(find teo_2dnav)/config/navigation_local/base_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find teo_2dnav)/config/move_base_params.yaml" command="load" />
+
+    <!-- Local costmap configs: common + local -->
+    <rosparam file="$(find teo_2dnav)/config/navigation_local/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find teo_2dnav)/config/navigation_local/local_costmap_params.yaml" command="load" />
+
+    <!-- Global costmap config: common + global -->
+    <rosparam file="$(find teo_2dnav)/config/navigation_local/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find teo_2dnav)/config/navigation_local/global_costmap_params.yaml" command="load" />
+  </node>
+</launch>

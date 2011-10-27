@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+
+<motion_seq xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="motion_sequence_file.xsd">
+   <num_motors>3</num_motors>
+   <num_steps>4</num_steps>
+   <control>position</control>
+   <motion>relative</motion>
+
+   <step>
+     <position>-10.0</position>
+     <position>0.0</position>
+     <position>7.5</position>
+     <velocity>20.0</velocity>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <delay>800</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>15</position>
+     <position>0.0</position>
+     <velocity>20.0</velocity>
+     <velocity>20.0</velocity>
+     <velocity>20.0</velocity>
+     <delay>900</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>-7.5</position>
+     <position>7.5</position>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <velocity>30.0</velocity>
+     <delay>1100</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>-7.5</position>
+     <position>-15</position>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <velocity>30.0</velocity>
+     <delay>1200</delay>
+   </step>
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <step>
+     <position>20.0</position>
+     <position>-7.5</position>
+     <position>0.0</position>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <velocity>20.0</velocity>
+     <delay>1500</delay>
+   </step>
+   <step>
+     <position>-5.0</position>
+     <position>0.0</position>
+     <position>7.5</position>
+     <velocity>30.0</velocity>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <delay>900</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>10.0</position>
+     <position>7.5</position>
+     <velocity>20.0</velocity>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <delay>1100</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>-5.0</position>
+     <position>-15.0</position>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <velocity>20.0</velocity>
+     <delay>1000</delay>
+   </step>
+   <step>
+     <position>-15.0</position>
+     <position>0.0</position>
+     <position>0.0</position>
+     <velocity>20.0</velocity>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <delay>900</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>-7.5</position>
+     <position>0.0</position>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <velocity>20.0</velocity>
+     <delay>600</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>0.0</position>
+     <position>10.0</position>
+     <velocity>20.0</velocity>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <delay>900</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>7.5</position>
+     <position>-5.0</position>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <velocity>30.0</velocity>
+     <delay>4000</delay>
+   </step>
+
+
+
+
+
+
+
+   <step>
+     <position>-15.0</position>
+     <position>-10.0</position>
+     <position>0.0</position>
+     <velocity>25.0</velocity>
+     <velocity>15.0</velocity>
+     <velocity>15.0</velocity>
+     <delay>900</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>-7.5</position>
+     <position>-10.0</position>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <velocity>20.0</velocity>
+     <delay>1100</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>5.0</position>
+     <position>0.0</position>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <velocity>20.0</velocity>
+     <delay>1200</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>0.0</position>
+     <position>5.0</position>
+     <velocity>20.0</velocity>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <delay>1500</delay>
+   </step>
+   <step>
+     <position>0.0</position>
+     <position>0.0</position>
+     <position>5.0</position>
+     <velocity>20.0</velocity>
+     <velocity>20.0</velocity>
+     <velocity>30.0</velocity>
+     <delay>1200</delay>
+   </step>
+
+
+
+
+
+
+</motion_seq>

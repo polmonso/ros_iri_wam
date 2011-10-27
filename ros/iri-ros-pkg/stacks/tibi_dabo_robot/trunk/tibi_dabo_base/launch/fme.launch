@@ -1,0 +1,17 @@
+<!-- -->
+
+<launch>
+
+  <param name="fme/robot_description" command="cat $(find tibi_dabo_base)/model/fme.urdf" />
+
+  <!-- joint state publisher node -->
+<!--   <node pkg="joint_state_publisher" type="joint_state_publisher" name="fme_joint_state_publisher"> -->
+<!--     <remap from="robot_description" to="fme/robot_description" /> -->
+<!--   </node> -->
+
+  <!-- robot state publisher node -->
+  <node pkg="robot_state_publisher" type="state_publisher" name="fme_robot_state_publisher">
+    <remap from="robot_description" to="fme/robot_description" />
+  </node>
+
+</launch>

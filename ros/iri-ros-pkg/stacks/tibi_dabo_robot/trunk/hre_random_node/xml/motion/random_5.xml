@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<hri_config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="hri_cfg_file.xsd">
+   <left_arm_seq>left_arm_random_5.xml</left_arm_seq>
+   <right_arm_seq>right_arm_random_5.xml</right_arm_seq>
+   <head_seq>head_random_5.xml</head_seq>
+   <face_expression></face_expression>
+   <tts_text></tts_text>
+</hri_config>

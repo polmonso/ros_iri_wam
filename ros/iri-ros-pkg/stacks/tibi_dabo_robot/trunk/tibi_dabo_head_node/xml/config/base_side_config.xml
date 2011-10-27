@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<motor_config>
+  <num_axis>1</num_axis>
+  <axis_config>
+    <accel_range>
+      <max>0</max>
+      <min>0</min>
+    </accel_range>
+    <velocity_range>
+      <max>684</max>
+      <min>0</min>
+    </velocity_range>
+    <position_range>
+      <max>300</max>
+      <min>0</min>
+    </position_range>
+    <encoder_res>1</encoder_res>
+    <gear_factor>1.0</gear_factor>
+  </axis_config>
+  <config_file>xml/config/side_config.xml</config_file>
+  <position_feedback>
+    <enabled>1</enabled>
+    <mode>polling</mode>
+    <rate>100.0</rate>
+  </position_feedback>
+  <velocity_feedback>
+    <enabled>0</enabled>
+    <mode>polling</mode>
+    <rate>100.0</rate>
+  </velocity_feedback>
+  <limits_feedback>
+    <enabled>0</enabled>
+    <mode>polling</mode>
+    <rate>10.0</rate>
+  </limits_feedback>
+</motor_config>

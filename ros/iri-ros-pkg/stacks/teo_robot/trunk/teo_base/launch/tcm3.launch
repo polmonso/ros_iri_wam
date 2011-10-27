@@ -1,0 +1,11 @@
+<!-- -->
+<launch>
+  <node pkg="iri_tcm3_compass" type="iri_tcm3_compass"
+        name="tcm3"
+        machine="laurel"
+	respawn="true">
+	<param name="frame_id" value="$(env ROBOT)/tcm3" />
+    <param name="mounting_position" value="6"/>
+    <param name="relative" value="true"/>
+  </node>
+</launch>

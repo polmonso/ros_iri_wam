@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<ptud46_config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="ptud46_cfg_file.xsd">
+
+  <pan_cfg>
+    <stdy_power_mode>low</stdy_power_mode>
+    <move_power_mode>regular</move_power_mode>
+    <base_speed>20.0</base_speed>
+  </pan_cfg>
+  <tilt_cfg>
+    <stdy_power_mode>low</stdy_power_mode>
+    <move_power_mode>regular</move_power_mode>
+    <base_speed>20.0</base_speed>
+  </tilt_cfg>
+  <serial_port>/dev/ttyS1</serial_port>
+</ptud46_config>

@@ -1,0 +1,10 @@
+\subsubsection usage Usage
+\verbatim
+<node name="FilterTableAlgorithm" pkg="iri_filter_table" type="FilterTableAlgorithm">
+  <param name="max_z" type="double" value="0.8" />
+  <param name="sac_dist_thr" type="double" value="0.001" />
+  <param name="filter_final_ratio" type="double" value="0.6" />
+  <param name="rad_radius_search" type="double" value="0.1" />
+</node>
+\endverbatim
+

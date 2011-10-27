@@ -1,0 +1,24 @@
+\subsubsection usage Usage
+\verbatim
+<node name="FirewireCameraDriver" pkg="firewire_camera_node" type="FirewireCameraDriver">
+  <param name="Camera_node" type="int" value="-1" />
+  <param name="ISO_speed" type="int" value="800" />
+  <param name="Image_width" type="int" value="640" />
+  <param name="Image_height" type="int" value="480" />
+  <param name="Left_offset" type="int" value="0" />
+  <param name="Top_offset" type="int" value="0" />
+  <param name="Framerate" type="double" value="50.0" />
+  <param name="Color_coding" type="int" value="0" />
+  <param name="White_balance_enabled" type="bool" value="False" />
+  <param name="White_balance_mode" type="int" value="0" />
+  <param name="White_balance_u_b_value" type="int" value="0" />
+  <param name="White_balance_v_r_value" type="int" value="0" />
+  <param name="Shutter_enabled" type="bool" value="False" />
+  <param name="Shutter_mode" type="int" value="0" />
+  <param name="Shutter_value" type="int" value="0" />
+  <param name="Gain_enabled" type="bool" value="False" />
+  <param name="Gain_mode" type="int" value="0" />
+  <param name="Gain_value" type="int" value="0" />
+</node>
+\endverbatim
+

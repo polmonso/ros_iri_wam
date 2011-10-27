@@ -1,0 +1,30 @@
+<launch>
+
+  <include file="$(find teo_base)/launch/teo_state_publisher.launch" />
+
+  <param name="/use_sim_time" value="true"/>
+
+  <node pkg="rviz" type="rviz" name="rviz"
+    args="-d $(find laser_scan_matcher)/demo/demo-marti.vcg"/>
+
+  <node pkg="rosbag" type="rosbag" name="rosbag"
+    args="play $(find laser_scan_matcher)/demo/first-round-scan.bag --delay=5 --clock">
+    <remap from="/teo/front_laser/scan" to="/scan"/>
+    </node>
+
+  <node pkg="laser_scan_matcher" type="laser_scan_matcher_node"
+    name="laser_scan_matcher_node" output="screen">
+
+    <param name="use_alpha_beta" value="true"/>
+    <param name="max_iterations" value="10"/>
+    <param name="base_frame" value="base_footprint"/>
+    <param name="publish_tf" value="true"/>
+    <param name="publish_pose" value="true"/>
+    <param name="publish_pose2d" value="true"/>
+
+  </node>
+
+  <node pkg="tf" type="static_transform_publisher" name="base_link_icp_pose"
+    args="0.0 0.0 0.0 0.0 0.0 0.0 /base_footprint /icp_pose 40" />
+
+</launch>

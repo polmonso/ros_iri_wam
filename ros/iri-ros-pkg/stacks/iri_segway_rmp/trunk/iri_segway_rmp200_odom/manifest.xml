@@ -1,0 +1,19 @@
+<package>
+  <description brief="iri_segway_rmp200_odom">
+
+     iri_segway_rmp200_odom
+
+  </description>
+  <author></author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_segway_rmp200_odom</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="iri_odometry_core"/>
+  <depend package="iri_generic_odometry"/>
+  <depend package="iri_segway_rmp200"/>
+
+</package>
+
+

@@ -1,0 +1,12 @@
+<package>
+  <description brief="teo_2dnav">
+      Teo Robot 2D Navigation package
+  </description>
+  <author>Jose Luis Rivero</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url></url>
+  <depend package="teo_base" />
+</package>
+
+

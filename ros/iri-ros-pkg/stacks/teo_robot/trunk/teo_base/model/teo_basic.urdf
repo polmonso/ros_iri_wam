@@ -1,0 +1,174 @@
+<!--
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          TEO ROBOT URDF MODEL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          Institut de Robotica i Informatica Industrial (IRI) UPC-CSIC
+          author: mmorta
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ -->
+
+<robot name="teo" 
+    xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+    xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+    xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface">
+
+<!-- BODY -->
+  <!-- link -->
+  <link name="body">
+    <visual>
+      <origin xyz="0 0 0.125"/>
+      <geometry>
+       <box size="0.37 0.97 0.27"/>
+      </geometry>
+      <material name="grey">
+        <color rgba="0.3 0.3 .3 1"/>
+      </material>
+    </visual>
+    <!-- gazebo (inertia, collision, material)-->
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="100.0" />
+      <inertia  ixx="1.748" ixy="0.0"  ixz="0.0"  iyy="8.448"  iyz="0.0"  izz="8.982"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <box size="0.37 0.97 0.27"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="body">
+    <material>PR2/Grey3</material>
+  </gazebo>
+
+<!-- WHEEL FRONT LEFT -->
+  <!-- joint -->
+  <joint name="body2wheel_fl" type="fixed" >
+    <parent link="body"/>
+    <child link="wheel_fl"/>
+    <origin xyz="0.27 0.2875 0" rpy="0 1.57079 0"/>
+    <axis xyz="0 1 0" />
+  </joint>
+  <!-- link -->
+  <link name="wheel_fl">
+    <visual>
+      <geometry>
+        <cylinder length="0.15" radius="0.25"/>
+      </geometry>
+      <material name="dark_grey">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+    <!-- gazebo (inertia, collision, material)-->
+    <inertial>
+      <mass value="100.0" />
+      <inertia  ixx="0.0529" ixy="0.0"  ixz="0.0"  iyy="0.09375"  iyz="0.0"  izz="0.0529"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <cylinder length="0.015" radius="0.25"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="wheel_fl">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+<!-- WHEEL FRONT RIGHT -->
+  <!-- joint -->
+  <joint name="body2wheel_fr" type="fixed" >
+    <parent link="body"/>
+    <child link="wheel_fr"/>
+    <origin xyz="0.27 -0.2875 0" rpy="0 1.57079 0"/>
+  </joint>
+  <!-- link -->
+  <link name="wheel_fr">
+    <visual>
+      <geometry>
+        <cylinder length="0.15" radius="0.25"/>
+      </geometry>
+      <material name="dark_grey">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="100.0" />
+      <inertia  ixx="0.0529" ixy="0.0"  ixz="0.0"  iyy="0.09375"  iyz="0.0"  izz="0.0529"/>
+    </inertial>
+    <!-- gazebo (inertia, collision, material)-->
+    <collision>
+      <geometry>
+        <cylinder length="0.015" radius="0.25"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="wheel_fr">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+<!-- WHEEL BACK LEFT -->
+  <!-- joint -->
+  <joint name="body2wheel_bl" type="fixed" >
+    <parent link="body"/>
+    <child link="wheel_bl"/>
+    <origin xyz="-0.27 0.2875 0" rpy="0 1.57079 0"/>
+  </joint>
+  <!-- link -->
+  <link name="wheel_bl">
+    <visual>
+      <geometry>
+        <cylinder length="0.15" radius="0.25"/>
+      </geometry>
+      <material name="dark_grey">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+    <!-- gazebo (inertia, collision, material)-->
+    <inertial>
+      <mass value="100.0" />
+      <inertia  ixx="0.0529" ixy="0.0"  ixz="0.0"  iyy="0.09375"  iyz="0.0"  izz="0.0529"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <cylinder length="0.015" radius="0.25"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="wheel_bl">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+<!-- WHEEL BACK RIGHT -->
+  <!-- joint -->
+  <joint name="body2wheel_br" type="fixed" >
+    <parent link="body"/>
+    <child link="wheel_br"/>
+    <origin xyz="-0.27 -0.2875 0" rpy="0 1.57079 0"/>
+  </joint>
+  <!-- link -->
+  <link name="wheel_br">
+    <visual>
+      <geometry>
+        <cylinder length="0.15" radius="0.25"/>
+      </geometry>
+      <material name="dark_grey">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+    <!-- gazebo (inertia, collision, material)-->
+    <inertial>
+      <mass value="100.0" />
+      <inertia  ixx="0.0529" ixy="0.0"  ixz="0.0"  iyy="0.09375"  iyz="0.0"  izz="0.0529"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <cylinder length="0.015" radius="0.25"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="wheel_br">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+
+</robot>

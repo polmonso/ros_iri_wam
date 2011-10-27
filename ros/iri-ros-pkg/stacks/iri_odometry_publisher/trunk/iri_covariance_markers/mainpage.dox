@@ -1,0 +1,28 @@
+/**
+\mainpage IRI Covariance Markers
+<p>
+\b Description:
+- This node creates covariance elipses as a Marker Array from an Odometry message. This is meant to be used with RViz
+.
+</p>
+<div style="width:100%; height:0px; border-top:1px solid #CCC;border-bottom:1px solid #EEE;"></div>
+\htmlinclude manifest.html
+
+<div style="float:left; margin:20px;">\image html http://www.iri.upc.edu/images/logo.png </div>
+
+<!--
+\section codeapi Code API
+
+
+Provide links to specific auto-generated API documentation within your
+package that is of particular interest to a reader. Doxygen will
+document pretty much every part of your code, so do your best here to
+point the reader to the actual API.
+
+If your codebase is fairly large or has different sets of APIs, you
+should use the doxygen 'group' tag to keep these APIs together. For
+example, the roscpp documentation has 'libros' group.
+-->
+
+
+*/

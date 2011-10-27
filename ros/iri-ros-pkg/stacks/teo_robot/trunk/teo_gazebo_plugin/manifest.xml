@@ -1,0 +1,19 @@
+<package>
+  <description brief="teo_simulator">
+     Teo robot simulator package. Originally oriented to work with Gazebo.
+  </description>
+  <author>Jose Luis Rivero</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url></url>
+  <depend package="gazebo"/>
+  <depend package="gazebo_plugins"/>
+  <depend package="roscpp"/>
+  <depend package="geometry_msgs" />
+  <depend package="nav_msgs" />
+  <depend package="tf" />
+  <depend package="driver_base" />
+  <export>
+    <gazebo plugin_path="${prefix}/lib" />
+  </export>
+</package>

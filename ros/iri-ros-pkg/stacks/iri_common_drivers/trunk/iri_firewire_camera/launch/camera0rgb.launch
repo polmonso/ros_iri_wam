@@ -1,0 +1,8 @@
+<launch>
+
+       <node name="iri_firewire_camera" pkg="iri_firewire_camera" type="firewire_camera_node" output="screen">
+       <param name="Camera_node" value="0" />
+       <param name="Framerate" value="30" />
+       <param name="Color_coding" value="3" />
+       </node>
+</launch>

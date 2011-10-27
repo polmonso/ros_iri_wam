@@ -1,0 +1,16 @@
+\subsubsection usage Usage
+\verbatim
+<node name="HokuyoLaserDriver" pkg="iri_hokuyo_laser" type="HokuyoLaserDriver">
+  <param name="angle_min" type="double" value="-1.57079632679" />
+  <param name="angle_max" type="double" value="1.57079632679" />
+  <param name="cluster" type="int" value="0" />
+  <param name="interval" type="int" value="0" />
+  <param name="type" type="int" value="1" />
+  <param name="high_sensivity" type="bool" value="False" />
+  <param name="use_ethernet" type="bool" value="False" />
+  <param name="usb_port" type="str" value="/dev/ttyACM0" />
+  <param name="ip_address" type="str" value="192.168.0.10" />
+  <param name="frame_id" type="str" value="/laser" />
+</node>
+\endverbatim
+

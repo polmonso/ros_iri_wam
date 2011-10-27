@@ -1,0 +1,18 @@
+<package>
+  <description brief="iri_leuze_laser">
+
+     iri_leuze_laser
+
+  </description>
+  <author></author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_leuze_laser</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_driver"/>
+  <depend package="sensor_msgs"/>
+  <depend package="iri_common_msgs"/>
+
+</package>
+
+

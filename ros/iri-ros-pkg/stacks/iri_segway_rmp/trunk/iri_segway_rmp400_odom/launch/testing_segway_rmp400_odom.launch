@@ -1,0 +1,40 @@
+<launch>
+
+  <!-- <arg name="robot_ns"      default="True" /> -->
+  <!-- <arg name="segway_driver" default="segway_rmp200_node" /> -->
+
+  <arg name="joystick" default="True" />
+  <arg name="wiimote"  default="True" />
+
+  <group ns="$(env ROBOT)">
+
+    <!-- segway rmp 400 platform -->
+    <node pkg="iri_segway_rmp400"
+          type="segway_rmp400_node"
+          name="iri_segway_rmp400"/>
+
+    <!-- segway rmp 400 odometry -->
+    <node pkg="iri_segway_rmp400_odom"
+          type="segway_rmp400_odom"
+          name="iri_segway_rmp400_odom"
+          output="screen">
+      <remap from="/$(env ROBOT)/segway_rmp400_odom/platform_status"
+               to="/$(env ROBOT)/segway_rmp400_node/status" />
+    </node>
+
+    <!-- teleoperation -->
+    <group if="$(arg joystick)">
+
+      <!-- wiimote teleop -->
+      <include file="$(find iri_wiimote_teleop)/launch/wiimote_teleop.launch"
+                if="$(arg wiimote)" />
+
+      <!-- gamepad teleop -->
+      <include file="$(find iri_gamepad_teleop)/launch/gamepad_teleop.launch"
+                unless="$(arg wiimote)" />
+
+    </group>
+
+  </group>
+
+</launch>

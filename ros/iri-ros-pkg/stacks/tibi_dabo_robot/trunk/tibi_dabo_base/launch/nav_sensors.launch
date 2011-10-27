@@ -1,0 +1,108 @@
+<!-- -->
+<launch>
+
+  <arg name="launch_rviz" default="False" />
+  <arg name="teleop" default="False" />
+  <arg name="wiimote" default="True" />
+
+  <!-- load robot defined machines -->
+  <include file="$(find tibi_dabo_base)/machines/tibi_dabo.machines" />
+
+  <group ns="$(env ROBOT)">
+
+    <!-- iri segway node -->
+    <node pkg ="iri_segway_rmp200"
+          type="iri_segway_rmp200"
+          name="iri_segway_rmp200"
+          machine="nav">
+    </node>
+
+    <!-- tibi_dabo urdf model -->
+    <param name="robot_description" command="cat $(find tibi_dabo_base)/model/tibi_dabo_base.urdf" />
+
+    <!-- joint state publisher node -->
+<!--     <node pkg ="joint_state_publisher"  -->
+<!--           type="joint_state_publisher"  -->
+<!--           name="$(env ROBOT)_joint_state_publisher" -->
+<!--           machine="nav"> -->
+<!--     </node> -->
+
+    <!-- robot state publisher node -->
+    <node pkg ="robot_state_publisher"
+          type="state_publisher"
+          name="robot_state_publisher"
+          machine="nav">
+      <param name="~tf_prefix" value="/$(env ROBOT)" type="str"/>
+    </node>
+
+    <!-- front laser -->
+    <node pkg ="hokuyo_node"
+          type="hokuyo_node"
+          name="front_laser"
+          machine="nav">
+      <remap from="/$(env ROBOT)/scan"
+               to="/$(env ROBOT)/front_laser/scan" />
+      <param name="frame_id" value="/$(env ROBOT)/front_laser" type="str" />
+      <param name="port" value="/dev/hokuyo_H0805704" type="str" />
+    </node>
+<!--      <node pkg="iri_hokuyo_laser" -->
+<!--           type="iri_hokuyo_laser" -->
+<!--           name="front_laser" -->
+<!--           machine="nav" -->
+<!--           output="screen"> -->
+<!--       <remap from="/$(env ROBOT)/scan" -->
+<!--                to="/$(env ROBOT)/front_laser/scan" /> -->
+<!--       <param name="frame_id" value="$(env ROBOT)/front_laser" type="str" /> -->
+<!--       <param name="use_ethernet" type="bool" value="False"/> -->
+<!--       <param name="~tf_prefix" value="$(env ROBOT)" type="str"/> -->
+<!--     </node> -->
+
+    <!-- rear laser -->
+    <node pkg ="iri_leuze_laser"
+          type="iri_leuze_laser"
+          name="rear_laser"
+          machine="nav">
+      <remap from="/$(env ROBOT)/scan"
+               to="/$(env ROBOT)/rear_laser/scan" />
+      <param name="frame_id" value="/$(env ROBOT)/rear_laser" type="str" />
+      <param name="serial_port" value="/dev/ttyS0" type="str" />
+    </node>
+
+    <!-- vertical laser -->
+    <node pkg ="hokuyo_node"
+          type="hokuyo_node" 
+          name="vertical_laser"
+          machine="nav">
+      <remap from="/$(env ROBOT)/scan"
+               to="/$(env ROBOT)/vertical_laser/scan" />
+      <param name="frame_id" value="/$(env ROBOT)/vertical_laser" type="str" />
+      <param name="port" value="/dev/hokuyo_H0805705" type="str" />
+    </node>
+
+    <!-- segway rmp 200 odometry -->
+    <node pkg ="iri_segway_rmp200_odom"
+          type="iri_segway_rmp200_odom"
+          name="iri_segway_rmp200_odom"
+          machine="nav">
+      <param name="~tf_prefix" value="/$(env ROBOT)" />
+      <remap from="/$(env ROBOT)/iri_segway_rmp200_odom/platform_status"
+               to="/$(env ROBOT)/iri_segway_rmp200/status" />
+    </node>
+
+  </group>
+
+  <!-- teleoperation -->
+  <group if="$(arg teleop)">
+    <!-- wiimote teleop -->
+    <include file="$(find iri_wiimote_teleop)/launch/iri_wiimote_teleop.launch"
+              if="$(arg wiimote)" />
+    <!-- gamepad teleop -->
+    <include file="$(find iri_gamepad_teleop)/launch/iri_gamepad_teleop.launch"
+              unless="$(arg wiimote)" />
+  </group>
+
+  <!-- rviz configurated -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tibi_dabo_base)/config/nav_sensors.vcg" 
+        if="$(arg launch_rviz)" />
+
+</launch>

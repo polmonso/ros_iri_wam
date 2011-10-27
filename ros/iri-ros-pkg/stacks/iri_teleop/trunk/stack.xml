@@ -1,0 +1,8 @@
+<stack>
+  <description brief="iri_teleop">IRI Teleop Stack</description>
+  <author>Maintained by Joan Perez</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_teleop</url>
+  <depend stack="ros" />
+</stack>

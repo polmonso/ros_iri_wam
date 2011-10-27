@@ -1,0 +1,105 @@
+/**
+\mainpage IRI Hokyo Laser3D
+<table border="0" width="100%" valign="top">
+<tr>
+<td>
+\image html diagrama_h3d.jpg
+</td>
+<td>
+<p>
+\b Description:
+- This is a high level driver to manage Hokuyo3D, a 3D laser Scanner based in Hokuyo UTM30lx.
+.
+</p>
+<p>
+\b Functionalities:
+- Configure the scan, via parameter server or dynamic reconfigure gui
+  - Resolution, dg/slice
+  - Laser Mode, distance or distance+intensity
+- Get a 3D Scan via service
+- Get continuous 3D Scans
+.
+</p>
+<p>
+\b More \b information:
+- <a href="http://wikiri.upc.es/index.php/Hokuyo_Laser_3D_driver" target="blank">IRI's wiki page</a>
+- <a href="http://fanfare.upc.es/docs/hokuyo_laser3d/index.html" target="blank">Low level driver documentation</a>
+.
+</p>
+</td>
+</tr>
+</table>
+<div style="width:100%; height:0px; border-top:1px solid #CCC;border-bottom:1px solid #EEE;"></div>
+\htmlinclude manifest.html
+
+\section howto How to:
+
+\subsection run Run node
+Call this node from rosrun:
+\code
+rosrun iri_hokuyo_laser3d iri_hokuyo_laser3d frame_id:=/robot/laser3d
+\endcode
+Call this node from launch:
+\code
+<launch>
+  <node pkg="iri_hokuyo_laser3d"
+        type="iri_hokuyo_laser3d"
+        name="h3d"
+        output="screen">
+    <param name="frame_id" value="/robot/laser3d"/>
+    <param name="laser_port" value="/dev/ttyACM0" />
+    <param name="scan_mode" value="True" /> <!-- from home position:True, from current position:False -->
+    <param name="resolution" value="0.5" /> <!-- [0.05, 2] -->
+    <param name="laser_mode" value="1" />   <!-- range:0, range+intensity:1 -->
+    <param name="continuous" value="False" />
+    <param name="publish_pointcloud" value="False" />
+    <param name="publish_pointcloud2" value="True" />
+  </node>
+</launch>
+\endcode
+
+\subsection call Call service
+Call the service from command line:
+\code
+rosservice call /robot/laser3d/get_3d_scan 1.0
+\endcode
+Call the service from code
+in manifest file:
+\code
+<depend package="iri_hokuyo_laser3d" />
+\endcode
+in cpp code:
+\code
+#include <iri_hokuyo_laser3d/Get3DScan.h>
+
+iri_hokuyo_laser3d::Get3DScan get_pointcloud;
+get_pointcloud.request.request = 1;
+if(ros::service::exists("/robot/laser3d/get_3d_scan",true))
+{
+  if(ros::service::call("/robot/laser3d/get_3d_scan", get_pointcloud))
+    ROS_DEBUG("get_3d_scan Service Called");
+  else
+    ROS_WARN("get_3d_scan Service NOT Called");
+}else{
+  ROS_WARN("get_3d_scan service doesn't exist!");
+}
+\endcode
+
+<div style="float:left; margin:20px;">\image html http://www.iri.upc.edu/images/logo.png </div>
+
+<!--
+\section codeapi Code API
+
+
+Provide links to specific auto-generated API documentation within your
+package that is of particular interest to a reader. Doxygen will
+document pretty much every part of your code, so do your best here to
+point the reader to the actual API.
+
+If your codebase is fairly large or has different sets of APIs, you
+should use the doxygen 'group' tag to keep these APIs together. For
+example, the roscpp documentation has 'libros' group.
+-->
+
+
+*/

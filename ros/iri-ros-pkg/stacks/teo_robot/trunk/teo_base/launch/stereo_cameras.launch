@@ -1,0 +1,28 @@
+<!-- -->
+<launch>
+
+  <node pkg="iri_firewire_camera" type="iri_firewire_camera"
+           name="right_camera"
+           machine="laurel"
+           output="screen">
+           <param name="frame_id" value="$(env ROBOT)/right_camera" />
+    <param name="C<param name="frame_id" value="$(env ROBOT)/h3d" />amera_node"  value="0" />
+    <param name="Color_coding" value="3"    type="int" />
+    <param name="Framerate"    value="1.0"    type="double" />
+    <param name="Image_height" value="1280" type="int" />
+    <param name="Image_width"  value="960"  type="int" />
+  </node>
+
+  <node pkg="iri_firewire_camera" type="iri_firewire_camera"
+           name="left_camera"
+           machine="laurel"
+           output="screen">
+           <param name="frame_id" value="$(env ROBOT)/left_camera" />
+    <param name="Camera_node"  value="1" />
+    <param name="Color_coding" value="3"    type="int" />
+    <param name="Framerate"    value="1.0"  type="double" />
+    <param name="Image_height" value="1280" type="int" />
+    <param name="Image_width"  value="960"  type="int" />
+  </node>
+
+</launch>

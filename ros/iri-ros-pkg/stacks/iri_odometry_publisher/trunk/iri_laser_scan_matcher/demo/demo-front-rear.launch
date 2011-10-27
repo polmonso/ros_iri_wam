@@ -1,0 +1,54 @@
+<launch>
+
+  <include file="$(find teo_base)/launch/teo_state_publisher.launch" />
+
+  <param name="/use_sim_time" value="true"/>
+<!--
+  <node pkg="rviz" type="rviz" name="rviz"
+    args="-d $(find laser_scan_matcher)/demo/demo-front-rear.vcg"/>
+-->
+
+  <node pkg="rosbag" type="rosbag" name="rosbag"
+    args="play $(find laser_scan_matcher)/demo/fme-2.bag --start=15 --clock">
+    <remap from="/teo/front_laser/scan" to="scan1"/>
+    <remap from="/teo/rear_laser/scan"  to="scan2"/>
+    </node>
+
+  <node pkg="laser_scan_matcher" type="laser_scan_matcher_node"
+    name="front_laser_scan_matcher_node" output="screen">
+
+    <param name="frameid" value="frontlaser"/>
+    <param name="use_alpha_beta" value="true"/>
+    <param name="max_iterations" value="10"/>
+    <param name="base_frame" value="base_footprint"/>
+    <param name="scan_topic" value="scan1"/>
+    <param name="pose_topic" value="pose1"/>
+    <param name="pose2d_topic" value="pose2d1"/>
+    <param name="publish_tf" value="false"/>
+    <param name="publish_pose" value="true"/>
+    <param name="publish_pose2d" value="true"/>
+
+  </node>
+
+  <node pkg="laser_scan_matcher" type="laser_scan_matcher_node"
+    name="rear_laser_scan_matcher_node" output="screen">
+
+    <param name="frameid" value="rearlaser"/>
+    <param name="use_alpha_beta" value="true"/>
+    <param name="max_iterations" value="10"/>
+    <param name="base_frame" value="base_footprint"/>
+    <param name="scan_topic" value="scan2"/>
+    <param name="pose_topic" value="pose2"/>
+    <param name="pose2d_topic" value="pose2d2"/>
+    <param name="publish_tf" value="false"/>
+    <param name="publish_pose" value="true"/>
+    <param name="publish_pose2d" value="true"/>
+
+  </node>
+
+  <node pkg="tf" type="static_transform_publisher" name="base_link_frontlaser"
+    args="0.0 0.0 0.0 0.0 0.0 0.0 /base_footprint /frontlaser 40" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_rearlaser"
+    args="0.0 0.0 0.0 0.0 0.0 0.0 /base_footprint /rearlaser 40" />
+
+</launch>

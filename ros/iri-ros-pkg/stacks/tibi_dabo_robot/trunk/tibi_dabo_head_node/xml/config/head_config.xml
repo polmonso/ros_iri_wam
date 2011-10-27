@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<head_config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="segway_head_cfg_file.xsd">
+
+  <bus_id>0</bus_id>
+  <pan_servo_id>1</pan_servo_id>
+  <tilt_servo_id>12</tilt_servo_id>
+  <side_servo_id>15</side_servo_id>
+  <lights_id>5</lights_id>
+  <pan_config_file>xml/config/base_pan_config.xml</pan_config_file>
+  <tilt_config_file>xml/config/base_tilt_config.xml</tilt_config_file>
+  <side_config_file>xml/config/base_side_config.xml</side_config_file>
+</head_config>

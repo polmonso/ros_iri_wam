@@ -1,0 +1,8 @@
+<launch>
+  <node name="camboard_camera" pkg="iri_pmdcamera" type="pmdcamera_node" >
+       <param name="camera_type" value="1" />
+  </node>
+
+  <node name="reconfigure_gui" pkg="dynamic_reconfigure" type="reconfigure_gui" />
+
+</launch>

@@ -1,0 +1,18 @@
+<package>
+  <description brief="iri_dummy_pomdp">
+
+     dummy node that outputs a fixed strategy like a pomdp
+
+  </description>
+  <author>pmonso</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_dummy_pomdp</url>
+
+  <depend package="iri_wam_common_msgs" /> 
+  <depend package="std_srvs" /> 
+  <depend package="std_msgs" /> 
+
+</package>
+
+

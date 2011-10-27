@@ -1,0 +1,8 @@
+<!-- -->
+<launch>
+  <node pkg="iri_asterx1" type="iri_asterx1"
+        name="gps"
+        machine="laurel">
+        <param name="frame_id" value="$(env ROBOT)/gps" />
+  </node>
+</launch>

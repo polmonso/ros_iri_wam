@@ -1,0 +1,47 @@
+<!-- -->
+
+<launch>
+
+  <arg name="brl_fme" default="False" />
+  <arg name="teleop" default="True" />
+  <arg name="wiimote" default="True" />
+
+  <!-- segway navigation sensors -->
+  <include file="$(find tibi_dabo_base)/launch/nav_sensors.launch">
+    <arg name="launch_rviz" value="False" />
+    <arg name="teleop" value="False" />
+  </include>
+
+  <!-- People Tracker Launch File -->
+  <include file="$(find iri_people_tracking)/launch/people_tracking.launch">
+    <arg name="launch_rviz" value="False" />
+    <arg name="launch_laser" value="False" />
+  </include>
+
+  <group ns="$(env ROBOT)">
+
+  </group>
+
+  <node pkg="tf"
+        type="static_transform_publisher"
+        name="map_to_odom"
+        args="0 0 0 0 0 0 map $(env ROBOT)/odom 100" />
+
+
+  <!-- FME -->
+  <group if="$(arg brl_fme)">
+    <!-- FME urdf launch file -->
+    <include file="$(find tibi_dabo_base)/launch/fme.launch" />
+    <!-- rviz configurated for FME -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tibi_dabo_base)/config/segway_rviz_fme_config.vcg" />
+  </group>
+
+  <!-- BRL -->
+  <group unless="$(arg brl_fme)">
+    <!-- BRL urdf launch file -->
+    <include file="$(find tibi_dabo_base)/launch/brl.launch"/>
+    <!-- rviz configurated for BRL -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tibi_dabo_base)/config/segway_rviz_brl_config.vcg" />
+  </group>
+
+</launch>

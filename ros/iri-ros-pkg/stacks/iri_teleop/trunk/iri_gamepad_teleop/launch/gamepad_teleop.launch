@@ -1,0 +1,27 @@
+<!-- -->
+
+<launch>
+
+  <!-- load robot defined machines -->
+  <include file="$(find tibi_dabo_base)/machines/tibi_dabo.machines" />
+
+  <group ns="$(env ROBOT)">
+
+    <!-- IRI joystick node -->
+    <node pkg="iri_joystick"
+          type="iri_joystick"
+          name="iri_joystick"
+          machine="nav"/>
+
+    <!-- gamepad teleop -->
+    <node pkg="iri_gamepad_teleop"
+          type="iri_gamepad_teleop"
+          name="iri_gamepad_teleop"
+          machine="nav">
+      <remap from="/$(env ROBOT)/cmd_vel"
+               to="/$(env ROBOT)/iri_segway_rmp200/cmd_vel" />
+    </node>
+
+  </group>
+
+</launch>

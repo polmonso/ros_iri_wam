@@ -1,0 +1,39 @@
+<launch>
+
+    <include file="$(find openni_camera)/launch/openni_node.launch"/>
+
+    <remap from="/wam_fk/tf" to="/tf"/>
+    <remap from="/wam_fk/joint_states" to="/wam_driver_node/joint_states"/>
+    <node name="iri_wam_fk" pkg="iri_wam_fk" type="wam_fk" />
+    
+    <remap from="/wam_ik/joint_states" to="/wam_driver_node/joint_states"/>
+    <remap from="/wam_ik/joint_move" to="/wam_driver_node/joints_move"/>
+    <node name="iri_wam_ik" pkg="iri_wam_ik" type="wam_ik" />
+
+
+    <remap from="/mofa_bridge/input/pcl2/raw" to="/camera/rgb/points"/>
+    <remap from="/mofa_bridge/output/pcl2/labeled" to="/mofa_bridge/segmented_pcl"/>
+    <!-- <node name="mofa_bridge" pkg="iri_pcl_filters" type="dummy_mofa_bridge" /> -->
+    <node name="mofa_bridge" pkg="iri_pcl_filters" type="mofa_bridge" />
+
+    <remap from="/obj_filter/input/pcl2/segmented" to="/mofa_bridge/output/pcl2/segmented"/> 
+    <remap from="/obj_filter/output/srv/wrinkle_map" to="/normal_descriptor_node/wrinkle_map_service"/>
+    <node name="iri_obj_filter" pkg="iri_obj_filter" type="obj_filter" />
+
+    <!-- Using service instead <remap from="/normal_descriptor_node/points" to="/obj_filter/output/pcl2/filtered"/> -->
+    <remap from="/normal_descriptor_node/points" to="/obj_filter/output/pcl2/filtered"/>
+    <node name="normal_descriptor_node" pkg="normal_descriptor_node" type="normal_descriptor_node" />
+
+    <node name="iri_find_pattern" pkg="iri_find_pattern" type="find_pattern" />
+
+    <remap from="/wam_actions/obj_filter" to="/obj_filter/srv/compute_grasp_pose"/>
+    <remap from="/wam_actions/pose_move" to="/wam_ik/pose_move"/>
+    <remap from="/wam_actions/bhand_cmd" to="/bhand_driver_node/bhand_cmd"/>
+    <node name="iri_wam_actions" pkg="iri_wam_actions" type="wam_actions" />
+
+    <remap from="/dummy_pomdp/obs_client" to="/mofa_bridge/srv/request_observation"/>
+    <remap from="/dummy_pomdp/wam_action" to="/wam_actions/wam_action"/>
+    <remap from="/dummy_pomdp/focused_obj_label" to="/obj_filter/input/focused_obj"/>
+    <node name="iri_dummy_pomdp" pkg="iri_dummy_pomdp" type="dummy_pomdp" />
+
+</launch>

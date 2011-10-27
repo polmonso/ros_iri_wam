@@ -1,0 +1,12 @@
+<!-- -->
+<launch>
+  <node pkg="iri_hokuyo_laser" type="iri_hokuyo_laser"
+        name="floor_laser"
+        machine="laurel">
+    <param name="frame_id" value="$(env ROBOT)/floor_laser" />
+    <param name="use_ethernet" value="False" />
+    <param name="usb_port" value="/dev/sensors/hokuyo_H0709110" />
+    <param name="angle_min" value="-1" />
+    <param name="angle_max" value="1" />
+  </node>
+</launch>

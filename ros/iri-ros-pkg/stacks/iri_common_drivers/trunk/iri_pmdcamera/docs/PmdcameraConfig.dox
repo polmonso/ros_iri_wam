@@ -1,0 +1,8 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~integration_time" : \b [int] Integration_time min: 12, default: 400, max: 16000
+- \b "~min_dist" : \b [double] MinZ_distance min: 0.0, default: 0.0, max: 3.0
+- \b "~max_dist" : \b [double] MaxZ_distance min: 0.0, default: 2.0, max: 3.0
+

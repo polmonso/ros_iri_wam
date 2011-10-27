@@ -1,0 +1,22 @@
+<launch>
+   <!-- send teo urdf to param server -->
+   <param name="robot_description" command="cat $(find teo_base)/model/teo.urdf" />
+
+   <!-- Robot state publisher (will use the defaul robot_description param) -->
+   <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
+         <param name="publish_frequency" type="double" value="50.0" />
+         <param name="tf_prefix" type="string" value="" />
+   </node>
+
+   <!-- push robot_description to factory and spawn robot in gazebo -->
+   <node name="spawn_teo_model" pkg="gazebo" 
+         type="spawn_model"
+         args="-unpause
+               -urdf
+               -param robot_description 
+               -model teo
+               -z 1
+               -x 1"
+         respawn="false"
+         output="screen" />
+</launch>

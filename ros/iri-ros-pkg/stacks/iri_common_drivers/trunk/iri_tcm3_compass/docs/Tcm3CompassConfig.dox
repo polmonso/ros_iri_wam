@@ -1,0 +1,8 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~mounting_position" : \b [int] Mounting Position min: 1, default: 6, max: 16
+- \b "~relative" : \b [bool] Relative data min: False, default: True, max: True
+- \b "~frame_id" : \b [str] Frame ID min: , default: tcm3, max: 
+

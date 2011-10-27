@@ -1,0 +1,30 @@
+/**
+\mainpage IRI Common Drivers Messages
+\htmlinclude manifest.html
+
+<p>
+\b Description:
+- This is a stack which contains the special messages of the IRI common drivers
+.
+</p>
+
+
+<div style="float:left; margin:20px;">\image html http://www.iri.upc.edu/images/logo.png </div>
+
+<!--
+
+\section codeapi Code API
+
+
+Provide links to specific auto-generated API documentation within your
+package that is of particular interest to a reader. Doxygen will
+document pretty much every part of your code, so do your best here to
+point the reader to the actual API.
+
+If your codebase is fairly large or has different sets of APIs, you
+should use the doxygen 'group' tag to keep these APIs together. For
+example, the roscpp documentation has 'libros' group.
+-->
+
+
+*/

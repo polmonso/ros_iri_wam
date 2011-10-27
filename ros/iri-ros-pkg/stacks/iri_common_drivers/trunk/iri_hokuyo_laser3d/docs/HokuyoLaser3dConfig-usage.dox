@@ -1,0 +1,14 @@
+\subsubsection usage Usage
+\verbatim
+<node name="HokuyoLaser3dDriver" pkg="iri_hokuyo_laser3d" type="HokuyoLaser3dDriver">
+  <param name="resolution" type="double" value="2.0" />
+  <param name="laser_mode" type="int" value="1" />
+  <param name="scan_mode" type="bool" value="True" />
+  <param name="continuous" type="bool" value="False" />
+  <param name="publish_pointcloud" type="bool" value="False" />
+  <param name="publish_pointcloud2" type="bool" value="True" />
+  <param name="laser_port" type="str" value="/dev/ttyACM0" />
+  <param name="frame_id" type="str" value="h3d" />
+</node>
+\endverbatim
+

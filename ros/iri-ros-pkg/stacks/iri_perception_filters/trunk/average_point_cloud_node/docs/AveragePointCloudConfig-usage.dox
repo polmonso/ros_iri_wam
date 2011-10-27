@@ -1,0 +1,7 @@
+\subsubsection usage Usage
+\verbatim
+<node name="AveragePointCloudAlgorithm" pkg="average_point_cloud_node" type="AveragePointCloudAlgorithm">
+  <param name="iBuffer" type="int" value="5" />
+</node>
+\endverbatim
+

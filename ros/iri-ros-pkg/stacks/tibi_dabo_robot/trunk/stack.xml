@@ -1,0 +1,9 @@
+<stack>
+  <description brief="tibi_dabo_robot">tibi_dabo_robot</description>
+  <author>Maintained by </author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/tibi_dabo_robot</url>
+  <depend stack="ros" />
+
+</stack>

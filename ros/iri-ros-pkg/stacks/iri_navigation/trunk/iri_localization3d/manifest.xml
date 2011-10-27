@@ -1,0 +1,21 @@
+<package>
+  <description brief="iri_localization3d">
+
+     iri_localization3d
+
+  </description>
+  <author>andreu</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_localization3d</url>
+  <depend package="roscpp"/>
+  <depend package="nav_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="sensor_msgs"/>
+  <depend package="tf"/>
+  <depend package="iri_segway_rmp_msgs"/>
+  <depend package="iri_base_algorithm"/>
+
+</package>
+
+

@@ -1,0 +1,56 @@
+<!-- -->
+
+<launch>
+
+  <arg name="launch_rviz" default="False" />
+  <arg name="launch_rviz_client" default="True" />
+
+  <!-- load robot defined machines -->
+  <include file="$(find tibi_dabo_base)/machines/tibi_dabo.machines" />
+
+  <!-- segway navigation sensors -->
+  <include file="$(find tibi_dabo_base)/launch/nav_sensors.launch">
+    <arg name="launch_rviz" value="False" />
+    <arg name="teleop" value="False" />
+  </include>
+<!--   <node   pkg="rosbag"  -->
+<!--          type="rosbag"  -->
+<!--          name="rosbag"  -->
+<!--          args="play -l clock /home/jnperez/rosbags/nav_sensors-2011-09-26-15-15-52.bag" /> -->
+  
+  <group ns="$(env ROBOT)">
+
+    <!-- no collision -->
+    <node pkg ="iri_no_collision"
+          type="iri_no_collision"
+          name="iri_no_collision"
+          machine="nav"
+          output="screen">
+      <remap from="/$(env ROBOT)/iri_no_collision/scan"
+               to="/$(env ROBOT)/front_laser/scan" />
+      <remap from="/$(env ROBOT)/iri_no_collision/segway_cmd" 
+               to="/$(env ROBOT)/iri_segway_rmp200/cmd_vel" />
+      <remap from="/$(env ROBOT)/iri_no_collision/segway_odom"
+               to="/$(env ROBOT)/iri_segway_rmp200_odom/odom" />
+      <param name="~tf_prefix" value="/$(env ROBOT)" />
+   </node> 
+
+    <!-- oa client -->
+    <node pkg ="iri_oa_client"
+          type="iri_oa_client"
+          name="iri_oa_client"
+          machine="nav"
+          output="screen"
+          if="$(arg launch_rviz_client)">
+      <remap from="/$(env ROBOT)/MoveBase"
+               to="/$(env ROBOT)/iri_no_collision/MoveBase" />
+      <param name="~tf_prefix" value="/$(env ROBOT)" />
+   </node> 
+
+  </group>
+
+  <!-- rviz configurated -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find iri_no_collision)/config/iri_no_collision.vcg" 
+        if="$(arg launch_rviz)" />
+
+</launch>

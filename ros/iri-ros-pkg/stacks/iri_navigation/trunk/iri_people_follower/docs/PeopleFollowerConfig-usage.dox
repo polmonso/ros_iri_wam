@@ -1,0 +1,6 @@
+\subsubsection usage Usage
+\verbatim
+<node name="PeopleFollowerAlgorithm" pkg="iri_people_follower" type="PeopleFollowerAlgorithm">
+</node>
+\endverbatim
+

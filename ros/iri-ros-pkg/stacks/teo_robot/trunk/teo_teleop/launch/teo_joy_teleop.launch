@@ -1,0 +1,19 @@
+<launch>
+
+  <!-- Teo base robot -->
+  <include file="$(find teo_base)/launch/teo_base.launch" />
+
+  <!-- Teo teleop -->
+  <node pkg="teo_teleop" type="teleop_teo_iri_joy" 
+        name="teleop_teo"
+        machine="laurel">
+    <remap from="/teo/command_velocity" to="/teo/segway/cmd_vel" />
+  </node>
+
+  <!-- iri joy node -->
+  <node respawn="true" pkg="iri_joystick" 
+        type="iri_joystick_node"
+        name="joy"
+        machine="laurel" />
+
+</launch>

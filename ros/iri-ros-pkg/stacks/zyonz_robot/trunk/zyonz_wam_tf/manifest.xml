@@ -1,0 +1,14 @@
+<package>
+  <description brief="zyonz_wam_tf">
+
+     zyonz_wam_tf
+
+  </description>
+  <author>Sergi Foix</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/zyonz_wam_tf</url>
+  <depend package="tf"/>
+</package>
+
+

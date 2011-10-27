@@ -1,0 +1,14 @@
+<!-- -->
+<launch>
+  <node pkg="iri_segway_rmp400_odom"
+        type="iri_segway_rmp400_odom"
+        name="odom_publisher"
+        output="screen">
+        <remap from="~platform_status" to="/$(env ROBOT)/segway/status" />
+        <param name="~tf_prefix" value="$(env ROBOT)" />
+        <param name="~base_link_id" value="base_footprint" />
+        <param name="~odom_id"      value="odom"/>
+        <param name="publish_tf"   value="false"/>
+
+  </node>
+</launch>

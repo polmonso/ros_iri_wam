@@ -1,0 +1,57 @@
+Background\ ColorR=0
+Background\ ColorG=0
+Background\ ColorB=0
+Fixed\ Frame=/odom
+Target\ Frame=<Fixed Frame>
+Axes\ COMPASS.Enabled=1
+Axes\ COMPASS.Length=0.5
+Axes\ COMPASS.Radius=0.025
+Axes\ COMPASS.Reference\ Frame=/tcm3
+Axes.Enabled=1
+Axes.Length=1.5
+Axes.Radius=0.01
+Axes.Reference\ Frame=<Fixed Frame>
+Compass\ Odo.Angle\ Tolerance=1e-05
+Compass\ Odo.ColorR=1
+Compass\ Odo.ColorG=0
+Compass\ Odo.ColorB=0
+Compass\ Odo.Enabled=1
+Compass\ Odo.Keep=1
+Compass\ Odo.Position\ Tolerance=0.001
+Compass\ Odo.Topic=/compass_odom
+Grid.Alpha=0.5
+Grid.Cell\ Size=1
+Grid.ColorR=0.5
+Grid.ColorG=0.5
+Grid.ColorB=0.5
+Grid.Enabled=1
+Grid.Line\ Style=0
+Grid.Line\ Width=0.03
+Grid.Normal\ Cell\ Count=0
+Grid.OffsetX=0
+Grid.OffsetY=0
+Grid.OffsetZ=0
+Grid.Plane=0
+Grid.Plane\ Cell\ Count=10
+Grid.Reference\ Frame=<Fixed Frame>
+Tool\ 2D\ Nav\ GoalTopic=goal
+Tool\ 2D\ Pose\ EstimateTopic=initialpose
+Camera\ Type=rviz::OrbitViewController
+Camera\ Config=0.997522 2.09376 3.67471 -0.18579 0.248965 -0.292639
+Property\ Grid\ State=selection=Target Frame;expanded=.Global Options;scrollpos=0,0;splitterpos=167,335;ispageselected=1
+[Display0]
+Name=Grid
+Package=rviz
+ClassName=rviz::GridDisplay
+[Display1]
+Name=Axes
+Package=rviz
+ClassName=rviz::AxesDisplay
+[Display2]
+Name=Compass Odo
+Package=rviz
+ClassName=rviz::OdometryDisplay
+[Display3]
+Name=Axes COMPASS
+Package=rviz
+ClassName=rviz::AxesDisplay

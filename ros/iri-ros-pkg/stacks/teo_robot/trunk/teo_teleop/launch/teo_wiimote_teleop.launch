@@ -1,0 +1,20 @@
+<launch>
+
+  <!-- Teo teleop -->
+  <node pkg="teo_teleop"
+        type="teleop_teo_iri_wiimote"
+        name="teleop_teo"
+        output="screen" >
+    <!--<remap from="/teo/command_velocity" to="/teo/segway/cmd_vel" />-->
+    <remap from="/cmd_vel" to="/teo/segway/cmd_vel" />
+  </node>
+
+  <!-- ros wiimote node -->
+  <node respawn="true"
+        pkg="wiimote"
+        type="wiimote_node.py"
+        name="joy"
+        >
+  </node>
+
+</launch>

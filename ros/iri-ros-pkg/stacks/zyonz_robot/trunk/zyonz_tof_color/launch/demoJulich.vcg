@@ -1,0 +1,61 @@
+Background\ ColorR=0
+Background\ ColorG=0
+Background\ ColorB=0
+Fixed\ Frame=/color_camera_frame
+Target\ Frame=<Fixed Frame>
+Image.Enabled=1
+Image.Image\ Topic=/camera/image_raw
+Image.Transport\ Hint=raw
+Image2.Enabled=1
+Image2.Image\ Topic=/camboard_camera/image_inten
+Image2.Transport\ Hint=raw
+Image3.Enabled=1
+Image3.Image\ Topic=/jump_edge/image_depth_jef
+Image3.Transport\ Hint=raw
+Point\ Cloud2.Alpha=1
+Point\ Cloud2.Billboard\ Size=0.01
+Point\ Cloud2.Color\ Transformer=RGB8
+Point\ Cloud2.Decay\ Time=0
+Point\ Cloud2.Enabled=1
+Point\ Cloud2.Position\ Transformer=XYZ
+Point\ Cloud2.Selectable=1
+Point\ Cloud2.Style=0
+Point\ Cloud2.Topic=/tof_color/cloud2_raw
+Point\ Cloud2..AxisAutocompute\ Value\ Bounds=1
+Point\ Cloud2..AxisAxis=2
+Point\ Cloud2..AxisMax\ Value=0
+Point\ Cloud2..AxisMin\ Value=-1.74954
+Point\ Cloud2..AxisUse\ Fixed\ Frame=1
+Point\ Cloud2..Flat\ ColorColorR=1
+Point\ Cloud2..Flat\ ColorColorG=1
+Point\ Cloud2..Flat\ ColorColorB=1
+Point\ Cloud2..IntensityAutocompute\ Intensity\ Bounds=1
+Point\ Cloud2..IntensityMax\ ColorR=1
+Point\ Cloud2..IntensityMax\ ColorG=1
+Point\ Cloud2..IntensityMax\ ColorB=1
+Point\ Cloud2..IntensityMax\ Intensity=0
+Point\ Cloud2..IntensityMin\ ColorR=0
+Point\ Cloud2..IntensityMin\ ColorG=0
+Point\ Cloud2..IntensityMin\ ColorB=0
+Point\ Cloud2..IntensityMin\ Intensity=0
+Tool\ 2D\ Nav\ GoalTopic=goal
+Tool\ 2D\ Pose\ EstimateTopic=initialpose
+Camera\ Type=rviz::OrbitViewController
+Camera\ Config=0.121 6.25349 0.720957 0 0 0
+Property\ Grid\ State=selection=Image.Enabled.Image.Image Topic;expanded=.Global Options,Image.Enabled,Image2.Enabled,Point Cloud2.Enabled;scrollpos=0,0;splitterpos=163,342;ispageselected=1
+[Display0]
+Name=Image
+Package=rviz
+ClassName=rviz::ImageDisplay
+[Display1]
+Name=Image2
+Package=rviz
+ClassName=rviz::ImageDisplay
+[Display2]
+Name=Point Cloud2
+Package=rviz
+ClassName=rviz::PointCloud2Display
+[Display3]
+Name=Image3
+Package=rviz
+ClassName=rviz::ImageDisplay

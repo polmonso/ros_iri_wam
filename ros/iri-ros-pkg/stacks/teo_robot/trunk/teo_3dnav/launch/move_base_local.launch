@@ -1,0 +1,56 @@
+<launch>
+  <master auto="start"/>
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <remap from="cmd_vel" to="/teo/segway/cmd_vel" />
+    <remap from="odom" to="/teo/segway/odom" />
+  
+
+    <rosparam file="$(find teo_3dnav)/config/navigation_local/base_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find teo_3dnav)/config/move_base_params.yaml" command="load" />
+
+    <!-- Local costmap configs: common + local -->
+    <rosparam file="$(find teo_3dnav)/config/navigation_local/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find teo_3dnav)/config/navigation_local/local_costmap_params.yaml" command="load" />
+
+    <!-- Global costmap config: common + global -->
+    <rosparam file="$(find teo_3dnav)/config/navigation_local/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find teo_3dnav)/config/navigation_local/global_costmap_params.yaml" command="load" />
+  </node>
+
+  <node type="laser_scan_assembler" pkg="laser_assembler" name="floor_assembler">
+    <remap from="scan" to="/teo/floor_laser/scan"/>
+    <remap from="assemble_scans" to="floor_assembler"/>
+    <param name="max_scans" type="int" value="400" />
+    <param name="fixed_frame" type="string" value="odom" />
+  </node>
+
+  <node type="point_cloud_assembler" pkg="laser_assembler" name="cloud_assembler">
+    <remap from="cloud" to="parcial_cloud"/>
+    <remap from="assemble_scans" to="complete_assemble_clouds"/>
+    <param name="max_clouds" type="int" value="400" />
+    <param name="fixed_frame" type="string" value="odom" />
+  </node>
+
+  <node type="clouder" pkg="teo_3dnav" name="clouder">
+     <param name="prev_clouds_" value="3" />
+     <param name="max_height_" value="0.06" />
+     <param name="use_kneighbours_" value="true" />
+     <param name="kneighbours_" value="20" />
+     <param name="use_tilt" value="False" />
+     <param name="rotate" value="True" />
+     <param name="downsampling" value="True" />
+     <param name="leafsize" value="0.04" />
+     <param name="precipice_threshold" value="400" />
+  </node>
+
+  <node type="snap" pkg="teo_3dnav" name="snap">
+     <param name="scan_time_" value="0.5" />
+  </node>
+
+  <node type="nav_controller" pkg="teo_3dnav" name="nav_controller">
+     <param name="enabled" value="true" />
+     <param name="obstacle_range" value="2.5" />
+     <param name="frequency" value="10"/>
+  </node>
+</launch>

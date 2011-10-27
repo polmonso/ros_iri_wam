@@ -1,0 +1,10 @@
+<stack>
+    <description brief="teo_robot">
+	Stack with packages for the teo segway robot.
+    </description>
+  <author>Maintained by Jose Luis Rivero</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://wikiri.upc.es/index.php/Segway_RMP400</url>
+  <depend stack="ros" />
+</stack>

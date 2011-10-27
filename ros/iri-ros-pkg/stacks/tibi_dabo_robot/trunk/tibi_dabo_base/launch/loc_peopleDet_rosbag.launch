@@ -1,0 +1,84 @@
+<!-- -->
+
+<launch>
+	
+	<!-- uses sim time (rosbag time) -->
+	<param name="/use_sim_time" value="True"/>
+
+	<!-- FME Big Door environment urdf launch file -->
+<!-- 	<param name="fme/robot_description" command="cat $(find tibi_dabo_base)/urdf/fme.urdf" /> -->
+ 	<include file="$(find tibi_dabo_base)/launch/fme.launch"/> -->
+
+	<!-- Rosbag: Platform, Odometry, front and rear lasers and clock in FME Big Door environment-->
+	<node	pkg="rosbag"
+		type="rosbag"
+		name="rosbag"
+		args="play --clock /home/andreu/rosbags/2011-08-24-16-06-32.bag" />
+
+	<!-- 	Launch localization node inside a namespace defining robot name -->
+	<group ns="$(env ROBOT)">
+		<!-- segway urdf model -->
+		<param name="robot_description" command="cat $(find tibi_dabo_base)/urdf/segway_rmp200.urdf" />
+		
+		<!-- map-based localization node -->
+		<node	pkg="iri_localization3d"
+			type="localization3d_node"
+			name="iri_localization3d"
+			args=""
+			output="screen">
+
+			<!--localization parameters -->
+			<param name="num_particles" value= "20" type="int" />
+			<param name="initX" value= "9.0" type="double" />  
+			<param name="initY" value= "11.0" type="double" /> 
+			<param name="initH" value= "0.0" type="double" /> 
+			<param name="mapFile" value= "/home/andreu/iriSw/faramotics/models/fmeBigDoor.obj" type="str" />
+			<param name="floorGridFile" value= "/home/andreu/iriSw/faramotics/models/fmeBigDoor_zGrid_20cm.txt" type="str" />  
+
+			<!--remap topic names -->
+			<remap from="/$(env ROBOT)/localization3d_node/platform_data"
+				to="/$(env ROBOT)/segway_rmp200_node/status" />
+			<remap from="/$(env ROBOT)/localization3d_node/platform_odom"
+				to="/$(env ROBOT)/segway_rmp200_odom/odom" />
+			<remap from="/$(env ROBOT)/localization3d_node/front_laser/scan"
+				to="/$(env ROBOT)/front_laser/scan" />
+			<remap from="/$(env ROBOT)/localization3d_node/rear_laser/scan"
+				to="/$(env ROBOT)/rear_laser/scan" />
+		</node>
+
+		<!-- laser people detection -->
+		<node pkg ="boostlaserpeopledetector_node"
+			type="boostlaserpeopledetector_node"
+			name="boostlaserpeopledetector_node"
+			args=""
+			output="screen">
+
+			<!--remap topic names -->
+			<remap from="/$(env ROBOT)/boostlaserpeopledetector/scan"
+				to="/$(env ROBOT)/front_laser/scan" />
+		</node>
+
+		<!-- people tracker -->
+		<node pkg ="people_tracking_node"
+			type="people_tracking_node"
+			name="people_tracking_node"
+			args=""
+			output="screen">
+
+			<!--remap topic names -->
+			<remap from="/$(env ROBOT)/people_tracking_node/people_array"
+				to="/$(env ROBOT)/boostlaserpeopledetector_node/people_array" />
+			<remap from="/$(env ROBOT)/people_tracking_node/odom"
+				to="/$(env ROBOT)/segway_rmp200_odom/odom" />
+		</node>
+
+	</group>
+
+	<!-- rviz configurated for debug localization -->
+	<node name="rviz" 
+		pkg="rviz" 
+		type="rviz" 
+		args="-d $(find iri_localization3d)/launch/loc_peopleDet_rosbag.vcg">
+	</node>
+
+</launch>

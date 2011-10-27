@@ -1,0 +1,21 @@
+<launch>
+
+  <!-- tibi dabo head node Launch File -->
+  <include file="$(find tibi_dabo_head_node)/launch/head_rviz.launch">
+    <arg name="model" value="$(find tibi_dabo_head_node)/model/head.urdf"/>
+  </include>
+
+  <!-- hre -->
+  <node pkg ="tibi_dabo_sequence_editor"
+        type="tibi_dabo_sequence_editor"
+        name="tibi_dabo_sequence_editor"
+        output="screen">
+    <param name="node_name" value="tibi_dabo_head_node" />
+    <param name="config_files" value="./xml/config/base_pan_config.xml,./xml/config/base_tilt_config.xml,./xml/config/base_side_config.xml" />
+    <remap from="/tibi_dabo_sequence_editor/joint_feedback"
+           to="/joint_states" />
+    <remap from="/motion"
+           to="/tibi_dabo_head_node/joint_motion" />
+  </node>
+
+</launch>

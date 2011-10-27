@@ -1,0 +1,13 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~velocity_scale_factor" : \b [double] Maximum velocity scale factor min: 0.0, default: 0.5, max: 1.0
+- \b "~acceleration_scale_factor" : \b [double] Maximum acceleration scale factor min: 0.0, default: 0.5, max: 1.0
+- \b "~turn_rate_scale_factor" : \b [double] Maximum turn rate scale factor min: 0.0, default: 0.5, max: 1.0
+- \b "~current_limit_scale_factor" : \b [double] Maximum current_limit scale factor min: 0.0, default: 0.5, max: 1.0
+- \b "~gain_schedule" : \b [int] Gain schedule min: 0, default: 0, max: 2
+- \b "~operation_mode" : \b [int] Operation mode min: 1, default: 1, max: 3
+- \b "~balance_lockout" : \b [bool] Lock balance min: False, default: False, max: True
+- \b "~serial_number" : \b [str] Serial number of the robot min: , default: NULL, max: 
+

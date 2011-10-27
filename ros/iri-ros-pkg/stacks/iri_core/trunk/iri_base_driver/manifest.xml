@@ -1,0 +1,21 @@
+<package>
+  <description brief="iri_base_driver">
+
+     iri_base_driver
+
+  </description>
+  <author></author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_base_driver</url>
+
+  <depend package="roscpp"/>
+  <depend package="driver_base"/>
+  <depend package="dynamic_reconfigure"/>
+
+  <export>
+    <cpp cflags="-I${prefix}/include"
+         lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -liri_base_driver"/>
+  </export>
+
+</package>

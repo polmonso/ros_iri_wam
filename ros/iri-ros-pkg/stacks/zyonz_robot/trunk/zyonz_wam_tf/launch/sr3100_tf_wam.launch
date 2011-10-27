@@ -1,0 +1,9 @@
+<!-- -*- mode: XML -*- -->
+
+<launch>
+  <node pkg="swissranger_camera" type="swissranger_camera" name="swissranger" output="screen" respawn="false">
+    <param name="auto_exposure" value="1" />
+    <param name="frame_id" value="camera" /> 
+  </node>
+  <node name="sr3100_tf_publisher" pkg="zyonz_wam_tf" type="sr3100_tf_publisher" />
+</launch>

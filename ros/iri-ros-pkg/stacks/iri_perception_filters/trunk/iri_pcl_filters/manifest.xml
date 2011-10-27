@@ -1,0 +1,25 @@
+<package>
+  <description brief="iri_pcl_filters">
+
+     iri_pcl_filters
+
+  </description>
+  <author>Sergi Foix</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_pcl_filters</url>
+  <depend package="sensor_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="iri_wam_common_msgs"/>
+  <depend package="image_transport"/>
+  <depend package="eigen"/>
+  <depend package="pcl_ros"/>
+  <depend package="opencv2"/>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+  <depend package="std_srvs"/>
+  <depend package="cv_bridge"/>
+  
+</package>
+
+

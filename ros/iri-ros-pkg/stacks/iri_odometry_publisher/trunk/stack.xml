@@ -1,0 +1,9 @@
+<stack>
+  <description brief="iri_odometry_publisher">iri_odometry_publisher</description>
+  <author>Maintained by Joan Perez</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_odometry_publisher</url>
+  <depend stack="ros" />
+
+</stack>

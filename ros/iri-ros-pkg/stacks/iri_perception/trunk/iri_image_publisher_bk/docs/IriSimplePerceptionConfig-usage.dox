@@ -1,0 +1,7 @@
+\subsubsection usage Usage
+\verbatim
+<node name="IriSimplePerceptionAlgorithm" pkg="iri_simple_perception" type="IriSimplePerceptionAlgorithm">
+  <param name="filename" type="str" value="default.jpg" />
+</node>
+\endverbatim
+

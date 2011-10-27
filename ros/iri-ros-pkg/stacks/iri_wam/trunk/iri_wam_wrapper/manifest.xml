@@ -1,0 +1,19 @@
+<package>
+  <description brief="iri_wam_wrapper">
+
+     iri_wam_wrapper
+
+  </description>
+  <author>Pol Monso</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_wrapper</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_driver"/>
+  <depend package="geometry_msgs"/>
+  <depend package="sensor_msgs"/>
+  <depend package="eigen"/>
+  <depend package="iri_wam_common_msgs"/> 
+</package>
+
+

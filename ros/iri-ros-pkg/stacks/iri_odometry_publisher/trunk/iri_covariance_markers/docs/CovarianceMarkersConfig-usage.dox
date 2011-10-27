@@ -1,0 +1,6 @@
+\subsubsection usage Usage
+\verbatim
+<node name="CovarianceMarkersAlgorithm" pkg="iri_covariance_markers" type="CovarianceMarkersAlgorithm">
+</node>
+\endverbatim
+

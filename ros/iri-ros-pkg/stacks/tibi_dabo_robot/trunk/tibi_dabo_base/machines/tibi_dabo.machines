@@ -1,0 +1,19 @@
+<!-- -->
+
+<launch>
+    <!-- hri pc box on board robot -->
+    <machine name="visio" address="192.168.0.101" 
+             ros-root="$(env ROS_ROOT)"
+             ros-package-path="$(env ROS_PACKAGE_PATH)"
+             default="true" />
+
+    <!-- navigation pc box on board robot -->
+    <machine name="nav" address="192.168.0.100"
+             ros-root="$(env ROS_ROOT)"
+             ros-package-path="$(env ROS_PACKAGE_PATH)"/>
+
+    <!-- monitor laptop outside robot -->
+    <machine name="monitor" address="192.168.0.200"
+             ros-root="$(env ROS_ROOT)"
+             ros-package-path="$(env ROS_PACKAGE_PATH)"/>
+</launch>

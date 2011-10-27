@@ -1,0 +1,18 @@
+<stack>
+    <description brief="iri_segway_rmp">
+	This stack contains ROS drivers for Segway RMP 200 and Segway RMP 400
+	platforms.  These drivers are derivated from iri_ros_core, featuring
+	dynamic reconfigure and diagnostics among other tools. IRI Lab Robotica
+	drivers are required to be installed:
+	http://wikiri.upc.es/index.php/Segway_RMP_200_driver and  
+	http://wikiri.upc.es/index.php/Segway_RMP_400_driver
+	This stack also contains 3d meshes and URDF files for both platforms,
+	as well as corresponding odometry publisher nodes.
+    </description>
+  <author>Maintained by IRI Lab</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_segway_rmp</url>
+  <depend stack="ros" />
+
+</stack>

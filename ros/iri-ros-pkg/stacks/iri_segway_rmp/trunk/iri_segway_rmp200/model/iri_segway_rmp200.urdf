@@ -1,0 +1,18 @@
+<!-- -->
+
+<?xml version="1.0"?>
+
+<robot name="iri_segway_rmp200">
+
+  <!-- LINKS -->
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://iri_segway_rmp200/model/meshes/rmp200.STL"/>
+      </geometry>
+    </visual>
+  </link>
+
+</robot>
+

@@ -1,0 +1,9 @@
+\subsubsection usage Usage
+\verbatim
+<node name="HrengagementAlgorithm" pkg="hrengagement_node" type="HrengagementAlgorithm">
+  <param name="min_stopped_iters" type="int" value="3" />
+  <param name="people_stand_max_vel" type="double" value="0.1" />
+  <param name="min_safefy_dist" type="double" value="0.9" />
+</node>
+\endverbatim
+

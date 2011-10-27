@@ -1,0 +1,47 @@
+/**
+\mainpage
+\htmlinclude manifest.html
+\b pmdcamera_node is a IRI-ROS driver supporting <a href="http://www.pmdtec.com/">pmd cameras</a> camcube3 and camboard. The image reference system in each camera is different. 
+The driver handles the differences between both cameras and return canonical images.
+
+Install the drivers following manufacturer instructions or with this <a href="http://wikiri.upc.es/index.php/CamCube_Driver_Installation">  instructions </a> 
+(link is not public as we cannot redistribute the drivers)
+
+Use dynamic_reconfigure to change the integration time.
+<!-- 
+Provide an overview of your package.
+-->
+\b Topics
+
+im1
+im2
+
+\section usage Use
+
+>
+
+Some launch files are provided
+
+<!--
+Provide links to specific auto-generated API documentation within your
+package that is of particular interest to a reader. Doxygen will
+document pretty much every part of your code, so do your best here to
+point the reader to the actual API.
+
+If your codebase is fairly large or has different sets of APIs, you
+should use the doxygen 'group' tag to keep these APIs together. For
+example, the roscpp documentation has 'libros' group.
+-->
+
+\section codeapi Code APIs
+
+PmdcameraDriverNode is the main IRI-ROS node class
+
+PmdcameraDriver is the IRI-ROS driver
+
+pmd_camcube::PmdCamcube is the low level IRI driver
+
+\todo: manufacturer wrapper is here now. Make a separate low-lever IRI driver 
+\todo: add camera features: multiple frequencies, flag image...
+
+*/

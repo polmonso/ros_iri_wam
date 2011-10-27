@@ -1,0 +1,10 @@
+\subsubsection usage Usage
+\verbatim
+<node name="LeuzeLaserDriver" pkg="iri_leuze_laser" type="LeuzeLaserDriver">
+  <param name="serial_port" type="str" value="/dev/ttyUSB0" />
+  <param name="frame_id" type="str" value="/laser" />
+  <param name="angle_offset" type="double" value="0.0" />
+  <param name="upsidedown" type="bool" value="False" />
+</node>
+\endverbatim
+

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<motion_seq xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="motion_sequence_file.xsd">
+   <num_motors>3</num_motors>
+   <num_steps>1</num_steps>
+   <control>position</control>
+   <motion>absolute</motion>
+   <step>
+     <position>150.0</position>
+     <position>125.0</position>
+     <position>125.0</position>
+     <velocity>50.0</velocity>
+     <velocity>50.0</velocity>
+     <velocity>50.0</velocity>
+     <delay>1000</delay>
+   </step>
+</motion_seq>

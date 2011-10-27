@@ -1,0 +1,39 @@
+<!-- -->
+<launch>
+
+  <arg name="launch_rviz" default="True" />
+
+  <group ns="$(env ROBOT)">
+
+    <!-- iri segway node -->
+    <node pkg ="iri_segway_rmp200"
+          type="iri_segway_rmp200"
+          name="iri_segway_rmp200">
+    </node>
+
+    <!-- segway urdf model -->
+    <param name="robot_description" command="cat $(find iri_segway_rmp200)/model/iri_segway_rmp200.urdf" />
+
+    <!-- robot state publisher node -->
+    <node pkg ="robot_state_publisher"
+          type="state_publisher"
+          name="robot_state_publisher">
+<!--         <remap from="robot_description" to="$(env ROBOT)/robot_description" /> -->
+      <param name="~tf_prefix" value="$(env ROBOT)" type="str"/>
+    </node>
+
+    <!-- joint state publisher node -->
+<!--     <node pkg ="joint_state_publisher"  -->
+<!--           type="joint_state_publisher"  -->
+<!--           name="$(env ROBOT)_joint_state_publisher"> -->
+<!--       <remap from="joint_states" to="$(env ROBOT)/joint_states" /> -->
+<!--     </node> -->
+
+  </group>
+
+  <!-- rviz configurated -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find iri_segway_rmp200)/config/iri_segway_rmp200.vcg" 
+        if="$(arg launch_rviz)" />
+
+</launch>
+

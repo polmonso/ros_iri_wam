@@ -1,0 +1,41 @@
+#type of map: voxel | costmap. What map type to use. "voxel" or "costmap" are the supported types, with the difference between them being a 3D-view of the world vs. a 2D-view of the world.
+map_type: voxel
+
+#determines the maximum range sensor reading that will result in an obstacle
+#being put into the costmap
+obstacle_range: 3.0
+
+#parameter determines the range to which we will raytrace freespace given a
+#sensor reading
+raytrace_range: 3.0
+
+# Footprint of the robot. The center of the robot is assumed to be at (0.0,
+# 0.0) and both clockwise and counterclockwise specifications are supported
+# teo.urdf: <box size="1.40 0.45 0.5"/> + wheels 0, 0.20 0
+footprint: [[0.7, -0.425], [0.7, 0.425], [-0.7,0.425], [-0.7,-0.425]]
+
+#The inflation radius should be set to the maximum distance from obstacles at which a cost should be incurred.
+inflation_radius: 0.6
+
+# defines a list of sensors that are going to be passing information to the costmap separated by spaces
+observation_sources: front_laser_sensor floor_laser_sensor
+# Testing purposes
+#observation_sources: floor_laser_sensor
+
+front_laser_sensor: {
+                      sensor_frame: front_laser,
+                      data_type: LaserScan,
+                      topic: /teo/front_laser/scan,
+                      min_obstacle_height: -2.0,
+                      marking: true,
+                      clearing: true
+                    }
+
+floor_laser_sensor:  {
+                      sensor_frame: floor_laser,
+                      data_type: PointCloudNormals,
+                      topic: /assembled_cloud_with_normals,
+                      min_obstacle_height: -8.0,
+                      marking: true,
+                      clearing: true
+                    }

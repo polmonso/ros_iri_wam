@@ -1,0 +1,22 @@
+<package>
+  <description brief="iri_pmdcamera">
+
+     iri_pmdcamera
+
+  </description>
+  <author>Guillem Alenya - IRI Robotics Lab</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://wikiri.upc.edu</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_driver"/>
+  <depend package="iri_common_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="sensor_msgs"/>
+<!--       <depend package="nodelet" />-->
+  <depend package="camera_info_manager" />
+  <depend package="image_transport" />  
+  <depend package="tf"/>
+</package>
+
+

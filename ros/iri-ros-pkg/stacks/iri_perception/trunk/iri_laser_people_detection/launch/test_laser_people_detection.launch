@@ -1,0 +1,38 @@
+<!-- -->
+
+<launch>
+
+  <node  pkg="rosbag" 
+        type="rosbag" 
+        name="rosbag" 
+        args="play -l /home/fherrero/PFC-LAB/BagFiles/lastday/2011-06-29-10-30-39_Laser1_people1_antihorario.bag"
+	output="screen"/>
+
+<!--   <group ns="$(env ROBOT)"> -->
+
+   <node pkg="tf"
+          type="static_transform_publisher" 
+	  name="laser_broadcaster"
+	  args="0 0 0 0 0 0 /world /laser 100" />-->
+
+    <!-- people detector -->
+    <node pkg ="iri_laser_people_detection"
+          type="iri_laser_people_detection"
+          name="iri_laser_people_detection">
+      <remap from="/iri_laser_people_detection/scan"
+               to="/scan" /> 
+    </node>
+    
+<!--   </group> -->
+
+	<!-- rviz configurated for people tracking -->
+	<node name="rviz" 
+		pkg="rviz" 
+		type="rviz" 
+		args="-d $(find iri_laser_people_detection)/config/test_laser_people_detection.vcg">
+	</node>
+
+
+</launch>
+
+<!-- /home/andreu/rosbags/two_persons_2011-07-06-18-36-09.bag -->

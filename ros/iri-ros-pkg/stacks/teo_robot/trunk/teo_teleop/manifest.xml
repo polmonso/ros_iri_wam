@@ -1,0 +1,12 @@
+<package>
+  <description brief="teo_teleop">
+      Teleoperation package for TEO IRI robot
+  </description>
+  <author>Jose Luis Rivero</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url></url>
+  <depend package="roscpp"/>
+  <depend package="iri_wiimote_teleop" />
+  <depend package="iri_hokuyo_laser3d" />
+</package>

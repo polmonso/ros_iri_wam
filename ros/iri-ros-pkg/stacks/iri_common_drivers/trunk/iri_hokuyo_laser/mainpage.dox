@@ -1,0 +1,77 @@
+/**
+\mainpage IRI Hokuyo Laser
+<table border="0" valign="top">
+<tr>
+<td>
+\image html lasers.png
+</td>
+</tr>
+<tr>
+<td>
+<p>
+\b Description:
+- Driver for Hokuyo URG laser range sensors both USB and ETHERNET using the protocol SCIP 2.0 (
+URG-40LX,UBG-04LX-F01,UHG-08LX,UTM-30LX,UXM-30LX-ETH)
+.
+</p>
+<p>
+\b Functionalities:
+- connection using USB or ETHERNET
+- Configure the scan, via parameter server or dynamic reconfigure gui
+.
+</p>
+<p>
+\b More \b information:
+- <a href="http://wikiri.upc.es/index.php/Hokuyo_Laser" target="blank">IRI's wiki page</a>
+- <a href="http://fanfare.upc.es/docs/hokuyo_laser_2d/index.html" target="blank">Low level driver documentation</a>
+.
+</p>
+</td>
+</tr>
+</table>
+<div style="width:100%; height:0px; border-top:1px solid #CCC;border-bottom:1px solid #EEE;"></div>
+\htmlinclude manifest.html
+
+\section howto How to:
+
+\subsection run Run node
+Call this node from rosrun:
+\code
+rosrun iri_hokuyo_laser iri_hokuyo_laser frame_id:=/robot/laser
+\endcode
+Call this node from launch:
+\code
+<launch>
+  <node pkg="iri_hokuyo_laser"
+        type="iri_hokuyo_laser"
+        name="laser"
+        output="screen">
+    <param name="frame_id"     value="/robot/laser" />
+    <param name="use_ethernet" value="true"         />
+    <param name="ip_address"   value="192.168.0.10" /> <!-- default IP address -->
+    <param name="angle_min"    value="-1.5708"      /> <!-- -pi/2 -->
+    <param name="angle_max"    value="1.5708"       /> <!-- pi/2 -->
+    <param name="interval"     value="1"            />
+    <param name="type"         value="1"            /> <!-- Normal:1, Intensity:2, Short:3 -->
+  </node>
+</launch>
+\endcode
+
+<div style="float:left; margin:20px;">\image html http://www.iri.upc.edu/images/logo.png </div>
+
+<!--
+\section codeapi Code API
+
+
+Provide links to specific auto-generated API documentation within your
+package that is of particular interest to a reader. Doxygen will
+document pretty much every part of your code, so do your best here to
+point the reader to the actual API.
+
+If your codebase is fairly large or has different sets of APIs, you
+should use the doxygen 'group' tag to keep these APIs together. For
+example, the roscpp documentation has 'libros' group.
+-->
+
+
+*/

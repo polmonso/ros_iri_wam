@@ -1,0 +1,13 @@
+<stack>
+  <description brief="iri_perception">
+
+  Set of algorithms for robot perception.
+
+  </description>
+  <author>Maintained by IRI lab</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_perception</url>
+  <depend stack="ros" />
+
+</stack>

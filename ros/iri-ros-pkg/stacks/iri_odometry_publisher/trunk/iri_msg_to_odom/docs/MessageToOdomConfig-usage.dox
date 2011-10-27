@@ -1,0 +1,6 @@
+\subsubsection usage Usage
+\verbatim
+<node name="MessageToOdomAlgorithm" pkg="iri_msg_to_odom" type="MessageToOdomAlgorithm">
+</node>
+\endverbatim
+

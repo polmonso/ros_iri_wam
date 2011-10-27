@@ -1,0 +1,9 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~config_file" : \b [str] XML configuration file min: , default: head_config.xml, max: 
+- \b "~motion_mode" : \b [int] Joint motion mode min: 0, default: 0, max: 1
+- \b "~control_mode" : \b [int] Joint control mode min: 0, default: 0, max: 1
+- \b "~feedback_rate" : \b [int] Joint state feedback rate min: 1, default: 10, max: 100
+

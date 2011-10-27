@@ -1,0 +1,9 @@
+#goal definition
+uint32  target_id
+float32 dist_to_goal
+---
+#result definition
+bool    successful
+---
+#feedback
+float32 current_dist

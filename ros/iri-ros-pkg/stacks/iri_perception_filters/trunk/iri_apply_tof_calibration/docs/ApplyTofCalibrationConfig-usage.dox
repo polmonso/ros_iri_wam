@@ -1,0 +1,6 @@
+\subsubsection usage Usage
+\verbatim
+<node name="ApplyTofCalibrationAlgorithm" pkg="iri_apply_tof_calibration" type="ApplyTofCalibrationAlgorithm">
+</node>
+\endverbatim
+

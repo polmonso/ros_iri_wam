@@ -1,0 +1,21 @@
+<package>
+  <description brief="iri_segway_rmp200">
+
+     iri_segway_rmp200
+
+  </description>
+  <author>IRI Lab</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_segway_rmp200</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_driver"/>
+  <depend package="geometry_msgs"/>
+  <depend package="iri_segway_rmp_msgs"/>
+
+  <!-- This is needed so RMP400 can use namespace functions -->
+  <export>
+      <cpp cflags="-I${prefix}/include"/>
+  </export>
+
+</package>

@@ -1,0 +1,24 @@
+<!-- -->
+
+<launch>
+
+  <!-- load robot defined machines -->
+  <include file="$(find tibi_dabo_base)/machines/tibi_dabo.machines" />
+
+  <!-- HRI Launch File -->
+  <include file="$(find tibi_dabo_hri_node)/launch/tibi_dabo_hri.launch"/>
+
+  <group ns="$(env ROBOT)">
+    <!-- hre -->
+    <node pkg ="hre_random_node"
+          type="hre_random_node"
+          name="hre_random_node"
+          machine="visio"
+          output="screen">
+      <remap from="/$(env ROBOT)/hri"
+               to="/$(env ROBOT)/tibi_dabo_hri_node/hri" />
+    </node>
+
+  </group>
+
+</launch>

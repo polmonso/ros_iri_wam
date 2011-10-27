@@ -1,0 +1,15 @@
+<launch>
+    <machine name="laurel" address="192.168.0.3" 
+             ros-root="$(env ROS_ROOT)"
+             ros-package-path="$(env ROS_PACKAGE_PATH)"
+             default="true" />
+
+    <machine name="hardy" address="192.168.0.4"
+             ros-root="$(env ROS_ROOT)"
+             ros-package-path="$(env ROS_PACKAGE_PATH)"/>
+
+    <!-- The tablet PC will work as visual -->
+    <machine name="visual" address="192.168.0.7"
+             ros-root="$(env ROS_ROOT)"
+             ros-package-path="$(env ROS_PACKAGE_PATH)"/>
+</launch>

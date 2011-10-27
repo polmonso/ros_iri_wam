@@ -1,0 +1,9 @@
+\subsubsection usage Usage
+\verbatim
+<node name="Tcm3CompassDriver" pkg="iri_tcm3_compass" type="Tcm3CompassDriver">
+  <param name="mounting_position" type="int" value="6" />
+  <param name="relative" type="bool" value="True" />
+  <param name="frame_id" type="str" value="tcm3" />
+</node>
+\endverbatim
+

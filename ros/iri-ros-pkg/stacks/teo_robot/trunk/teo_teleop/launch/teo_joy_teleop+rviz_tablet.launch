@@ -1,0 +1,8 @@
+<launch>
+  <!-- Teo joy base -->
+  <include file="$(find teo_teleop)/launch/teo_joy_teleop.launch" />
+
+  <!-- rviz on visual -->
+  <node pkg="rviz" pkg="rviz"
+        machine="visual" />
+</launch>

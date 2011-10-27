@@ -1,0 +1,10 @@
+\subsubsection usage Usage
+\verbatim
+<node name="TibiDaboArmDriver" pkg="tibi_dabo_arm_node" type="TibiDaboArmDriver">
+  <param name="config_file" type="str" value="base_arm_config.xml" />
+  <param name="motion_mode" type="int" value="0" />
+  <param name="control_mode" type="int" value="0" />
+  <param name="feedback_rate" type="int" value="10" />
+</node>
+\endverbatim
+

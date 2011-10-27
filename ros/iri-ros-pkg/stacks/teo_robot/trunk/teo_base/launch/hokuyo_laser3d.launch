@@ -1,0 +1,15 @@
+<!-- -->
+<launch>
+     <node pkg="iri_hokuyo_laser3d"
+           type="iri_hokuyo_laser3d"
+           name="h3d"
+           output="screen">
+           <param name="frame_id" value="$(env ROBOT)/h3d" />
+       <param name="laser_port" value="/dev/sensors/hokuyo_H0901258" />
+       <param name="resolution" value="1.0" />
+       <param name="laser_mode" value="1" />
+       <param name="scan_mode" value="True" />
+       <param name="continuous" value="False" />
+       <param name="publish_pointcloud" value="False" />
+     </node>
+</launch>

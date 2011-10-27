@@ -1,0 +1,19 @@
+<package>
+  <description brief="iri_segway_rmp400">
+    Segway RMP 400 ROS driver
+  </description>
+  <author>Jose Luis Rivero</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url></url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_driver"/>
+  <depend package="tf"/>
+  <depend package="geometry_msgs"/>
+  <depend package="nav_msgs"/>
+  <depend package="iri_segway_rmp200"/>
+  <depend package="iri_segway_rmp_msgs"/>
+
+</package>
+
+

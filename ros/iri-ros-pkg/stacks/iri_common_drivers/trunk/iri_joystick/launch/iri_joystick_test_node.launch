@@ -1,0 +1,17 @@
+<!-- %Tag(FULL)%-->
+<!--
+     Launch the testing node, open rxconsole and set the DEBUG level
+     for joy_testing >> ros-iri-joystick-node
+-->
+<launch>
+ <!-- iri joy node -->
+  <node respawn="true"
+        pkg="iri_joystick"
+        type="iri_joystick_node"
+        name="joy_testing">
+
+    <param name="dev" type="string" value="/dev/input/js0" />
+  </node>
+
+</launch>
+<!-- %EndTag(FULL)%-->

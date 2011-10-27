@@ -1,0 +1,48 @@
+<!-- -->
+
+<launch>
+
+  <node  pkg="rosbag" 
+        type="rosbag" 
+        name="rosbag" 
+        args="play -l /home/andreu/rosbags/2011-08-24-16-06-32.bag" />
+
+  <group ns="$(env ROBOT)">
+
+<!--    <node pkg="tf"
+          type="static_transform_publisher" 
+	    name="laser_broadcaster"
+	    args="0.3 0 0.4 0 0 0 /odom /laser 100" />-->
+
+    <!-- people detector -->
+    <node pkg ="iri_laser_people_detection"
+          type="iri_laser_people_detection"
+          name="iri_laser_people_detection">
+      <remap from="/$(env ROBOT)/iri_laser_people_detection/scan"
+               to="/$(env ROBOT)/front_laser/scan" /> 
+    </node>
+
+    <!-- people tracker -->
+    <node pkg ="iri_people_tracking"
+          type="iri_people_tracking"
+          name="iri_people_tracking"
+	    output="screen">
+      <remap from="/$(env ROBOT)/iri_people_tracking/people_array"
+               to="/$(env ROBOT)/iri_laser_people_detection/people_array" />
+	<remap from="/$(env ROBOT)/iri_people_tracking/odom"
+               to="/$(env ROBOT)/segway_rmp200_odom/odom" />
+    </node>
+
+  </group>
+
+	<!-- rviz configurated for people tracking -->
+	<node name="rviz" 
+		pkg="rviz" 
+		type="rviz" 
+		args="-d $(find iri_people_tracking)/config/test_people_tracking.vcg">
+	</node>
+
+
+</launch>
+
+<!-- /home/andreu/rosbags/two_persons_2011-07-06-18-36-09.bag -->

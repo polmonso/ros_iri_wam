@@ -1,0 +1,27 @@
+<launch>
+<!--     <remap from="/camcube" to="camcube3"/>-->
+<group ns="camera1" >
+  <node name="camcube" pkg="iri_pmdcamera" type="pmdcamera_node">
+       <param name="camera_type" value="0" />
+  </node>
+  <node pkg="dynamic_reconfigure" type="reconfigure_gui"
+        name="reconfigure_gui" />
+  <node pkg="pcl_tutorials" type="pointcloud_online_viewer"
+        name="pointcloud_online_viewer" >
+       <param name="input" value="/camera1/pointcloud/cloud2_raw" />
+  </node>
+</group>
+<group ns="camera2" >
+  <node name="camboard" pkg="iri_pmdcamera" type="pmdcamera_node">
+       <param name="camera_type" value="1" />
+  </node>
+  <node pkg="dynamic_reconfigure" type="reconfigure_gui"
+        name="reconfigure_gui" />
+</group>
+  <node pkg="pcl_tutorials" type="pointcloud_online_viewer"
+        name="pointcloud2" >
+       <param name="input" value="/camera2/pointcloud/cloud2_raw" />
+  </node>
+
+</launch>
+

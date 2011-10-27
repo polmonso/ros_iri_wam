@@ -1,0 +1,60 @@
+<!-- -->
+
+<launch>
+
+  <arg name="launch_rviz" default="False" />
+  <arg name="launch_laser" default="True" />
+
+  <!-- load robot defined machines -->
+  <include file="$(find tibi_dabo_base)/machines/tibi_dabo.machines" />
+
+  <group ns="$(env ROBOT)">
+
+    <!-- hokuyo laser -->
+<!--      <node pkg="iri_hokuyo_laser" -->
+<!--           type="iri_hokuyo_laser" -->
+<!--           name="iri_hokuyo_laser" -->
+<!--           output="screen" -->
+<!--           if="$(arg launch_laser)"> -->
+<!--       <param name="use_ethernet" type="bool" value="False"/> -->
+<!--     </node> -->
+    <node pkg ="hokuyo_node"
+          type="hokuyo_node"
+          name="front_laser"
+          machine="nav"
+          if="$(arg launch_laser)">
+      <remap from="/$(env ROBOT)/scan"
+               to="/$(env ROBOT)/front_laser/scan" />
+      <param name="frame_id" value="/$(env ROBOT)/front_laser" type="str" />
+      <param name="port" value="/dev/hokuyo_H0805704" type="str" />
+    </node>
+
+    <!-- people detector -->
+    <node pkg ="iri_laser_people_detection"
+          type="iri_laser_people_detection"
+          name="iri_laser_people_detection"
+          machine="nav">
+      <remap from="/$(env ROBOT)/iri_laser_people_detection/scan"
+               to="/$(env ROBOT)/front_laser/scan" /> 
+    </node>
+
+    <!-- people tracker -->
+    <node pkg ="iri_people_tracking"
+          type="iri_people_tracking"
+          name="iri_people_tracking"
+          machine="nav">
+      <remap from="/$(env ROBOT)/iri_people_tracking/people_array"
+               to="/$(env ROBOT)/iri_laser_people_detection/people_array" />
+      <remap from="/$(env ROBOT)/iri_people_tracking/odom"
+               to="/$(env ROBOT)/segway_rmp200_odom/odom" />
+<!--       <param name="laser_frame_id" value="/$(env ROBOT)/front_laser" type="str" /> -->
+<!--       <param name="~tf_prefix" value="$(env ROBOT)" type="str"/> -->
+    </node>
+
+  </group>
+
+  <!-- rviz configurated for people tracking -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find iri_people_tracking)/config/people_tracking.vcg"
+        if="$(arg launch_rviz)" />
+
+</launch>

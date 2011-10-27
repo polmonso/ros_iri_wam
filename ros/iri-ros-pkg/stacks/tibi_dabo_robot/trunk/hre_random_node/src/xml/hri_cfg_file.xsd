@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<!--
+
+file      : hri_cfg_file.xsd 
+author    : Sergi Hernandez Juan (shernand@iri.upc.edu)
+copyright : not copyrighted - public domain
+
+-->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:complexType name="hri_config_t">
+    <xsd:sequence>
+      <xsd:element name="left_arm_seq" type="xsd:string">
+      </xsd:element>
+      <xsd:element name="right_arm_seq" type="xsd:string">
+      </xsd:element>
+      <xsd:element name="head_seq" type="xsd:string">
+      </xsd:element>
+      <xsd:element name="face_expression" type="xsd:string">
+      </xsd:element>
+      <xsd:element name="tts_text" type="xsd:string">
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="hri_config" type="hri_config_t">
+  </xsd:element>
+
+</xsd:schema>

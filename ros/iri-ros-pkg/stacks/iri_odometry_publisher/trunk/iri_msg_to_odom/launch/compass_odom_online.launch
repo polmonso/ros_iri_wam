@@ -1,0 +1,27 @@
+<launch>
+
+  <include file="$(find teo_base)/machines/$(env ROBOT).machines" />
+
+    <!-- compass_odom -->
+    <node pkg="iri_tcm3_compass"
+               type="tcm3_compass_node"
+               name="tc"
+               output="screen" >
+      <remap from="/tc/tcm3" to="/compass"/>
+      <param name="mounting_position" value="6"/>
+      <param name="relative" value="true"/>
+    </node>
+
+    <!-- compass_odom -->
+    <node pkg="iri_compass_odom"
+               type="compass_odom_node"
+               name="co"
+               output="screen"
+               >
+      <remap from="/co/compass" to="/compass"/>
+      <remap from="/co/compass_odom" to="/compass_odom"/>
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find iri_compass_odom)/config/co_rviz.vcg" />
+
+</launch>

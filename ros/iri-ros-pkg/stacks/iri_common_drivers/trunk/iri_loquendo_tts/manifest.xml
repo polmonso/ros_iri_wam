@@ -1,0 +1,18 @@
+<package>
+  <description brief="iri_loquendo_tts">
+
+     iri_loquendo_tts
+
+  </description>
+  <author>segway</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_loquendo_tts</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_driver"/>
+  <depend package="iri_common_drivers_msgs"/>
+  <depend package="iri_action_server"/>
+
+</package>
+
+

@@ -1,0 +1,6 @@
+<launch>
+	<arg name="model" />
+	<param name="robot_description" textfile="$(arg model)" />
+  <include file="$(find teo_base)/launch/teo_state_publisher.launch" />
+	<node name="rviz" pkg="rviz" type="rviz" />
+</launch>

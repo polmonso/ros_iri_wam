@@ -1,0 +1,8 @@
+\subsubsection usage Usage
+\verbatim
+<node name="Asterx1Driver" pkg="iri_asterx1" type="Asterx1Driver">
+  <param name="serialPortName" type="str" value="/dev/ttyACM0" />
+  <param name="acquisitionRate" type="int" value="5" />
+</node>
+\endverbatim
+

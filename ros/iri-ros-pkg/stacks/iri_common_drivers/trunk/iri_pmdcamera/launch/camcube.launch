@@ -1,0 +1,11 @@
+<launch>
+  <node name="camcube3_camera" pkg="iri_pmdcamera" type="pmdcamera_node" >
+       <param name="camera_type" value="0" />
+  </node>
+
+  <node name="reconfigure_gui" pkg="dynamic_reconfigure" type="reconfigure_gui" />
+
+  <node name="pointcloud_online_viewer" pkg="pcl_tutorials" type="pointcloud_online_viewer"
+        args="input:=/camcube3_camera/pointcloud/cloud2_raw" />
+
+</launch>

@@ -1,0 +1,41 @@
+<launch>
+
+<!-- To save an image open a terminal and call the service using
+> rosservice call /tof_color/saveImage
+-->
+
+<!-- TODO: engegar la camcube! -->
+
+       <node name="iri_firewire_camera" pkg="iri_firewire_camera" type="firewire_camera_node" output="screen">
+       <param name="Camera_node" value="0" />
+       <param name="Framerate" value="30" />
+       <param name="Color_coding" value="3" />
+       </node>
+
+<!-- Rectificar l'imatge de color. Cal el fitxer de calibratge! 
+       <node name="image_proc" pkg="image_proc" type="image_proc" output="screen" ns="/firewire_camera_node">
+       <remap from="/firewire_camera_node/image_raw" to="/firewire_camera_node/camera_image" /> 
+       </node>
+-->
+
+<!-- Filter jump edge points -->
+       <node name="pcl_je_filter" pkg="iri_pcl_filters" type="pcl_je_filter" output="screen">
+       <remap from="input" to="/camcube3_camera/pointcloud/cloud2_raw" /> 
+       </node>
+
+<!-- Average points -->
+       <node name="average_point_cloud_node" pkg="average_point_cloud_node" type="average_point_cloud_node" output="screen">
+<!--       <remap from="input" to="/pmdcamera_driver_node/pointcloud/cloud2_raw" /> -->
+       <remap from="/average_point_cloud_node/input" to="/jump_edge/pcl2_jef" /> 
+       </node>
+
+
+<!-- merge tof and rgb -->
+       <node name="tof_color" pkg="zyonz_tof_color" type="zyonz_tof_color" output="screen">
+       <remap from="/image" to="/firewire_camera_node/camera_image" /> 
+       <remap from="/input_intens" to="/camcube3_camera/image_inten" /> 
+<!--       <remap from="/pointCloud" to="/pmdcamera_driver_node/pointcloud/cloud2_raw" /> -->
+       <remap from="/pointCloud" to="/jump_edge/pcl2_jef" /> 
+<!--       <remap from="/pointCloud" to="/average_point_cloud_node/output" /> -->
+       </node>
+</launch>

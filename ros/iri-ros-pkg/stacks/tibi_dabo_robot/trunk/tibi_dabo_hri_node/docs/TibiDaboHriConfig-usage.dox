@@ -1,0 +1,6 @@
+\subsubsection usage Usage
+\verbatim
+<node name="TibiDaboHriAlgorithm" pkg="tibi_dabo_hri_node" type="TibiDaboHriAlgorithm">
+</node>
+\endverbatim
+

@@ -1,0 +1,7 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~serialPortName" : \b [str] The serial_port where the asterx1 device can be found min: , default: /dev/ttyACM0, max: 
+- \b "~acquisitionRate" : \b [int] acquisition_rate  min: 0, default: 5, max: 9
+

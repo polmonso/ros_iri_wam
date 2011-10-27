@@ -1,0 +1,80 @@
+latest
+rosrun dummy_pomdp pomdp /planner/obs_client:=/mofa_bridge/srv/request_observation /planner/wam_action:=/wam_actions/wam_action /planner/focused_obj_label:=/obj_filter/input/focused_obj /planner/save_pcl:=store_image_action
+rosservice call /dummy_pomdp/execution_flow_control
+
+
+ROS WAM new commands 
+rosrun wam_fk wam_fk /wam_fk/tf:=/tf /wam_fk/joint_states:=/wam_driver_node/joint_states
+rosrun wam_ik wam_ik /wam_ik/joint_states:=/wam_driver_node/joint_states /wam_ik/joint_move:=/wam_driver_node/joints_move
+rosrun wam_calibration wam_calibration /wam_cal/pose:=/wam_node/pose /wam_cal/joint_states:=/wam_node/joint_states /wam_cal/pose_move:=/wam_node/pose_move /wam_cal/pose_move2:=/wam_ik/pose_move /wam_cal/joints_move:=/wam_node/joints_move /wam_cal/tf:=/tf
+
+rosrun wam_tutorial wam_tutorial /wam_tut/pose:=/wam_driver_node/pose /wam_tut/joint_states:=/wam_driver_node/joint_states /wam_tut/pose_move:=/wam_ik/pose_move /wam_tut/pose_move2:=/wam_ik/pose_move /wam_tut/joints_move:=/wam_driver_node/joints_move /wam_tut/tf:=/tf
+
+rosservice call /wam_ik/pose_move "{pose: {position: {x: 0.5, y: 0.0, z: 0.0}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 0.0}}}"
+rosservice call /bhand_driver_node/bhand_cmd "{bhandcmd: HI}"
+
+rosrun wam_actions wam_actions /wam_actions/pose_move:=/wam_ik/pose_move /wam_actions/bhand_cmd:=/bhand_driver_node/bhand_cmd /wam_actions/obj_filter:=/obj_filter/srv/compute_grasp_pose
+rosrun wam_actions wam_actions /wam_actions/pose_move:=/wam_ik/pose_move /wam_actions/bhand_cmd:=/bhand_driver_node/bhand_cmd
+rosservice call /wam_actions/wam_action "{action: 0}"
+rosservice call /wam_actions/wam_action "{action: 0, pixelx: 50, pixely: 20, pixelz: 20}"
+
+//services list: 1 = free 0 = hold
+rosservice call /wam_driver_node/wam_services "{call: 1}"
+
+rosbag record /camera/rgb/image_color /image_pattern /pattern/tf /wam_driver_node/joint_states /wam_driver_node/pose /tf /camera/rgb/points
+
+rosrun camera_calibration cameracalibrator.py --size 8x5 --square 0.02994444 image:=/camera/rgb/image_color camera:=/camera --no-service-check
+
+roslaunch openni_camera openni_node.launch 
+rosrun image_view image_view image:=/camera/rgb/image_color
+
+rosbag record /camera/rgb/image_color /wam_driver_pose/pose
+
+rosrun handeye_log handeye_log input_image:=camera/rgb/image_color robot/pose:=wam_driver_node/pose 
+rosrun handeye_log handeye_log input/pcl2/raw:=camera/rgb/points
+
+rosservice call /store_range_image
+
+rosrun find_pattern find_pattern image:=camera/rgb/image_color
+
+rostopic echo /pattern/tf/"transforms[0]"/transform
+
+rosparam set /handeye_log/flags/tf_robot false
+rosparam set /handeye_log/flags/tf_pattern false
+rosparam set /handeye_log/flags/matlab_pcl2 false
+rosparam set /handeye_log/flags/img_intensity false
+rosparam set /handeye_log/flags/img_depth false
+
+ROS WAM old commands and other
+
+roscore
+rxgraph
+rxconsole
+rosrun dynamic_reconfigure reconfigure_gui
+rosrun camera1394 camera1394_node
+rosrun image_view image_view image:=camera/image_color
+rosrun image_view image_view image:=camera/image_raw
+rosrun camera_calibration cameracalibrator.py --size 8x5 --square 0.02994444 image:=/camera/image_raw camera:=/camera
+ROS_NAMESPACE=camera rosrun image_proc image_proc
+rosrun image_view image_view image:=camera/image_rect
+rosrun image_view image_view image:=camera/image_rect_color
+
+blob detection
+rosparam set /cmvision/color_file /path/to/colors.txt
+rosrun cmvision cmvision image:=<image topic>
+
+rosrun wam_fk_node wam_fk_node /wam_fk_node/tf:=/tf /wam_fk_node/joint_states:=/wam_node/joint_states
+
+rosservice call /wam_node/joint_move [0.0,0.0,0.2,0.0,0.0,0.0,0.0]
+
+rosservice call /wam_ik_node/pose_move "{pose: {position: {x: 0.5, y: 0.0, z: 0.0}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 0.0}}}"
+rosservice call /wam_node/pose_move "{pose: {position: {x: 0.5, y: 0.0, z: 0.0}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 0.0}}}"
+
+rosrun wam_accuracy_node wam_accuracy_node /wam_accuracy_node/pose:=/wam_node/pose /wam_accuracy_node/joint_states:=/wam_node/joint_states /wam_accuracy_node/pose_move:=/wam_node/pose_move /wam_accuracy_node/pose_move2:=/wam_ik_node/pose_move /wam_accuracy_node/joint_move:=/wam_node/joint_move /wam_accuracy_node/tf:=/tf
+
+rosservice call /barrett_hand_node/barrett_hand_cmd "{bhandcmd: HI}"
+
+rosrun wam_node wam_node
+rosrun barrett_hand_node barrett_hand_node
+
+

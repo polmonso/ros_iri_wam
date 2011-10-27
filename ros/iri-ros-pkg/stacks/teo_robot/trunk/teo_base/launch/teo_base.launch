@@ -1,0 +1,78 @@
+<!-- -->
+<launch>
+
+  <!-- platform -->
+  <arg name="segway"  default="True" />
+  <arg name="odom"    default="False" />
+  <arg name="icp"     default="True" />
+  <!-- sensors -->
+  <arg name="front"   default="True" />
+  <arg name="rear"    default="True" />
+  <arg name="floor"   default="True" />
+  <arg name="h3d"     default="True" />
+  <arg name="stereo"  default="False" />
+  <arg name="compass" default="True" />
+  <arg name="gps"     default="False" />
+  <!-- utils -->
+  <arg name="sim"     default="False" />
+  <arg name="rviz"    default="False" />
+
+  <include file="$(find teo_base)/machines/$(env ROBOT).machines" />
+
+  <group ns="teo">
+
+    <param name="/use_sim_time" value="$(arg sim)" />
+
+    <!-- RVIZ  -->
+    <include  file="$(find teo_base)/launch/rviz_teo.launch"
+              if="$(arg rviz)" />
+
+    <!-- state & joint publisher -->
+    <include file="$(find teo_base)/launch/teo_state_publisher.launch" />
+
+    <!-- segway rmp 400 platform -->
+    <node pkg="iri_segway_rmp400"
+          type="iri_segway_rmp400"
+          name="segway"
+          if="$(arg segway)"
+          machine="laurel"/>
+
+   <!-- Odometry publisher -->
+   <include  file="$(find teo_base)/launch/teo_odom_publisher.launch"
+              if="$(arg odom)" />
+
+    <!-- Odometry publisher ICP -->
+    <include  file="$(find teo_base)/launch/teo_odom_icp.launch"
+              if="$(arg icp)" />
+
+    <!-- Front Laser -->
+    <include  file="$(find teo_base)/launch/front_laser.launch"
+              if="$(arg front)" />
+
+    <!-- Rear Laser -->
+    <include  file="$(find teo_base)/launch/rear_laser.launch"
+              if="$(arg rear)" />
+
+    <!-- Floor Laser -->
+    <include  file="$(find teo_base)/launch/floor_laser.launch"
+              if="$(arg floor)" />
+
+    <!-- Hokuyo Laser 3D -->
+    <include  file="$(find teo_base)/launch/hokuyo_laser3d.launch"
+              if="$(arg h3d)" />
+
+    <!-- Stereo Cameras -->
+    <include  file="$(find teo_base)/launch/stereo_cameras.launch"
+              if="$(arg stereo)" />
+
+    <!-- TCM3 Compass -->
+    <include  file="$(find teo_base)/launch/tcm3.launch"
+              if="$(arg compass)" />
+
+    <!-- GPS  -->
+    <include  file="$(find teo_base)/launch/gps.launch"
+              if="$(arg gps)" />
+
+  </group>
+
+</launch>

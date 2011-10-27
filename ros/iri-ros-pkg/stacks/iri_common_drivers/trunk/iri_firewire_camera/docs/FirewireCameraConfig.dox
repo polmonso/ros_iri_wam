@@ -1,0 +1,23 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~Camera_node" : \b [int] Desired camera id min: -1, default: -1, max: 100
+- \b "~ISO_speed" : \b [int] Desired ISO speed min: 100, default: 800, max: 800
+- \b "~Image_width" : \b [int] Desired image width in pixels min: 160, default: 640, max: 2448
+- \b "~Image_height" : \b [int] Desired image height in pixels min: 120, default: 480, max: 2048
+- \b "~Left_offset" : \b [int] Desired left offset in pixels min: 0, default: 0, max: 2448
+- \b "~Top_offset" : \b [int] Desired top offset in pixels min: 0, default: 0, max: 2048
+- \b "~Framerate" : \b [double] Desired framerate in frames per second min: 1.875, default: 50.0, max: 200.0
+- \b "~Color_coding" : \b [int] Desired color coding min: 0, default: 0, max: 7
+- \b "~White_balance_enabled" : \b [bool] Enable white balance feature min: False, default: False, max: True
+- \b "~White_balance_mode" : \b [int] White balance mode min: 0, default: 0, max: 1
+- \b "~White_balance_u_b_value" : \b [int] White balance U/B value min: 0, default: 0, max: 1023
+- \b "~White_balance_v_r_value" : \b [int] White balance V/R value min: 0, default: 0, max: 1023
+- \b "~Shutter_enabled" : \b [bool] Enable shutter feature min: False, default: False, max: True
+- \b "~Shutter_mode" : \b [int] Shutter mode min: 0, default: 0, max: 1
+- \b "~Shutter_value" : \b [int] Shutter value min: 28, default: 0, max: 4095
+- \b "~Gain_enabled" : \b [bool] Enable gain feature min: False, default: False, max: True
+- \b "~Gain_mode" : \b [int] Gain mode min: 0, default: 0, max: 1
+- \b "~Gain_value" : \b [int] Gain value min: 48, default: 0, max: 730
+

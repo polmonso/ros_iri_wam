@@ -1,0 +1,13 @@
+<package>
+  <description brief="iri_joystick">
+      Joystick ROS Driver for the IRI joystick library.
+      Library web page: http://wikiri.upc.es/index.php/Joystick_driver
+  </description>
+  <author>Jose Luis Rivero</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url></url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_driver"/>
+  <depend package="joy"/>
+</package>

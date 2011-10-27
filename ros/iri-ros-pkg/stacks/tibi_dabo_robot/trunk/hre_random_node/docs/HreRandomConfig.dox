@@ -1,0 +1,10 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~op_mode" : \b [int] Desired operation mode min: 0, default: 0, max: 1
+- \b "~seq_file" : \b [str] Sequence file to execute min: , default: , max: 
+- \b "~home_interval" : \b [int] Desired interval (in cicles) to execute the home sequence min: 2, default: 3, max: 10
+- \b "~speech_interval" : \b [int] Desired interval (in cicles) to speak min: 1, default: 1, max: 10
+- \b "~repeat_interval" : \b [int] Minimum interval (in cicles) between two identical motion sequences min: 1, default: 3, max: 10
+

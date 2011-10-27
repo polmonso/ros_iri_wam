@@ -1,0 +1,13 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~resolution" : \b [double] scan resolution dg/scan min: 0.05, default: 2.0, max: 2.0
+- \b "~laser_mode" : \b [int] ranges or ranges+intensity min: 0, default: 1, max: 1
+- \b "~scan_mode" : \b [bool] scan from the point 0 or just where the laser is min: False, default: True, max: True
+- \b "~continuous" : \b [bool] publish continuous pointclouds or service one min: False, default: False, max: True
+- \b "~publish_pointcloud" : \b [bool]  min: False, default: False, max: True
+- \b "~publish_pointcloud2" : \b [bool]  min: False, default: True, max: True
+- \b "~laser_port" : \b [str] port of the laser min: , default: /dev/ttyACM0, max: 
+- \b "~frame_id" : \b [str] The frame in which laser scans will be returned min: , default: h3d, max: 
+

@@ -1,0 +1,20 @@
+<package>
+  <description brief="iri_joystick_core">
+
+     iri_joystick_core
+
+  </description>
+  <author></author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_joystick_core</url>
+  <depend package="roscpp"/>
+  <depend package="sensor_msgs" />
+  <depend package="geometry_msgs" />
+
+  <export>
+    <cpp cflags="-I${prefix}/include"
+         lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -liri_joystick_core"/>
+  </export>
+
+</package>

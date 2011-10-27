@@ -1,0 +1,44 @@
+<!-- -->
+
+<launch>
+
+  <arg name="launch_rviz" default="True" />
+
+  <arg name="teleop"  default="False" />
+  <arg name="wiimote" default="True" />
+
+  <!-- segway platform and model -->
+  <include file="$(find iri_segway_rmp200)/launch/iri_segway_rmp200.launch">
+    <arg name="launch_rviz" value="False" />
+  </include>
+
+  <group ns="$(env ROBOT)">
+
+    <!-- segway rmp 200 odometry -->
+    <node pkg ="iri_segway_rmp200_odom"
+          type="iri_segway_rmp200_odom"
+          name="iri_segway_rmp200_odom"
+          output="screen">
+      <param name="~tf_prefix" value="$(env ROBOT)" />
+      <remap from="/$(env ROBOT)/iri_segway_rmp200_odom/platform_status"
+               to="/$(env ROBOT)/iri_segway_rmp200/status" />
+    </node>
+
+  </group>
+
+  <!-- teleoperation -->
+  <group if="$(arg teleop)">
+    <!-- wiimote teleop -->
+    <include file="$(find iri_wiimote_teleop)/launch/iri_wiimote_teleop.launch"
+              if="$(arg wiimote)" />
+    <!-- gamepad teleop -->
+    <include file="$(find iri_gamepad_teleop)/launch/iri_gamepad_teleop.launch"
+              unless="$(arg wiimote)" />
+  </group>
+
+  <!-- rviz configurated -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find iri_segway_rmp200_odom)/config/iri_segway_rmp200_odom.vcg" 
+        if="$(arg launch_rviz)" />
+
+</launch>
+

@@ -1,0 +1,4 @@
+<!-- -->
+<launch>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find teo_base)/config/teo_rviz.vcg" />
+</launch>

@@ -1,0 +1,6 @@
+\subsubsection usage Usage
+\verbatim
+<node name="FakeImageProcessingAlgorithm" pkg="iri_fake_image_processing" type="FakeImageProcessingAlgorithm">
+</node>
+\endverbatim
+

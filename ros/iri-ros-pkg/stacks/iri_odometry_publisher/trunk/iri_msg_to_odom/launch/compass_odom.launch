@@ -1,0 +1,23 @@
+<launch>
+
+  <include file="$(find teo_base)/machines/$(env ROBOT).machines" />
+
+    <!-- segway_odom (ROSBAG) -->
+    <node pkg="rosbag" type="rosbag" name="rosbag" output="screen"
+    args = "play /home/mmorta/Experiments/PAU/nav3d-experiment/29-06-2011/grass-slope-down/2011-06-29-12-21-52.bag --start=5 --clock">
+      <remap from="/tf" to="/tf_from_experiment"/>
+      <remap from="/teo/tcm3/tcm3" to="/compass"/>
+    </node>
+
+    <!-- compass_odom -->
+    <node pkg="iri_compass_odom"
+               type="compass_odom_node"
+               name="co"
+               output="screen" >
+      <remap from="/co/compass" to="/compass"/>
+      <remap from="/co/compass_odom" to="/compass_odom"/>
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find iri_compass_odom)/config/co_rviz.vcg" />
+
+</launch>

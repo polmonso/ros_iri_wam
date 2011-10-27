@@ -1,0 +1,9 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~serial_port" : \b [str] The serial port where the leuze device can be found min: , default: /dev/ttyUSB0, max: 
+- \b "~frame_id" : \b [str] The frame in which laser scans will be returned min: , default: /laser, max: 
+- \b "~angle_offset" : \b [double] The offset angle of the first/last range measurement in degrees min: 0.0, default: 0.0, max: 89.0
+- \b "~upsidedown" : \b [bool] The position of the leuze device min: False, default: False, max: True
+

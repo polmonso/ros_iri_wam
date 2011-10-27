@@ -1,0 +1,21 @@
+<package>
+  <description brief="iri_image_publisher">
+
+     iri_image_publisher
+
+  </description>
+  <author></author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_image_publisher</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="sensor_msgs"/>
+  <depend package="opencv2"/>
+  <depend package="cv_bridge"/>
+  <depend package="std_msgs"/>
+  <depend package="image_transport"/>
+
+</package>
+
+

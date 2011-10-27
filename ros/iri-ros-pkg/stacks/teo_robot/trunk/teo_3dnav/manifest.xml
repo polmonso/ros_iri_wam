@@ -1,0 +1,28 @@
+<package>
+  <description brief="teo_3dnav">
+
+     teo_3dnav
+
+  </description>
+  <author>Esteban Rodriguez</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/teo_3dnav</url>
+  <depend package="roscpp"/>
+  <depend package="pcl"/>
+  <depend package="pcl_ros"/>
+  <depend package="std_msgs"/>
+  <depend package="tf"/>
+  <depend package="sensor_msgs"/>
+  <depend package="geometry_msgs"/>
+  <depend package="laser_geometry"/>
+  <depend package="laser_assembler"/>
+  <depend package="teo_base"/>
+  <depend package="nav_msgs" />
+  <depend package="iri_base_driver"/>
+  <depend package="iri_segway_rmp400"/>
+  <depend package="iri_segway_rmp_msgs"/>
+
+</package>
+
+

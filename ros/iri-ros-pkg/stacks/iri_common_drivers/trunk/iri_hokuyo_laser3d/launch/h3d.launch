@@ -1,0 +1,9 @@
+<launch>
+     <node pkg="iri_hokuyo_laser3d" type="hokuyo_laser3d_node"
+           name="h3d" output="screen">
+       <param name="frame_id" value="h3d"/>
+       <param name="laser_port" value="/dev/ttyACM0" />
+       <param name="scan_mode" value="True" />
+     </node>
+</launch>
+

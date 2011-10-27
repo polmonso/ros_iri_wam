@@ -1,0 +1,573 @@
+<!--
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          TEO ROBOT URDF MODEL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          Institut de Robotica i Informatica Industrial (IRI) UPC-CSIC
+          author: mmorta
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  units: [m], [rad] (SI)
+  constants:
+  pi   = 3.14159
+  pi/2 = 1.57079
+
+  Basic Transformation Pro Engineer to URDF (If no coordinates changed)
+    <origin xyz="0 0 0" rpy="1.57079 0 0"/>
+
+  Basic Transformation SolidWorks to URDF
+    <origin xyz="0 0 0" rpy="1.57079 0 0"/>
+ -->
+
+<robot name="teo"
+    xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+    xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+    xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface">
+
+
+<!-- BODY FOOTPRINT -->
+  <!-- link -->
+  <link name="base_footprint">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </visual>
+<!-- gazebo (inertia, collision, material)-->
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.01" />
+      <inertia  ixx="0.001" ixy="0.0"  ixz="0.0"  iyy="0.001"  iyz="0.0"  izz="0.001"/>
+    </inertial>
+    <collision>
+      <!-- it has to be the same origin as the visual origin-->
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <!-- box containing the model -->
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+<!-- BODY
+      a coordinates center has been added in the CAD model in order to not have
+      to change rpy (ref_teo). It is in the middle of the model except the Z
+      which is in the wheels' axes' Z
+-->
+  <!-- joint -->
+  <joint name="base_footprint2base_link" type="fixed" >
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0.2667" rpy="0 0 0"/>
+  </joint>
+  <!-- link -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 3.14159"/>
+      <geometry>
+        <!-- pro engineer model exported to STL -->
+        <mesh filename="package://teo_base/model/meshes/rmp400_body_m_v2.stl" />
+      </geometry>
+      <material name="grey">
+        <color rgba="0.3 0.3 .3 0.5"/>
+      </material>
+    </visual>
+    <!-- gazebo (inertia, collision, material)-->
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="100.0" />
+      <inertia  ixx="1.748" ixy="0.0"  ixz="0.0"  iyy="8.448"  iyz="0.0"  izz="8.982"/>
+    </inertial>
+    <collision>
+      <!-- it has to be the same origin as the visual origin-->
+      <origin xyz="0 0 0.1"/>
+      <geometry>
+        <!-- leaving some space extra -->
+        <box size="1.40 0.45 0.5"/>
+      </geometry>
+      <material name="red">
+        <color rgba="0.8 0.1 .1 0.5"/>
+      </material>
+    </collision>
+  </link>
+  <gazebo reference="body">
+    <material>PR2/Grey3</material>
+  </gazebo>
+
+<!-- WHEEL FRONT LEFT
+      It is already rotated in the real CAD file, so the rotation is not
+      automatic.
+      It is centered in 0, so its joint needs an offset XYZ
+-->
+  <!-- joint -->
+  <joint name="base_link2wheel_fl" type="continuous" >
+    <parent link="base_link"/>
+    <child link="wheel_fl"/>
+    <origin xyz="0.3039 0.2857 0.0" rpy="0 0 0"/>
+    <axis xyz="0 1 0" />
+  </joint>
+  <!-- link -->
+  <link name="wheel_fl">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0 "/>
+      <geometry>
+        <mesh filename="package://teo_base/model/meshes/rmp400_wheel_m.stl" />
+      </geometry>
+      <material name="dark_grey">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="3.0" />
+      <inertia  ixx="0.0529" ixy="0.0"  ixz="0.0"  iyy="0.09375"  iyz="0.0"  izz="0.0529"/>
+    </inertial>
+    <collision>
+      <geometry>
+        <cylinder length="0.20" radius="0.28"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="wheel_fl">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+<!-- WHEEL FRONT RIGHT -->
+  <!-- joint -->
+  <joint name="base_link2wheel_fr" type="continuous" >
+    <parent link="base_link"/>
+    <child link="wheel_fr"/>
+    <origin xyz="0.3039 -0.2857 0.0" rpy="0 0 3.14159"/>
+     <axis xyz="0 1 0" />
+  </joint>
+  <!-- link -->
+  <link name="wheel_fr">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0 "/>
+      <geometry>
+        <mesh filename="package://teo_base/model/meshes/rmp400_wheel_m.stl" />
+      </geometry>
+      <material name="dark_grey">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="3.0" />
+      <inertia  ixx="0.0529" ixy="0.0"  ixz="0.0"  iyy="0.09375"  iyz="0.0"  izz="0.0529"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57079 0 0"/>
+      <geometry>
+        <cylinder length="0.20" radius="0.28"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="wheel_fr">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+<!-- WHEEL BACK LEFT -->
+  <!-- joint -->
+  <joint name="base_link2wheel_bl" type="continuous" >
+    <parent link="base_link"/>
+    <child link="wheel_bl"/>
+    <origin xyz="-0.3039 0.2857 0.0" rpy="0 0 0"/>
+    <axis xyz="0 1 0" />
+  </joint>
+  <!-- link -->
+  <link name="wheel_bl">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0 "/>
+      <geometry>
+        <mesh filename="package://teo_base/model/meshes/rmp400_wheel_m.stl" />
+      </geometry>
+      <material name="dark_grey">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="3.0" />
+      <inertia  ixx="0.0529" ixy="0.0"  ixz="0.0"  iyy="0.09375"  iyz="0.0"  izz="0.0529"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57079 0 0"/>
+      <geometry>
+        <cylinder length="0.20" radius="0.28"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="wheel_bl">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+<!-- WHEEL BACK RIGHT -->
+  <!-- joint -->
+  <joint name="base_link2wheel_br" type="continuous" >
+    <parent link="base_link"/>
+    <child link="wheel_br"/>
+    <origin xyz="-0.3039 -0.2857 0.0" rpy="0 0 3.14159"/>
+    <axis xyz="0 1 0" />
+  </joint>
+  <!-- link -->
+  <link name="wheel_br">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0 "/>
+      <geometry>
+        <mesh filename="package://teo_base/model/meshes/rmp400_wheel_m.stl" />
+      </geometry>
+      <material name="dark_grey">
+        <color rgba="0.1 0.1 0.1 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="3.0" />
+      <inertia  ixx="0.0529" ixy="0.0"  ixz="0.0"  iyy="0.09375"  iyz="0.0"  izz="0.0529"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57079 0 0"/>
+      <geometry>
+        <cylinder length="0.20" radius="0.28"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="wheel_br">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+
+  <!-- FRONT LASER-->
+  <!-- joint -->
+  <joint name="base_link2front_laser" type="fixed" >
+    <parent link="base_link"/>
+    <child link="front_laser"/>
+    <!--
+    x = 0.435 (long box=0.870) + 0.155 (position in frame)
+    y = 0
+    z = 0.05 (laser position, cc_teo->bottom laser)
+    -->
+    <origin xyz="0.590 0 0.05" rpy="0 0 0"/>
+  </joint>
+  <!-- link -->
+  <link name="front_laser">
+    <visual>
+      <!-- from STL origin to real sensor origin 0.0625-->
+      <origin xyz="-0.05 -0.06 -0.073" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://teo_base/model/meshes/UXM30LN_m_v2.stl" />
+      </geometry>
+      <material name="blue_navy">
+        <color rgba="0.0 0.2 0.25 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.800" />
+      <inertia  ixx="0.00238" ixy="0.0"  ixz="0.0"  iyy="0.00246"  iyz="0.0"  izz="0.00200"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.125 0.120 0.146"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="front_laser">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+
+  <!-- REAR LASER-->
+  <!-- joint -->
+  <joint name="base_link2rear_laser" type="fixed" >
+    <parent link="base_link"/>
+    <child link="rear_laser"/>
+    <!--
+    x = 0.435 (long box=0.870) + 0.95 (position in frame)
+    y = 0
+    z = 0.06 (laser position, cc_teo->bottom laser)
+    -->
+    <origin xyz="-0.575 0 0.06" rpy="0 0 3.14159"/>
+  </joint>
+  <!-- link -->
+  <link name="rear_laser">
+    <visual>
+      <!-- from STL origin to real sensor origin -->
+      <origin xyz="-0.05 -0.06 -0.073" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://teo_base/model/meshes/UXM30LN_m_v2.stl" />
+      </geometry>
+      <material name="red_navy">
+        <color rgba="0.5 0.0 0.1 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.800" />
+      <inertia  ixx="0.00238" ixy="0.0"  ixz="0.0"  iyy="0.00246"  iyz="0.0"  izz="0.00200"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.125 0.120 0.146"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="rear_laser">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+
+  <!-- H3D LASER-->
+  <!-- joint -->
+  <joint name="base_link2h3d" type="fixed" >
+    <parent link="base_link"/>
+    <child link="h3d"/>
+    <!-- position of the center of the sensor! -->
+    <origin xyz="0 0 0.8" rpy="0 0 0"/>
+  </joint>
+  <!-- link -->
+  <link name="h3d">
+    <visual>
+      <!-- from STL origin to real sensor origin -->
+      <origin xyz="-0.095 -0.095 -0.38" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://teo_base/model/meshes/h3d.stl" />
+      </geometry>
+      <material name="green">
+        <color rgba="0.0 0.5 0.1 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="8.0" />
+      <inertia  ixx="0.04113" ixy="0.0"  ixz="0.0"  iyy="0.04113"  iyz="0.0"  izz="0.04813"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.125 0.120 0.146"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="h3dsuport" type="fixed" >
+    <parent link="h3d"/>
+    <child link="h3d_suport"/>
+    <!-- position of the center of the sensor! -->
+    <origin xyz="0 0 -0.45" rpy="0 0 0"/>
+  </joint>
+  <!-- link -->
+  <link name="h3d_suport">
+    <visual>
+      <!-- from STL origin to real sensor origin -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.2 0.2 0.175" />
+      </geometry>
+      <material name="green">
+        <color rgba="0.0 0.5 0.1 0.5"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="2.0" />
+      <inertia  ixx="0.01" ixy="0.0"  ixz="0.0"  iyy="0.01"  iyz="0.0"  izz="0.01"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.2 0.2 0.175" />
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="h3d">
+    <material>Gazebo/Green</material>
+  </gazebo>
+  <gazebo reference="h3d_suport">
+    <material>Gazebo/Green</material>
+  </gazebo>
+
+
+  <!-- FLOOR LASER-->
+  <!-- joint -->
+  <joint name="base_link2floor_laser" type="fixed" >
+    <parent link="base_link"/>
+    <child link="floor_laser"/>->
+    <origin xyz="0.485 0 -0.01" rpy="3.14159 0.314159 0"/>
+  </joint>
+  <!-- link -->
+  <link name="floor_laser">
+    <visual>
+      <!-- from STL origin to real sensor origin -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.050 0.050 0.070"/>
+      </geometry>
+      <material name="yellow">
+        <color rgba="1 1 0.0 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.141" />
+      <inertia  ixx="0.0001" ixy="0.0"  ixz="0.0"  iyy="0.0001"  iyz="0.0"  izz="0.0001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.0 0.0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.050 0.050 0.070"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="floor_laser">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+  <!-- STEREO RIGHT-->
+  <!-- joint -->
+  <joint name="base_link2stereo_right" type="fixed" >
+    <parent link="base_link"/>
+    <child link="stereo_right"/>->
+    <origin xyz="0.350 0.203 0.370" rpy="0 0 0"/>
+  </joint>
+  <!-- link -->
+  <link name="stereo_right">
+    <visual>
+      <!-- from STL origin to real sensor origin -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.030 0.030 0.030"/>
+      </geometry>
+      <material name="pink">
+        <color rgba="1 0 0.8 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.141" />
+      <inertia  ixx="0.0001" ixy="0.0"  ixz="0.0"  iyy="0.0001"  iyz="0.0"  izz="0.0001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.0 0.0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.030 0.030 0.030"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="stereo_right">
+    <material>Gazebo/Pink</material>
+  </gazebo>
+
+  <!-- STEREO LEFT-->
+  <!-- joint -->
+  <joint name="base_link2stereo_left" type="fixed" >
+    <parent link="base_link"/>
+    <child link="stereo_left"/>->
+    <origin xyz="0.350 -0.203 0.370" rpy="0 0 0"/>
+  </joint>
+  <!-- link -->
+  <link name="stereo_left">
+    <visual>
+      <!-- from STL origin to real sensor origin -->
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.030 0.030 0.030"/>
+      </geometry>
+      <material name="pink">
+        <color rgba="1 0 0.8 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.141" />
+      <inertia  ixx="0.0001" ixy="0.0"  ixz="0.0"  iyy="0.0001"  iyz="0.0"  izz="0.0001"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.0 0.0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.030 0.030 0.030"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="stereo_left">
+    <material>Gazebo/Pink</material>
+  </gazebo>
+
+  <!-- COMPASS -->
+  <!-- joint -->
+  <joint name="base_link2compass" type="fixed" >
+    <parent link="base_link"/>
+    <child link="compass"/>
+    <origin xyz="-0.550 -0.2 0.44" rpy="0 0 0"/>
+  </joint>
+  <!-- link -->
+  <link name="compass">
+    <visual>
+
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.070 0.040 0.020"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0.0 1 0.0 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.001" />
+      <inertia  ixx="0.00001" ixy="0.0"  ixz="0.0"  iyy="0.00001"  iyz="0.0"  izz="0.000002"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.070 0.040 0.020"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="compass">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <!-- GPS -->
+  <!-- joint -->
+  <joint name="base_link2gps" type="fixed" >
+    <parent link="base_link"/>
+    <child link="gps"/>
+    <origin xyz="-0.550 -0.17 0.57" rpy="0 0 0"/>
+  </joint>
+  <!-- link -->
+  <link name="gps">
+    <visual>
+
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.040 0.040 0.01"/>
+      </geometry>
+      <material name="green2">
+        <color rgba="0.5 1 0.3 1"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="0.001" />
+      <inertia  ixx="0.00001" ixy="0.0"  ixz="0.0"  iyy="0.00001"  iyz="0.0"  izz="0.000002"/>
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.040 0.040 0.010"/>
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="gps">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+
+
+  <gazebo>
+    <controller:teo_plugin name="teo_driver" plugin="libteo_plugin.so">
+      <alwaysOn>true</alwaysOn>
+      <update>100</update>
+      <updateRate>50.0</updateRate>
+      <fr_joint>base_link2wheel_fr</fr_joint>
+      <fl_joint>base_link2wheel_fl</fl_joint>
+      <br_joint>base_link2wheel_br</br_joint>
+      <bl_joint>base_link2wheel_bl</bl_joint>
+      <interface:position name="position_iface_0"/>
+      <robotNamespace>/</robotNamespace>
+      <topicName>cmd_vel</topicName>
+    </controller:teo_plugin>
+  </gazebo>
+
+</robot>
+

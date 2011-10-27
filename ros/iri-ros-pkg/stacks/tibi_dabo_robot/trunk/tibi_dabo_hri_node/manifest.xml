@@ -1,0 +1,20 @@
+<package>
+  <description brief="tibi_dabo_hri_node">
+
+     tibi_dabo_hri_node
+
+  </description>
+  <author></author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/tibi_dabo_hri_node</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="std_msgs"/>
+  <depend package="tibi_dabo_msgs"/>
+  <depend package="iri_common_drivers_msgs"/>
+  <depend package="iri_action_server"/>
+
+</package>
+
+

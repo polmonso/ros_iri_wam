@@ -1,0 +1,17 @@
+<launch>
+    <remap from="/wam_fk/tf" to="/tf"/>
+    <remap from="/wam_fk/joint_states" to="/wam_driver_node/joint_states"/>
+    <node name="wam_fk" pkg="iri_wam_fk" type="wam_fk" />
+    <remap from="/wam_ik/joint_states" to="/wam_driver_node/joint_states"/>
+    <remap from="/wam_ik/joint_move" to="/wam_driver_node/joints_move"/>
+    <node name="wam_ik" pkg="iri_wam_ik" type="wam_ik" />
+<!--
+    <remap from="/wam_test/pose" to="/wam_driver_node/pose"/>
+    <remap from="/wam_test/joint_states" to="/wam_driver_node/joint_states"/>
+    <remap from="/wam_test/pose_move" to="/wam_ik/pose_move"/>
+    <remap from="/wam_test/pose_move2" to="/wam_ik/pose_move"/>
+    <remap from="/wam_test/joints_move" to="/wam_driver_node/joints_move"/>
+    <remap from="/wam_test/tf" to="/tf"/> 
+    <node name="wam_test" pkg="iri_wam_test" type="wam_test" />
+-->
+</launch>

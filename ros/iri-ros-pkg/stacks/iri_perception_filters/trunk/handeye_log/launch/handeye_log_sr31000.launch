@@ -1,0 +1,14 @@
+<!-- -*- mode: XML -*- -->
+
+<launch>
+    <param name="/handeye_log/flags/img_intensity" value="true" />
+    <param name="/handeye_log/flags/img_depth" value="false" />
+    <param name="/handeye_log/flags/matlab_pcl2" value="false" />
+    <param name="/handeye_log/flags/tf_pattern" value="false" />
+    <param name="/handeye_log/flags/tf_robot" value="true" />
+    <param name="/handeye_log/flags/tf_robot_inverse" value="false" />
+    <node pkg="handeye_log" type="handeye_log" name="handeye" output="screen" respawn="false">
+        <remap from="/input/image/intensity" to="/swissranger/intensity/image_raw" />
+        <remap from="/input/pose/robot" to="/wam_driver_node/pose"/>
+    </node>
+</launch>

@@ -1,0 +1,7 @@
+\subsubsection usage Usage
+\verbatim
+<node name="IriClothesGraspingPointAlgorithm" pkg="iri_clothes_grasping_point" type="IriClothesGraspingPointAlgorithm">
+  <param name="a" type="double" value="0.5" />
+</node>
+\endverbatim
+

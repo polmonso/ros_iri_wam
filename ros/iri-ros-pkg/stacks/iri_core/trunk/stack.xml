@@ -1,0 +1,9 @@
+<stack>
+  <description brief="iri_core">iri_core</description>
+  <author>Maintained by </author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_core</url>
+  <depend stack="ros" />
+
+</stack>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<led_seq xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="led_seq_file.xsd">
+   <led_sequence>
+      <expression>stand_by</expression>
+      <brightness>80</brightness>
+      <delay>1000</delay>
+   </led_sequence>
+   <led_sequence>
+      <expression>speak</expression>
+      <brightness>80</brightness>
+      <delay>400</delay>
+   </led_sequence>
+   <led_sequence>
+      <expression>speak</expression>
+      <brightness>80</brightness>
+      <delay>500</delay>
+   </led_sequence>
+   <led_sequence>
+      <expression>speak</expression>
+      <brightness>80</brightness>
+      <delay>300</delay>
+   </led_sequence>
+</led_seq>

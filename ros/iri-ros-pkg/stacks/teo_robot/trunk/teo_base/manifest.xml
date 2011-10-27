@@ -1,0 +1,14 @@
+<package>
+  <description brief="teo_base">
+      Base package for robot TEO from the IRI, CSIC-UPC.
+  </description>
+  <author>Jose Luis Rivero</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://wikiri.upc.es/index.php/Segway_RMP400</url>
+  <depend package="iri_segway_rmp400" />
+  <depend package="iri_hokuyo_laser" />
+  <depend package="iri_tcm3_compass" />
+  <depend package="iri_asterx1" />
+</package>
+

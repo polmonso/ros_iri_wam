@@ -1,0 +1,18 @@
+<package>
+  <description brief="iri_laser_people_detection">
+
+     iri_laser_people_detection
+
+  </description>
+  <author>Fernando, Andreu</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_laser_people_detection</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="visualization_msgs"/>
+  <depend package="sensor_msgs"/>
+
+</package>
+
+

@@ -1,0 +1,19 @@
+<package>
+  <description brief="iri_covariance_markers">
+
+     iri_covariance_markers
+
+  </description>
+  <author>Marti Morta, mmorta at iri.upc.edu­</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_covariance_markers</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="visualization_msgs"/>
+  <depend package="nav_msgs"/>
+  <depend package="eigen"/>
+
+</package>
+
+

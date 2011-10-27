@@ -1,0 +1,23 @@
+<package>
+  <description brief="iri_generic_odometry">
+
+     iri_generic_odometry
+
+  </description>
+  <author></author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_generic_odometry</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="nav_msgs"/>
+  <depend package="std_msgs"/>
+  <depend package="iri_odometry_core"/>
+  <depend package="tf"/>
+  <export> 
+   <cpp cflags="-I${prefix}/include"/> 
+  </export>
+
+</package>
+
+

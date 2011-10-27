@@ -1,0 +1,9 @@
+<stack>
+  <description brief="iri_pcl">iri_pcl</description>
+  <author>Maintained by Sergi Foix</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_pcl</url>
+  <depend stack="ros" />
+
+</stack>

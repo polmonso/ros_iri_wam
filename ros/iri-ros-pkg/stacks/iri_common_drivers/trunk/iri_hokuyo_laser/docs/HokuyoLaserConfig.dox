@@ -1,0 +1,15 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~angle_min" : \b [double] The angle of the first range measurement. The unit depends on ~ang_radians. min: -1.57079632679, default: -1.57079632679, max: 0.0
+- \b "~angle_max" : \b [double] The angle of the first range measurement. The unit depends on ~ang_radians. min: 0.0, default: 1.57079632679, max: 1.57079632679
+- \b "~cluster" : \b [int] The number of adjacent range measurements to cluster into a single reading min: 0, default: 0, max: 99
+- \b "~interval" : \b [int] The number of scans to skip between each measured scan min: 0, default: 0, max: 9
+- \b "~type" : \b [int] Short/Normal/Intensity. min: 1, default: 1, max: 3
+- \b "~high_sensivity" : \b [bool] True or False min: False, default: False, max: True
+- \b "~use_ethernet" : \b [bool] Sensor Connection min: False, default: False, max: True
+- \b "~usb_port" : \b [str] The serial port where the hokuyo device can be found min: , default: /dev/ttyACM0, max: 
+- \b "~ip_address" : \b [str] The serial port where the hokuyo device can be found min: , default: 192.168.0.10, max: 
+- \b "~frame_id" : \b [str] The frame in which laser scans will be returned min: , default: /laser, max: 
+

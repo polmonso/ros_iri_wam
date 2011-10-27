@@ -1,0 +1,70 @@
+/**
+\mainpage IRI TCM3 Compass
+<p>
+\b Description:
+- Driver for TCM3 Compass.
+.
+</p>
+<p>
+\b Functionalities:
+- Connection via serial port (or USB-serial)
+- Configure the device via parameter server or dynamic reconfigure gui
+- It uses an own-type message "compass3axis.msg" composed by header, angles[3], covariances[9] and alarms[3]
+.
+</p>
+<p>
+\b More \b information:
+- <a href="http://wikiri.upc.es/index.php/Compass_TCM3" target="blank">IRI's wiki page</a>
+- <a href="http://wikiri.upc.es/index.php/TCM3_compass_driver" target="blank">IRI's wiki driver page</a>
+- <a href="http://fanfare.upc.es/docs/tcm3_compass/index.html" target="blank">Low level driver documentation</a>
+.
+</p>
+<div style="width:100%; height:0px; border-top:1px solid #CCC;border-bottom:1px solid #EEE;"></div>
+\htmlinclude manifest.html
+
+\section howto How to:
+
+\subsection run Run node
+Call this node from rosrun:
+\code
+rosrun iri_tcm3_compass iri_tcm3_compass frame_id:=/robot/tcm3
+\endcode
+Call this node from launch:
+\code
+<launch>
+  <node pkg="iri_tcm3_compass"
+        type="iri_tcm3_compass"
+        name="tcm3"
+        output="screen">
+    <param name="frame_id"          value="/robot/tcm3" />
+    <param name="mounting_position" value="6"           />
+    <param name="relative"          value="True"        /> <!-- for Yaw use relative Data -->
+    <param name="frequency"         value="10"          />
+  </node>
+</launch>
+\endcode
+
+\section mounting-positions Mounting Positions
+
+- STD, 1, Standard
+- Xup, 2, X axis up
+- Yup, 3, Y axis up
+- m90h, 4, minus 90 heading offset
+- m180h, 5, minus 180 heading offset
+- m270h, 6, minus 270 heading offset
+- Zdown, 7, Z down
+- X90, 8, X + 90
+- X180, 9, X + 180
+- X270, 10, X + 270
+- Y90, 11, Y + 90
+- Y180, 12, Y + 180
+- Y270, 13, Y + 270
+- Zdown90, 14, Z down + 90
+- Zdown180, 15, Z down + 180
+- Zdown270, 16, Z down + 270
+.
+
+
+<div style="float:left; margin:20px;">\image html http://www.iri.upc.edu/images/logo.png </div>
+
+*/

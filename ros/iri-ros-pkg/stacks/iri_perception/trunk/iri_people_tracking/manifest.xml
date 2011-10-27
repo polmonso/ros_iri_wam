@@ -1,0 +1,20 @@
+<package>
+  <description brief="iri_people_tracking">
+
+     Multi target tracking of pedestrians. Requires, at least, input from one people detector node, such as that provided by iri_laser_people_detection package.
+     State space for each pedestrian is (x,y,vx,vy). Heading is derived from vx and vy.
+
+  </description>
+  <author>Andreu Corominas Murtra</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_people_tracking</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="nav_msgs"/>
+  <depend package="visualization_msgs"/>
+  <depend package="tf"/>
+
+</package>
+
+

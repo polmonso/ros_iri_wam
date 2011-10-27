@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<dynamixel_motor_config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="dynamixel_motor_cfg_file.xsd">
+
+  <temp_limit>85</temp_limit>
+  <max_voltage>190</max_voltage>
+  <min_voltage>60</min_voltage>
+  <cw_comp_margin>2</cw_comp_margin>
+  <ccw_comp_margin>2</ccw_comp_margin>
+  <cw_comp_slope>16</cw_comp_slope>
+  <ccw_comp_slope>16</ccw_comp_slope>
+  <punch>32</punch>
+</dynamixel_motor_config>

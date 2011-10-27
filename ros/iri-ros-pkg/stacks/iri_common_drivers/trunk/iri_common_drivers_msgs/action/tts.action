@@ -1,0 +1,9 @@
+#goal definition
+string msg
+---
+#result definition
+bool   ok
+---
+#feedback
+bool   busy
+

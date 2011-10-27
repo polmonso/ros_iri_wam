@@ -1,0 +1,68 @@
+<!-- -->
+
+<launch>
+
+  <!-- load robot defined machines -->
+  <include file="$(find tibi_dabo_base)/machines/tibi_dabo.machines" />
+
+    <group ns="$(env ROBOT)">
+
+      <!-- Head node -->
+      <node pkg ="tibi_dabo_head_node"
+            type="tibi_dabo_head_node"
+            name="tibi_dabo_head_node"
+            machine="visio"
+            output="screen">
+      </node>
+
+      <!-- Left arm node -->
+      <node pkg ="tibi_dabo_arm_node"
+            type="tibi_dabo_arm_node"
+            name="tibi_dabo_left_arm_node"
+            machine="visio"
+            output="screen">
+      <param name="config_file"  value="base_left_arm_config.xml" type="string" />
+
+      </node>
+
+      <!-- Right arm node -->
+      <node pkg ="tibi_dabo_arm_node"
+            type="tibi_dabo_arm_node"
+            name="tibi_dabo_right_arm_node"
+            machine="visio"
+            output="screen">
+        <param name="config_file"  value="base_right_arm_config.xml" type="string" />
+      </node>
+
+      <!-- Loquendo node -->
+      <node pkg ="iri_loquendo_tts"
+            type="iri_loquendo_tts"
+            name="iri_loquendo_tts"
+            machine="visio"
+            output="screen">
+        <param name="speaker" value="Kate" type="str" />
+      </node>
+
+      <!-- Human Robot Interaction control node -->
+      <node pkg ="tibi_dabo_hri_node"
+            type="tibi_dabo_hri_node"
+            name="tibi_dabo_hri_node"
+            machine="visio"
+            output="screen">
+      <remap from="/$(env ROBOT)/tibi_dabo_hri_node/facial_expression"
+            to="/$(env ROBOT)/tibi_dabo_head_node/facial_expression" />
+      <remap from="/$(env ROBOT)/head"
+            to="/$(env ROBOT)/tibi_dabo_head_node/motion_sequence" />
+      <remap from="/$(env ROBOT)/left_arm"
+            to="/$(env ROBOT)/tibi_dabo_left_arm_node/motion_sequence" />
+      <remap from="/$(env ROBOT)/right_arm"
+            to="/$(env ROBOT)/tibi_dabo_right_arm_node/motion_sequence" />
+      <remap from="/$(env ROBOT)/leds"
+            to="/$(env ROBOT)/tibi_dabo_head_node/lights_sequence/" />
+      <remap from="/$(env ROBOT)/tts"
+            to="/$(env ROBOT)/iri_loquendo_tts/tts/" />
+      </node>
+
+  </group> 
+
+</launch>

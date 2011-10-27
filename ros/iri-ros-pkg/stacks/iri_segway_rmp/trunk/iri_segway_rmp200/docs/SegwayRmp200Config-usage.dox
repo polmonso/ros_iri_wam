@@ -1,0 +1,14 @@
+\subsubsection usage Usage
+\verbatim
+<node name="SegwayRmp200Driver" pkg="iri_segway_rmp200" type="SegwayRmp200Driver">
+  <param name="velocity_scale_factor" type="double" value="0.5" />
+  <param name="acceleration_scale_factor" type="double" value="0.5" />
+  <param name="turn_rate_scale_factor" type="double" value="0.5" />
+  <param name="current_limit_scale_factor" type="double" value="0.5" />
+  <param name="gain_schedule" type="int" value="0" />
+  <param name="operation_mode" type="int" value="1" />
+  <param name="balance_lockout" type="bool" value="False" />
+  <param name="serial_number" type="str" value="NULL" />
+</node>
+\endverbatim
+

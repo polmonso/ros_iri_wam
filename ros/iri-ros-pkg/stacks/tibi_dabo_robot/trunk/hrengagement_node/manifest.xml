@@ -1,0 +1,22 @@
+<package>
+  <description brief="hrengagement_node">
+
+     hrengagement_node
+
+  </description>
+  <author></author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/hrengagement_node</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="geometry_msgs"/>
+  <depend package="iri_people_tracking"/>
+  <depend package="tibi_dabo_msgs"/>
+  <depend package="actionlib"/>
+  <depend package="move_base_msgs"/>
+  <depend package="tf"/>
+
+</package>
+
+
