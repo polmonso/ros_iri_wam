@@ -5,7 +5,7 @@
 
   </description>
   <author></author>
-  <license>BSD</license>
+  <license>LGPL</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_ik</url>
   <depend package="roscpp"/>
