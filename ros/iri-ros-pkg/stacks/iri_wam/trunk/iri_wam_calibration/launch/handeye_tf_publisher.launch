@@ -1,3 +1,0 @@
-<launch>
-  <node pkg="tf" type="static_transform_publisher" name="handeye_broadcaster" args="1 0 0 0 0 0 /wam_fk/wam0 openni_camera  100" />
-</launch>
