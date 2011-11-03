@@ -54,8 +54,21 @@ class WamIKJ {
 	static void dotprod(Eigen::MatrixXd u,Eigen::MatrixXd v,double& p);
 	static Eigen::MatrixXd crossprod(Eigen::MatrixXd u,Eigen::MatrixXd v);
 	static void svdJ(Eigen::MatrixXd J,Eigen::MatrixXd& U,Eigen::MatrixXd& V,Eigen::MatrixXd& S);
-	static void pseudoinverse(Eigen::MatrixXd J,Eigen::MatrixXd& Ji);
-  
+	static void pseudoinverse(Eigen::MatrixXd J,Eigen::MatrixXd& Ji,Eigen::MatrixXd& U,Eigen::MatrixXd& V,Eigen::MatrixXd& S);
+	static void Dpseudoinverse(Eigen::MatrixXd J,Eigen::MatrixXd& Ji,double lambda);
+	static void Fpseudoinverse(Eigen::MatrixXd J,Eigen::MatrixXd& Ji,double lambda, double eps);
+	static void CFpseudoinverse(Eigen::MatrixXd J,Eigen::MatrixXd& Ji,double nu,double s0);
+
+	static Eigen::VectorXd pi2piwam(Eigen::VectorXd q);
+	static Eigen::MatrixXd rcpinv(Eigen::MatrixXd Q,Eigen::MatrixXd W);
+	static Eigen::MatrixXd lcpinv(Eigen::MatrixXd Q,Eigen::MatrixXd W);
+	static Eigen::MatrixXd cpinv(Eigen::MatrixXd J,Eigen::MatrixXd H);
+	static void HjlCONT(Eigen::VectorXd q,Eigen::MatrixXd& H,double b);
+	static double fubeta(double x,double beta);
+	static void clampjoints(Eigen::VectorXd q,Eigen::MatrixXd& H);
+	static  void dhfunct(Eigen::VectorXd q,Eigen::VectorXd& dH);
+	static  void manipgrad(Eigen::VectorXd q,double& man,Eigen::VectorXd& gradman);
+	static  void manipulability(Eigen::MatrixXd J,double& man);
     // [action server attributes]
 
     // [action client attributes]
