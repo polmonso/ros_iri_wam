@@ -1,0 +1,14 @@
+<package>
+  <description brief="iri_wam_description">
+
+     iri_wam_description
+
+  </description>
+  <author>irojas</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_description</url>
+
+</package>
+
+
