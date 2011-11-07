@@ -32,9 +32,9 @@
 
 <xacro:macro name="Visual" params="name xyz rpy">
     <visual>
-      <origin xyz="${xyz}" rpy="${rpy}" />
-      <xacro:geometry_default name="${name}"/>
-      <xacro:material_default name="${name}"/> 
+       <origin xyz="${xyz}" rpy="${rpy}" />
+       <xacro:geometry_default name="${name}"/>
+       <xacro:material_default name="${name}"/>
     </visual>
 </xacro:macro>
 
@@ -66,26 +66,32 @@
 </xacro:macro>
 <!-- LINKS   -->  
   <xacro:Link name="wambase" xyz="0 0 0" rpy="0 0 0" mass="1" prefix=""/>
-  <link name="wam_fk/wam0"/> 
+  <link name="wam_fk/wam0">
+  	<inertial>
+	   <origin xyz="0 0 0" rpy="0 0 0" />
+       <mass value="1"/>
+       <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
+	</inertial>
+  </link>
   <xacro:Link name="wam1" xyz="0 0 0" rpy="${pi} 0 0" mass="1" prefix="wam_fk/"/>
   <xacro:Link name="wam2" xyz="0 0 0" rpy="-${pi} 0 0" mass="1" prefix="wam_fk/"/> 
-  <xacro:Link name="wam3" xyz="-0.045 0.55 0" rpy="${pi}0 0 0" mass="1" prefix="wam_fk/"/>
-  <xacro:Link name="wam4" xyz="0.045 0 0" rpy="-${pi}0 0 0" mass="1" prefix="wam_fk/"/>
+  <xacro:Link name="wam3" xyz="-0.045 0.55 0" rpy="${pi} 0 0" mass="1" prefix="wam_fk/"/>
+  <xacro:Link name="wam4" xyz="0.045 0 0" rpy="-${pi} 0 0" mass="1" prefix="wam_fk/"/>
   <xacro:Link name="wam5" xyz="0 0.3 0" rpy="${pi} 0 0" mass="1" prefix="wam_fk/"/>
   <xacro:Link name="wam6" xyz="0 0 0" rpy="-${pi} 0 0" mass="1" prefix="wam_fk/"/>
   <xacro:Link name="wam7" xyz="0 0 -0.06" rpy="0 0 0" mass="1" prefix="wam_fk/"/> 
 <!-- JOINTS  --> 
 
-  <xacro:Joint name="j0" type="fixed" xyz="0 0 0" rpy="0 0 0" upperLim="2.6" lowerLim="-2.6" effort="30" velocity="2" axis="1 0 0" parent="wambase" child="wam_fk/wam0" /> 
-  <xacro:Joint name="j1" type="revolute" xyz="0 0 0" rpy="0 0 0" upperLim="2.6" lowerLim="-2.6" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam0" child="wam_fk/wam1" /> 
-  <xacro:Joint name="j2" type="revolute" xyz="0 0 0" rpy="0 0 0" upperLim="2.0" lowerLim="-2.0" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam1" child="wam_fk/wam2" />
-  <xacro:Joint name="j3" type="revolute" xyz="0 0 0" rpy="0 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam2" child="wam_fk/wam3" />
-  <xacro:Joint name="j4" type="revolute" xyz="0 0 0" rpy="0 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam3" child="wam_fk/wam4" />
-  <xacro:Joint name="j5" type="revolute" xyz="0 0 0" rpy="0 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam4" child="wam_fk/wam5" />
-  <xacro:Joint name="j6" type="revolute" xyz="0 0 0" rpy="0 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam5" child="wam_fk/wam6" />
-  <xacro:Joint name="j7" type="revolute" xyz="0 0 0" rpy="0 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam6" child="wam_fk/wam7" />
-
-<!-- Transmission -->
+  <xacro:Joint name="j0" type="fixed"    xyz="0.22 0.14 0.346" rpy="0 0 0" upperLim="2.6" lowerLim="-2.6" effort="30" velocity="2" axis="1 0 0" parent="wambase" child="wam_fk/wam0" /> 
+  <xacro:Joint name="j1" type="revolute" xyz="0 0 0" rpy="-${pi} 0 0" upperLim="2.6" lowerLim="-2.6" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam0" child="wam_fk/wam1" /> 
+  <xacro:Joint name="j2" type="revolute" xyz="0 0 0" rpy="${pi} 0 0" upperLim="2.0" lowerLim="-2.0" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam1" child="wam_fk/wam2" />
+  <xacro:Joint name="j3" type="revolute" xyz="0.045 0 0.55" rpy="-${pi} 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam2" child="wam_fk/wam3" />
+  <xacro:Joint name="j4" type="revolute" xyz="-0.045 0 0" rpy="${pi} 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam3" child="wam_fk/wam4" />
+  <xacro:Joint name="j5" type="revolute" xyz="0 0 0.3" rpy="-${pi} 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam4" child="wam_fk/wam5" />
+  <xacro:Joint name="j6" type="revolute" xyz="0 0 0" rpy="${pi} 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam5" child="wam_fk/wam6" />
+  <xacro:Joint name="j7" type="revolute" xyz="0 0 0.06" rpy="0 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="1 0 0" parent="wam_fk/wam6" child="wam_fk/wam7" />
+  <!-- Transmission -->
+  <xacro:Transmission name="linkb_link0" jointName="j0" reduction="1" torque="1"/>
   <xacro:Transmission name="link0_link1" jointName="j1" reduction="1" torque="1"/>
   <xacro:Transmission name="link1_link2" jointName="j2" reduction="1" torque="1"/>
   <xacro:Transmission name="link2_link3" jointName="j3" reduction="1" torque="1"/>
@@ -94,8 +100,7 @@
   <xacro:Transmission name="link5_link6" jointName="j6" reduction="1" torque="1"/>
   <xacro:Transmission name="link6_link7" jointName="j7" reduction="1" torque="1"/>
 <!-- PLUGINS -->
-<!--
   <include filename="$(find iri_wam_gazebo)/urdf/iri_wam.gazebo.xacro" />
--->
+
 </robot>
 
