@@ -167,7 +167,7 @@ bool WamIKJ::ik(vector<double> pose, vector<double> currentjoints, vector<double
 	Qlim<<-2.6,2.6,-2.0,2.0,-2.8,2.8,-0.9,3.1,-4.8,1.3,-1.6,1.6,-2.2,2.2;
 
 	//PARAMETERS
-	int itmax=10;
+	int itmax=100;
 	double emax=0.0001,lambda=0.00001,eps=0.01;
 	
 
@@ -177,7 +177,8 @@ bool WamIKJ::ik(vector<double> pose, vector<double> currentjoints, vector<double
 
 	  for(int i=0;i<7;i++)
 	    cjoints(i) = currentjoints.at(i);
-// 		cjoints(i)=0.1;
+// 		
+cjoints<<0.8147,0.9058,0.1270,0.9134,0.6324,0.0975,0.2785;
 // 
 
 	  for(int i=0;i<16;i++)
@@ -196,17 +197,18 @@ bool WamIKJ::ik(vector<double> pose, vector<double> currentjoints, vector<double
         int n=6;
 	int it=0;
 	bool final=false;
-	double mu=0.2,beta0=0.15,nu=10,s0=0.01,gmax=M_PI/5.0,gi,Ni,Mi,sig,lambdajl=0.2;
+	double mu=0.2,beta0=0.2,nu=10,s0=0.01,gmax=M_PI/5.0,gi,Ni,Mi,sig,lambdajl=0.2;
 	MatrixXd Tf,J,I7(7,7);
 	I7.setIdentity();
 
 	//Wam_IKAC::fkine(cjoints,Tf,Jn);
-	VectorXd errc,aux,gradman,ejl,qnew(7);
+	VectorXd errc,aux,gradman,ejl,qnew(7),dq2(7);
 	MatrixXd Vi(m,1),Ui(n,1),Ji(n,1);
 
-	VectorXd q(7),dH(7),dH0(7),difH(7),wi(7),w(7),thi,dq;
-	MatrixXd H,Wi(7,7),J0,J1i,JP1i,J1,P1;
+	VectorXd q(7),dH(7),dH0(7),difH(7),wi(7),w(7),thi,dq,dq1;
+	MatrixXd H,Wi(7,7),J0,J1i,JP1i,JP1iaux,J1,P1,Haux(7,7),Jf(n,m),S2(n,m),Ub,Vb,Sb;
 	Wi.fill(0.0);
+	S2.fill(0.0);
 
 	
 	q=cjoints;
@@ -223,6 +225,8 @@ bool WamIKJ::ik(vector<double> pose, vector<double> currentjoints, vector<double
 std::cout<<"METHOD="<<method<<std::endl;
 
 	while(!final){
+	  			 dq.fill(0.0);
+				 dq1.fill(0.0);
 			  if (method==1){  // JACOBIAN TRANSPOSE
 			    std::cout<<"-----------------------------------------CHECKPOINT m1\n"<<std::endl;
 				Ji=J.transpose();
@@ -289,22 +293,18 @@ std::cout<<"-----------------------------------------CHECKPOINT m9\n"<<std::endl
 			    
 			  }else if(method==10){ //SELECTIVELY DAMPED
 std::cout<<"-----------------------------------------CHECKPOINT m10\n"<<std::endl;
-
 			       wi.resize(7);
 			       WamIKJ::svdJ(J,U,V,S);
 				w.fill(0.0);    
-				
 			    for (int i=0;i<m;i++){
 					if (i>n-1){
 					  wi.fill(0.0);
 					  Ni=0.0;
 					  sig=0.0;
-					  
 					}else if (abs(S(i,i))<0.000001){
 					  wi.fill(0.0);
 					  Ni=0.0;
-					  sig=0.0;
-					      
+					  sig=0.0;  
 					}else{
 					  //define Vi
 					  for (int ii=0;ii<m;ii++){
@@ -320,15 +320,12 @@ std::cout<<"-----------------------------------------CHECKPOINT m10\n"<<std::end
 					  // wi value
 					    wi=sig*Vi*Ui.transpose()*errc;
 					    Ni=Ui.norm();
-					  
 					    Mi=0.0;
 					    for (int j=0;j<m;j++){
 						Mi=Mi+sig*abs(V(j,i))*Ji.norm();			  
 					    }
-					    
 					    // gamma i
 					    gi=gmax*min(1.0,Ni/Mi);
-					    
 					  if (wi.maxCoeff()>gi){
 					    thi=gi*wi/wi.maxCoeff(); 
 					  }else{
@@ -336,7 +333,6 @@ std::cout<<"-----------------------------------------CHECKPOINT m10\n"<<std::end
 					  }
 					  w=w+thi;
 					}
-			    
 			      }
 			      
 			      	if (w.maxCoeff()>gmax){
@@ -344,8 +340,7 @@ std::cout<<"-----------------------------------------CHECKPOINT m10\n"<<std::end
 				}else{
 				      dq=w; 
 				}
-				      
-    
+
 				    qnew=q+dq;
 // 				      std::cout<<"\n w="<<w<<"\n wi="<<wi<<"\n thi"<<thi<<std::endl;
 // 				      std::cout<<"-----------------------------------------CHECKPOINT SD4d\n"<<std::endl;
@@ -367,23 +362,133 @@ std::cout<<"-----------------------------------------CHECKPOINT m10\n"<<std::end
 				}else if(method==12){ // CONTINUOUS TAS PRIORITY CLAMPING
 std::cout<<"-----------------------------------------CHECKPOINT m12\n"<<std::endl;
  
-				    WamIKJ::HjlCONT(q,H,beta0);
-				    
-
+				    WamIKJ::HjlCONT(q,Haux,beta0);
+				    J1=I7;
+				    H=I7-Haux;
 				    J0.resize(7,7);
-				    J1=I7-H;
 				    ejl=-lambdajl*q;
-				    J1i=WamIKJ::rcpinv(I7,H);
+				    J1i=H;
 				    P1=I7-J1i*J1;
-// 				    std::cout<<"\n J= "<<J<<std::endl;
-				    JP1i=WamIKJ::lcpinv(J,P1);    
-// 				    std::cout<<"-----------------------------------------CHECKPOINT 4\n"<<std::endl;
-// 				    std::cout<<"J1i\n "<<J1i <<"\nejl \n"<< ejl<<"\n JP1i\n"<< JP1i <<"\n errc \n"<< errc <<"\n J \n"<< J <<std::endl;
-				    dq=J1i*ejl+JP1i*(errc+J*J1i*ejl);
-// 				    std::cout<<"-----------------------------------------CHECKPOINT 5\n"<<std::endl;
-				    qnew=q+dq;
-
+				    JP1iaux=WamIKJ::cpinv(J.transpose(),P1);   
+				    JP1i=JP1iaux.transpose();
+				    dq1=J1i*ejl;
+				    dq=dq1+JP1i*errc-JP1i*J*dq1;
+				    qnew=pi2piwam(q+dq);
 				  
+				}else if(method==13){ // CONTINUOUS TAS PRIORITY CLAMPING and smooth filtering
+std::cout<<"-----------------------------------------CHECKPOINT m13\n"<<std::endl;
+
+				    WamIKJ::svdJ(J,U,V,S);
+				      for (int i=0;i<n;i++){
+					S2(i,i)=(2*s0+S(i,i)*(2+S(i,i)*(nu+S(i,i))))/(2+S(i,i)*(nu+S(i,i)));
+				      }
+				    Jf=U*S2*V.transpose();
+				    WamIKJ::HjlCONT(q,Haux,beta0);
+				    J1=I7;
+				    H=I7-Haux;
+				    J0.resize(7,7);
+				    ejl=-lambdajl*q;
+// 				    J1i=WamIKJ::rcpinv(J1,H);
+				    J1i=H;
+				    P1=I7-J1i*J1;
+ 				    
+				    JP1iaux=WamIKJ::cpinv(J.transpose(),P1);   
+// 				    std::cout<<"Jfresca\n"<<JP1iaux<<std::endl;
+				    JP1i=JP1iaux.transpose();
+// 				    std::cout<<"Jfresca2\n"<<JP1i<<std::endl;
+//  				    std::cout<<"-----------------------------------------CHECKPOINT 4\n"<<std::endl;
+//     				    std::cout<<"\nejl \n"<< ejl<<"\n errc \n"<< errc <<std::endl;
+				    dq1=J1i*ejl;
+				    dq=dq1+JP1i*errc-JP1i*J*dq1;
+				    
+//     				    std::cout<<"qinicial \n"<<q<<"\n H=\n"<<H<<"\n J= \n"<<J<<"\n J1i= \n"<<J1i<<"\n P1= \n"<<P1<<"\n JP1i= \n"<<JP1i<<"\n dq \n"<<dq<<std::endl;
+// 				    std::cout<<"-----------------------------------------CHECKPOINT 5\n"<<std::endl;
+//    				    std::cout<<"dq1 \n"<<dq1<<"\n JP1i*J*dq1= \n"<<JP1i*J*dq1<<"\n JP1i*errc\n "<<JP1i*errc<<std::endl;
+
+				     
+				    qnew=pi2piwam(q+dq);
+				  
+				}else if(method==14){ // CONTINUOUS TAS PRIORITY CLAMPING selectively damped and smooth filtering
+std::cout<<"-----------------------------------------CHECKPOINT m14\n"<<std::endl;
+				    // compute P1
+				    WamIKJ::HjlCONT(q,Haux,beta0);
+				    J1=I7;
+				    H=I7-Haux;
+				    J0.resize(7,7);
+				    ejl=-lambdajl*q;
+				    J1i=H;
+				    P1=I7-J1i*J1;
+  
+				    // compute filtered jacobian: Jf
+				    WamIKJ::svdJ(J,U,V,S);
+				      for (int i=0;i<n;i++){
+					S2(i,i)=(2*s0+S(i,i)*(2+S(i,i)*(nu+S(i,i))))/(2+S(i,i)*(nu+S(i,i)));
+				      }
+				    Jf=U*S2*V.transpose();
+
+				    // compute J2P1
+				    JP1iaux=WamIKJ::cpinv(Jf.transpose(),P1);   
+				    JP1i=JP1iaux.transpose();
+				    
+				    // svd of J2P1
+				    WamIKJ::svdJ(JP1i,Vb,Ub,Sb);
+				    
+				    wi.resize(7);			    
+				    w.fill(0.0);    
+				    
+				    for (int i=0;i<n;i++){
+					if (abs(S(i,i))<0.000001){
+					  wi.fill(0.0);
+					  Ni=1.0;
+					  sig=0.0;  
+					}else{
+					  //define Vi
+					  for (int ii=0;ii<m;ii++){
+					  Vi(ii,0)=Vb(ii,i);
+					  }  
+					  //define Ji and Ui
+					  for (int ii2=0;ii2<n;ii2++){
+					    Ji(ii2,0)=Jf(ii2,i);
+					    Ui(ii2,0)=Ub(ii2,i);
+					  }
+					  // si
+					  sig=Sb(i,i);
+					  // wi value
+					  wi=sig*Vi*Ui.transpose()*errc;
+					  Ni=Ui.norm();
+					  Mi=0.0;
+					  for (int j=0;j<m;j++){
+						Mi=Mi+sig*abs(Vb(j,i))*Ji.norm();			  
+					  }
+					    // gamma i
+					  gi=gmax*min(1.0,Ni/Mi);
+					  if (wi.maxCoeff()>gi){
+					    thi=gi*wi/wi.maxCoeff(); 
+					  }else{
+					    thi=wi; 
+					  }
+					  w=w+thi;
+					}
+				  }
+				dq1=J1i*ejl-JP1i*Jf*J1i*ejl;
+				dq2=dq1+w;
+			      	if (dq2.maxCoeff()>gmax){
+				      dq=gmax*dq2/dq2.maxCoeff(); 
+				}else{
+				      dq=dq2; 
+				}
+				    
+// 				    std::cout<<"Jfresca2\n"<<JP1i<<std::endl;
+//  				    std::cout<<"-----------------------------------------CHECKPOINT 4\n"<<std::endl;
+//     				    std::cout<<"\nejl \n"<< ejl<<"\n errc \n"<< errc <<std::endl;
+
+				    
+//     				    std::cout<<"qinicial \n"<<q<<"\n H=\n"<<H<<"\n J= \n"<<J<<"\n J1i= \n"<<J1i<<"\n P1= \n"<<P1<<"\n JP1i= \n"<<JP1i<<"\n dq \n"<<dq<<std::endl;
+// 				    std::cout<<"-----------------------------------------CHECKPOINT 5\n"<<std::endl;
+//    				    std::cout<<"dq1 \n"<<dq1<<"\n JP1i*J*dq1= \n"<<JP1i*J*dq1<<"\n JP1i*errc\n "<<JP1i*errc<<std::endl;
+
+				     
+				    qnew=pi2piwam(q+dq);
 				  
 				}
 			
@@ -420,9 +525,11 @@ MatrixXd WamIKJ::rcpinv(MatrixXd Q,MatrixXd W){
   MatrixXd Qu,J1,U,V,S;
   WamIKJ::svdJ(W,U,V,S);
   Qu=U.transpose()*Q;
-//    std::cout<<"Q \n "<<Q<<"\n W \n"<<W<<"\n Jout0=\n"<<cpinv(Qu,S)<<std::endl;
       
   J1=cpinv(Qu,S)*U.transpose(); 
+  
+// std::cout<<"Q= \n"<<Q<<"\nW\n"<<W<<"\n U\n"<<U<<"\n V \n"<<V<<"\n S \n"<<S<<"\n Qu \n "<<Qu<<"\n W \n"<<W<<"\n cpinv(Qu,S)=\n"<<cpinv(Qu,S)<<"\n Joutrcp \n "<<J1<<std::endl;
+
   return J1;
 }
 
@@ -430,8 +537,9 @@ MatrixXd WamIKJ::rcpinv(MatrixXd Q,MatrixXd W){
 MatrixXd WamIKJ::lcpinv(MatrixXd Q,MatrixXd W){
   MatrixXd J1;
 //   std::cout<<"-----------------------------------------CHECKPOINT a\n"<<std::endl;
-//   std::cout<<"Qt \n "<<Q.transpose()<<"\n W \n"<<W<<std::endl;
   J1=rcpinv(Q.transpose(),W);
+// std::cout<<"Qt \n "<<Q.transpose()<<"\n W \n"<<W<<"\n JLout=\n"<<J1<<std::endl;
+
 //   std::cout<<"-----------------------------------------CHECKPOINT b\n"<<std::endl;
   return J1.transpose();
 }
@@ -441,29 +549,34 @@ MatrixXd WamIKJ::cpinv(MatrixXd J,MatrixXd H){
      int m=J.cols();
      int n=J.rows();
       MatrixXd U,V,S,Ji,J1(m,n),H0(7,7);
+      J1.fill(0.0);
       H0.fill(0.0);
       int val;
-      MatrixXd hbin(m,1),hi(m,1);
+      MatrixXd hbin(n,1),hi(n,1);
       double produ;
-//       std::cout<<"-----------------------------------------CHECKPOINT cp1\n"<<std::endl;
+      
+      	for (int j=0;j<n;j++){
+      	  hi(j,0)=H(j,j);
+	}
 
-    for (int i1=0;i1<pow(m,2);i1++){
+//       std::cout<<"-----------------------------------------CHECKPOINT cp1\n"<<std::endl;
+//  std::cout<<"H=\n" <<H<<"\n hi=["<<hi.transpose()<<"]\n"<<"n, total"<<n<<pow(2,m)<<std::endl;
+    for (int i1=0;i1<pow(2,n);i1++){
 	hbin.fill(0.0);
 	val=i1;
-	for (int iaux=6;iaux>=0;iaux--){
+	for (int iaux=n-1;iaux>=0;iaux--){
 	    if (val>pow(2,iaux)-1){
-		hbin(iaux)=1.0;
+		hbin(iaux,0)=1.0;
 		val=val-pow(2,iaux);
 	    } 
 	}
     
-	for (int j=0;j<m;j++){
+	for (int j=0;j<n;j++){
 	  H0(j,j)=hbin(j,0); 
-	  hi(j,0)=H(j,j);
 	}
     
 	produ=1.0;
-	for(int i2=0;i2<m;i2++){
+	for(int i2=0;i2<n;i2++){
 	    if (hbin(i2,0)==1.0){
 	      produ=produ*hi(i2,0);
 	    }else {
@@ -474,10 +587,16 @@ MatrixXd WamIKJ::cpinv(MatrixXd J,MatrixXd H){
 	WamIKJ::pseudoinverse(H0*J,Ji,U,V,S);
 // 	std::cout<<"-----------------------------------------CHECKPOINT cp3\n"<<std::endl;
 	J1=J1+produ*Ji;
+// std::cout<<"i1="<<i1<<", hbin= ["<<hbin.transpose()<<"], produ= "<<produ<<std::endl;
+ 	if (produ>0.0000001){
+//   	  std::cout<<"\n H0=\n"<<H0<<"\n J \n"<<J<<"\nH0*J=\n"<<H0*J<<"\n Ji\n"<<Ji<<std::endl;
+ 	}
+
 
     }
-  
+//    std::cout<<"JP1i\n"<<J1<<std::endl;
   return J1;
+  
 }
 
 VectorXd WamIKJ::pi2piwam(VectorXd q){
@@ -511,13 +630,15 @@ void WamIKJ::HjlCONT(VectorXd q,MatrixXd& H,double b){
            hb(i)=1.0;
 	}else if(q(i)>Qlim(i,0) && q(i)<Qlim(i,0)+beta(i)){
  	    hb(i)=fubeta(beta(i)+Qlim(i,0)-q(i),beta(i));
-	}else if(q(i)<Qlim(i,1) && q(i)>Qlim(i,0)-beta(i)){
-	    hb(i)=fubeta(beta(i)-Qlim(i,0)+q(i),beta(i));
+	}else if(q(i)<Qlim(i,1) && q(i)>Qlim(i,1)-beta(i)){
+	    hb(i)=fubeta(beta(i)-Qlim(i,1)+q(i),beta(i));
+	}else{
+	    hb(i)=0.0;
 	}
 	H(i,i)=1.0-hb(i);
-
+//  std::cout<<"i="<<i<<"\n min,max= "<<Qlim(i,0)+beta(i)<<" , "<<Qlim(i,1)-beta(i)<<std::endl;
   }
-
+//   std::cout<<"b="<<b<<"\n beta=\n"<<beta<<"\n q=\n"<<q<<"\n hb=\n "<<hb<<std::endl;
 }
 
 
@@ -721,7 +842,7 @@ void WamIKJ::svdJ(MatrixXd J, MatrixXd& U,MatrixXd& V,MatrixXd& S){
 	
   }  
   
-//   std::cout<<"\n U=\n"<<U<<"\n V= \n"<<V<<"\n S=\n"<<S<<"\n -------------------------SVD DONE-------------------\n";
+// std::cout<<"J\n"<<J<<"\n U=\n"<<U<<"\n V= \n"<<V<<"\n S=\n"<<S<<"\n -------------------------SVD DONE-------------------\n";
 }
 
 void WamIKJ::fkine(VectorXd theta,MatrixXd& Tfk,MatrixXd& Jn){
