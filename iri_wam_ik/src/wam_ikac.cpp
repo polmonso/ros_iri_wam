@@ -17,6 +17,9 @@ WamIKAC::WamIKAC() {
   std::string port_name;
 
   // [init publishers]
+  port_name = ros::names::append(ros::this_node::getName(), "ikjoints"); 
+  this->ik_joints_publisher_ = this->nh_.advertise<sensor_msgs::JointState>(port_name, 5);
+  this->ik_joints_msg.position.resize(7);
   
   // [init subscribers]
   port_name = ros::names::append(ros::this_node::getName(), "joint_states"); 
@@ -34,7 +37,16 @@ WamIKAC::WamIKAC() {
   
   // [init action servers]
   
-  // [init action clients]
+  // [init action clients] 
+  
+}
+
+void WamIKAC::ikPub(void)
+{
+  for (int i=0;i<7;i++){
+    this->ik_joints_msg.position[i]=joints_(i);
+  }
+    this->ik_joints_publisher_.publish(this->ik_joints_msg);
 }
 
 /*  [subscriber callbacks] */
@@ -84,11 +96,13 @@ bool WamIKAC::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, ir
   }else{
 
       ROS_INFO("wamik Service computed joints:\n %f %f %f %f %f %f %f\n", joints.at(0), joints.at(1), joints.at(2), joints.at(3), joints.at(4), joints.at(5), joints.at(6));
-    
+      joints_.resize(7);
       joint_move_srv.request.joints.resize(7);
-      for(int i=0;i<7;i++)
+      for(int i=0;i<7;i++){
         joint_move_srv.request.joints[i] = joints.at(i);
-    
+	joints_(i)=joints.at(i);
+      }
+     ikPub();
       if (this->joint_move_client.call(joint_move_srv)) 
       { 
         ROS_INFO(" %d\n",joint_move_srv.response.success); 
@@ -99,6 +113,8 @@ bool WamIKAC::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, ir
         ROS_ERROR("Failed to call service joint_move"); 
         result = false;
       }
+      
+
   }
   res.success = result;
   return result;
@@ -135,9 +151,11 @@ bool WamIKAC::wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &
       ROS_INFO("wamik Service computed joints:\n %f %f %f %f %f %f %f\n", joints.at(0), joints.at(1), joints.at(2), joints.at(3), joints.at(4), joints.at(5), joints.at(6));
     
       res.joints.position.resize(7);
-      for(int i=0;i<7;i++)
+      joints_.resize(7);
+      for(int i=0;i<7;i++){
         res.joints.position[i] = joints.at(i);
-    
+	joints_(i)=joints.at(i);
+      }
   }
   return result;
 }
@@ -271,7 +289,7 @@ bool WamIKAC::ik(vector<double> pose, vector<double> currentjoints, vector<doubl
 		WamIKAC::DHmatrix(PI/2,0.,0.,qoptim(5),T56);
 		WamIKAC::DHmatrix(0.,0.,0.06,qoptim(6),T67);
 	
-
+	
 		T07=T01*T12*T23*T34*T45*T56*T67;
 
 		ROS_INFO("ELAPSED TIME IS  %.5lf seconds ", dif );
@@ -708,8 +726,15 @@ void WamIKAC::soltrig(double a, double b, double c, MatrixXd& q2sol2){
 
 
 
+
+
 int main(int argc, char** argv) {
     ros::init(argc, argv, "wam_ik");
     WamIKAC wam_ikac;
-    ros::spin();
+    ros::Rate loop_rate(10); 
+    while(ros::ok()){
+      ros::spinOnce();
+      loop_rate.sleep(); 
+    }
+
 }

@@ -25,6 +25,9 @@ class WamIKJ {
   private:
     ros::NodeHandle nh_;
     // [publisher attributes]
+    sensor_msgs::JointState ik_joints_msg;
+    ros::Publisher ik_joints_publisher_;
+    Eigen::VectorXd joints_;
 
     // [subscriber attributes]
     ros::Subscriber joint_states_subscriber;
@@ -76,6 +79,7 @@ class WamIKJ {
   protected:
   public:
     WamIKJ();
+    void ikPub(void);
   
 };
 #endif
