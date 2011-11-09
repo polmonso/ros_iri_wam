@@ -13,6 +13,7 @@
   <depend package="iri_wam_common_msgs" /> 
   <depend package="tf"/>
   <depend package="eigen"/>
+  <depend package="sensor_msgs"/>
 
 </package>
 

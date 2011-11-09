@@ -24,6 +24,8 @@ class WamIKAC {
   private:
     ros::NodeHandle nh_;
     // [publisher attributes]
+    sensor_msgs::JointState ik_joints_;
+    ros::Publisher ik_joints_publisher_;
 
     // [subscriber attributes]
     ros::Subscriber joint_states_subscriber;
