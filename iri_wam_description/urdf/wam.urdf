@@ -34,18 +34,36 @@
   <link name="wam_fk/wam0">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="1"/>
+      <mass value="0.1"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
+    <!--
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="wam0-geom">
+        <mesh filename="package://iri_wam_description/mesh/wam0.stl"/>
+      </geometry>
+      <material name="wam0-mat">
+        <color rgba="0.75 0.75 0.75 1.0"/>
+      </material>
+    </visual>
+-->
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry name="wam0-geom">
+        <mesh filename="package://iri_wam_description/mesh/wam0.stl"/>
+      </geometry>
+      <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+    </collision>
   </link>
   <link name="wam_fk/wam1">
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="1"/>
+      <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+      <mass value="0.1"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
-      <origin rpy="1.57 0 0" xyz="0 0 0"/>
+      <origin rpy="1.5708 0 0" xyz="0 0 0"/>
       <geometry name="wam1-geom">
         <mesh filename="package://iri_wam_description/mesh/wam1.stl"/>
       </geometry>
@@ -54,7 +72,7 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="1.57 0 0" xyz="0 0 0"/>
+      <origin rpy="1.5708 0 0" xyz="0 0 0"/>
       <geometry name="wam1-geom">
         <mesh filename="package://iri_wam_description/mesh/wam1.stl"/>
       </geometry>
@@ -63,12 +81,12 @@
   </link>
   <link name="wam_fk/wam2">
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="1"/>
+      <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
+      <mass value="0.1"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
-      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
+      <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry name="wam2-geom">
         <mesh filename="package://iri_wam_description/mesh/wam2.stl"/>
       </geometry>
@@ -77,7 +95,7 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
+      <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry name="wam2-geom">
         <mesh filename="package://iri_wam_description/mesh/wam2.stl"/>
       </geometry>
@@ -86,12 +104,12 @@
   </link>
   <link name="wam_fk/wam3">
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="1"/>
+      <origin rpy="1.5708 0 0" xyz="-0.045 0.55 0"/>
+      <mass value="0.1"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
-      <origin rpy="1.57 0 0" xyz="-0.045 0.55 0"/>
+      <origin rpy="1.5708 0 0" xyz="-0.045 0.55 0"/>
       <geometry name="wam3-geom">
         <mesh filename="package://iri_wam_description/mesh/wam3.stl"/>
       </geometry>
@@ -100,7 +118,7 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="1.57 0 0" xyz="-0.045 0.55 0"/>
+      <origin rpy="1.5708 0 0" xyz="-0.045 0.55 0"/>
       <geometry name="wam3-geom">
         <mesh filename="package://iri_wam_description/mesh/wam3.stl"/>
       </geometry>
@@ -109,12 +127,12 @@
   </link>
   <link name="wam_fk/wam4">
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="1"/>
+      <origin rpy="-1.5708 0 0" xyz="0.045 0 0"/>
+      <mass value="0.1"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
-      <origin rpy="-1.57 0 0" xyz="0.045 0 0"/>
+      <origin rpy="-1.5708 0 0" xyz="0.045 0 0"/>
       <geometry name="wam4-geom">
         <mesh filename="package://iri_wam_description/mesh/wam4.stl"/>
       </geometry>
@@ -123,7 +141,7 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="-1.57 0 0" xyz="0.045 0 0"/>
+      <origin rpy="-1.5708 0 0" xyz="0.045 0 0"/>
       <geometry name="wam4-geom">
         <mesh filename="package://iri_wam_description/mesh/wam4.stl"/>
       </geometry>
@@ -132,12 +150,12 @@
   </link>
   <link name="wam_fk/wam5">
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="1"/>
+      <origin rpy="1.5708 0 0" xyz="0 0 0"/>
+      <mass value="0.1"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
-      <origin rpy="1.57 0 0" xyz="0 0.3 0"/>
+      <origin rpy="1.5708 0 0" xyz="0 0 0"/>
       <geometry name="wam5-geom">
         <mesh filename="package://iri_wam_description/mesh/wam5.stl"/>
       </geometry>
@@ -146,7 +164,7 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="1.57 0 0" xyz="0 0.3 0"/>
+      <origin rpy="1.5708 0 0" xyz="0 0 0"/>
       <geometry name="wam5-geom">
         <mesh filename="package://iri_wam_description/mesh/wam5.stl"/>
       </geometry>
@@ -155,12 +173,12 @@
   </link>
   <link name="wam_fk/wam6">
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="1"/>
+      <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
+      <mass value="0.1"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
-      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
+      <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry name="wam6-geom">
         <mesh filename="package://iri_wam_description/mesh/wam6.stl"/>
       </geometry>
@@ -169,7 +187,7 @@
       </material>
     </visual>
     <collision>
-      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
+      <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
       <geometry name="wam6-geom">
         <mesh filename="package://iri_wam_description/mesh/wam6.stl"/>
       </geometry>
@@ -178,8 +196,8 @@
   </link>
   <link name="wam_fk/wam7">
     <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="1"/>
+      <origin rpy="0 0 0" xyz="0 0 -0.06"/>
+      <mass value="0.1"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
@@ -200,61 +218,61 @@
     </collision>
   </link>
   <!-- JOINTS  -->
-  <joint name="j0" type="fixed">
+  <joint name="j0" type="revolute">
     <parent link="wambase"/>
     <child link="wam_fk/wam0"/>
     <origin rpy="0 0 0" xyz="0.22 0.14 0.346"/>
     <limit effort="30" lower="-2.6" upper="2.6" velocity="2"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
   <joint name="j1" type="revolute">
     <parent link="wam_fk/wam0"/>
     <child link="wam_fk/wam1"/>
-    <origin rpy="-1.57 0 0" xyz="0 0 0"/>
+    <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
     <limit effort="30" lower="-2.6" upper="2.6" velocity="2"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 1 0"/>
   </joint>
   <joint name="j2" type="revolute">
     <parent link="wam_fk/wam1"/>
     <child link="wam_fk/wam2"/>
-    <origin rpy="1.57 0 0" xyz="0 0 0"/>
+    <origin rpy="1.5708 0 0" xyz="0 0 0"/>
     <limit effort="30" lower="-2.0" upper="2.0" velocity="2"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 1 0"/>
   </joint>
   <joint name="j3" type="revolute">
     <parent link="wam_fk/wam2"/>
     <child link="wam_fk/wam3"/>
-    <origin rpy="-1.57 0 0" xyz="0.045 0 0.55"/>
+    <origin rpy="-1.5708 0 0" xyz="0.045 0 0.55"/>
     <limit effort="30" lower="-2.8" upper="2.8" velocity="2"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
   <joint name="j4" type="revolute">
     <parent link="wam_fk/wam3"/>
     <child link="wam_fk/wam4"/>
-    <origin rpy="1.57 0 0" xyz="-0.045 0 0"/>
+    <origin rpy="1.5708 0 0" xyz="-0.045 0 0"/>
     <limit effort="30" lower="-2.8" upper="2.8" velocity="2"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
   <joint name="j5" type="revolute">
     <parent link="wam_fk/wam4"/>
     <child link="wam_fk/wam5"/>
-    <origin rpy="-1.57 0 0" xyz="0 0 0.3"/>
+    <origin rpy="-1.5708 0 0" xyz="0 0 0.3"/>
     <limit effort="30" lower="-2.8" upper="2.8" velocity="2"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
   <joint name="j6" type="revolute">
     <parent link="wam_fk/wam5"/>
     <child link="wam_fk/wam6"/>
-    <origin rpy="1.57 0 0" xyz="0 0 0"/>
+    <origin rpy="1.5708 0 0" xyz="0 0 0"/>
     <limit effort="30" lower="-2.8" upper="2.8" velocity="2"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
   <joint name="j7" type="revolute">
     <parent link="wam_fk/wam6"/>
     <child link="wam_fk/wam7"/>
     <origin rpy="0 0 0" xyz="0 0 0.06"/>
     <limit effort="30" lower="-2.8" upper="2.8" velocity="2"/>
-    <axis xyz="1 0 0"/>
+    <axis xyz="0 0 1"/>
   </joint>
   <!-- Transmission -->
   <transmission name="linkb_link0_trans" type="pr2_mechanism_model/SimpleTransmission">
