@@ -29,6 +29,7 @@ class WamIKJ {
     ros::Publisher ik_joints_publisher_;
     Eigen::VectorXd joints_;
 
+
     // [subscriber attributes]
     ros::Subscriber joint_states_subscriber;
     void joint_states_callback(const sensor_msgs::JointState::ConstPtr& msg);

@@ -187,7 +187,7 @@ bool WamIKJ::ik(vector<double> pose, vector<double> currentjoints, vector<double
 	Qlim<<-2.6,2.6,-2.0,2.0,-2.8,2.8,-0.9,3.1,-4.8,1.3,-1.6,1.6,-2.2,2.2;
 
 	//PARAMETERS
-	int itmax=100;
+	int itmax=500;
 	double emax=0.0001,lambda=0.00001,eps=0.01;
 	
 
@@ -205,9 +205,12 @@ cjoints<<0.8147,0.9058,0.1270,0.9134,0.6324,0.0975,0.2785;
 	     T0(i/4,i%4) = pose.at(i); 
 
 	//METHOD SELECTION
-	int method;
-	std::cout<<"method=";
-	std::cin>>method;
+	int method=1;
+	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// 	std::cout<<"method=";
+// 	std::cin>>method;
+	//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	
 	
 	// STEP SELECTION
 //by now, step is alpha=1;
@@ -516,7 +519,7 @@ std::cout<<"METHOD="<<method<<std::endl;
 
 	    WamIKJ::fkine(qnew,Tf,J);
 	    WamIKJ::errortrans(Tf,T0,errc);
-	    q=qnew;
+	    q=pi2piwam(qnew);
 	    
 	    if (std::isnan(errc.norm())){
 	    }else{
@@ -532,7 +535,7 @@ std::cout<<"METHOD="<<method<<std::endl;
 
 	}
 	
-	
+std::cout<<"end error= "<<errc.norm()<<", iterations="<< it-1<<std::endl;
 for(int i=0;i<7;i++)
   joints.at(i) = q(i);
   return true;

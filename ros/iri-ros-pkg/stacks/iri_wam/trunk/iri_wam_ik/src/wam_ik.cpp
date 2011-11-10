@@ -12,6 +12,9 @@ WamIK::WamIK() {
   std::string port_name;
 
   // [init publishers]
+    port_name = ros::names::append(ros::this_node::getName(), "ikjoints"); 
+  this->ik_joints_publisher_ = this->nh_.advertise<sensor_msgs::JointState>(port_name, 5);
+  this->ik_joints_msg.position.resize(7);
   
   // [init subscribers]
   port_name = ros::names::append(ros::this_node::getName(), "joint_states"); 
@@ -30,6 +33,14 @@ WamIK::WamIK() {
   // [init action servers]
   
   // [init action clients]
+}
+
+void WamIK::ikPub(void)
+{
+  for (int i=0;i<7;i++){
+    this->ik_joints_msg.position[i]=joints_(i);
+  }
+    this->ik_joints_publisher_.publish(this->ik_joints_msg);
 }
 
 /*  [subscriber callbacks] */
@@ -79,10 +90,13 @@ bool WamIK::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, iri_
   }else{
 
       ROS_INFO("wamik Service computed joints:\n %f %f %f %f %f %f %f\n", joints.at(0), joints.at(1), joints.at(2), joints.at(3), joints.at(4), joints.at(5), joints.at(6));
-    
+          joints_.resize(7);
       joint_move_srv.request.joints.resize(7);
-      for(int i=0;i<7;i++)
+      for(int i=0;i<7;i++){
         joint_move_srv.request.joints[i] = joints.at(i);
+	joints_(i)=joints.at(i);
+      }
+     ikPub();
     
       if (this->joint_move_client.call(joint_move_srv)) 
       { 
@@ -130,8 +144,11 @@ bool WamIK::wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &re
       ROS_INFO("wamik Service computed joints:\n %f %f %f %f %f %f %f\n", joints.at(0), joints.at(1), joints.at(2), joints.at(3), joints.at(4), joints.at(5), joints.at(6));
     
       res.joints.position.resize(7);
-      for(int i=0;i<7;i++)
+      joints_.resize(7);
+      for(int i=0;i<7;i++){
         res.joints.position[i] = joints.at(i);
+	joints_(i)=joints.at(i);
+      }
     
   }
   return result;
@@ -167,5 +184,9 @@ bool WamIK::ik(vector<double> pose, vector<double> currentjoints, vector<double>
 int main(int argc, char** argv) {
     ros::init(argc, argv, "wam_ik");
     WamIK wamik;
-    ros::spin();
+    ros::Rate loop_rate(10); 
+    while(ros::ok()){
+      ros::spinOnce();
+      loop_rate.sleep(); 
+    }
 }
