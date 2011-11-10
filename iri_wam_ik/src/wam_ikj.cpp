@@ -98,11 +98,13 @@ bool WamIKJ::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, iri
         pose[4],pose[5],pose[6],pose[7],
         pose[8],pose[9],pose[10],pose[11],
         pose[12],pose[13],pose[14],pose[15]);
+	joints_<<-99.9,-99.9,-99.9,-99.9,-99.9,-99.9,-99.9;
       result = false;
   }else{
 
       ROS_INFO("wamik Service computed joints:\n %f %f %f %f %f %f %f\n", joints.at(0), joints.at(1), joints.at(2), joints.at(3), joints.at(4), joints.at(5), joints.at(6));
           joints_.resize(7);
+	  
       joint_move_srv.request.joints.resize(7);
       for(int i=0;i<7;i++){
         joint_move_srv.request.joints[i] = joints.at(i);
@@ -246,7 +248,7 @@ std::cout<<"METHOD="<<method<<std::endl;
 	  			 dq.fill(0.0);
 				 dq1.fill(0.0);
 			  if (method==1){  // JACOBIAN TRANSPOSE
-			    std::cout<<"-----------------------------------------CHECKPOINT m1\n"<<std::endl;
+/*			    std::cout<<"-----------------------------------------CHECKPOINT m1\n"<<std::endl;*/
 				Ji=J.transpose();
 				aux=J*Ji*errc;
 				WamIKJ::dotprod(aux,errc,alpha);
@@ -255,27 +257,27 @@ std::cout<<"METHOD="<<method<<std::endl;
 				qnew=q+alpha*Ji*errc;	
 			  }else if(method==2){  // JACOBIAN PSEUDOINVERSE
 			
-				std::cout<<"-----------------------------------------CHECKPOINT m2\n"<<std::endl;
+/*				std::cout<<"-----------------------------------------CHECKPOINT m2\n"<<std::endl;*/
 /*				std::cout<<"J=\n"<<J<<std::endl<<"U=\n"<<U<<std::endl<<"V=\n"<<V<<std::endl<<"S=\n"<<S<<std::endl;*/
 				WamIKJ::pseudoinverse(J,Ji,U,V,S);
 				qnew=q+Ji*errc;	
 			  }else if(method==3){ // MANIPULABILITY GRADIENT PROJECTION
-				std::cout<<"-----------------------------------------CHECKPOINT m3\n"<<std::endl;
+/*				std::cout<<"-----------------------------------------CHECKPOINT m3\n"<<std::endl;*/
 				WamIKJ::pseudoinverse(J,Ji,U,V,S);
 				WamIKJ::manipgrad(q,man,gradman);
 				
 				qnew=q+Ji*errc+mu*(I7-Ji*J)*gradman;	
 			 }else if(method==4){ // DAMPED JACOBIAN
-			    std::cout<<"-----------------------------------------CHECKPOINT m4\n"<<std::endl;
+/*			    std::cout<<"-----------------------------------------CHECKPOINT m4\n"<<std::endl;*/
 				WamIKJ::Dpseudoinverse(J,Ji,lambda);
 				qnew=q+Ji*errc;
 			  }else if(method==5){ // FILTERED JACOBIAN
-			    std::cout<<"-----------------------------------------CHECKPOINT m5\n"<<std::endl;
+/*			    std::cout<<"-----------------------------------------CHECKPOINT m5\n"<<std::endl;*/
 				WamIKJ::Fpseudoinverse(J,Ji,lambda,eps);
 				
 				qnew=q+Ji*errc;
 			  }else if(method==6){ //WEIGTHED JACOBIAN
-			      std::cout<<"-----------------------------------------CHECKPOINT m6\n"<<std::endl;
+/*			      std::cout<<"-----------------------------------------CHECKPOINT m6\n"<<std::endl;*/
 				dhfunct(q,dH);
 				difH=dH.cwiseAbs()-dH0.cwiseAbs();
 				
@@ -291,7 +293,7 @@ std::cout<<"METHOD="<<method<<std::endl;
 				
 				dH0=dH;
 			  }else if(method==7){ // JOINT CLAMPING
-std::cout<<"-----------------------------------------CHECKPOINT m7\n"<<std::endl;
+/*std::cout<<"-----------------------------------------CHECKPOINT m7\n"<<std::endl;*/
 			    WamIKJ::clampjoints(q,H);
 			    WamIKJ::pseudoinverse(J*H,Ji,U,V,S);
 			    qnew=WamIKJ::pi2piwam(q+H*Ji*errc);
@@ -299,18 +301,18 @@ std::cout<<"-----------------------------------------CHECKPOINT m7\n"<<std::endl
 
 				
 			  }else if(method==8){ //JOINT CLAMPING WITH CONTINUOUS ACTIVATION
-std::cout<<"-----------------------------------------CHECKPOINT m8\n"<<std::endl;
+/*std::cout<<"-----------------------------------------CHECKPOINT m8\n"<<std::endl;*/
 			    WamIKJ::HjlCONT(q,H,beta0);
 			    WamIKJ::pseudoinverse(J*H,Ji,U,V,S);		    
 			    qnew=q+H*Ji*errc;
 	
 			  }else if(method==9){ // JACOBIAN CONTINUOUS FILTERING
-std::cout<<"-----------------------------------------CHECKPOINT m9\n"<<std::endl;
+/*std::cout<<"-----------------------------------------CHECKPOINT m9\n"<<std::endl;*/
 			    WamIKJ::CFpseudoinverse(J,Ji,nu,s0);
 			    qnew=q+Ji*errc;	
 			    
 			  }else if(method==10){ //SELECTIVELY DAMPED
-std::cout<<"-----------------------------------------CHECKPOINT m10\n"<<std::endl;
+/*std::cout<<"-----------------------------------------CHECKPOINT m10\n"<<std::endl;*/
 			       wi.resize(7);
 			       WamIKJ::svdJ(J,U,V,S);
 				w.fill(0.0);    
@@ -363,7 +365,7 @@ std::cout<<"-----------------------------------------CHECKPOINT m10\n"<<std::end
 // 				      std::cout<<"\n w="<<w<<"\n wi="<<wi<<"\n thi"<<thi<<std::endl;
 // 				      std::cout<<"-----------------------------------------CHECKPOINT SD4d\n"<<std::endl;
 				}else if(method==11){ // TAS PRIORITY CLAMPING
-				      std::cout<<"-----------------------------------------CHECKPOINT m11\n"<<std::endl;
+// 				      std::cout<<"-----------------------------------------CHECKPOINT m11\n"<<std::endl;
 
 				    WamIKJ::HjlCONT(q,H,beta0);
 				    J0.resize(7,7);
@@ -378,7 +380,7 @@ std::cout<<"-----------------------------------------CHECKPOINT m10\n"<<std::end
 				  
 				  
 				}else if(method==12){ // CONTINUOUS TAS PRIORITY CLAMPING
-std::cout<<"-----------------------------------------CHECKPOINT m12\n"<<std::endl;
+/*std::cout<<"-----------------------------------------CHECKPOINT m12\n"<<std::endl;*/
  
 				    WamIKJ::HjlCONT(q,Haux,beta0);
 				    J1=I7;
@@ -394,7 +396,7 @@ std::cout<<"-----------------------------------------CHECKPOINT m12\n"<<std::end
 				    qnew=pi2piwam(q+dq);
 				  
 				}else if(method==13){ // CONTINUOUS TAS PRIORITY CLAMPING and smooth filtering
-std::cout<<"-----------------------------------------CHECKPOINT m13\n"<<std::endl;
+// std::cout<<"-----------------------------------------CHECKPOINT m13\n"<<std::endl;
 
 				    WamIKJ::svdJ(J,U,V,S);
 				      for (int i=0;i<n;i++){
@@ -427,7 +429,7 @@ std::cout<<"-----------------------------------------CHECKPOINT m13\n"<<std::end
 				    qnew=pi2piwam(q+dq);
 				  
 				}else if(method==14){ // CONTINUOUS TAS PRIORITY CLAMPING selectively damped and smooth filtering
-std::cout<<"-----------------------------------------CHECKPOINT m14\n"<<std::endl;
+/*std::cout<<"-----------------------------------------CHECKPOINT m14\n"<<std::endl;*/
 				    // compute P1
 				    WamIKJ::HjlCONT(q,Haux,beta0);
 				    J1=I7;
@@ -518,7 +520,7 @@ std::cout<<"-----------------------------------------CHECKPOINT m14\n"<<std::end
 	    
 	    if (std::isnan(errc.norm())){
 	    }else{
-	    std::cout<<"enorm="<<errc.norm()<<std::endl;
+// 	    std::cout<<"enorm="<<errc.norm()<<std::endl;
 	    }
 	    it++;
 //   std::cout<<"-----------------------------------------CHECKPOINT 3\n"<<std::endl;		    
