@@ -198,7 +198,7 @@ bool WamIKJ::ik(vector<double> pose, vector<double> currentjoints, vector<double
 	  for(int i=0;i<7;i++)
 	    cjoints(i) = currentjoints.at(i);
 // 		
-cjoints<<0.8147,0.9058,0.1270,0.9134,0.6324,0.0975,0.2785;
+// cjoints<<0.8147,0.9058,0.1270,0.9134,0.6324,0.0975,0.2785;
 // 
 
 	  for(int i=0;i<16;i++)
@@ -536,8 +536,20 @@ std::cout<<"METHOD="<<method<<std::endl;
 	}
 	
 std::cout<<"end error= "<<errc.norm()<<", iterations="<< it-1<<std::endl;
-for(int i=0;i<7;i++)
+// FILE *hola;
+/*
+  if((hola=fopen("dataM1.txt","w")) == NULL) {
+    printf("Cannot open file.\n");
+  }*/
+
+// fprintf(hola,"err=%e, joints=",errc.norm());
+for(int i=0;i<7;i++){
   joints.at(i) = q(i);
+//   fprintf(hola," %e",q(i));
+}
+// fprintf(hola,"\n");
+  
+//   return errc.norm()<emax;
   return true;
 }
 
@@ -624,13 +636,13 @@ MatrixXd WamIKJ::cpinv(MatrixXd J,MatrixXd H){
 
 VectorXd WamIKJ::pi2piwam(VectorXd q){
   MatrixXd Qlim(7,7);
-  VectorXd qout(7);
+  VectorXd qout(7),q2(7);
   Qlim.resize(7,2);
   Qlim<<-2.6,2.6,-2.0,2.0,-2.8,2.8,-0.9,3.1,-4.8,1.3,-1.6,1.6,-2.2,2.2;
 
   for (int i=0;i<7;i++){
-    qout(i)=min(q(i),Qlim(i,1))-0.00000001;
-    qout(i)=max(q(i),Qlim(i,0))+0.00000001;
+    q2(i)=min(q(i),Qlim(i,1))-0.00000001;
+    qout(i)=max(q2(i),Qlim(i,0))+0.00000001;
   }
   return qout;
 }
