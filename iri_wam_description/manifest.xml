@@ -9,10 +9,10 @@
       <b>mesh</b>  This directory contains all STL files (use mesh tag in urdf)
       <b>urdf</b>  This directory contains all URDF files building from XACRO file(in xacro directory)
                       <b>wam.urdf</b> This file comes from wam.urdf.xacro
-                      <b>wam_sim.urdf</b> This File comes from wam_sim.urdf.xacro
+                      <b>wam_sim.urdf</b> This file comes from wam_sim.urdf.xacro
    </p>
   </description>
-  <author>Ivan Rojas (irojas@iri.upc.edu)</author>
+  <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_description</url>
