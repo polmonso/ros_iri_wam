@@ -1,6 +1,6 @@
 <stack>
-  <description brief="iri_wam">wam</description>
-  <author>Maintained by Pol Monso'</author>
+  <description brief="iri_wam">Lots of tools for the WAM arm: fk, ik, calibration ... Driver wrapper interfaces with the NEW libbarrett library</description>
+  <author>Maintained by IRI Robotics Lab, Pol Monso'</author>
   <license>LGPL</license>  
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam</url>
