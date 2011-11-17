@@ -67,6 +67,8 @@
   
   <!-- LINKS   -->  
   <xacro:Link name="wambase" xyz="0 0 0" rpy="0 0 0" mass="1" prefix=""/>
+<!-- TODO: Try to add wam0 virtual Link and its corresponding joint since it is how it is defined on the real kinematics
+           Not sure if this is possible -->
   <xacro:Link name="wam1" xyz="0 0 0" rpy="0 0 0" mass="0.1" prefix="wam_fk/"/>
   <xacro:Link name="wam2" xyz="0 0 0" rpy="0 0 0" mass="0.1" prefix="wam_fk/"/> 
   <xacro:Link name="wam3" xyz="0 0 0" rpy="0 0 0" mass="0.1" prefix="wam_fk/"/>
