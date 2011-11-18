@@ -1,0 +1,5 @@
+<launch>
+
+ <node name="test" pkg="iri_wam_gazebo" type="marm"/>
+
+</launch>

@@ -1,0 +1,18 @@
+arm_controller:
+  type: robot_mechanism_controllers/JointSplineTrajectoryController
+  joints:
+    -j1
+    -j2
+    -j3
+    -j4
+    -j5
+    -j6
+    -j7
+  gains:
+    j1: {p: 100.0}
+    j2: {p: 100.0}
+    j3: {p: 100.0}
+    j4: {p: 100.0}
+    j5: {p: 100.0}
+    j6: {p: 100.0}
+    j7: {p: 100.0}
