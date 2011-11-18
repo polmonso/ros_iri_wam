@@ -96,8 +96,8 @@
   <xacro:Transmission name="link5_link6" jointName="j6" reduction="1" torque="1"/>
   <xacro:Transmission name="link6_link7" jointName="j7" reduction="1" torque="1"/>
   <!-- PLUGINS -->
-<!--
+
   <include filename="$(find iri_wam_gazebo)/urdf/iri_wam.gazebo.xacro" />
--->
+
 </robot>
 
