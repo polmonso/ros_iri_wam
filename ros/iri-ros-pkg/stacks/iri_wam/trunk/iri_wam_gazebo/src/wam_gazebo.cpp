@@ -159,6 +159,7 @@ void WAMGazebo::UpdateChild()
   loadPose(actual_positions);
   getState(joints_positions);
   sendState(joints_positions);
+  //updateForce();
 }
 void WAMGazebo::FiniChild()
 {
@@ -406,7 +407,7 @@ bool WAMGazebo::inBodies(Body* body,std::vector<Body*> bodies)
       return false;
 }
 void WAMGazebo::getPoses(std::vector<Pose3d>& poses)
-{
+{  
   poses.clear();
   poses.push_back(zeroBase);
   for(int i= JOINT1; i<= JOINT7; ++i)

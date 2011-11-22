@@ -3,10 +3,19 @@
 #include <actionlib/client/terminal_state.h>
 #include <arm_navigation_msgs/MoveArmAction.h>
 #include <arm_navigation_msgs/utils.h>
-#include <std_srvs/Empty.h>
+#include <sstream>
+#include <iostream>
+#include <stdlib.h>
+template <class T>
+bool to_double(T& t,const std::string& s, std::ios_base& (*f)(std::ios_base&))
+{
+  std::istringstream iss(s);
+  return !(iss >> f >> t).fail();
+}
+
 int main(int argc, char **argv){
 	static const std::string SET_PLANNING_SCENE_DIFF_NAME = "/environment_server/register_planning_scene";
-
+double d=0.0;
   ros::init (argc, argv, "test_move_iri_wam");
   ros::NodeHandle nh;
   actionlib::SimpleActionClient<arm_navigation_msgs::MoveArmAction> move_arm("move_iri_wam",true);
@@ -17,44 +26,51 @@ int main(int argc, char **argv){
   goalA.planner_service_name="/ompl_planning/plan_kinematic_path";
   goalA.motion_plan_request.group_name="iri_wam";
   arm_navigation_msgs::JointConstraint joint1;
+  to_double<double>(d, argv[1], std::dec);	
   joint1.joint_name="j1";
-  joint1.position=1.0;
+  joint1.position=d;
   joint1.tolerance_above=0.01;
   joint1.tolerance_below=0.01;
   joint1.weight=1.0;
   arm_navigation_msgs::JointConstraint joint2;
+  to_double<double>(d, argv[2], std::dec);	
   joint2.joint_name="j2";
-  joint2.position=0.0;
+  joint2.position=d;
   joint2.tolerance_above=0.01;
   joint2.tolerance_below=0.01;
   joint2.weight=1.0;  
   arm_navigation_msgs::JointConstraint joint3;
+  to_double<double>(d, argv[3], std::dec);	
   joint3.joint_name="j3";
-  joint3.position=0.0;
+  joint3.position=d;
   joint3.tolerance_above=0.01;
   joint3.tolerance_below=0.01;
   joint3.weight=1.0;  
   arm_navigation_msgs::JointConstraint joint4;
+  to_double<double>(d, argv[4], std::dec);	
   joint4.joint_name="j4";
-  joint4.position=0.5;
+  joint4.position=d;
   joint4.tolerance_above=0.01;
   joint4.tolerance_below=0.01;
   joint4.weight=1.0;  
   arm_navigation_msgs::JointConstraint joint5;
+  to_double<double>(d, argv[5], std::dec);	
   joint5.joint_name="j5";
-  joint5.position=0.0;
+  joint5.position=d;
   joint5.tolerance_above=0.01;
   joint5.tolerance_below=0.01;
   joint5.weight=1.0;  
   arm_navigation_msgs::JointConstraint joint6;
+  to_double<double>(d, argv[6], std::dec);	
   joint6.joint_name="j6";
-  joint6.position=0.0;
+  joint6.position=d;
   joint6.tolerance_above=0.01;
   joint6.tolerance_below=0.01;
   joint6.weight=1.0;  
   arm_navigation_msgs::JointConstraint joint7;
+  to_double<double>(d, argv[7], std::dec);	
   joint7.joint_name="j7";
-  joint7.position=0.0;
+  joint7.position=d;
   joint7.tolerance_above=0.01;
   joint7.tolerance_below=0.01;
   joint7.weight=1.0;  
@@ -93,6 +109,6 @@ int main(int argc, char **argv){
       else
         ROS_INFO("Action failed: %s",state.toString().c_str());
     }
-  }
+  } 
   ros::shutdown();
 }
