@@ -245,13 +245,6 @@
     <axis xyz="0 0 1"/>
   </joint>
   <!-- Transmission -->
-  <transmission name="linkb_link0_trans" type="pr2_mechanism_model/SimpleTransmission">
-    <actuator name="linkb_link0_motor"/>
-    <joint name="j0"/>
-    <mechanicalReduction>1</mechanicalReduction>
-    <motorTorqueConstant>1</motorTorqueConstant>
-    <!--  <pulsesPerRevolution>90000</pulsesPerRevolution>-->
-  </transmission>
   <transmission name="link0_link1_trans" type="pr2_mechanism_model/SimpleTransmission">
     <actuator name="link0_link1_motor"/>
     <joint name="j1"/>
@@ -305,4 +298,3 @@
   <!--  <include filename="$(find iri_wam_gazebo)/urdf/iri_wam.gazebo.xacro" />
 -->
 </robot>
-
