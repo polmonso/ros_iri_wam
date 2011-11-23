@@ -85,9 +85,9 @@ void WamFK::joint_states_callback(const sensor_msgs::JointState::ConstPtr& msg)
          msg->position[3],msg->position[4],msg->position[5],msg->position[6]);
     
     transforms[0] << 1,0,0,0.22,
-         0,1,0,0.14,
-         0,0,1,0.346,
-         0,0,0,1;
+                     0,1,0,0.14,
+                     0,0,1,0.346,
+                     0,0,0,1;
 
     dhMatrix(0,-M_PI/2,0,msg->position[0], transforms[1]); 
     dhMatrix(0,M_PI/2,0,msg->position[1], transforms[2]); 
