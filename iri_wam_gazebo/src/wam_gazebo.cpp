@@ -128,6 +128,9 @@ void WAMGazebo::LoadChild(XMLConfigNode *node)
 
   zeroBase=bodys_[0]->GetWorldPose();
 
+
+
+//bodys_[0]->GetAnchor();
   joints_.push_back(parent_->GetJoint(** joint_1));
   joints_.push_back(parent_->GetJoint(** joint_2));
   joints_.push_back(parent_->GetJoint(** joint_3));
@@ -136,10 +139,17 @@ void WAMGazebo::LoadChild(XMLConfigNode *node)
   joints_.push_back(parent_->GetJoint(** joint_6));
   joints_.push_back(parent_->GetJoint(** joint_7));   
   joints_positions.resize(7);
-  
-  int argc = 0;
-  char** argv = NULL;
-  ros::init(argc, argv, "wam_plugin", ros::init_options::NoSigintHandler | ros::init_options::AnonymousName);
+  //anchors.resize(7);
+anchors.push_back(joints_[JOINT1]->GetAnchor(2));
+anchors.push_back(joints_[JOINT2]->GetAnchor(1));
+anchors.push_back(joints_[JOINT3]->GetAnchor(2));
+anchors.push_back(joints_[JOINT4]->GetAnchor(2));
+anchors.push_back(joints_[JOINT5]->GetAnchor(2));
+anchors.push_back(joints_[JOINT6]->GetAnchor(2));
+anchors.push_back(joints_[JOINT7]->GetAnchor(2));
+  //int argc = 0;
+  //char** argv = NULL;
+ // ros::init(argc, argv, "wam_plugin", ros::init_options::NoSigintHandler | ros::init_options::AnonymousName);
   rosnode_ = new ros::NodeHandle(robotNamespace);
   initTopics(); 
   getPoses(init_positions);
@@ -152,14 +162,13 @@ void WAMGazebo::ResetChild()
 {
   ROS_INFO("reset child");
   loadPose(init_positions);
+  getState(joints_positions);
   copyVector(init_positions,actual_positions);
  }
 void WAMGazebo::UpdateChild()
 { 
   loadPose(actual_positions);
-  getState(joints_positions);
   sendState(joints_positions);
-  //updateForce();
 }
 void WAMGazebo::FiniChild()
 {
@@ -190,7 +199,7 @@ void WAMGazebo::goalCB(GoalHandle gh)
    pointToMove(jtp,gl->trajectory.joint_names);
    getPoses(actual_positions);
    getState(joints_positions);
-   ros::Duration(0.05).sleep();
+//   ros::Duration(0.05).sleep();
    sendState(joints_positions);
  }
  getPoses(actual_positions);
@@ -255,15 +264,16 @@ void WAMGazebo::pointToMove(trajectory_msgs::JointTrajectoryPoint& jtp,std::vect
 	   findJointPosition(target_pos,names_joints[ii],names,jtp.positions);
 	   findJointVelocity(vel,names_joints[ii],names,jtp.velocities);
 	   findJointAccel(acel,names_joints[ii],names,jtp.accelerations);
-	   Vector3 anchor=joints_[ii]->GetAnchor(0);
+	   Vector3 anchor=anchors[ii];
+	   //Vector3 anchor=(ii != 1)?joints_[ii]->GetAnchor(2):joints_[ii]->GetAnchor(1);
+	   //Vector3 axis=(ii != 1)?joints_[ii]->GetAxis(2):joints_[ii]->GetAxis(1);
 	   Vector3 axis = joints_[ii]->GetAxis(0);
-	   joints_[ii]->SetVelocity(0,vel);
+	   joints_[ii]->SetVelocity(2,vel);
 	   current_pos=joints_positions[ii];
 	   parent= getParentBody(joints_[ii]);
 	   child= getChildBody(joints_[ii]);
 	   force=acel*(child->GetMass().GetAsDouble());
-	   joints_[ii]->SetForce(0,force);
-	   //Dangle=target_pos;
+	   (ii != 1)?joints_[ii]->SetForce(2,force):joints_[ii]->SetForce(1,force);
 	   Dangle= (target_pos-current_pos)*10000;
 	   Dangle=round(Dangle);
 	   Dangle/=10000;
@@ -350,6 +360,7 @@ void WAMGazebo::rotateBodyAndChildren(Body* body1,Vector3 anchor,Vector3 axis, d
   if (update_children) getAllChildrenBodies(bodies, body1->GetModel(), body1);
    for (std::vector<Body*>::iterator bit = bodies.begin(); bit != bodies.end(); bit++)
     rotateBodyAndChildren((*bit), anchor, axis, dangle,false);
+    
  gazebo::Simulator::Instance()->SetPaused(false);
 }
 void WAMGazebo::getAllChildrenBodies(std::vector<Body*> &bodies,Model* model, Body* body)
