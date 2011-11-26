@@ -61,7 +61,7 @@ namespace gazebo
 		  		  
 		  std::vector<Pose3d> init_positions;
           std::vector<Pose3d> actual_positions;
-          
+          std::vector<Vector3> anchors;
           std::vector<std::string> names_joints;
           std::vector<std::string> names_bodys;
           
