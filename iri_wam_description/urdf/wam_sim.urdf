@@ -11,7 +11,7 @@
   <link name="wambase">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="1"/>
+      <mass value="20"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
@@ -36,7 +36,7 @@
   <link name="wam_fk/wam1">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="0.1"/>
+      <mass value="8.3936"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
@@ -59,7 +59,7 @@
   <link name="wam_fk/wam2">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="0.1"/>
+      <mass value="4.8487"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
@@ -82,7 +82,7 @@
   <link name="wam_fk/wam3">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="0.1"/>
+      <mass value="1.7251"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
@@ -105,7 +105,7 @@
   <link name="wam_fk/wam4">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="0.1"/>
+      <mass value="2.0824"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
@@ -128,7 +128,7 @@
   <link name="wam_fk/wam5">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="0.1"/>
+      <mass value="0.3067"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
@@ -151,7 +151,7 @@
   <link name="wam_fk/wam6">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="0.1"/>
+      <mass value="0.4278"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
@@ -174,7 +174,7 @@
   <link name="wam_fk/wam7">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="0.1"/>
+      <mass value="0.0557"/>
       <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
     </inertial>
     <visual>
@@ -207,7 +207,7 @@
     <child link="wam_fk/wam2"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <limit effort="30" lower="-2.0" upper="2.0" velocity="2"/>
-    <axis xyz="0 0 1 "/>
+    <axis xyz="0 1 0 "/>
   </joint>
   <joint name="j3" type="revolute">
     <parent link="wam_fk/wam2"/>
