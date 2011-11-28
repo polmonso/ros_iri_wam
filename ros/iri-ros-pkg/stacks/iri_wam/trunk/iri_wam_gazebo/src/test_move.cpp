@@ -94,7 +94,7 @@ double d=0.0;
   {
     bool finished_within_time = false;
     move_arm.sendGoal(goalA);
-    finished_within_time = move_arm.waitForResult(ros::Duration(200.0));
+    finished_within_time = move_arm.waitForResult(ros::Duration(20000.0));
     if (!finished_within_time)
     {
       move_arm.cancelGoal();

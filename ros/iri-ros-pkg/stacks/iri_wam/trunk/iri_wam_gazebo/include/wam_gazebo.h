@@ -79,6 +79,7 @@ namespace gazebo
           actionlib::ActionServer <control_msgs::FollowJointTrajectoryAction > server;
           
           bool alive_;
+          bool inMoving;
 
           boost::mutex lock;
           
@@ -124,6 +125,7 @@ namespace gazebo
 		 void getAllParentBodies(std::vector<Body*> &bodies, Model* model, Body* body, Body* orig_parent_body);
 		 bool inBodies(Body* body,std::vector<Body*> bodies);
 		 void getPosition(Joint* j1,double& pos);
+		 void publishFeed(int st);
 		 
     };
 }
