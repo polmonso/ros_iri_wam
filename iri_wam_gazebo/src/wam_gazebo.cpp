@@ -23,13 +23,15 @@ using namespace gazebo;
 GZ_REGISTER_DYNAMIC_CONTROLLER("wam_gazebo", WAMGazebo);
 typedef  actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> ExecutorActionServer;
 typedef  actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle GoalHandle;	
+typedef  control_msgs::FollowJointTrajectoryActionFeedback feedback;
 enum{ JOINT1 , JOINT2 , JOINT3 , JOINT4 , JOINT5 , JOINT6 , JOINT7};
 enum{ BODY1  , BODY2  , BODY3  , BODY4  , BODY5  , BODY6 , BODY7, BODY8};
 
 WAMGazebo::WAMGazebo(Entity * parent) :
     Controller(parent),
     server(nodo_, "iri_wam_controller/follow_joint_trajectory", false),
-    alive_(true)
+    alive_(true),
+    inMoving(false)
    {
   parent_ = dynamic_cast<Model *> (parent);
  
@@ -139,17 +141,17 @@ void WAMGazebo::LoadChild(XMLConfigNode *node)
   joints_.push_back(parent_->GetJoint(** joint_6));
   joints_.push_back(parent_->GetJoint(** joint_7));   
   joints_positions.resize(7);
-  //anchors.resize(7);
+  anchors.resize(7);
 anchors.push_back(joints_[JOINT1]->GetAnchor(2));
-anchors.push_back(joints_[JOINT2]->GetAnchor(1));
+anchors.push_back(joints_[JOINT2]->GetAnchor(2));
 anchors.push_back(joints_[JOINT3]->GetAnchor(2));
 anchors.push_back(joints_[JOINT4]->GetAnchor(2));
 anchors.push_back(joints_[JOINT5]->GetAnchor(2));
 anchors.push_back(joints_[JOINT6]->GetAnchor(2));
 anchors.push_back(joints_[JOINT7]->GetAnchor(2));
-  //int argc = 0;
-  //char** argv = NULL;
- // ros::init(argc, argv, "wam_plugin", ros::init_options::NoSigintHandler | ros::init_options::AnonymousName);
+  int argc = 0;
+  char** argv = NULL;
+  ros::init(argc, argv, "wam_plugin", ros::init_options::NoSigintHandler | ros::init_options::AnonymousName);
   rosnode_ = new ros::NodeHandle(robotNamespace);
   initTopics(); 
   getPoses(init_positions);
@@ -168,7 +170,11 @@ void WAMGazebo::ResetChild()
 void WAMGazebo::UpdateChild()
 { 
   loadPose(actual_positions);
-  sendState(joints_positions);
+  if(!inMoving)
+  {
+   sendState(joints_positions);
+   publishFeed(0);
+  }
 }
 void WAMGazebo::FiniChild()
 {
@@ -197,12 +203,14 @@ void WAMGazebo::goalCB(GoalHandle gh)
  {
    jtp=gl->trajectory.points[i];	
    pointToMove(jtp,gl->trajectory.joint_names);
-   getPoses(actual_positions);
-   getState(joints_positions);
-//   ros::Duration(0.05).sleep();
+   //
+   //getState(joints_positions);
+   ros::Duration(0.05).sleep();
    sendState(joints_positions);
+  // getPoses(actual_positions);
  }
- getPoses(actual_positions);
+ //getPoses(actual_positions);
+ publishFeed(3);
  lock.unlock();
 }
 
@@ -216,13 +224,13 @@ void WAMGazebo::copyVector(const std::vector<Pose3d>& a,std::vector<Pose3d>& b)
 void WAMGazebo::loadPose(const std::vector<Pose3d>& pose)
 {
 	bodys_[BODY1]->SetWorldPose(zeroBase,true);
-	bodys_[BODY2]->SetRelativePose(pose[1],true);
-	bodys_[BODY3]->SetRelativePose(pose[2],true);
-	bodys_[BODY4]->SetRelativePose(pose[3],true);
-	bodys_[BODY5]->SetRelativePose(pose[4],true);
-    bodys_[BODY6]->SetRelativePose(pose[5],true);
-	bodys_[BODY7]->SetRelativePose(pose[6],true);
-	bodys_[BODY8]->SetRelativePose(pose[7],true);
+	bodys_[BODY2]->SetWorldPose(pose[1],true);
+	bodys_[BODY3]->SetWorldPose(pose[2],true);
+	bodys_[BODY4]->SetWorldPose(pose[3],true);
+	bodys_[BODY5]->SetWorldPose(pose[4],true);
+    bodys_[BODY6]->SetWorldPose(pose[5],true);
+	bodys_[BODY7]->SetWorldPose(pose[6],true);
+	bodys_[BODY8]->SetWorldPose(pose[7],true);
 }
 void WAMGazebo::initTopics()
 {
@@ -265,8 +273,6 @@ void WAMGazebo::pointToMove(trajectory_msgs::JointTrajectoryPoint& jtp,std::vect
 	   findJointVelocity(vel,names_joints[ii],names,jtp.velocities);
 	   findJointAccel(acel,names_joints[ii],names,jtp.accelerations);
 	   Vector3 anchor=anchors[ii];
-	   //Vector3 anchor=(ii != 1)?joints_[ii]->GetAnchor(2):joints_[ii]->GetAnchor(1);
-	   //Vector3 axis=(ii != 1)?joints_[ii]->GetAxis(2):joints_[ii]->GetAxis(1);
 	   Vector3 axis = joints_[ii]->GetAxis(0);
 	   joints_[ii]->SetVelocity(2,vel);
 	   current_pos=joints_positions[ii];
@@ -336,7 +342,6 @@ Body* WAMGazebo::getParentBody(Joint* joint)
 }
 Body* WAMGazebo::getChildBody(Joint* joint)
 {
-    // anchor is with the child (same as urdf)
   if (joint->GetJointBody(0) == joint->anchorBody)
      return joint->GetJointBody(0);
   else if (joint->GetJointBody(1) == joint->anchorBody)
@@ -347,7 +352,8 @@ Body* WAMGazebo::getChildBody(Joint* joint)
 void WAMGazebo::rotateBodyAndChildren(Body* body1,Vector3 anchor,Vector3 axis, double dangle, bool update_children)
 { 
   gazebo::Simulator::Instance()->SetPaused(true);
-  Pose3d world_pose = body1->GetRelativePose();
+  //Pose3d world_pose = body1->GetRelativePose();
+  Pose3d world_pose = body1->GetWorldPose();
   Pose3d relative_pose(world_pose.pos - anchor,world_pose.rot); 
   Quatern rotation;
   rotation.SetFromAxis(axis.x,axis.y,axis.z,dangle);
@@ -355,13 +361,14 @@ void WAMGazebo::rotateBodyAndChildren(Body* body1,Vector3 anchor,Vector3 axis, d
   new_relative_pose.pos = rotation.RotateVector(relative_pose.pos);
   new_relative_pose.rot = rotation * relative_pose.rot;
   Pose3d new_world_pose(relative_pose.pos+anchor,new_relative_pose.rot);
-  body1->SetRelativePose(new_world_pose);
+  //body1->SetRelativePose(new_world_pose);
+  body1->SetWorldPose(new_world_pose);
   std::vector<Body*> bodies;
   if (update_children) getAllChildrenBodies(bodies, body1->GetModel(), body1);
    for (std::vector<Body*>::iterator bit = bodies.begin(); bit != bodies.end(); bit++)
     rotateBodyAndChildren((*bit), anchor, axis, dangle,false);
-    
- gazebo::Simulator::Instance()->SetPaused(false);
+  if(update_children)getPoses(actual_positions);   
+  gazebo::Simulator::Instance()->SetPaused(false);
 }
 void WAMGazebo::getAllChildrenBodies(std::vector<Body*> &bodies,Model* model, Body* body)
 {
@@ -436,4 +443,40 @@ void  WAMGazebo::getPosition(Joint* j1,double& pos)
 	pos=d;
 	if(pos < 0.01 && pos > -0.01)pos=0.0;
 }
-
+void WAMGazebo::publishFeed(int st)
+{
+	feedback feed;
+	feed.header.stamp=ros::Time::now();
+	feed.header.frame_id="wambase";
+    feed.feedback.header.stamp=ros::Time::now();
+	feed.feedback.header.frame_id="wambase";
+	feed.feedback.joint_names=names_joints;
+	getState(joints_positions);
+	feed.feedback.actual.positions=joints_positions;
+	feed.status.goal_id.stamp=ros::Time::now();
+	feed.status.goal_id.id="wambase";
+	
+	switch(st)
+	{
+		case 0:  feed.status.status=actionlib_msgs::GoalStatus::PENDING;
+		       break; 
+		case 1:  feed.status.status=actionlib_msgs::GoalStatus::ACTIVE;
+		       break; 
+		case 2:  feed.status.status=actionlib_msgs::GoalStatus::PREEMPTED;
+		       break; 
+		case 3:  feed.status.status=actionlib_msgs::GoalStatus::SUCCEEDED;
+		       break; 
+		case 4:  feed.status.status=actionlib_msgs::GoalStatus::ABORTED;
+		       break; 
+		case 5:  feed.status.status=actionlib_msgs::GoalStatus::REJECTED;
+		       break; 
+		case 6:  feed.status.status=actionlib_msgs::GoalStatus::PREEMPTING;
+		       break; 
+		case 7:  feed.status.status=actionlib_msgs::GoalStatus::RECALLING;
+		       break; 
+		case 8:  feed.status.status=actionlib_msgs::GoalStatus::RECALLED;
+		       break; 
+		case 9:  feed.status.status=actionlib_msgs::GoalStatus::LOST;
+		       break; 
+	}
+}
