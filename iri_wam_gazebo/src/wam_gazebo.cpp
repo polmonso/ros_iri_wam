@@ -127,10 +127,15 @@ void WAMGazebo::LoadChild(XMLConfigNode *node)
   bodys_.push_back(parent_->GetBody(** body_6));
   bodys_.push_back(parent_->GetBody(** body_7));  
   bodys_.push_back(parent_->GetBody(** body_8));  
-
+  bodys_[BODY1]->SetStatic(true);
+/*  bodys_[BODY2]->SetStatic(true);
+  bodys_[BODY3]->SetStatic(true);
+  bodys_[BODY4]->SetStatic(true);
+  bodys_[BODY5]->SetStatic(true);
+  bodys_[BODY6]->SetStatic(true);
+  bodys_[BODY7]->SetStatic(true);
+  bodys_[BODY8]->SetStatic(true);*/
   zeroBase=bodys_[0]->GetWorldPose();
-
-
 
 //bodys_[0]->GetAnchor();
   joints_.push_back(parent_->GetJoint(** joint_1));
@@ -168,13 +173,12 @@ void WAMGazebo::ResetChild()
   copyVector(init_positions,actual_positions);
  }
 void WAMGazebo::UpdateChild()
-{ 
+{ //lock.locked();
   loadPose(actual_positions);
-  if(!inMoving)
-  {
-   sendState(joints_positions);
-   publishFeed(0);
-  }
+  sendState(joints_positions);
+  publishFeed(0);
+  //ROS_INFO("UPDATE");
+  //ros::Duration(0.0005).sleep();
 }
 void WAMGazebo::FiniChild()
 {
@@ -186,7 +190,7 @@ void WAMGazebo::FiniChild()
 }
 void WAMGazebo::QueueThread()
 {
-  static const double timeout = 0.01;
+  static const double timeout = 0.05;
   ROS_INFO("[wam_GAZEBO] In the Queue Thread");
   while (alive_ && rosnode_->ok())
   {
@@ -201,17 +205,25 @@ void WAMGazebo::goalCB(GoalHandle gh)
  getState(joints_positions);
  for(unsigned int i=0; i< gl->trajectory.points.size(); ++i)
  {
+	  
    jtp=gl->trajectory.points[i];	
-   pointToMove(jtp,gl->trajectory.joint_names);
-   //
-   //getState(joints_positions);
    ros::Duration(0.05).sleep();
+   pointToMove(jtp,gl->trajectory.joint_names);
+   getState(joints_positions);
    sendState(joints_positions);
-  // getPoses(actual_positions);
+  //ROS_INFO("#######A######");
+  //publishFeed(1);
+  //ROS_INFO("#######B######");
+  //getPoses(actual_positions);
  }
  //getPoses(actual_positions);
  publishFeed(3);
- lock.unlock();
+  
+ //lock.unlock();
+ //sleep(2);
+ //sleep(2);
+  //gazebo::Simulator::Instance()->GetMRMutex()->unlock();
+  lock.unlock();
 }
 
 void WAMGazebo::copyVector(const std::vector<Pose3d>& a,std::vector<Pose3d>& b)
@@ -223,7 +235,7 @@ void WAMGazebo::copyVector(const std::vector<Pose3d>& a,std::vector<Pose3d>& b)
 }
 void WAMGazebo::loadPose(const std::vector<Pose3d>& pose)
 {
-	bodys_[BODY1]->SetWorldPose(zeroBase,true);
+	//bodys_[BODY1]->SetWorldPose(zeroBase,true);
 	bodys_[BODY2]->SetWorldPose(pose[1],true);
 	bodys_[BODY3]->SetWorldPose(pose[2],true);
 	bodys_[BODY4]->SetWorldPose(pose[3],true);
@@ -250,7 +262,7 @@ void WAMGazebo::getState(std::vector<double>& jnt)
 }
 void WAMGazebo::sendState(const std::vector<double>& jnt)
 {
- if(jnt.size() >0)
+ if(jnt.size() == 7)
  {
   sensor_msgs::JointState joint_msgs; 
   joint_msgs.name.resize(names_joints.size());
@@ -259,11 +271,12 @@ void WAMGazebo::sendState(const std::vector<double>& jnt)
   joint_msgs.position=jnt;
   joint_msgs.header.frame_id="wambase";
   joint_msgs.header.stamp=ros::Time::now();
-  state_publisher.publish(joint_msgs);
+  if(joint_msgs.position.size() == 7 && joint_msgs.name.size()==7)state_publisher.publish(joint_msgs);
+ //  ros::Duration(0.005).sleep();
  }
 }
 void WAMGazebo::pointToMove(trajectory_msgs::JointTrajectoryPoint& jtp,std::vector<std::string> names)
-{
+{	   
    int count = parent_->GetJointCount();
    double target_pos=0.0,current_pos=0.0,Dangle=0.0,acel=0.0,vel=0.0,force=0.0;
    Body *parent=NULL,*child=NULL;
@@ -283,8 +296,11 @@ void WAMGazebo::pointToMove(trajectory_msgs::JointTrajectoryPoint& jtp,std::vect
 	   Dangle= (target_pos-current_pos)*10000;
 	   Dangle=round(Dangle);
 	   Dangle/=10000;
+
 	   rotateBodyAndChildren(child,anchor,axis,Dangle,true);
+ 
    }
+   	    //gazebo::Simulator::Instance()->GetMRMutex()->unlock(); 
  }
 bool WAMGazebo::findJointPosition(double &position, std::string name, std::vector<std::string> joint_names, std::vector<double> joint_positions)
 {
@@ -351,8 +367,9 @@ Body* WAMGazebo::getChildBody(Joint* joint)
 }    
 void WAMGazebo::rotateBodyAndChildren(Body* body1,Vector3 anchor,Vector3 axis, double dangle, bool update_children)
 { 
-  gazebo::Simulator::Instance()->SetPaused(true);
+ // gazebo::Simulator::Instance()->SetPaused(true);
   //Pose3d world_pose = body1->GetRelativePose();
+    gazebo::Simulator::Instance()->GetMRMutex()->lock();  
   Pose3d world_pose = body1->GetWorldPose();
   Pose3d relative_pose(world_pose.pos - anchor,world_pose.rot); 
   Quatern rotation;
@@ -362,13 +379,20 @@ void WAMGazebo::rotateBodyAndChildren(Body* body1,Vector3 anchor,Vector3 axis, d
   new_relative_pose.rot = rotation * relative_pose.rot;
   Pose3d new_world_pose(relative_pose.pos+anchor,new_relative_pose.rot);
   //body1->SetRelativePose(new_world_pose);
+  //gazebo::Simulator::Instance()->GetMRMutex()->lock();
   body1->SetWorldPose(new_world_pose);
   std::vector<Body*> bodies;
   if (update_children) getAllChildrenBodies(bodies, body1->GetModel(), body1);
    for (std::vector<Body*>::iterator bit = bodies.begin(); bit != bodies.end(); bit++)
     rotateBodyAndChildren((*bit), anchor, axis, dangle,false);
-  if(update_children)getPoses(actual_positions);   
-  gazebo::Simulator::Instance()->SetPaused(false);
+  if(update_children)
+  {
+	getPoses(actual_positions);   
+
+  }
+  gazebo::Simulator::Instance()->GetMRMutex()->unlock();  
+//  gazebo::Simulator::Instance()->SetPaused(false);
+
 }
 void WAMGazebo::getAllChildrenBodies(std::vector<Body*> &bodies,Model* model, Body* body)
 {
