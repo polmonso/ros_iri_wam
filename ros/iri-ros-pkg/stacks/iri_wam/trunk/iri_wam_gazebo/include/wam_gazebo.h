@@ -46,7 +46,7 @@ namespace gazebo
         protected:
           virtual void LoadChild(XMLConfigNode *node);
           virtual void InitChild();
-          void ResetChild();
+          virtual void ResetChild();
           virtual void UpdateChild();
           virtual void FiniChild();
 
@@ -126,6 +126,7 @@ namespace gazebo
 		 bool inBodies(Body* body,std::vector<Body*> bodies);
 		 void getPosition(Joint* j1,double& pos);
 		 void publishFeed(int st);
+		 void update(int i);
 		 
     };
 }
