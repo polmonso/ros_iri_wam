@@ -127,6 +127,7 @@ namespace gazebo
 		 void getPosition(Joint* j1,double& pos);
 		 void publishFeed(int st);
 		 void update(int i);
+	//	 bool GenerealState(iri_wam_common_msgs::GenerealState::Request& request,iri_wam_common_msgs::GenerealState::Response& response);
 		 
     };
 }
