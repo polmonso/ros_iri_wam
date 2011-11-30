@@ -188,7 +188,7 @@ void WAMGazebo::FiniChild()
   callback_queue_thread_->join();	
   rosnode_->shutdown();
 }
-void WAMGazebo::QueueThread()
+void WAMGazebo::QueueThread()                                                                                                              
 {
   static const double timeout = 0.05;
   ROS_INFO("[wam_GAZEBO] In the Queue Thread");
@@ -203,6 +203,7 @@ void WAMGazebo::goalCB(GoalHandle gh)
  control_msgs::FollowJointTrajectoryGoal::ConstPtr gl = gh.getGoal();
  trajectory_msgs::JointTrajectoryPoint jtp;
  getState(joints_positions);
+  gh.setAccepted();
  for(unsigned int i=0; i< gl->trajectory.points.size(); ++i)
  {
 	  
@@ -211,18 +212,9 @@ void WAMGazebo::goalCB(GoalHandle gh)
    pointToMove(jtp,gl->trajectory.joint_names);
    getState(joints_positions);
    sendState(joints_positions);
-  //ROS_INFO("#######A######");
-  //publishFeed(1);
-  //ROS_INFO("#######B######");
-  //getPoses(actual_positions);
  }
- //getPoses(actual_positions);
- publishFeed(3);
-  
- //lock.unlock();
- //sleep(2);
- //sleep(2);
-  //gazebo::Simulator::Instance()->GetMRMutex()->unlock();
+  gh.setSucceeded();
+  publishFeed(3);
   lock.unlock();
 }
 
@@ -235,14 +227,21 @@ void WAMGazebo::copyVector(const std::vector<Pose3d>& a,std::vector<Pose3d>& b)
 }
 void WAMGazebo::loadPose(const std::vector<Pose3d>& pose)
 {
-	//bodys_[BODY1]->SetWorldPose(zeroBase,true);
-	bodys_[BODY2]->SetWorldPose(pose[1],true);
+	bodys_[BODY1]->SetWorldPose(zeroBase,true);
+	/*bodys_[BODY2]->SetWorldPose(pose[1],true);
 	bodys_[BODY3]->SetWorldPose(pose[2],true);
 	bodys_[BODY4]->SetWorldPose(pose[3],true);
 	bodys_[BODY5]->SetWorldPose(pose[4],true);
     bodys_[BODY6]->SetWorldPose(pose[5],true);
 	bodys_[BODY7]->SetWorldPose(pose[6],true);
-	bodys_[BODY8]->SetWorldPose(pose[7],true);
+	bodys_[BODY8]->SetWorldPose(pose[7],true);*/
+	bodys_[BODY2]->SetRelativePose(pose[1],true);
+	bodys_[BODY3]->SetRelativePose(pose[2],true);
+	bodys_[BODY4]->SetRelativePose(pose[3],true);
+	bodys_[BODY5]->SetRelativePose(pose[4],true);
+    bodys_[BODY6]->SetRelativePose(pose[5],true);
+	bodys_[BODY7]->SetRelativePose(pose[6],true);
+	bodys_[BODY8]->SetRelativePose(pose[7],true);
 }
 void WAMGazebo::initTopics()
 {
@@ -272,7 +271,6 @@ void WAMGazebo::sendState(const std::vector<double>& jnt)
   joint_msgs.header.frame_id="wambase";
   joint_msgs.header.stamp=ros::Time::now();
   if(joint_msgs.position.size() == 7 && joint_msgs.name.size()==7)state_publisher.publish(joint_msgs);
- //  ros::Duration(0.005).sleep();
  }
 }
 void WAMGazebo::pointToMove(trajectory_msgs::JointTrajectoryPoint& jtp,std::vector<std::string> names)
@@ -296,11 +294,8 @@ void WAMGazebo::pointToMove(trajectory_msgs::JointTrajectoryPoint& jtp,std::vect
 	   Dangle= (target_pos-current_pos)*10000;
 	   Dangle=round(Dangle);
 	   Dangle/=10000;
-
-	   rotateBodyAndChildren(child,anchor,axis,Dangle,true);
- 
+	   rotateBodyAndChildren(child,anchor,axis,Dangle,true); 
    }
-   	    //gazebo::Simulator::Instance()->GetMRMutex()->unlock(); 
  }
 bool WAMGazebo::findJointPosition(double &position, std::string name, std::vector<std::string> joint_names, std::vector<double> joint_positions)
 {
@@ -367,10 +362,9 @@ Body* WAMGazebo::getChildBody(Joint* joint)
 }    
 void WAMGazebo::rotateBodyAndChildren(Body* body1,Vector3 anchor,Vector3 axis, double dangle, bool update_children)
 { 
- // gazebo::Simulator::Instance()->SetPaused(true);
-  //Pose3d world_pose = body1->GetRelativePose();
-    gazebo::Simulator::Instance()->GetMRMutex()->lock();  
-  Pose3d world_pose = body1->GetWorldPose();
+  gazebo::Simulator::Instance()->GetMRMutex()->lock();  
+  // Pose3d world_pose = body1->GetWorldPose();
+  Pose3d world_pose = body1->GetRelativePose();
   Pose3d relative_pose(world_pose.pos - anchor,world_pose.rot); 
   Quatern rotation;
   rotation.SetFromAxis(axis.x,axis.y,axis.z,dangle);
@@ -378,21 +372,17 @@ void WAMGazebo::rotateBodyAndChildren(Body* body1,Vector3 anchor,Vector3 axis, d
   new_relative_pose.pos = rotation.RotateVector(relative_pose.pos);
   new_relative_pose.rot = rotation * relative_pose.rot;
   Pose3d new_world_pose(relative_pose.pos+anchor,new_relative_pose.rot);
-  //body1->SetRelativePose(new_world_pose);
-  //gazebo::Simulator::Instance()->GetMRMutex()->lock();
-  body1->SetWorldPose(new_world_pose);
+  body1->SetRelativePose(new_world_pose);
+    //body1->SetWorldPose(new_world_pose);
   std::vector<Body*> bodies;
   if (update_children) getAllChildrenBodies(bodies, body1->GetModel(), body1);
-   for (std::vector<Body*>::iterator bit = bodies.begin(); bit != bodies.end(); bit++)
+  for (std::vector<Body*>::iterator bit = bodies.begin(); bit != bodies.end(); bit++)
     rotateBodyAndChildren((*bit), anchor, axis, dangle,false);
   if(update_children)
   {
 	getPoses(actual_positions);   
-
   }
   gazebo::Simulator::Instance()->GetMRMutex()->unlock();  
-//  gazebo::Simulator::Instance()->SetPaused(false);
-
 }
 void WAMGazebo::getAllChildrenBodies(std::vector<Body*> &bodies,Model* model, Body* body)
 {
@@ -504,3 +494,37 @@ void WAMGazebo::publishFeed(int st)
 		       break; 
 	}
 }
+
+/*
+bool WAMGazebo::GenerealState(iri_wam_common_msgs::GenerealState::Request& request,iri_wam_common_msgs::GenerealState::Response& response)
+{
+	if( 1 == request.index or 3 == request.index)
+	{
+	 //RobotState
+	  /* getState(joints_positions);
+	   * std::vector<double> vel;
+	   * std::vector<double> force;
+	   * for(int ii=JOINT1; ii<JOINT7; ++ii)
+	   * {
+	   *  vel.push_back(joints_[ii]->GetVelocity());
+	   * }
+	   * for(int ii=JOINT1; ii<JOINT7; ++ii)
+	   * {
+	   *  force.push_back(joints_[ii]->GetForce());
+	   * }
+	   * response.robot_state.joint_state.header.frame_id="wambase";
+	   * response.robot_state.joint_state.header.stamp=ros::Time::now();
+	   * response.robot_state.joint_state.name=names_joints;
+	   * response.robot_state.joint_state.position=joints_positions;
+	   * response.robot_state.joint_state.velocity=vel;
+	   * response.robot_state.joint_state.effort=force; 
+	   *
+	   
+	}
+	if( 2 == request.index or 3 == request.index)
+	{
+
+	}	
+	return true
+} 
+*/
