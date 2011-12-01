@@ -66,7 +66,9 @@
 </xacro:macro>
   
   <!-- LINKS   -->  
-  <xacro:Link name="wambase" xyz="0 0 0" rpy="0 0 0" mass="20" prefix=""/>
+  <link name="world" />
+
+  <xacro:Link name="wambase" xyz="0 0 0" rpy="0 0 0" mass="1" prefix=""/>
 <!-- TODO: Try to add wam0 virtual Link and its corresponding joint since it is how it is defined on the real kinematics
            Not sure if this is possible -->
   <xacro:Link name="wam1" xyz="0 0 0" rpy="0 0 0" mass="8.3936" prefix="wam_fk/"/>
@@ -78,6 +80,12 @@
   <xacro:Link name="wam7" xyz="0 0 0" rpy="0 0 0" mass="0.0557" prefix="wam_fk/"/> 
   
   <!-- JOINTS  --> 
+  <joint name="base_fix" type="fixed">
+    <parent link="world"/>
+    <child link="wambase"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+
   <xacro:Joint name="j1" type="revolute" xyz="0.22 0.14 0.346" rpy="0 0 0" upperLim="2.6" lowerLim="-2.6" effort="30" velocity="2" axis="0 0 1" parent="wambase" child="wam_fk/wam1" /> 
   <xacro:Joint name="j2" type="revolute" xyz="0 0 0" rpy="0 0 0" upperLim="2.0" lowerLim="-2.0" effort="30" velocity="2" axis="0 1 0 " parent="wam_fk/wam1" child="wam_fk/wam2" />
   <xacro:Joint name="j3" type="revolute" xyz="0.0 0.0 0.0" rpy="0 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="0 0 1" parent="wam_fk/wam2" child="wam_fk/wam3" />
@@ -86,6 +94,10 @@
   <xacro:Joint name="j6" type="revolute" xyz="0 0 0" rpy="-${pi/2} 0 0" upperLim="1.6" lowerLim="-1.6" effort="30" velocity="2" axis="0 0 1" parent="wam_fk/wam5" child="wam_fk/wam6" />
   <xacro:Joint name="j7" type="revolute" xyz="0 0 0" rpy="${pi/2} 0 0" upperLim="2.2" lowerLim="-2.2" effort="30" velocity="2" axis="0 0 1" parent="wam_fk/wam6" child="wam_fk/wam7" />
   
+
+
+
+
   <!-- Transmission -->
   <xacro:Transmission name="link0_link1" jointName="j1" reduction="1" torque="1"/>
   <xacro:Transmission name="link1_link2" jointName="j2" reduction="1" torque="1"/>
