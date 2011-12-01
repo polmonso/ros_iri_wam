@@ -1,10 +1,8 @@
 <package>
   <description brief="iri_wam_gazebo">
-
-     iri_wam_gazebo
-
+	Simulator of WAM arm robot in GAZEBO.
   </description>
-  <author>irojas</author>
+  <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_gazebo</url>
@@ -20,6 +18,7 @@
   <depend package="actionlib"/>
   <depend package="actionlib_msgs"/>
   <depend package="planning_environment"/>
+  <depend package="iri_wam_common_msgs"/>
   <rosdep name="tinyxml" />
   <!-- <depend package="pr2_controllers_msgs"/>-->
   <export>
