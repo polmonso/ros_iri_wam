@@ -1,10 +1,13 @@
 <launch>
   <!-- start gazebo with an empty plane -->
   <param name="use_sim_time" value="true" />
+  <rosparam file="$(find iri_wam_gazebo)/controllers/arm_controllers.yaml" command="load"/>
   <param name="robot_description" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/wam_sim.urdf.xacro'" />
   <node name="gazebo" pkg="gazebo" type="gazebo" args="-u $(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen"/>
   <node name="spawn_wam_model" pkg="gazebo" type="spawn_model" args="-unpause -urdf -param robot_description -model iri_wam" respawn="false"  output="screen"/>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+  <node name="arm_controller" pkg="joint_trajectory_action" type="joint_trajectory_action" />
   <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation.launch" />
 </launch>
+
 

@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <ros/ros.h>
 
-
+#include <actionlib/client/simple_action_client.h>
 #include <gazebo/Body.hh>
 #include <gazebo/Global.hh>
 #include <gazebo/XMLConfig.hh>
@@ -16,6 +16,8 @@
 #include <kinematics_msgs/GetPositionFK.h>
 #include <kinematics_msgs/GetKinematicSolverInfo.h>
 #include "wam_gazebo.h"
+#include <pr2_controllers_msgs/JointTrajectoryAction.h>
+#include <pr2_controllers_msgs/JointTrajectoryControllerState.h>
 #include <math.h>
 
 using namespace gazebo;
@@ -23,10 +25,12 @@ using namespace gazebo;
 GZ_REGISTER_DYNAMIC_CONTROLLER("wam_gazebo", WAMGazebo);
 typedef  actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> ExecutorActionServer;
 typedef  actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle GoalHandle;	
+typedef  actionlib::SimpleActionClient<pr2_controllers_msgs::JointTrajectoryAction> TrajClient;
+
 typedef  control_msgs::FollowJointTrajectoryActionFeedback feedback;
 enum{ JOINT1 , JOINT2 , JOINT3 , JOINT4 , JOINT5 , JOINT6 , JOINT7};
 enum{ BODY1  , BODY2  , BODY3  , BODY4  , BODY5  , BODY6 , BODY7, BODY8};
-
+static const std::string Name_Service="/gazebo/GeneralState";
 WAMGazebo::WAMGazebo(Entity * parent) :
     Controller(parent),
     server(nodo_, "iri_wam_controller/follow_joint_trajectory", false),
@@ -146,14 +150,14 @@ void WAMGazebo::LoadChild(XMLConfigNode *node)
   joints_.push_back(parent_->GetJoint(** joint_6));
   joints_.push_back(parent_->GetJoint(** joint_7));   
   joints_positions.resize(7);
-  anchors.resize(7);
-anchors.push_back(joints_[JOINT1]->GetAnchor(2));
-anchors.push_back(joints_[JOINT2]->GetAnchor(2));
-anchors.push_back(joints_[JOINT3]->GetAnchor(2));
-anchors.push_back(joints_[JOINT4]->GetAnchor(2));
-anchors.push_back(joints_[JOINT5]->GetAnchor(2));
-anchors.push_back(joints_[JOINT6]->GetAnchor(2));
-anchors.push_back(joints_[JOINT7]->GetAnchor(2));
+  //anchors.resize(7);
+  anchors.push_back(joints_[JOINT1]->GetAnchor(2));
+  anchors.push_back(joints_[JOINT2]->GetAnchor(1));
+  anchors.push_back(joints_[JOINT3]->GetAnchor(2));
+  anchors.push_back(joints_[JOINT4]->GetAnchor(2));
+  anchors.push_back(joints_[JOINT5]->GetAnchor(2));
+  anchors.push_back(joints_[JOINT6]->GetAnchor(2));
+  anchors.push_back(joints_[JOINT7]->GetAnchor(2));
   int argc = 0;
   char** argv = NULL;
   ros::init(argc, argv, "wam_plugin", ros::init_options::NoSigintHandler | ros::init_options::AnonymousName);
@@ -162,7 +166,7 @@ anchors.push_back(joints_[JOINT7]->GetAnchor(2));
   getPoses(init_positions);
   copyVector(init_positions,actual_positions);
   getState(joints_positions);
-
+  traj_client_=new TrajClient("arm_controller",true);
   }
 // Reset
 void WAMGazebo::ResetChild()
@@ -200,8 +204,9 @@ void WAMGazebo::QueueThread()
 void WAMGazebo::goalCB(GoalHandle gh)
 {
  lock.lock();  
+ gh.setAccepted();
  control_msgs::FollowJointTrajectoryGoal::ConstPtr gl = gh.getGoal();
- trajectory_msgs::JointTrajectoryPoint jtp;
+ /*trajectory_msgs::JointTrajectoryPoint jtp;
  getState(joints_positions);
   gh.setAccepted();
  for(unsigned int i=0; i< gl->trajectory.points.size(); ++i)
@@ -212,7 +217,23 @@ void WAMGazebo::goalCB(GoalHandle gh)
    pointToMove(jtp,gl->trajectory.joint_names);
    getState(joints_positions);
    sendState(joints_positions);
- }
+ }*/
+   
+	// while(!traj_client_->waitForActionServerToStart(ros::Duration(1.0)))
+	 while(!traj_client_->waitForServer(ros::Duration(1.0)))
+  	 {
+       ROS_INFO("Waiting for the joint_trajectory_action server");
+     }
+	pr2_controllers_msgs::JointTrajectoryGoal goal;
+    goal.trajectory=gl->trajectory;
+ 	//goal.trajectory.points.resize(1);
+	//goal.trajectory.points[0]=jtp;
+    traj_client_->sendGoal(goal);
+    /*while(!traj_client_->getState().isDone() && ros::ok())
+    {
+     usleep(50000);
+    }*/
+ // command.publish(gl->trajectory);
   gh.setSucceeded();
   publishFeed(3);
   lock.unlock();
@@ -228,24 +249,31 @@ void WAMGazebo::copyVector(const std::vector<Pose3d>& a,std::vector<Pose3d>& b)
 void WAMGazebo::loadPose(const std::vector<Pose3d>& pose)
 {
 	bodys_[BODY1]->SetWorldPose(zeroBase,true);
-	/*bodys_[BODY2]->SetWorldPose(pose[1],true);
+	bodys_[BODY2]->SetWorldPose(pose[1],true);
 	bodys_[BODY3]->SetWorldPose(pose[2],true);
 	bodys_[BODY4]->SetWorldPose(pose[3],true);
 	bodys_[BODY5]->SetWorldPose(pose[4],true);
     bodys_[BODY6]->SetWorldPose(pose[5],true);
 	bodys_[BODY7]->SetWorldPose(pose[6],true);
-	bodys_[BODY8]->SetWorldPose(pose[7],true);*/
-	bodys_[BODY2]->SetRelativePose(pose[1],true);
+	bodys_[BODY8]->SetWorldPose(pose[7],true);
+	/*bodys_[BODY2]->SetRelativePose(pose[1],true);
 	bodys_[BODY3]->SetRelativePose(pose[2],true);
 	bodys_[BODY4]->SetRelativePose(pose[3],true);
 	bodys_[BODY5]->SetRelativePose(pose[4],true);
     bodys_[BODY6]->SetRelativePose(pose[5],true);
 	bodys_[BODY7]->SetRelativePose(pose[6],true);
-	bodys_[BODY8]->SetRelativePose(pose[7],true);
+	bodys_[BODY8]->SetRelativePose(pose[7],true);*/
 }
 void WAMGazebo::initTopics()
 {
   state_publisher=rosnode_->advertise< sensor_msgs::JointState>("joint_states", 1);		
+  service_=  global_.advertiseService(Name_Service,&WAMGazebo::GenerealStateCB,this);
+  
+  
+ //ros::SubscribeOptions so =ros::SubscribeOptions::create<trajectory_msgs::JointTrajectory>("command", 1,
+  	//															boost::bind(&WAMGazebo::commandCB, this, _1),ros::VoidPtr(), &queue_);  																
+  //sub_command= rosnode_->subscribe(so);
+  //command=rosnode_->advertise<trajectory_msgs::JointTrajectory>("command", 5);		 
   init_positions.resize(8);
   actual_positions.resize(8);
  }
@@ -495,36 +523,30 @@ void WAMGazebo::publishFeed(int st)
 	}
 }
 
-/*
-bool WAMGazebo::GenerealState(iri_wam_common_msgs::GenerealState::Request& request,iri_wam_common_msgs::GenerealState::Response& response)
+
+bool WAMGazebo::GenerealStateCB(iri_wam_common_msgs::GeneralState::Request& request,iri_wam_common_msgs::GeneralState::Response& response)
 {
 	if( 1 == request.index or 3 == request.index)
 	{
 	 //RobotState
-	  /* getState(joints_positions);
-	   * std::vector<double> vel;
-	   * std::vector<double> force;
-	   * for(int ii=JOINT1; ii<JOINT7; ++ii)
-	   * {
-	   *  vel.push_back(joints_[ii]->GetVelocity());
-	   * }
-	   * for(int ii=JOINT1; ii<JOINT7; ++ii)
-	   * {
-	   *  force.push_back(joints_[ii]->GetForce());
-	   * }
-	   * response.robot_state.joint_state.header.frame_id="wambase";
-	   * response.robot_state.joint_state.header.stamp=ros::Time::now();
-	   * response.robot_state.joint_state.name=names_joints;
-	   * response.robot_state.joint_state.position=joints_positions;
-	   * response.robot_state.joint_state.velocity=vel;
-	   * response.robot_state.joint_state.effort=force; 
-	   *
-	   
+	    getState(joints_positions);
+	    std::vector<double> vel;
+	    std::vector<double> force;
+	    for(int ii=JOINT1; ii<JOINT7; ++ii)
+	    {
+	     vel.push_back(joints_[ii]->GetVelocity(0));
+	    }
+	    for(int ii=JOINT1; ii<JOINT7; ++ii)
+	    {
+	     force.push_back(joints_[ii]->GetForce(2));
+	    }
+	    response.robot_state.joint_state.header.frame_id="wambase";
+	    response.robot_state.joint_state.header.stamp=ros::Time::now();
+	    response.robot_state.joint_state.name=names_joints;
+	    response.robot_state.joint_state.position=joints_positions;
+	    response.robot_state.joint_state.velocity=vel;
+	    response.robot_state.joint_state.effort=force; 
 	}
-	if( 2 == request.index or 3 == request.index)
-	{
-
-	}	
-	return true
+	return true;
 } 
-*/
+

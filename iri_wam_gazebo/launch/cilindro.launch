@@ -1,0 +1,5 @@
+<launch>
+  <node name="Set_Planning" pkg="iri_wam_gazebo" type="scene"/>
+
+
+</launch>
