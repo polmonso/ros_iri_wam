@@ -1,18 +1,70 @@
 arm_controller:
-  type: robot_mechanism_controllers/JointSplineTrajectoryController
+  type: robot_mechanism_controllers/JointPositionController
+  joint: j1
+  pid:
+    p:100
+    i:0.0
+    d:0.0
+    i_clamp:0.0
+  type: robot_mechanism_controllers/JointPositionController
+  joint: j2
+  pid:
+    p:100
+    i:0.0
+    d:0.0
+    i_clamp:0.0
+  type: robot_mechanism_controllers/JointPositionController
+  joint: j3
+  pid:
+    p:100
+    i:0.0
+    d:0.0
+    i_clamp:0.0
+  type: robot_mechanism_controllers/JointPositionController
+  joint: j4
+  pid:
+    p:100
+    i:0.0
+    d:0.0
+    i_clamp:0.0  
+  type: robot_mechanism_controllers/JointPositionController
+  joint: j5
+  pid:
+    p:100
+    i:0.0
+    d:0.0
+    i_clamp:0.0
+
+  type: robot_mechanism_controllers/JointPositionController
+  joint: j6
+  pid:
+    p:100
+    i:0.0
+    d:0.0
+    i_clamp:0.0
+  type: robot_mechanism_controllers/JointPositionController
+  joint: j7
+  pid:
+    p:100
+    i:0.0
+    d:0.0
+    i_clamp:0.0   
   joints:
-    -j1
-    -j2
-    -j3
-    -j4
-    -j5
-    -j6
-    -j7
-  gains:
-    j1: {p: 100.0}
-    j2: {p: 100.0}
-    j3: {p: 100.0}
-    j4: {p: 100.0}
-    j5: {p: 100.0}
-    j6: {p: 100.0}
-    j7: {p: 100.0}
+    [j1,j2,j3,j4,j5,j6,j7]   
+  constraints:
+     goal_time: 0.6
+     j1:
+         goal: 0.02
+     j2:
+         goal: 0.02 
+     j3:
+         goal: 0.02   
+     j4:
+         goal: 0.02   
+     j5:
+         goal: 0.02   
+     j6:
+         goal: 0.02
+     j7:
+         goal: 0.02   
+

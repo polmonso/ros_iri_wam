@@ -28,6 +28,9 @@
 #include <trajectory_msgs/JointTrajectory.h>
 #include <control_msgs/FollowJointTrajectoryAction.h>
 #include <sensor_msgs/JointState.h>
+#include "iri_wam_common_msgs/GeneralState.h"
+#include <pr2_controllers_msgs/JointTrajectoryAction.h>
+#include <pr2_controllers_msgs/JointTrajectoryControllerState.h>
 typedef  actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle GoalHandle;	
 namespace gazebo
 {
@@ -69,6 +72,8 @@ namespace gazebo
           // ROS STUFF
           ros::NodeHandle* rosnode_;                    
           ros::Publisher state_publisher;
+          ros::Publisher command;
+        //  ros::Subscriber state;
           // Custom Callback Queue
           ros::CallbackQueue queue_;
           boost::thread* callback_queue_thread_;          
@@ -76,8 +81,9 @@ namespace gazebo
           std::string robotNamespace;
           
           ros::NodeHandle  nodo_;
+          ros::NodeHandle  global_;
           actionlib::ActionServer <control_msgs::FollowJointTrajectoryAction > server;
-          
+          ros::ServiceServer service_;
           bool alive_;
           bool inMoving;
 
@@ -127,8 +133,8 @@ namespace gazebo
 		 void getPosition(Joint* j1,double& pos);
 		 void publishFeed(int st);
 		 void update(int i);
-	//	 bool GenerealState(iri_wam_common_msgs::GenerealState::Request& request,iri_wam_common_msgs::GenerealState::Response& response);
-		 
+		 bool GenerealStateCB(iri_wam_common_msgs::GeneralState::Request& request,iri_wam_common_msgs::GeneralState::Response& response);
+		  actionlib::SimpleActionClient<pr2_controllers_msgs::JointTrajectoryAction>* traj_client_;
     };
 }
 

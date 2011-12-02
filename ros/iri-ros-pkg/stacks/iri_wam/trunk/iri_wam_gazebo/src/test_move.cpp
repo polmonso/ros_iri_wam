@@ -14,7 +14,7 @@ bool to_double(T& t,const std::string& s, std::ios_base& (*f)(std::ios_base&))
 }
 
 int main(int argc, char **argv){
-	static const std::string SET_PLANNING_SCENE_DIFF_NAME = "/environment_server/register_planning_scene";
+	//static const std::string SET_PLANNING_SCENE_DIFF_NAME = "/environment_server/register_planning_scene";
 double d=0.0;
   ros::init (argc, argv, "test_move_iri_wam");
   ros::NodeHandle nh;
