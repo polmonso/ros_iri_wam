@@ -27,6 +27,7 @@
                 <mesh filename="package://iri_wam_description/mesh/wam4.stl" scale="1.0 1.0 1.0" />
 <!--                <box size="0.10 0.10 0.10"/> -->
             </geometry>
+            <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
         </collision>
     </link>
     <gazebo reference="wam_fk/wam4">
@@ -39,8 +40,9 @@
         <child link="wam_fk/wam4"/>
         <origin xyz="0.045 0.0 0.55" rpy="-${M_PI/2} 0 0" />
         <axis xyz="0 0 1" />
-        <limit lower="-0.9" upper="2.8" effort="10" velocity="1.0"/>
-        <dynamics damping="200.5"/> 
+        <limit lower="-0.9" upper="2.8" effort="35" velocity="2.0"/>
+  <!--  <safety_controller k_velocity="0.5"/>-->
+  <dynamics damping="100"/>
     </joint>
 
     <transmission type="pr2_mechanism_model/SimpleTransmission" name="wam_fk/wam4_transmission">
@@ -48,7 +50,7 @@
       <joint name="j4" />
       <mechanicalReduction>1</mechanicalReduction>
       <motorTorqueConstant>1</motorTorqueConstant>
-      <pulsesPerRevolution>90000</pulsesPerRevolution>
+      <!--<pulsesPerRevolution>90000</pulsesPerRevolution>-->
     </transmission>
 
   </xacro:macro>

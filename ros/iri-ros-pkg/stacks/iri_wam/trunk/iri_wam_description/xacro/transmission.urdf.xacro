@@ -5,8 +5,8 @@
        xmlns:xacro="http://ros.org/wiki/xacro"
        name="iri_wam">
 <xacro:macro name="Transmission" params="name jointName reduction torque">
-       <transmission type="pr2_mechanism_model/SimpleTransmission" name="${name}_trans">
-           <actuator name="${name}_motor" />
+       <transmission type="pr2_mechanism_model/SimpleTransmission" name="${name}_transmision">
+           <actuator name="${name}_controller" />
             <joint name="${jointName}" />
             <mechanicalReduction>${reduction}</mechanicalReduction>
             <motorTorqueConstant>${torque}</motorTorqueConstant>
