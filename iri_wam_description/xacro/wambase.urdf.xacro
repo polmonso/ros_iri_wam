@@ -25,9 +25,9 @@
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry name="wambase_collision">
         <mesh filename="package://iri_wam_description/mesh/wambase.stl" scale="1.0 1.0 1.0" />
-<!--        <box size="0.35 0.28 0.16"/>
--->
+<!--        <box size="0.35 0.28 0.16"/>-->
       </geometry>
+      <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
     </collision>
   </link>
   <gazebo reference="wambase">
@@ -38,7 +38,6 @@
   <joint name="base_fix" type="fixed">
     <parent link="world"/>
     <child link="wambase"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
   </joint>
 
 </xacro:macro>

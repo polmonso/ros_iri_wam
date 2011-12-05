@@ -33,6 +33,6 @@
   </xacro:wam7>
 
   <!-- PLUGINS -->
-  <!--  <include filename="$(find iri_wam_gazebo)/urdf/iri_wam.gazebo.xacro" /> -->
+  <include filename="$(find iri_wam_gazebo)/urdf/iri_wam.gazebo.xacro" />
 </robot>
 
