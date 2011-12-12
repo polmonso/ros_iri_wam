@@ -20,6 +20,8 @@
   <depend package="planning_environment"/>
   <depend package="iri_wam_common_msgs"/>
   <rosdep name="tinyxml" />
+  <rosdep name="iri_wam_common_msgs" />
+  
   <depend package="pr2_controllers_msgs"/>
   <export>
     <gazebo plugin_path="${prefix}/lib" />
