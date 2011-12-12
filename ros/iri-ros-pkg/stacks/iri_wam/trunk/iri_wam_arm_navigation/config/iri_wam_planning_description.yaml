@@ -1,8 +1,8 @@
 multi_dof_joints:
   - name: world_joint
-    type: Floating
-    parent_frame_id: wambase
-    child_frame_id: wambase
+    type: Fixed 
+    parent_frame_id: world
+    child_frame_id: world
 groups:
   - name: iri_wam
     base_link: wambase
