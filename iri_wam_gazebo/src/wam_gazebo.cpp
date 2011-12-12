@@ -26,6 +26,6 @@ WAMGazebo::WAMGazebo()
  }
  
  bool WAMGazebo::joints_moveCB(iri_wam_common_msgs::joints_move::Request &req, iri_wam_common_msgs::joints_move::Response &res)
- {
+ {    
 	 
  }

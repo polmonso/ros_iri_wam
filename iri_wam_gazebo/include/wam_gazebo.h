@@ -16,7 +16,7 @@ class WAMGazebo
 	actionlib::SimpleActionClient< pr2_controllers_msgs::JointTrajectoryAction > client_trajectory_;
 	ros::NodeHandle node;
     ros::ServiceServer service_;
-    std::vector<std::string> names_joints;
+    std::vector<std::string> names_joints;    
 	//this->joints_move_server = this->public_node_handle_.advertiseService("joints_move", &WamDriverNode::joints_moveCallback, this);
 };
 
