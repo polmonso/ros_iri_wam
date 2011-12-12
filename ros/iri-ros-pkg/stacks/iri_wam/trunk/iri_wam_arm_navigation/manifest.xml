@@ -1,10 +1,10 @@
 <package>
   <description brief="iri_wam_arm_navigation">
 
-     navigation package for WAM arm robot
+     iri_wam_arm_navigation
 
   </description>
- <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
+  <author>irojas</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_arm_navigation</url>
