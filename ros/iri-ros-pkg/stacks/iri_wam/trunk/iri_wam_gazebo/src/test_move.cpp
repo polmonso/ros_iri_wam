@@ -23,7 +23,7 @@ double d=0.0;
   ROS_INFO("Connected to server");
   arm_navigation_msgs::MoveArmGoal goalA;
 
-  goalA.planner_service_name="/ompl_planning/plan_kinematic_path";
+  goalA.planner_service_name=std::string("ompl_planning/plan_kinematic_path");
   goalA.motion_plan_request.group_name="iri_wam";
   arm_navigation_msgs::JointConstraint joint1;
   to_double<double>(d, argv[1], std::dec);	
@@ -94,7 +94,7 @@ double d=0.0;
   {
     bool finished_within_time = false;
     move_arm.sendGoal(goalA);
-    finished_within_time = move_arm.waitForResult(ros::Duration(20000.0));
+    finished_within_time = move_arm.waitForResult(ros::Duration(200.0));
     if (!finished_within_time)
     {
       move_arm.cancelGoal();
