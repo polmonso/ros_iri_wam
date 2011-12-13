@@ -20,6 +20,8 @@ rosbuild_add_boost_directories()
 #rosbuild_link_boost(wam_gazebo thread)
 
 rosbuild_add_executable(marm src/test_move.cpp)
+rosbuild_add_executable(move_arm_joint_goal src/move_arm_joint_goal.cpp)
+rosbuild_add_executable(simple_trajectory src/simple_trajectory.cpp)
 #rosbuild_add_executable(scene src/object_1.cpp)
 #rosbuild_add_executable(scene2 src/object_2.cpp)
 #rosbuild_add_executable(prueba src/prueba.cpp)
