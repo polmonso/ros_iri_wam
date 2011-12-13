@@ -33,7 +33,7 @@
       <alwaysOn>true</alwaysOn>
       <update>1000</update>
       <updateRate>1000.0</updateRate>
-      <robotParam>robot_wam_description</robotParam>
+      <robotParam>robot_description</robotParam>
       <robotNamespace>/</robotNamespace>
     </controller:gazebo_ros_controller_manager>
   </gazebo>
