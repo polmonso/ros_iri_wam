@@ -1,5 +1,5 @@
 iri_wam_controller:
-  type: "JointTrajectoryActionController"
+  type: "robot_mechanism_controllers/JointTrajectoryActionController" 
   joints:
     - j1
     - j2
