@@ -1,0 +1,5 @@
+<library path="lib/iri_wam_controller_lib">
+  <class name="iri_wam_controller/WAMController" 
+         type="controller::WAMController"           
+         base_class_type="pr2_controller_interface::Controller" />
+</library>
