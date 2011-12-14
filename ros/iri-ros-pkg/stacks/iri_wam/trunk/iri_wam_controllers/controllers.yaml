@@ -1,5 +1,5 @@
  iri_wam_controller:
-    type: WAMController
+    type: controller/WAMController
     joints:
       -j1
       -j2
