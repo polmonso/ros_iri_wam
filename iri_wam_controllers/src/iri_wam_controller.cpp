@@ -1,4 +1,4 @@
-#include "iri_wam_controllers.h"
+#include "iri_wam_controller.h"
 #include <pluginlib/class_list_macros.h>
 using namespace XmlRpc;
 

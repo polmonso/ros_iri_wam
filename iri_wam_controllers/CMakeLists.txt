@@ -17,7 +17,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 
-rosbuild_add_library(iri_wam_controller_lib src/iri_wam_controllers.cpp)
+rosbuild_add_library(iri_wam_controller_lib src/iri_wam_controller.cpp)
 #target_link_libraries(iri_wam_controller iri_wam_controller_lib)
 #uncomment if you have defined messages
 #rosbuild_genmsg()
