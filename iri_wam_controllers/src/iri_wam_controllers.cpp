@@ -114,6 +114,8 @@ void WAMController::update()
   /*double desired_pos = init_pos_ + 15 * sin(ros::Time::now().toSec());
   double current_pos = joint_state_->position_;
   joint_state_->commanded_effort_ = -10 * (current_pos - desired_pos);*/
+  ROS_DEBUG("DEBUG");
+
 }
 
 
