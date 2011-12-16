@@ -1,50 +1,50 @@
 joint_limits:
-  j1:
+  j1_joint:
     has_position_limits: true
     has_velocity_limits: true
     max_velocity: 2
     has_acceleration_limits: true
-    max_acceleration: 0.02
+    max_acceleration: 1
     angle_wraparound: false
-  j2:
+  j2_joint:
     has_position_limits: true
     has_velocity_limits: true
     max_velocity: 2
     has_acceleration_limits: true
-    max_acceleration: 0.02
+    max_acceleration: 1
     angle_wraparound: false
-  j3:
+  j3_joint:
     has_position_limits: true
     has_velocity_limits: true
     max_velocity: 2
     has_acceleration_limits: true
-    max_acceleration: 0.02
+    max_acceleration: 1
     angle_wraparound: false
-  j4:
+  j4_joint:
     has_position_limits: true
     has_velocity_limits: true
     max_velocity: 2
     has_acceleration_limits: true
-    max_acceleration: 0.02
+    max_acceleration: 1
     angle_wraparound: false
-  j5:
+  j5_joint:
     has_position_limits: true
     has_velocity_limits: true
     max_velocity: 2
     has_acceleration_limits: true
-    max_acceleration: 0.02
+    max_acceleration: 1
     angle_wraparound: false
-  j6:
+  j6_joint:
     has_position_limits: true
     has_velocity_limits: true
     max_velocity: 2
     has_acceleration_limits: true
-    max_acceleration: 0.02
+    max_acceleration: 1
     angle_wraparound: false
-  j7:
+  j7_joint:
     has_position_limits: true
     has_velocity_limits: true
     max_velocity: 2
     has_acceleration_limits: true
-    max_acceleration: 0.02
+    max_acceleration: 1
     angle_wraparound: false
