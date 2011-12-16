@@ -1,0 +1,13 @@
+<launch>
+
+<!-- Load and Start Default Controllers -->
+    <rosparam command="load" file="$(find iri_wam_controllers)/config/iri_wam_controllers.yaml" />
+    <node name="iri_wam_pr2_controller"
+        pkg="pr2_controller_manager" type="spawner" output="screen"
+        args="iri_wam_pr2_controller" />
+
+    <group ns="iri_wam_pr2_controller">
+        <node name="joint_trajectory_action" pkg="joint_trajectory_action" type="joint_trajectory_action" />
+    </group>
+
+</launch>
