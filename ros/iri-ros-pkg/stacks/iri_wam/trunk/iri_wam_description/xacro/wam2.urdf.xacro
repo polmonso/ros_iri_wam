@@ -33,7 +33,7 @@
         <selfCollide>true</selfCollide>
     </gazebo>
 
-    <joint name="j2" type="revolute">
+    <joint name="j2_joint" type="revolute">
         <parent link="${parent}"/>
         <child link="wam_fk/wam2"/>
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
@@ -43,9 +43,9 @@
         <dynamics damping="100"/>
     </joint>
 
-    <transmission type="pr2_mechanism_model/SimpleTransmission" name="wam_fk/wam2_transmission">
-      <actuator name="wam_fk/wam2_rotation" />
-      <joint name="j2" />
+    <transmission type="pr2_mechanism_model/SimpleTransmission" name="j2_transmission">
+      <actuator name="j2" />
+      <joint name="j2_joint" />
       <mechanicalReduction>1</mechanicalReduction>
       <motorTorqueConstant>1</motorTorqueConstant>
       <!--<pulsesPerRevolution>90000</pulsesPerRevolution>-->

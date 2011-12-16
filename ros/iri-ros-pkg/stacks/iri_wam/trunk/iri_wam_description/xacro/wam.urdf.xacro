@@ -1,101 +1,36 @@
 <?xml version="1.0"?>
-
 <robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
        xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
        xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
        xmlns:xacro="http://ros.org/wiki/xacro"
        name="iri_wam">
-      <!-- Constants -->  
- <xacro:property name="pi" value="3.1416" />
-
-   <!-- Includes -->    
-<include filename="$(find iri_wam_description)/xacro/transmission.urdf.xacro" />
-<!-- MACROS -->
-<xacro:macro name="intertial_default" params="mass xyz rpy">
-	<inertial>
-	   <origin xyz="${xyz}" rpy="${rpy}" />
-       <mass value="${mass}"/>
-       <inertia ixx="100"  ixy="0"  ixz="0" iyy="100" iyz="0" izz="100" />
-	</inertial>
-</xacro:macro>
-
-<xacro:macro name= "geometry_default" params="name">
-    <geometry name="${name}-geom">
-       <mesh filename="package://iri_wam_description/mesh/${name}.stl"/>
-    </geometry>
-</xacro:macro>
-
-<xacro:macro name= "material_default" params="name">
-    <material name="${name}-mat">
-       <color rgba="0.75 0.75 0.75 1.0"/>
-    </material>
-</xacro:macro>
-
-<xacro:macro name="Visual" params="name xyz rpy">
-    <visual>
-       <origin xyz="${xyz}" rpy="${rpy}" />
-       <xacro:geometry_default name="${name}"/>
-       <xacro:material_default name="${name}"/>
-    </visual>
-</xacro:macro>
-
-<xacro:macro name="Collision" params="name xyz rpy">
-    <collision>
-       <origin xyz="${xyz}" rpy="${rpy}" />
-       <xacro:geometry_default name="${name}"/>
-       <contact_coefficients mu="0" kp="1000.0" kd="1.0"/>
-    </collision>
-</xacro:macro>
-
-<xacro:macro name="Link"  params="name xyz rpy mass prefix">
-  <link name="${prefix}${name}">
-	<xacro:intertial_default mass="${mass}" xyz="${xyz}" rpy="${rpy}" />
-	<xacro:Visual name="${name}" xyz="${xyz}" rpy="${rpy}" />
-	<xacro:Collision name="${name}" xyz="${xyz}" rpy="${rpy}"/>
-  </link>
- </xacro:macro>
-
-<xacro:macro name="Joint" params="name type xyz rpy upperLim lowerLim effort velocity axis parent child">
-  <joint name="${name}" type="${type}">
-      <parent link="${parent}"/>
-      <child link="${child}"/>
-      <origin xyz="${xyz}" rpy="${rpy}"/>
-      <limit upper="${upperLim}" lower="${lowerLim}" effort="${effort}" velocity="${velocity}" />
-      <axis xyz="${axis}"/>
-  </joint>  
   
-</xacro:macro>
-
-<!-- LINKS   -->  
-  <xacro:Link name="wambase" xyz="0 0 0" rpy="0 0 0" mass="1" prefix=""/>
-  <link name="wam_fk/wam0">
-    <inertial>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <mass value="0.1"/>
-      <inertia ixx="100" ixy="0" ixz="0" iyy="100" iyz="0" izz="100"/>
-    </inertial>
-  </link>
-  <xacro:Link name="wam1" xyz="0 0 0" rpy="${pi/2} 0 0" mass="0.1" prefix="wam_fk/"/>
-  <xacro:Link name="wam2" xyz="0 0 0" rpy="0 0 0" mass="0.1" prefix="wam_fk/"/> 
-  <xacro:Link name="wam3" xyz="-0.045 0.55 0" rpy="${pi/2} 0 0" mass="0.1" prefix="wam_fk/"/>
-  <xacro:Link name="wam4" xyz="0.045 0 0" rpy="-${pi/2} 0 0" mass="0.1" prefix="wam_fk/"/>
-  <xacro:Link name="wam5" xyz="0 0 0" rpy="${pi/2} 0 0" mass="0.1" prefix="wam_fk/"/>
-  <xacro:Link name="wam6" xyz="0 0 0" rpy="-${pi/2} 0 0" mass="0.1" prefix="wam_fk/"/>
-  <xacro:Link name="wam7" xyz="0 0 -0.06" rpy="0 0 0" mass="0.1" prefix="wam_fk/"/> 
-
-<!-- JOINTS  --> 
-  <xacro:Joint name="j0" type="fixed" xyz="0.22 0.14 0.346" rpy="0 0 0" upperLim="0.0" lowerLim="0.0" effort="0.0" velocity="0.0" axis="0 0 0" parent="wambase" child="wam_fk/wam0" /> 
-  <xacro:Joint name="j1" type="revolute" xyz="0.22 0.14 0.346" rpy="-${pi/2} 0 0" upperLim="2.6" lowerLim="-2.6" effort="30" velocity="2" axis="0 -1 0" parent="wambase" child="wam_fk/wam1" /> 
-  <xacro:Joint name="j2" type="revolute" xyz="0 0 0" rpy="${pi/2} 0 0" upperLim="2.0" lowerLim="-2.0" effort="30" velocity="2" axis="0 1 0" parent="wam_fk/wam1" child="wam_fk/wam2" />
-  <xacro:Joint name="j3" type="revolute" xyz="0.045 0 0.55" rpy="-${pi/2} 0 0" upperLim="2.8" lowerLim="-2.8" effort="30" velocity="2" axis="0 -1 0" parent="wam_fk/wam2" child="wam_fk/wam3" />
-  <xacro:Joint name="j4" type="revolute" xyz="-0.045 0 0" rpy="${pi/2} 0 0" upperLim="3.1" lowerLim="-0.9" effort="30" velocity="2" axis="0 1 0" parent="wam_fk/wam3" child="wam_fk/wam4" />
-  <xacro:Joint name="j5" type="revolute" xyz="0 0 0.3" rpy="-${pi/2} 0 0" upperLim="1.3" lowerLim="-4.8" effort="30" velocity="2" axis="0 -1 0" parent="wam_fk/wam4" child="wam_fk/wam5" />
-  <xacro:Joint name="j6" type="revolute" xyz="0 0 0" rpy="${pi/2} 0 0" upperLim="1.6" lowerLim="-1.6" effort="30" velocity="2" axis="0 1 0" parent="wam_fk/wam5" child="wam_fk/wam6" />
-  <xacro:Joint name="j7" type="revolute" xyz="0 0 0.06" rpy="0 0 0" upperLim="2.2" lowerLim="-2.2" effort="30" velocity="2" axis="0 0 1" parent="wam_fk/wam6" child="wam_fk/wam7" />
-
-<!-- PLUGINS -->
-<!--  <include filename="$(find iri_wam_gazebo)/urdf/iri_wam.gazebo.xacro" /> -->
+  <!-- LINKS   -->  
+  <include filename="$(find iri_wam_description)/xacro/wambase.urdf.xacro" />
+  <include filename="$(find iri_wam_description)/xacro/wam1.urdf.xacro" />
+  <include filename="$(find iri_wam_description)/xacro/wam2.urdf.xacro" />
+  <include filename="$(find iri_wam_description)/xacro/wam3.urdf.xacro" />
+  <include filename="$(find iri_wam_description)/xacro/wam4.urdf.xacro" />
+  <include filename="$(find iri_wam_description)/xacro/wam5.urdf.xacro" />
+  <include filename="$(find iri_wam_description)/xacro/wam6.urdf.xacro" />
+  <include filename="$(find iri_wam_description)/xacro/wam7.urdf.xacro" />
+  
+  <xacro:wambase>
+  </xacro:wambase>
+  <xacro:wam1 parent="wambase">
+  </xacro:wam1>
+  <xacro:wam2 parent="wam_fk/wam1">
+  </xacro:wam2>
+  <xacro:wam3 parent="wam_fk/wam2">
+  </xacro:wam3>
+  <xacro:wam4 parent="wam_fk/wam3">
+  </xacro:wam4>
+  <xacro:wam5 parent="wam_fk/wam4">
+  </xacro:wam5>
+  <xacro:wam6 parent="wam_fk/wam5">
+  </xacro:wam6>
+  <xacro:wam7 parent="wam_fk/wam6">
+  </xacro:wam7>
 
 </robot>
-
 
