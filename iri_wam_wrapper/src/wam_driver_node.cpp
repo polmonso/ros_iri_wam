@@ -38,7 +38,7 @@ void WamDriverNode::mainNodeThread(void)
 
   std::vector<double> angles(7,0.1);
   std::vector<double> pose(16,0);
-  char jname[5];
+  char jname[9];
   Matrix3f rmat;
 
   // [fill msg Header if necessary]
@@ -68,7 +68,7 @@ void WamDriverNode::mainNodeThread(void)
 
   JointState_msg.header.stamp = ros::Time::now();
   for(int i=0;i<(int)angles.size();i++){
-      snprintf(jname, 5, "wam%d", i);
+      snprintf(jname, 9, "j%d_joint", i+1);
       JointState_msg.name[i] = jname;
       JointState_msg.position[i] = angles[i];
   }

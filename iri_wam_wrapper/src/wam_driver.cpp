@@ -5,8 +5,8 @@ using namespace std;
 WamDriver::WamDriver()
 {
   //setDriverId(driver string id);
-  this->wamserver_ip = "192.168.100.49";
-//  this->wamserver_ip = "192.168.100.50";
+//  this->wamserver_ip = "192.168.100.49";
+  this->wamserver_ip = "192.168.100.50";
   this->server_port = 4321;
   this->state_refresh_rate = 100;
 }
