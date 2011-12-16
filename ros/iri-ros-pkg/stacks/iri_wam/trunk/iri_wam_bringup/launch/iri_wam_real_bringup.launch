@@ -1,0 +1,22 @@
+<launch> 
+
+<!-- Load urdf WAM model -->
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/wam.urdf.xacro'" />
+
+<!-- Controller Manager -->
+    <remap from="/joint_states" to="/wam_driver_node/joint_states"/>
+    <include file="$(find pr2_controller_manager)/controller_manager.launch" />
+
+<!-- Publish Inverse Kinematics -->
+    <remap from="/wam_ik/joint_states" to="/wam_driver_node/joint_states"/>
+    <remap from="/wam_ik/joint_move" to="/wam_driver_node/joints_move"/>
+    <node name="wam_ik" pkg="iri_wam_ik" type="wam_ikac" />
+
+    <!-- Publish Forward Kinematics -->
+<!--
+    <remap from="/wam_fk/tf" to="/tf"/>
+    <remap from="/wam_fk/joint_states" to="/wam_driver_node/joint_states"/>
+    <node name="wam_fk" pkg="iri_wam_fk" type="wam_fk" />
+-->    
+
+</launch>

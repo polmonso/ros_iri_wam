@@ -1,0 +1,14 @@
+<package>
+  <description brief="iri_wam_bringup">
+
+     iri_wam_bringup
+
+  </description>
+  <author>sfoix</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_bringup</url>
+
+</package>
+
+

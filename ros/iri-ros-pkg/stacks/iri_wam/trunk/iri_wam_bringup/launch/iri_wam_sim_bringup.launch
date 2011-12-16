@@ -1,0 +1,26 @@
+<launch> 
+
+<!-- start gazebo with an empty plane -->
+    <param name="/use_sim_time" value="true" />
+    <node name="gazebo" pkg="gazebo" type="gazebo" args="-s -1 -u $(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen"/>
+
+<!-- send iri_wam urdf to param server -->
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find iri_wam_description)/robots/iri_wam.gazebo.xacro'" />
+
+<!-- push robot_description to factory and spawn robot in gazebo -->
+    <node name="spawn_iri_wam_model" pkg="gazebo" type="spawn_model" args="$(optenv ROBOT_INITIAL_POSE) -unpause -urdf -param robot_description -model iri_wam" respawn="false" output="screen" />
+
+<!-- Controller Manager -->
+    <include file="$(find pr2_controller_manager)/controller_manager.launch" />
+
+<!-- Add arm Controller -->
+    <include file="$(find iri_wam_controllers)/launch/iri_wam_pr2_controller.launch" />
+<!--
+    <include file="$(find iri_wam_controllers)/launch/iri_wam_controller.launch" />
+    <include file="$(find iri_wam_controllers)/launch/iri_wam_cart_controller.launch" />
+-->
+
+<!-- start arm navigation stack -->
+    <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation.launch" />
+
+</launch>
