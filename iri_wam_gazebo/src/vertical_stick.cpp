@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 
   //add the cylinder into the collision space
   arm_navigation_msgs::CollisionObject cylinder_object;
-  cylinder_object.id = "/world";
+  cylinder_object.id = "/vertical_stick";
   cylinder_object.operation.operation = arm_navigation_msgs::CollisionObjectOperation::ADD;
   cylinder_object.header.frame_id = "/wambase";
   cylinder_object.header.stamp = ros::Time::now();
@@ -39,16 +39,16 @@ int main(int argc, char** argv) {
 // size_z := dimensions[2]
 
   object.dimensions.resize(2);
-  object.dimensions[0]=0.07;
-  object.dimensions[1]=13.2;
+  object.dimensions[0] = 0.02;
+  object.dimensions[1] = 1.5;
   geometry_msgs::Pose pose;
-  pose.position.x=0.5;
-  pose.position.y=0.14;
-  pose.position.z=0.01;
-  pose.orientation.x=0;
-  pose.orientation.y=0;
-  pose.orientation.z=0;
-  pose.orientation.w=1;
+  pose.position.x = 0.5;
+  pose.position.y = 0.14;
+  pose.position.z = 0.75;
+  pose.orientation.x = 0;
+  pose.orientation.y = 0;
+  pose.orientation.z = 0;
+  pose.orientation.w = 1;
   cylinder_object.shapes.push_back(object);
   cylinder_object.poses.push_back(pose);
 

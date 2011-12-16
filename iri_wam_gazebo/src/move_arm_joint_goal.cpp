@@ -9,7 +9,7 @@
 
 int main(int argc, char **argv){
   
-  ros::init (argc, argv, "move_arm_joint_goal_test");
+  ros::init (argc, argv, "move_arm_joint_goal");
   ros::NodeHandle nh;
   actionlib::SimpleActionClient<arm_navigation_msgs::MoveArmAction> move_arm("move_iri_wam",true);
 
@@ -18,13 +18,13 @@ int main(int argc, char **argv){
 
   arm_navigation_msgs::MoveArmGoal goalA;
   std::vector<std::string> names(7);
-  names[0] = "j1";
-  names[1] = "j2";
-  names[2] = "j3";
-  names[3] = "j4";
-  names[4] = "j5";
-  names[5] = "j6";
-  names[6] = "j7";
+  names[0] = "j1_joint";
+  names[1] = "j2_joint";
+  names[2] = "j3_joint";
+  names[3] = "j4_joint";
+  names[4] = "j5_joint";
+  names[5] = "j6_joint";
+  names[6] = "j7_joint";
 
   goalA.motion_plan_request.group_name="iri_wam";
   goalA.motion_plan_request.num_planning_attempts = 1;
