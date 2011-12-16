@@ -1,0 +1,22 @@
+<package>
+  <description brief="iri_wam_controller">
+
+     iri_wam_controller
+
+  </description>
+  <author>sfoix</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_controller</url>
+  <depend package="pr2_controller_interface"/>
+  <depend package="pr2_mechanism_model"/>
+  <depend package="pluginlib"/>
+  <depend package="control_toolbox"/>
+  <depend package="eigen"/>
+  <depend package="kdl"/>
+  <export>
+    <pr2_controller_interface plugin="${prefix}/controller_plugins.xml" />
+  </export>
+</package>
+
+
