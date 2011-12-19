@@ -5,7 +5,7 @@
 #include <control_toolbox/pid.h>
 
 
-namespace iri_wam_controller_ns{
+namespace iri_wam_controllers{
 
 class IriWamControllerClass: public pr2_controller_interface::Controller
 {

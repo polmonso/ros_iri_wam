@@ -1,7 +1,7 @@
-#include "iri_wam_controller/iri_wam_cart_controller.h"
+#include "iri_wam_controllers/iri_wam_cart_controller.h"
 #include <pluginlib/class_list_macros.h>
 
-namespace iri_wam_controller_ns {
+namespace iri_wam_controllers {
 
 
 /// Controller initialization in non-realtime
@@ -136,6 +136,6 @@ void IriWamCartControllerClass::stopping()
 
 /// Register controller to pluginlib                                                                                                                                              
 PLUGINLIB_DECLARE_CLASS(iri_wam_controllers,IriWamCartController,
-                         iri_wam_controller_ns::IriWamCartControllerClass,
+                         iri_wam_controllers::IriWamCartControllerClass,
                          pr2_controller_interface::Controller)
 

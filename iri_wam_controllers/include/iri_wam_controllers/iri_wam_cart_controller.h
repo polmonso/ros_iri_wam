@@ -11,7 +11,7 @@
 #include <kdl/jntarray.hpp>
 
 
-namespace iri_wam_controller_ns{
+namespace iri_wam_controllers{
 
 class IriWamCartControllerClass: public pr2_controller_interface::Controller
 {

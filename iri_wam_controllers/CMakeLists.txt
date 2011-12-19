@@ -30,5 +30,5 @@ rosbuild_gensrv()
 #target_link_libraries(example ${PROJECT_NAME})
 #rosbuild_add_library(iri_wam_controller_lib src/iri_wam_controller.cpp src/iri_wam_cart_controller.cpp)
 #rosbuild_add_library(iri_wam_controller_lib src/iri_wam_cart_controller.cpp
-rosbuild_add_library(iri_wam_controller_lib src/iri_wam_controller.cpp)
-rosbuild_add_library(iri_wam_cart_controller_lib src/iri_wam_cart_controller.cpp)
+rosbuild_add_library(iri_wam_controller src/iri_wam_controller.cpp)
+rosbuild_add_library(iri_wam_cart_controller src/iri_wam_cart_controller.cpp)
