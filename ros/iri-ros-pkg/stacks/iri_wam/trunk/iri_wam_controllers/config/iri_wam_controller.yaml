@@ -1,0 +1,8 @@
+ iri_wam_controller:
+    type: iri_wam_controllers/IriWamController
+    joint_name: j2_joint 
+    pid_parameters:
+      p: 100.0
+      d: 0.0
+      i: 0.0
+      i_clamp: 0.0 
