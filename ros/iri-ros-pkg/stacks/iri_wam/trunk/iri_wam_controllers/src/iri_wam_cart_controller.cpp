@@ -135,7 +135,7 @@ void IriWamCartControllerClass::stopping()
 } // namespace
 
 /// Register controller to pluginlib                                                                                                                                              
-PLUGINLIB_DECLARE_CLASS(iri_wam_controller,IriWamCartController,
+PLUGINLIB_DECLARE_CLASS(iri_wam_controllers,IriWamCartController,
                          iri_wam_controller_ns::IriWamCartControllerClass,
                          pr2_controller_interface::Controller)
 
