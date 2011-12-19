@@ -1,5 +1,5 @@
 <launch>
-   <rosparam command="load" file="$(find iri_wam_controllers)/config/iri_wam_controllers.yaml" />
+   <rosparam command="load" file="$(find iri_wam_controllers)/config/iri_wam_controller.yaml" />
 
    <node name="iri_wam_controller_spawner" pkg="pr2_controller_manager" type="spawner" args="iri_wam_controller" output="screen"/>
 </launch>

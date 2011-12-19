@@ -1,0 +1,4 @@
+ iri_wam_cart_controller:
+    type: iri_wam_controllers/IriWamCartController
+    root_name: wambase
+    tip_name: wam_fk/wam7
