@@ -1,10 +1,10 @@
-<library path="lib/libiri_wam_cart_controller_lib">
+<library path="lib/libiri_wam_cart_controller">
   <class name="iri_wam_controllers/IriWamCartController" 
-         type="iri_wam_controller_ns::IriWamCartControllerClass"           
+         type="iri_wam_controllers::IriWamCartControllerClass"           
          base_class_type="pr2_controller_interface::Controller" />
 </library>
-<library path="lib/libiri_wam_controller_lib">
+<library path="lib/libiri_wam_controller">
   <class name="iri_wam_controllers/IriWamController" 
-         type="iri_wam_controller_ns::IriWamControllerClass"           
+         type="iri_wam_controllers::IriWamControllerClass"           
          base_class_type="pr2_controller_interface::Controller" />
 </library>

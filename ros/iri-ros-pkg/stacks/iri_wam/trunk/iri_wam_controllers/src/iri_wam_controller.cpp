@@ -1,8 +1,7 @@
-#include "iri_wam_controller/iri_wam_controller.h"
+#include "iri_wam_controllers/iri_wam_controller.h"
 #include <pluginlib/class_list_macros.h>
 
-namespace iri_wam_controller_ns {
-
+namespace iri_wam_controllers {
 
 /// Controller initialization in non-realtime
 bool IriWamControllerClass::init(pr2_mechanism_model::RobotState *robot,
@@ -90,6 +89,6 @@ bool IriWamControllerClass::setAmplitude(iri_wam_controllers::SetAmplitude::Requ
 
 /// Register controller to pluginlib
 PLUGINLIB_DECLARE_CLASS(iri_wam_controllers,IriWamController, 
-                         iri_wam_controller_ns::IriWamControllerClass, 
+                         iri_wam_controllers::IriWamControllerClass, 
                          pr2_controller_interface::Controller)
 
