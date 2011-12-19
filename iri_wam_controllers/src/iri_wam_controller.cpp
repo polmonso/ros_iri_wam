@@ -89,7 +89,7 @@ bool IriWamControllerClass::setAmplitude(iri_wam_controllers::SetAmplitude::Requ
 } // namespace
 
 /// Register controller to pluginlib
-PLUGINLIB_DECLARE_CLASS(iri_wam_controller,IriWamController, 
+PLUGINLIB_DECLARE_CLASS(iri_wam_controllers,IriWamController, 
                          iri_wam_controller_ns::IriWamControllerClass, 
                          pr2_controller_interface::Controller)
 
