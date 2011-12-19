@@ -16,7 +16,7 @@ public:
   RobotArm() 
   {
     // tell the action client that we want to spin a thread by default
-    traj_client_ = new TrajClient("iri_wam_controller/joint_trajectory_action", true);
+    traj_client_ = new TrajClient("iri_wam_pr2_controller/joint_trajectory_action", true);
 
     // wait for action server to come up
     while(!traj_client_->waitForServer(ros::Duration(5.0))){
@@ -50,13 +50,13 @@ public:
     pr2_controllers_msgs::JointTrajectoryGoal goal;
 
     // First, the joint names, which apply to all waypoints
-    goal.trajectory.joint_names.push_back("j1");
-    goal.trajectory.joint_names.push_back("j2");
-    goal.trajectory.joint_names.push_back("j3");
-    goal.trajectory.joint_names.push_back("j4");
-    goal.trajectory.joint_names.push_back("j5");
-    goal.trajectory.joint_names.push_back("j6");
-    goal.trajectory.joint_names.push_back("j7");
+    goal.trajectory.joint_names.push_back("j1_joint");
+    goal.trajectory.joint_names.push_back("j2_joint");
+    goal.trajectory.joint_names.push_back("j3_joint");
+    goal.trajectory.joint_names.push_back("j4_joint");
+    goal.trajectory.joint_names.push_back("j5_joint");
+    goal.trajectory.joint_names.push_back("j6_joint");
+    goal.trajectory.joint_names.push_back("j7_joint");
 
     // We will have two waypoints in this goal trajectory
     goal.trajectory.points.resize(3);
