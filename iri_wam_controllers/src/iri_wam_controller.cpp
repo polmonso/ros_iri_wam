@@ -70,8 +70,8 @@ void IriWamControllerClass::stopping()
 {}
 
 /// Service call to set amplitude of sin
-bool IriWamControllerClass::setAmplitude(iri_wam_controller::SetAmplitude::Request& req,
-                                     iri_wam_controller::SetAmplitude::Response& resp)
+bool IriWamControllerClass::setAmplitude(iri_wam_controllers::SetAmplitude::Request& req,
+                                     iri_wam_controllers::SetAmplitude::Response& resp)
 {
   if (fabs(req.amplitude) < 2.0){
     amplitude_ = req.amplitude;

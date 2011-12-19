@@ -1,7 +1,7 @@
 #include <pr2_controller_interface/controller.h>
 #include <pr2_mechanism_model/joint.h>
 #include <ros/ros.h>
-#include <iri_wam_controller/SetAmplitude.h>
+#include <iri_wam_controllers/SetAmplitude.h>
 #include <control_toolbox/pid.h>
 
 
@@ -10,8 +10,8 @@ namespace iri_wam_controller_ns{
 class IriWamControllerClass: public pr2_controller_interface::Controller
 {
 private:
-  bool setAmplitude(iri_wam_controller::SetAmplitude::Request& req,
-                    iri_wam_controller::SetAmplitude::Response& resp);
+  bool setAmplitude(iri_wam_controllers::SetAmplitude::Request& req,
+                    iri_wam_controllers::SetAmplitude::Response& resp);
 
   pr2_mechanism_model::JointState* joint_state_;
   double init_pos_;
