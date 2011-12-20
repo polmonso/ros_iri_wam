@@ -2,7 +2,9 @@
 
 using namespace Eigen;
 
-WamDriverNode::WamDriverNode(ros::NodeHandle &nh) : iri_base_driver::IriBaseNodeDriver<WamDriver>(nh)
+WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
+ iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
+ action_server_(nh,"joint_trajectory_action",false)
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -27,7 +29,10 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) : iri_base_driver::IriBaseNode
   // [init clients]
   
   // [init action servers]
-  
+  action_server_.registerGoalCallback(boost::bind(&WamDriverNode::goalCB, this, _1));
+  //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelCB, this, _1));
+  action_server_.start();
+   // action_server_.reset(new ActionExecutor(nh, "joint_trajectory_action",boost::bind(&WamDriverNode::goalCB, this, _1), boost::bind(&WamDriverNode::cancelCB, this, _1)));
   // [init action clients]
 }
 
@@ -192,6 +197,28 @@ bool WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &r
 }
 
 /*  [action callbacks] */
+void WamDriverNode::goalCB(GoalHandle gh)
+{	gh.setAccepted();
+	  this->driver_.lock();
+
+	trajectory_msgs::JointTrajectory traj=gh.getGoal()->trajectory;
+	for(unsigned int i=0; i < traj.points.size(); ++i)
+	{
+      if(this->driver_.isRunning())
+      {
+       this->driver_.move_in_joints(&traj.points[i].positions); //this call blocks if the wam faults. The mutex is not freed...!
+       ros::Duration(5.0).sleep();
+      }
+      else
+      {
+		  ROS_FATAL("Driver is not running");
+	  }
+    }
+    this->driver_.unlock();
+    this->driver_.wait_move_end();
+}
+ 
+
 
 /*  [action requests] */
 
