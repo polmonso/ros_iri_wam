@@ -1,12 +1,8 @@
 <launch>
  
- <node name="wam_drive_node" pkg="iri_wam_wrapper_exp" type="iri_wam_wrapper" args="" respawn="false" output="screen">
-  <param name="wam_ip" value="192.168.100.50"/>	
-  
-  <!--
-  <param name="port" value="4321"/>	
-  <param name="refresh_rate" value="100"/>	
-  -->
- 
+ <node name="wam_drive_node" pkg="iri_wam_wrapper_exp" type="iri_wam_wrapper_exp" args="" respawn="false" output="screen">
+  <param name="wam_ip" value="192.168.100.49"/>	
+  <!--<param name="port" value="4321"/>	
+  <param name="refresh_rate" value="100"/>-->	
  </node>
-<launch>
+</launch>
