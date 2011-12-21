@@ -12,11 +12,19 @@
     <remap from="/wam_ik/joint_move" to="/wam_driver_node/joints_move"/>
     <node name="wam_ik" pkg="iri_wam_ik" type="wam_ikac" />
 
-    <!-- Publish Forward Kinematics -->
+<!-- Starts RVIZ -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find iri_wam_bringup)/launch/iri_wam_real.vcg" output="screen" />
+
+<!-- start arm navigation stack -->
+    <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation.launch" />
+
+</launch>
+
+
+<!-- Publish Forward Kinematics (NOT NEEDED BECAUSE OF THE ROBOT STATE PKG ) -->
 <!--
     <remap from="/wam_fk/tf" to="/tf"/>
     <remap from="/wam_fk/joint_states" to="/wam_driver_node/joint_states"/>
     <node name="wam_fk" pkg="iri_wam_fk" type="wam_fk" />
 -->    
 
-</launch>
