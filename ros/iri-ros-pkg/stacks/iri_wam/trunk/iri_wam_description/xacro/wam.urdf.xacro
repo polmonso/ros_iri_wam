@@ -6,7 +6,9 @@
        name="iri_wam">
   
   <!-- LINKS   -->  
-  <include filename="$(find iri_wam_description)/xacro/wambase.urdf.xacro" />
+<!--  <include filename="$(find iri_wam_description)/xacro/wambase.urdf.xacro" />
+-->
+  <include filename="$(find iri_wam_description)/xacro/wam0.urdf.xacro" />
   <include filename="$(find iri_wam_description)/xacro/wam1.urdf.xacro" />
   <include filename="$(find iri_wam_description)/xacro/wam2.urdf.xacro" />
   <include filename="$(find iri_wam_description)/xacro/wam3.urdf.xacro" />
@@ -14,10 +16,15 @@
   <include filename="$(find iri_wam_description)/xacro/wam5.urdf.xacro" />
   <include filename="$(find iri_wam_description)/xacro/wam6.urdf.xacro" />
   <include filename="$(find iri_wam_description)/xacro/wam7.urdf.xacro" />
+  <include filename="$(find iri_wam_description)/xacro/wamtcp.urdf.xacro" />
   
+<!--
   <xacro:wambase>
   </xacro:wambase>
-  <xacro:wam1 parent="wambase">
+-->
+  <xacro:wam0>
+  </xacro:wam0>
+  <xacro:wam1 parent="wam_fk/wam0">
   </xacro:wam1>
   <xacro:wam2 parent="wam_fk/wam1">
   </xacro:wam2>
@@ -31,6 +38,7 @@
   </xacro:wam6>
   <xacro:wam7 parent="wam_fk/wam6">
   </xacro:wam7>
-
+  <xacro:wamtcp parent="wam_fk/wam7">
+  </xacro:wamtcp>
 </robot>
 
