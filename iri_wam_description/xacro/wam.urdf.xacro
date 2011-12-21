@@ -24,7 +24,6 @@
 -->
   <xacro:wam0>
   </xacro:wam0>
-<!--
   <xacro:wam1 parent="wam_fk/wam0">
   </xacro:wam1>
   <xacro:wam2 parent="wam_fk/wam1">
@@ -41,6 +40,5 @@
   </xacro:wam7>
   <xacro:wamtcp parent="wam_fk/wam7">
   </xacro:wamtcp>
--->
 </robot>
 
