@@ -5,10 +5,10 @@ multi_dof_joints:
     child_frame_id: world
 groups:
   - name: iri_wam
-    base_link: wambase
+    base_link: wam_fk/wam0
     tip_link: wam_fk/wam7
 default_collision_operations:
-  - object1: wambase
+  - object1: wam_fk/wam0
     object2: wam_fk/wam1
     operation: disable  # Adjacent in collision
   - object1: wam_fk/wam1

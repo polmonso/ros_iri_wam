@@ -1,7 +1,7 @@
 Background\ ColorR=0
 Background\ ColorG=0
 Background\ ColorB=0
-Fixed\ Frame=wambase
+Fixed\ Frame=wam_fk/wam0
 Target\ Frame=<Fixed Frame>
 Grid.Alpha=0.5
 Grid.Cell\ Size=1
