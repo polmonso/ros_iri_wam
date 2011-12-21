@@ -40,6 +40,11 @@
 
 // [action server client headers]
 
+// [action server msgs]
+#include <pr2_controllers_msgs/JointTrajectoryAction.h>
+// [action server msgs]
+#include <actionlib/server/action_server.h>
+
 #define HOLDON 0
 #define HOLDOFF 1
 
@@ -60,8 +65,11 @@
  * http://www.ros.org/wiki/diagnostics/ (Tutorials: Creating a Diagnostic Analyzer)
  * http://www.ros.org/wiki/self_test/ (Example: Self Test)
  */
+
 class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
 {
+	typedef actionlib::ActionServer<pr2_controllers_msgs::JointTrajectoryAction> ActionExecutor;
+typedef ActionExecutor::GoalHandle GoalHandle;
   private:
     // [publisher attributes]
     ros::Publisher joint_states_publisher;
@@ -82,9 +90,11 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
     // [client attributes]
 
     // [action server attributes]
-
+    ActionExecutor action_server_;
+    void goalCB(GoalHandle gh);
+    void cancelCB(GoalHandle gh);
     // [action client attributes]
-
+    
    /**
     * \brief post open hook
     * 

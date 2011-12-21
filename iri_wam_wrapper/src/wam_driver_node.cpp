@@ -2,7 +2,9 @@
 
 using namespace Eigen;
 
-WamDriverNode::WamDriverNode(ros::NodeHandle &nh) : iri_base_driver::IriBaseNodeDriver<WamDriver>(nh)
+WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
+ iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
+ action_server_(nh,"joint_trajectory_action",false)
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -27,7 +29,10 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) : iri_base_driver::IriBaseNode
   // [init clients]
   
   // [init action servers]
-  
+  action_server_.registerGoalCallback(boost::bind(&WamDriverNode::goalCB, this, _1));
+  //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelCB, this, _1));
+  action_server_.start();
+   // action_server_.reset(new ActionExecutor(nh, "joint_trajectory_action",boost::bind(&WamDriverNode::goalCB, this, _1), boost::bind(&WamDriverNode::cancelCB, this, _1)));
   // [init action clients]
 }
 
@@ -43,7 +48,7 @@ void WamDriverNode::mainNodeThread(void)
 
   // [fill msg Header if necessary]
   this->PoseStamped_msg.header.stamp = ros::Time::now();
-  this->PoseStamped_msg.header.frame_id = "wam0";
+  this->PoseStamped_msg.header.frame_id = "wam_fk/wam7";
 
   // [fill msg structures]
   this->driver_.lock();
@@ -192,6 +197,29 @@ bool WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &r
 }
 
 /*  [action callbacks] */
+void WamDriverNode::goalCB(GoalHandle gh)
+{
+    gh.setAccepted();
+    this->driver_.lock();
+
+	trajectory_msgs::JointTrajectory traj = gh.getGoal()->trajectory;
+	for(unsigned int ii=0; ii < traj.points.size(); ++ii)
+	{
+        if(this->driver_.isRunning())
+        {
+            this->driver_.move_in_joints(&traj.points[ii].positions); //this call blocks if the wam faults. The mutex is not freed...!
+            this->driver_.unlock();
+            this->driver_.wait_move_end();
+//            ros::Duration(5.0).sleep();
+        }
+        else
+        {
+		    ROS_FATAL("Driver is not running");
+	    }
+    }
+}
+ 
+
 
 /*  [action requests] */
 

@@ -1,14 +1,43 @@
 #include "wam_driver.h"
 
 using namespace std;
+using namespace XmlRpc;
 
 WamDriver::WamDriver()
 {
-  //setDriverId(driver string id);
-//  this->wamserver_ip = "192.168.100.49";
-  this->wamserver_ip = "192.168.100.50";
-  this->server_port = 4321;
-  this->state_refresh_rate = 100;
+ ros::NodeHandle nh("~");
+
+ XmlRpc::XmlRpcValue ip;
+ XmlRpc::XmlRpcValue port;
+ XmlRpc::XmlRpcValue rate;
+
+ nh.getParam("wam_ip",ip);
+ this->wamserver_ip=(std::string)ip;
+ 
+ if(!nh.hasParam("port"))
+ {
+  ROS_WARN_STREAM("Port not defined, Defaults: "<<4321);
+  this->server_port=4321;
+ } 
+ else
+ {
+  nh.getParam("port",port);
+  this->server_port=(int)port;
+ }
+ if(!nh.hasParam("refresh_rate"))
+ {
+  ROS_WARN_STREAM("Refresh Rate not defined, Defaults: "<<100);
+  this->state_refresh_rate=100;
+ } 
+ else
+ {
+ nh.getParam("refresh_rate",rate);
+ this->state_refresh_rate=(int)rate;
+ }
+ 
+ ROS_INFO_STREAM("IP Address: "<<this->wamserver_ip);
+ ROS_INFO_STREAM("Port Server: "<<this->server_port);
+ ROS_INFO_STREAM("Refresh Rate: "<<this->state_refresh_rate);
 }
 
 bool WamDriver::openDriver(void)
