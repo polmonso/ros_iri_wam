@@ -4,7 +4,7 @@ using namespace Eigen;
 
 WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
  iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
- action_server_(nh,"joint_trajectory_action",false)
+ action_server_(nh,"iri_wam_pr2_controller/joint_trajectory_action",false)
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -32,7 +32,6 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   action_server_.registerGoalCallback(boost::bind(&WamDriverNode::goalCB, this, _1));
   //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelCB, this, _1));
   action_server_.start();
-   // action_server_.reset(new ActionExecutor(nh, "joint_trajectory_action",boost::bind(&WamDriverNode::goalCB, this, _1), boost::bind(&WamDriverNode::cancelCB, this, _1)));
   // [init action clients]
 }
 

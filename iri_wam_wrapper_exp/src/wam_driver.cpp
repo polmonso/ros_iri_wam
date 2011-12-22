@@ -27,7 +27,7 @@ WamDriver::WamDriver()
  if(!nh.hasParam("refresh_rate"))
  {
   ROS_WARN_STREAM("Refresh Rate not defined, Defaults: "<<100);
-  this->server_port=100;
+  this->state_refresh_rate=100;
  } 
  else
  {

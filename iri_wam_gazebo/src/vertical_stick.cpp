@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
   arm_navigation_msgs::CollisionObject cylinder_object;
   cylinder_object.id = "/vertical_stick";
   cylinder_object.operation.operation = arm_navigation_msgs::CollisionObjectOperation::ADD;
-  cylinder_object.header.frame_id = "/wambase";
+  cylinder_object.header.frame_id = "/world";
   cylinder_object.header.stamp = ros::Time::now();
   arm_navigation_msgs::Shape object;
   object.type = arm_navigation_msgs::Shape::CYLINDER;
