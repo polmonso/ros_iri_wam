@@ -42,7 +42,7 @@
 
 // [action server msgs]
 #include <pr2_controllers_msgs/JointTrajectoryAction.h>
-// [action server msgs]
+#include <control_msgs/FollowJointTrajectoryAction.h>
 #include <actionlib/server/action_server.h>
 
 #define HOLDON 0
@@ -68,8 +68,13 @@
 
 class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
 {
-	typedef actionlib::ActionServer<pr2_controllers_msgs::JointTrajectoryAction> ActionExecutor;
-typedef ActionExecutor::GoalHandle GoalHandle;
+  // JointTrajectoryAction(Diamondback & Electric) 	
+  typedef actionlib::ActionServer<pr2_controllers_msgs::JointTrajectoryAction> ActionExecutor;
+  typedef ActionExecutor::GoalHandle GoalHandle;
+  //FollowJoinTrajectoryAction(Electric)
+  typedef actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> ActionExecutorFollow;
+  typedef ActionExecutorFollow::GoalHandle GoalHandleFollow;
+  
   private:
     // [publisher attributes]
     ros::Publisher joint_states_publisher;
@@ -93,6 +98,10 @@ typedef ActionExecutor::GoalHandle GoalHandle;
     ActionExecutor action_server_;
     void goalCB(GoalHandle gh);
     void cancelCB(GoalHandle gh);
+    
+    ActionExecutorFollow action_server_follow_;
+    void goalFollowCB(GoalHandleFollow gh);
+    void canceFollowlCB(GoalHandleFollow gh);    
     // [action client attributes]
     
    /**
@@ -103,6 +112,8 @@ typedef ActionExecutor::GoalHandle GoalHandle;
     * reconfigure application can update them.
     */
     void postNodeOpenHook(void);
+    
+    void trajectory2follow(trajectory_msgs::JointTrajectory traj, bool& state);
 
   public:
    /**

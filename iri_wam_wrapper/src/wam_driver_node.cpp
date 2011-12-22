@@ -4,7 +4,8 @@ using namespace Eigen;
 
 WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
  iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
- action_server_(nh,"iri_wam_pr2_controller/joint_trajectory_action",false)
+ action_server_(nh,"iri_wam_pr2_controller/joint_trajectory_action",false),
+ action_server_follow_(nh,"iri_wam_pr2_controller/follow_joint_trajectory",false)
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -32,6 +33,11 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   action_server_.registerGoalCallback(boost::bind(&WamDriverNode::goalCB, this, _1));
   //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelCB, this, _1));
   action_server_.start();
+  
+  action_server_follow_.registerGoalCallback(boost::bind(&WamDriverNode::goalFollowCB, this, _1));
+  //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelFollowCB, this, _1));
+  action_server_follow_.start();
+
   // [init action clients]
 }
 
@@ -199,9 +205,24 @@ bool WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &r
 void WamDriverNode::goalCB(GoalHandle gh)
 {
     gh.setAccepted();
-    this->driver_.lock();
-
-	trajectory_msgs::JointTrajectory traj = gh.getGoal()->trajectory;
+    bool state=false;
+    trajectory_msgs::JointTrajectory traj = gh.getGoal()->trajectory;
+    trajectory2follow(traj,state);
+    if(state) gh.setSucceeded();
+    else gh.setAborted();
+}
+void WamDriverNode::goalFollowCB(GoalHandleFollow gh)
+{
+    gh.setAccepted();
+    bool state=false;
+    trajectory_msgs::JointTrajectory traj = gh.getGoal()->trajectory;
+    trajectory2follow(traj,state);
+    if(state) gh.setSucceeded();
+    else gh.setAborted();
+}
+void WamDriverNode::trajectory2follow(trajectory_msgs::JointTrajectory traj, bool& state)
+{
+	this->driver_.lock();
 	for(unsigned int ii=0; ii < traj.points.size(); ++ii)
 	{
         if(this->driver_.isRunning())
@@ -214,10 +235,11 @@ void WamDriverNode::goalCB(GoalHandle gh)
         else
         {
 		    ROS_FATAL("Driver is not running");
+		    state=false;
 	    }
     }
-}
- 
+    state=true;	
+} 
 
 
 /*  [action requests] */
