@@ -7,7 +7,7 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_gazebo</url>
   <depend package="gazebo"/>
-  <depend package="gazebo_plugins"/>
+  <!--<depend package="gazebo_plugins"/>-->
   <depend package="roscpp"/>
   <depend package="arm_navigation_msgs" />
   <depend package="geometry_msgs" />
@@ -19,8 +19,8 @@
   <depend package="actionlib_msgs"/>
   <depend package="planning_environment"/>
   <depend package="iri_wam_common_msgs"/>
+  <depend package="pr2_gazebo_plugins"/>
   <rosdep name="tinyxml" />
-  
   <depend package="pr2_controllers_msgs"/>
   <export>
     <gazebo plugin_path="${prefix}/lib" />
