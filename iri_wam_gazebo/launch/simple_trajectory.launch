@@ -1,0 +1,5 @@
+<launch>
+    <group ns="iri_wam_63">
+        <node name="simple_trajectory" pkg="iri_wam_gazebo" type="simple_trajectory" output="screen" />    
+    </group>
+</launch>   
