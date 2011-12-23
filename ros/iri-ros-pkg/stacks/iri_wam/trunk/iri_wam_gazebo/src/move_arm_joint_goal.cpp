@@ -36,7 +36,7 @@ int main(int argc, char **argv){
   for (unsigned int i = 0 ; i < goalA.motion_plan_request.goal_constraints.joint_constraints.size(); ++i)
   {
     goalA.motion_plan_request.goal_constraints.joint_constraints[i].joint_name = names[i];
-    goalA.motion_plan_request.goal_constraints.joint_constraints[i].position = 0.0;
+    goalA.motion_plan_request.goal_constraints.joint_constraints[i].position = 0.01;
     goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = 0.01;
     goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = 0.01;
     // goalA.motion_plan_request.goal_constraints.joint_constraints[i].weight = 1.0;
