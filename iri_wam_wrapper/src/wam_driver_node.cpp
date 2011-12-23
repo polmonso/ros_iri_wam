@@ -4,8 +4,10 @@ using namespace Eigen;
 
 WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
  iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
- action_server_(nh,"iri_wam_pr2_controller/joint_trajectory_action",false),
- action_server_follow_(nh,"iri_wam_pr2_controller/follow_joint_trajectory",false)
+// action_server_(nh,"iri_wam_pr2_controller/joint_trajectory_action",false),
+ //action_server_follow_(nh,"iri_wam_pr2_controller/follow_joint_trajectory",false)
+ action_server_(nh,"joint_trajectory_action",false),
+ action_server_follow_(nh,"follow_joint_trajectory",false)
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -230,7 +232,6 @@ void WamDriverNode::trajectory2follow(trajectory_msgs::JointTrajectory traj, boo
             this->driver_.move_in_joints(&traj.points[ii].positions); //this call blocks if the wam faults. The mutex is not freed...!
             this->driver_.unlock();
             this->driver_.wait_move_end();
-//            ros::Duration(5.0).sleep();
         }
         else
         {
@@ -238,8 +239,9 @@ void WamDriverNode::trajectory2follow(trajectory_msgs::JointTrajectory traj, boo
 		    state=false;
 	    }
     }
-    state=true;	
+   state=true;	
 } 
+
 
 
 /*  [action requests] */
