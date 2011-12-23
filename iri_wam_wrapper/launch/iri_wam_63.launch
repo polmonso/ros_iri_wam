@@ -8,4 +8,6 @@
         </node>
     </group>
 
+   <param name="/iri_wam_move_iri_wam/controller_action_name" type="string" value="iri_wam_63/follow_joint_trajectory" />
+
 </launch>
