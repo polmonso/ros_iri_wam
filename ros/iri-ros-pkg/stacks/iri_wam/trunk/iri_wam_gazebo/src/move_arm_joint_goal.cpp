@@ -32,13 +32,14 @@ int main(int argc, char **argv){
   goalA.motion_plan_request.planner_id = std::string("");
   goalA.planner_service_name=std::string("ompl_planning/plan_kinematic_path");
   goalA.motion_plan_request.goal_constraints.joint_constraints.resize(names.size());
-
+  double dt;
   for (unsigned int i = 0 ; i < goalA.motion_plan_request.goal_constraints.joint_constraints.size(); ++i)
   {
     goalA.motion_plan_request.goal_constraints.joint_constraints[i].joint_name = names[i];
-    goalA.motion_plan_request.goal_constraints.joint_constraints[i].position = 0.01;
-    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = 0.01;
-    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = 0.01;
+    goalA.motion_plan_request.goal_constraints.joint_constraints[i].position =0.00;
+    dt=strtod(argv[i+1],NULL)-0.1;
+    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = (dt < 0)? dt*-1: dt;
+    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = strtod(argv[i+1],NULL)+0.1;
     // goalA.motion_plan_request.goal_constraints.joint_constraints[i].weight = 1.0;
   }
 
