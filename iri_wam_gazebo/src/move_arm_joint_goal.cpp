@@ -23,12 +23,16 @@ int main(int argc, char **argv){
   names[2] = "j3_joint";
   names[3] = "j4_joint";
   names[4] = "j5_joint";
-  names[5] = "j6_joint";
+  names[5] = "j6_joint";//
   names[6] = "j7_joint";
 
   goalA.motion_plan_request.group_name="iri_wam";
   goalA.motion_plan_request.num_planning_attempts = 1;
   goalA.motion_plan_request.allowed_planning_time = ros::Duration(5.0);
+  goalA.motion_plan_request.expected_path_dt = ros::Duration(0.002);
+  goalA.motion_plan_request.expected_path_duration = ros::Duration(3.0);
+
+  
   goalA.motion_plan_request.planner_id = std::string("");
   goalA.planner_service_name=std::string("ompl_planning/plan_kinematic_path");
   goalA.motion_plan_request.goal_constraints.joint_constraints.resize(names.size());
