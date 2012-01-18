@@ -2,7 +2,7 @@
 
 
 <!-- Load urdf WAM model -->
-    <param name="robot_description" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/wam.urdf.xacro'" />
+    <include file="$(find iri_wam_description)/launch/iri_wam_description.launch" />
 
 <!-- Controller Manager -->
     <remap from="/joint_states" to="iri_wam_63/wam_wrapper/joint_states"/>
