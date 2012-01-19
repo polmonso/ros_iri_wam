@@ -7,7 +7,6 @@ BhandDriver::BhandDriver()
   //setDriverId(driver string id);
   this->bhserver_ip = "192.168.100.49";
   this->server_port = 4322;
-  this->state_refresh_rate = 100;
 }
 
 bool BhandDriver::openDriver(void)
@@ -16,7 +15,7 @@ bool BhandDriver::openDriver(void)
   //setDriverId(driver string id);
   try{
     if(this->state_ != OPENED){
-        this->bhand = new BarrettHand(this->bhserver_ip, this->server_port, this->state_refresh_rate);
+        this->bhand = new BarrettHand(this->bhserver_ip, this->server_port);
         bhand->open();
         this->state_ = OPENED;
         ROS_INFO("bhand opened");
