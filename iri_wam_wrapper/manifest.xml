@@ -1,8 +1,9 @@
 <package>
   <description brief="iri_wam_wrapper">
-
-     iri_wam_wrapper
-
+      Base package design to control Barrett WAM arm. <br />
+      This driver is based on 
+      <a href="http://wikiri.upc.es/index.php/WAM_Client_Server_Driver">
+      IRI low level driver</a>.
   </description>
   <author>Pol Monso</author>
   <license>LGPL</license>
@@ -17,5 +18,3 @@
   <depend package="eigen"/>
   <depend package="iri_wam_common_msgs"/> 
 </package>
-
-
