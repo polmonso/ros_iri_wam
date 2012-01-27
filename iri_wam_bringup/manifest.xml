@@ -4,7 +4,7 @@
      iri_wam_bringup
 
   </description>
-  <author>sfoix</author>
+  <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_bringup</url>
