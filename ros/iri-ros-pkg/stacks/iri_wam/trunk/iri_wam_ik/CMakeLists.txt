@@ -28,11 +28,11 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 #rosbuild_add_executable(example examples/example.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
-FIND_PACKAGE(wamik REQUIRED)
-INCLUDE_DIRECTORIES(${WAMIK_INCLUDE_DIR})
-rosbuild_add_executable(wam_ik src/wam_ik.cpp)
+
 rosbuild_add_executable(wam_ikac src/wam_ikac.cpp)
 rosbuild_add_executable(wam_ikj src/wam_ikj.cpp)
+rosbuild_add_executable(wam_ik_kdl src/wam_ik_kdl.cpp)
+
 MESSAGE(STATUS ${wamik_LIBRARY})
 TARGET_LINK_LIBRARIES(wam_ik ${wamik_LIBRARY})
 
