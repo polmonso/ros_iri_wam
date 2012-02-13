@@ -25,25 +25,38 @@ int main(int argc, char **argv){
   names[4] = "j5_joint";
   names[5] = "j6_joint";//
   names[6] = "j7_joint";
-
   goalA.motion_plan_request.group_name="iri_wam";
-  goalA.motion_plan_request.num_planning_attempts = 1;
+  goalA.motion_plan_request.num_planning_attempts = 2;
   goalA.motion_plan_request.allowed_planning_time = ros::Duration(5.0);
-  goalA.motion_plan_request.expected_path_dt = ros::Duration(0.002);
-  goalA.motion_plan_request.expected_path_duration = ros::Duration(3.0);
+  goalA.motion_plan_request.expected_path_dt = ros::Duration(60.0);
+  goalA.motion_plan_request.expected_path_duration = ros::Duration(60.0);
 
   
   goalA.motion_plan_request.planner_id = std::string("");
   goalA.planner_service_name=std::string("ompl_planning/plan_kinematic_path");
   goalA.motion_plan_request.goal_constraints.joint_constraints.resize(names.size());
+  goalA.motion_plan_request.path_constraints.joint_constraints.resize(names.size());
   double dt;
   for (unsigned int i = 0 ; i < goalA.motion_plan_request.goal_constraints.joint_constraints.size(); ++i)
   {
     goalA.motion_plan_request.goal_constraints.joint_constraints[i].joint_name = names[i];
     goalA.motion_plan_request.goal_constraints.joint_constraints[i].position =0.00;
-    dt=strtod(argv[i+1],NULL)-0.1;
-    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = (dt < 0)? dt*-1: dt;
-    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = strtod(argv[i+1],NULL)+0.1;
+
+    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = strtod(argv[i+1],NULL) -0.1;
+    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = strtod(argv[i+1],NULL) +0.1;
+    if(strtod(argv[i+1],NULL) == 0.0){
+     goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below *= -1;
+	 }
+    if(strtod(argv[i+1],NULL) < 0.0){
+     goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above *= -1;
+          goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below *= -1;
+	 }
+	
+  
+    goalA.motion_plan_request.path_constraints.joint_constraints[i].joint_name = names[i];
+    goalA.motion_plan_request.path_constraints.joint_constraints[i].position =0.00; 
+    goalA.motion_plan_request.path_constraints.joint_constraints[i].tolerance_below = 100;
+    goalA.motion_plan_request.path_constraints.joint_constraints[i].tolerance_above = 100;
     // goalA.motion_plan_request.goal_constraints.joint_constraints[i].weight = 1.0;
   }
 
@@ -55,11 +68,18 @@ int main(int argc, char **argv){
   goalA.motion_plan_request.goal_constraints.joint_constraints[5].position = strtod(argv[6],NULL);
   goalA.motion_plan_request.goal_constraints.joint_constraints[6].position = strtod(argv[7],NULL);
 
+  goalA.motion_plan_request.path_constraints.joint_constraints[0].position = strtod(argv[1],NULL);
+  goalA.motion_plan_request.path_constraints.joint_constraints[1].position = strtod(argv[2],NULL);
+  goalA.motion_plan_request.path_constraints.joint_constraints[2].position = strtod(argv[3],NULL);
+  goalA.motion_plan_request.path_constraints.joint_constraints[3].position = strtod(argv[4],NULL);
+  goalA.motion_plan_request.path_constraints.joint_constraints[4].position = strtod(argv[5],NULL);
+  goalA.motion_plan_request.path_constraints.joint_constraints[5].position = strtod(argv[6],NULL);
+  goalA.motion_plan_request.path_constraints.joint_constraints[6].position = strtod(argv[7],NULL);
   if (nh.ok())
   {
     bool finished_within_time = false;
     move_arm.sendGoal(goalA);
-    finished_within_time = move_arm.waitForResult(ros::Duration(200.0));
+    finished_within_time = move_arm.waitForResult(ros::Duration(300.0));
     if (!finished_within_time)
     {
       move_arm.cancelGoal();
