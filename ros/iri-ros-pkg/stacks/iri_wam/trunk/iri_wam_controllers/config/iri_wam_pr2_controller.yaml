@@ -9,13 +9,13 @@
     - j6_joint
     - j7_joint
   gains:
-    j1_joint: {p: 100.0, d: 0.0, i: 0.0, i_clamp: 0.0}
-    j2_joint: {p: 100.0, d: 0.0, i: 0.0, i_clamp: 0.0}
-    j3_joint: {p: 100.0, d: 0.0, i: 0.0, i_clamp: 0.0}
-    j4_joint: {p: 100.0, d: 0.0, i: 0.0, i_clamp: 0.0}
-    j5_joint: {p: 100.0, d: 0.0, i: 0.0, i_clamp: 0.0}
-    j6_joint: {p: 100.0, d: 0.0, i: 0.0, i_clamp: 0.0}
-    j7_joint: {p: 100.0, d: 0.0, i: 0.0, i_clamp: 0.0}
+    j1_joint: {p: 900.0, d: 10.0, i: 2.5, i_clamp: 0.0}
+    j2_joint: {p: 2500.0, d: 20.0, i: 5.0, i_clamp: 0.0}
+    j3_joint: {p: 600.0, d: 5.0, i: 2.0, i_clamp: 0.0}
+    j4_joint: {p: 500.0, d: 2.0, i: 0.5, i_clamp: 0.0}
+    j5_joint: {p: 50.0, d: 0.5, i: 0.5, i_clamp: 0.0}
+    j6_joint: {p: 50.0, d: 0.5, i: 0.5, i_clamp: 0.0}
+    j7_joint: {p: 8.0, d: 0.05, i: 0.1, i_clamp: 0.0}
   joint_trajectory_action:
     joints:
       - j1_joint 
@@ -40,4 +40,4 @@
       j6_joint:
         goal: 0.02
       j7_joint:
-        goal: 0.02  
+        goal: 0.02
