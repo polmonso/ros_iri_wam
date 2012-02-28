@@ -61,8 +61,27 @@ void WamIKAC::joint_states_callback(const sensor_msgs::JointState::ConstPtr& msg
 bool WamIKAC::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, iri_wam_common_msgs::pose_move::Response &res) 
 { 
 
+  try{
+    ros::Time now = ros::Time::now();
+    ros::Duration interval = ros::Duration(1.0);
+    listener_.waitForTransform("/wam_tcp", "/wam_fk/wam7", now, interval);
+    listener_.lookupTransform("/wam_tcp", "/wam_fk/wam7", now, tcp_H_wam7_);
+    
+  }catch (tf::TransformException ex){
+    ROS_ERROR("%s", ex.what());
+  }
+  ROS_DEBUG("Received Pose: %f %f %f %f %f %f %f\n", tcp_H_wam7_.getOrigin().getX(), tcp_H_wam7_.getOrigin().getY(), tcp_H_wam7_.getOrigin().getZ(), tcp_H_wam7_.getRotation().getAxis().getX(), tcp_H_wam7_.getRotation().getAxis().getY(), tcp_H_wam7_.getRotation().getAxis().getZ(), tcp_H_wam7_.getRotation().getW());
+
+  tf::Quaternion world_quat_tcp( req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z);
+  tf::Vector3 world_pos_tcp( req.pose.position.x, req.pose.position.y, req.pose.position.z);
+  tf::Transform world_H_wam7_( world_quat_tcp, world_pos_tcp);
+
+  world_H_wam7_ *= tcp_H_wam7_;
+
+
   bool result;
-  Quaternion<float> quat( req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z);
+  //Quaternion<float> quat( req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z);
+  Quaternion<float> quat( world_H_wam7_.getRotation().w(), world_H_wam7_.getRotation().x(), world_H_wam7_.getRotation().y(), world_H_wam7_.getRotation().z());
   Matrix3f mat = quat.toRotationMatrix();
       ROS_INFO("Received Quat: %f %f %f %f %f %f %f\n",
                 req.pose.position.x, req.pose.position.y, req.pose.position.z, 
@@ -71,9 +90,12 @@ bool WamIKAC::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, ir
   std::vector <double> pose(16,0);
   std::vector <double> joints(7,0);
 
-  pose[3] = req.pose.position.x;
-  pose[7] = req.pose.position.y;
-  pose[11] = req.pose.position.z;
+  //pose[3] = req.pose.position.x;
+  //pose[7] = req.pose.position.y;
+  //pose[11] = req.pose.position.z;
+  pose[3] = world_H_wam7_.getOrigin().getX();
+  pose[7] = world_H_wam7_.getOrigin().getY();
+  pose[11] = world_H_wam7_.getOrigin().getZ();
   pose[15] = 1;
   for(int i=0; i<12; i++){
    if(i%4 != 3){
@@ -121,16 +143,37 @@ bool WamIKAC::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, ir
 }
 
 bool WamIKAC::wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &req, iri_wam_common_msgs::wamInverseKinematics::Response &res){
+  try{
+    ros::Time now = ros::Time::now();
+    ros::Duration interval = ros::Duration(1.0);
+    listener_.waitForTransform("/wam_tcp", "/wam_fk/wam7", now, interval);
+    listener_.lookupTransform("/wam_tcp", "/wam_fk/wam7", now, tcp_H_wam7_);
+    
+  }catch (tf::TransformException ex){
+    ROS_ERROR("%s", ex.what());
+  }
+  ROS_DEBUG("Received Pose: %f %f %f %f %f %f %f\n", tcp_H_wam7_.getOrigin().getX(), tcp_H_wam7_.getOrigin().getY(), tcp_H_wam7_.getOrigin().getZ(), tcp_H_wam7_.getRotation().getAxis().getX(), tcp_H_wam7_.getRotation().getAxis().getY(), tcp_H_wam7_.getRotation().getAxis().getZ(), tcp_H_wam7_.getRotation().getW());
+
+  tf::Quaternion world_quat_tcp( req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z);
+  tf::Vector3 world_pos_tcp( req.pose.position.x, req.pose.position.y, req.pose.position.z);
+  tf::Transform world_H_wam7_( world_quat_tcp, world_pos_tcp);
+
+  world_H_wam7_ *= tcp_H_wam7_;
+  
   bool result;
-  Quaternion<float> quat(req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z, req.pose.orientation.w);
+  //Quaternion<float> quat(req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z, req.pose.orientation.w);
+  Quaternion<float> quat( world_H_wam7_.getRotation().w(), world_H_wam7_.getRotation().x(), world_H_wam7_.getRotation().y(), world_H_wam7_.getRotation().z());
   Matrix3f mat = quat.toRotationMatrix();
 
   std::vector <double> pose(16,0);
   std::vector <double> joints(7,0);
 
-  pose[3] = req.pose.position.x;
-  pose[7] = req.pose.position.y;
-  pose[11] = req.pose.position.z;
+  //pose[3] = req.pose.position.x;
+  //pose[7] = req.pose.position.y;
+  //pose[11] = req.pose.position.z;
+  pose[3] = world_H_wam7_.getOrigin().getX();
+  pose[7] = world_H_wam7_.getOrigin().getY();
+  pose[11] = world_H_wam7_.getOrigin().getZ();
   pose[15] = 1;
   for(int i=0; i<12; i++){
    if(i%4 != 3){
@@ -731,7 +774,7 @@ void WamIKAC::soltrig(double a, double b, double c, MatrixXd& q2sol2){
 int main(int argc, char** argv) {
     ros::init(argc, argv, "wam_ik");
     WamIKAC wam_ikac;
-    ros::Rate loop_rate(10); 
+    ros::Rate loop_rate(10);
     while(ros::ok()){
       ros::spinOnce();
       loop_rate.sleep(); 
