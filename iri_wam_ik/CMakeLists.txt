@@ -30,11 +30,11 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #target_link_libraries(example ${PROJECT_NAME})
 
 rosbuild_add_executable(wam_ikac src/wam_ikac.cpp)
-rosbuild_add_executable(wam_ikj src/wam_ikj.cpp)
-rosbuild_add_executable(wam_ik_kdl src/wam_ik_kdl.cpp)
+#rosbuild_add_executable(wam_ikj src/wam_ikj.cpp)
+#rosbuild_add_executable(wam_ik_kdl src/wam_ik_kdl.cpp)
 
-MESSAGE(STATUS ${wamik_LIBRARY})
-TARGET_LINK_LIBRARIES(wam_ik ${wamik_LIBRARY})
+#MESSAGE(STATUS ${wamik_LIBRARY})
+#TARGET_LINK_LIBRARIES(wam_ik ${wamik_LIBRARY})
 
 MESSAGE(STATUS)
 MESSAGE(STATUS "IMPORTANT NOTE: This code is not well tested and probably incomplete")
