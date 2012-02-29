@@ -60,6 +60,7 @@ void WamIKAC::joint_states_callback(const sensor_msgs::JointState::ConstPtr& msg
 /*  [service callbacks] */
 bool WamIKAC::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, iri_wam_common_msgs::pose_move::Response &res) 
 { 
+  bool result;
 
   try{
     ros::Time now = ros::Time::now();
@@ -68,18 +69,19 @@ bool WamIKAC::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, ir
     listener_.lookupTransform("/wam_tcp", "/wam_fk/wam7", now, tcp_H_wam7_);
     
   }catch (tf::TransformException ex){
-    ROS_ERROR("%s", ex.what());
+    ROS_ERROR("lookup transform error: %s", ex.what());
+    return false;
   }
-  ROS_DEBUG("Received Pose: %f %f %f %f %f %f %f\n", tcp_H_wam7_.getOrigin().getX(), tcp_H_wam7_.getOrigin().getY(), tcp_H_wam7_.getOrigin().getZ(), tcp_H_wam7_.getRotation().getAxis().getX(), tcp_H_wam7_.getRotation().getAxis().getY(), tcp_H_wam7_.getRotation().getAxis().getZ(), tcp_H_wam7_.getRotation().getW());
+  ROS_INFO("Received Pose: %f %f %f  %f %f %f %f\n", req.pose.position.x, req.pose.position.y, req.pose.position.z, req.pose.orientation.x,req.pose.orientation.y,req.pose.orientation.z,req.pose.orientation.w);
+  ROS_DEBUG("TCP_H_wam7 looked up transform: %f %f %f  %f %f %f %f\n", tcp_H_wam7_.getOrigin().getX(), tcp_H_wam7_.getOrigin().getY(), tcp_H_wam7_.getOrigin().getZ(), tcp_H_wam7_.getRotation().getAxis().getX(), tcp_H_wam7_.getRotation().getAxis().getY(), tcp_H_wam7_.getRotation().getAxis().getZ(), tcp_H_wam7_.getRotation().getW());
 
   tf::Quaternion world_quat_tcp( req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z);
   tf::Vector3 world_pos_tcp( req.pose.position.x, req.pose.position.y, req.pose.position.z);
   tf::Transform world_H_wam7_( world_quat_tcp, world_pos_tcp);
 
   world_H_wam7_ *= tcp_H_wam7_;
-
-
-  bool result;
+  ROS_DEBUG("world_H_wam7 tcp Recomputed Pose: %f %f %f  %f %f %f %f\n", world_H_wam7_.getOrigin().getX(), world_H_wam7_.getOrigin().getY(), world_H_wam7_.getOrigin().getZ(), world_H_wam7_.getRotation().getAxis().getX(), world_H_wam7_.getRotation().getAxis().getY(), world_H_wam7_.getRotation().getAxis().getZ(), world_H_wam7_.getRotation().getW());
+  
   //Quaternion<float> quat( req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z);
   Quaternion<float> quat( world_H_wam7_.getRotation().w(), world_H_wam7_.getRotation().x(), world_H_wam7_.getRotation().y(), world_H_wam7_.getRotation().z());
   Matrix3f mat = quat.toRotationMatrix();
@@ -150,17 +152,19 @@ bool WamIKAC::wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &
     listener_.lookupTransform("/wam_tcp", "/wam_fk/wam7", now, tcp_H_wam7_);
     
   }catch (tf::TransformException ex){
-    ROS_ERROR("%s", ex.what());
+    ROS_ERROR("lookup transform error: %s", ex.what());
+    return false;
   }
-  ROS_DEBUG("Received Pose: %f %f %f %f %f %f %f\n", tcp_H_wam7_.getOrigin().getX(), tcp_H_wam7_.getOrigin().getY(), tcp_H_wam7_.getOrigin().getZ(), tcp_H_wam7_.getRotation().getAxis().getX(), tcp_H_wam7_.getRotation().getAxis().getY(), tcp_H_wam7_.getRotation().getAxis().getZ(), tcp_H_wam7_.getRotation().getW());
+  ROS_INFO("Received Pose: %f %f %f  %f %f %f %f\n", req.pose.position.x, req.pose.position.y, req.pose.position.z, req.pose.orientation.x,req.pose.orientation.y,req.pose.orientation.z,req.pose.orientation.w);
+  ROS_DEBUG("TCP_H_wam7 looked up transform: %f %f %f  %f %f %f %f\n", tcp_H_wam7_.getOrigin().getX(), tcp_H_wam7_.getOrigin().getY(), tcp_H_wam7_.getOrigin().getZ(), tcp_H_wam7_.getRotation().getAxis().getX(), tcp_H_wam7_.getRotation().getAxis().getY(), tcp_H_wam7_.getRotation().getAxis().getZ(), tcp_H_wam7_.getRotation().getW());
 
   tf::Quaternion world_quat_tcp( req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z);
   tf::Vector3 world_pos_tcp( req.pose.position.x, req.pose.position.y, req.pose.position.z);
   tf::Transform world_H_wam7_( world_quat_tcp, world_pos_tcp);
 
   world_H_wam7_ *= tcp_H_wam7_;
+  ROS_DEBUG("world_H_wam7 tcp Recomputed Pose: %f %f %f  %f %f %f %f\n", world_H_wam7_.getOrigin().getX(), world_H_wam7_.getOrigin().getY(), world_H_wam7_.getOrigin().getZ(), world_H_wam7_.getRotation().getAxis().getX(), world_H_wam7_.getRotation().getAxis().getY(), world_H_wam7_.getRotation().getAxis().getZ(), world_H_wam7_.getRotation().getW());
   
-  bool result;
   //Quaternion<float> quat(req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z, req.pose.orientation.w);
   Quaternion<float> quat( world_H_wam7_.getRotation().w(), world_H_wam7_.getRotation().x(), world_H_wam7_.getRotation().y(), world_H_wam7_.getRotation().z());
   Matrix3f mat = quat.toRotationMatrix();
@@ -187,8 +191,8 @@ bool WamIKAC::wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &
         pose[12],pose[13],pose[14],pose[15]);
 
   if(!WamIKAC::ik(pose, currentjoints, joints)){
-      ROS_ERROR("IK solution not found");
-      result = false;
+      ROS_ERROR("IK solution not found. Is pose out of configuration space?");
+      return false;
   }else{
 
       ROS_INFO("wamik Service computed joints:\n %f %f %f %f %f %f %f\n", joints.at(0), joints.at(1), joints.at(2), joints.at(3), joints.at(4), joints.at(5), joints.at(6));
@@ -197,10 +201,10 @@ bool WamIKAC::wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &
       joints_.resize(7);
       for(int i=0;i<7;i++){
         res.joints.position[i] = joints.at(i);
-	joints_(i)=joints.at(i);
+        joints_(i)=joints.at(i);
       }
   }
-  return result;
+  return true;
 }
 
 /*  [action callbacks] */
@@ -250,10 +254,10 @@ bool WamIKAC::ik(vector<double> pose, vector<double> currentjoints, vector<doubl
 	double potq=10000.;
 	//int basicelements=4;
 	step=0.0005;
-	ROS_INFO("WAM_IKAC: Beta Version, still being tested but apparently working correctly");
-	ROS_INFO("Solution found is that which minimizes a weighted norm of the joints variation, to insert another criterion, modify the function WamIKAC::potentialfunction");
-	ROS_INFO("Variation on q0 at each step for obtaining first solution : %e",step);
-	ROS_INFO("Initial joints:\n %f %f %f %f %f %f %f\n", currentjoints.at(0), currentjoints.at(1), currentjoints.at(2), currentjoints.at(3), currentjoints.at(4), currentjoints.at(5), currentjoints.at(6));
+	ROS_DEBUG("WAM_IKAC: Beta Version, still being tested but apparently working correctly");
+	ROS_DEBUG("Solution found is that which minimizes a weighted norm of the joints variation, to insert another criterion, modify the function WamIKAC::potentialfunction");
+	ROS_DEBUG("Variation on q0 at each step for obtaining first solution : %e",step);
+	ROS_DEBUG("Initial joints:\n %f %f %f %f %f %f %f\n", currentjoints.at(0), currentjoints.at(1), currentjoints.at(2), currentjoints.at(3), currentjoints.at(4), currentjoints.at(5), currentjoints.at(6));
 	//std::cout<<"q1 iteration step:\n"<<step<<std::endl;	
 	//std::cin>>step;
 	/* Look for the initial solution */
@@ -335,12 +339,12 @@ bool WamIKAC::ik(vector<double> pose, vector<double> currentjoints, vector<doubl
 	
 		T07=T01*T12*T23*T34*T45*T56*T67;
 
-		ROS_INFO("ELAPSED TIME IS  %.5lf seconds ", dif );
+		ROS_DEBUG("ELAPSED TIME IS  %.5lf seconds ", dif );
 		  return true;
 	} else{
 		  for(int i=0;i<7;i++)
 		     joints[i] = cjoints(i);
-		ROS_INFO("SOLUTION NOT FOUND, robot not moving ");
+		ROS_DEBUG("SOLUTION NOT FOUND, robot not moving ");
 		return false;
 	}    
 
