@@ -1,0 +1,6 @@
+\subsubsection usage Usage
+\verbatim
+<node name="WamTcpIkAlgorithm" pkg="iri_wam_tcp_ik" type="WamTcpIkAlgorithm">
+</node>
+\endverbatim
+
