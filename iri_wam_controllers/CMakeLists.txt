@@ -10,7 +10,7 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 #set(ROS_BUILD_TYPE RelWithDebInfo)
 
 rosbuild_init()
-
+rosbuild_genmsg()
 #set the default path for built executables to the "bin" directory
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
@@ -30,5 +30,8 @@ rosbuild_gensrv()
 #target_link_libraries(example ${PROJECT_NAME})
 #rosbuild_add_library(iri_wam_controller_lib src/iri_wam_controller.cpp src/iri_wam_cart_controller.cpp)
 #rosbuild_add_library(iri_wam_controller_lib src/iri_wam_cart_controller.cpp
-rosbuild_add_library(iri_wam_controller src/iri_wam_controller.cpp)
-rosbuild_add_library(iri_wam_cart_controller src/iri_wam_cart_controller.cpp)
+#rosbuild_add_library(iri_wam_controller src/iri_wam_controller.cpp)
+#rosbuild_add_library(iri_wam_cart_controller src/iri_wam_cart_controller.cpp)
+#rosbuild_add_library(iri_wam_controller src/sim_trajectory_server.cpp)
+rosbuild_add_executable(sim_trajectory_server src/sim_trajectory_server.cpp)
+rosbuild_link_boost(sim_trajectory_server thread)
