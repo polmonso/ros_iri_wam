@@ -1,0 +1,29 @@
+<launch> 
+
+   <param name="/iri_wam_move_iri_wam/controller_action_name" type="string" value="iri_wam_pr2_controller/follow_joint_trajectory" />
+    
+<!-- Robot Description -->
+    <include file="$(find iri_wam_description)/launch/iri_wam_description.launch" />
+
+<!-- Gazebo Simulator -->
+    <include file="$(find iri_wam_gazebo)/launch/iri_wam_gazebo.launch" />
+
+<!-- Controller Manager -->
+    <include file="$(find pr2_controller_manager)/controller_manager.launch" />
+
+<!-- Add arm Controller -->
+    <include file="$(find iri_wam_controllers)/launch/iri_wam_pr2_controller.launch" />
+
+
+<!-- push vertical_stick_description to factory and spawn vertical_stick in gazebo -->
+  <!--
+   <include file="$(find iri_wam_gazebo)/launch/spawn_vertical_stick.launch" />
+   -->
+ 	
+<!-- start arm navigation stack -->
+   <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation_sim.launch" />
+ 
+ 
+  
+   	 <include file="$(find iri_wam_controllers)/launch/wam_sim_trajectory_server.launch" />
+</launch>
