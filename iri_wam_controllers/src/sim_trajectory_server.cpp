@@ -4,12 +4,9 @@ namespace sim_trajectory_server
 {
  sim_trajectory_server::sim_trajectory_server():
  private_hand_("~")
- { ROS_INFO("Connected to server :1 syn_move_arm");
+ { 
 	bringupTopics(); 
-	ROS_INFO("Connected to server :3 syn_move_arm");
-	
 	bringupActions();
-	
 	private_hand_.param<double>("waited_time_for_result", waited_time_for_result,200);
 
  }
@@ -17,13 +14,13 @@ namespace sim_trajectory_server
  
 void sim_trajectory_server::bringupActions()
 {
-  //  actionlib::SimpleActionClient<arm_navigation_msgs::MoveArmAction> c_C(private_hand_,"bb",true);
-    action_client_= new actionlib::SimpleActionClient<arm_navigation_msgs::MoveArmAction>(public_hand_,"move_iri_wam",true);
+   // actionlib::SimpleActionClient<arm_navigation_msgs::MoveArmAction> c_C(private_hand_,"bb",true);
+    action_client_= new actionlib::SimpleActionClient<arm_navigation_msgs::MoveArmAction>(public_hand_,"syn_move_arm",true);
     action_client_->waitForServer();
-    ROS_INFO("Connected to server : 2syn_move_arm");
-	//action_server_.reset(new actionlib::SimpleActionServer<arm_navigation_msgs::MoveArmAction>(public_hand_,"move_iri_wam", boost::bind(&sim_trajectory_server::goalCB, this, _1), false));
-  //  action_server_->start();	
-    ROS_INFO("Initializer server : move_iri_wam");
+    ROS_INFO("Initializer Client Action : syn_move_arm");
+	action_server_.reset(new actionlib::SimpleActionServer<arm_navigation_msgs::MoveArmAction>(public_hand_,"move_iri_wam", boost::bind(&sim_trajectory_server::goalCB, this, _1), false));
+    action_server_->start();	
+    ROS_INFO("Initializer Server Action : move_iri_wam");
 }
 void sim_trajectory_server::bringupTopics()
 {
