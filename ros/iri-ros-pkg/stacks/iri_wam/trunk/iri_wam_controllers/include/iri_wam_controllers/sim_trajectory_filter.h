@@ -43,7 +43,9 @@ namespace sim_trajectory_filter
 		void accelToMsg(trajectory_msgs::JointTrajectory& msg,const double& dt);
 		void getPositionMsg(const trajectory_msgs::JointTrajectory& msg,const int& index,const int& indexJoint,double& pos);
 		void getVelocityMsg(const trajectory_msgs::JointTrajectory& msg,const int& index,const int& indexJoint,double& vel);
-
+		void sendGoal(const pr2_controllers_msgs::JointTrajectoryGoal& msg);
+		void copyMsg(const trajectory_msgs::JointTrajectory& a,trajectory_msgs::JointTrajectory& b);
+		void sendTrajectory(const trajectory_msgs::JointTrajectory& msg);
 	public:
 		sim_trajectory_filter();
 		~sim_trajectory_filter(){};
