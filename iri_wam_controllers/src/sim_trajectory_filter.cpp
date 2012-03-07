@@ -48,17 +48,13 @@ namespace sim_trajectory_filter
 	  gh.setAccepted();
 	  trajectory_msgs::JointTrajectory input = gh.getGoal()->trajectory;
 	  trajectory_msgs::JointTrajectory output;
-	  output.header=input.header;	
-	  output.joint_names=input.joint_names;	
-	  output.points=input.points;	
+	  copyMsg(input,output);
 	  double dt=0.0;
 	  get_Dtime(output.points.size(),dt);
 	  velocityToMsg(output,dt);
 	  accelToMsg(output,dt);
 	  timeToMsg(output,dt);
-	  control_msgs::FollowJointTrajectoryGoal flwGoal=*gh.getGoal();
-	  flwGoal.trajectory=output;
-	  
+	  sendTrajectory(output);
 	}
   }
   void sim_trajectory_filter::get_Dtime(const int& num_points,double& dtime)
@@ -119,8 +115,22 @@ namespace sim_trajectory_filter
 		  msg.points[i].time_from_start= ros::Duration(time*i);
 	  }
   }
-
-
+  void sim_trajectory_filter::sendGoal(const pr2_controllers_msgs::JointTrajectoryGoal& msg)
+  {
+	  controller_action_client_->sendGoal(msg);
+  }
+  void sim_trajectory_filter::copyMsg(const trajectory_msgs::JointTrajectory& a,trajectory_msgs::JointTrajectory& b)
+  {
+	  b.header=a.header;	
+	  b.joint_names=a.joint_names;	
+	  b.points=a.points;
+  }
+  void sim_trajectory_filter::sendTrajectory(const trajectory_msgs::JointTrajectory& msg)
+  {
+	 pr2_controllers_msgs::JointTrajectoryGoal  jta_msg;
+	 jta_msg.trajectory=msg;
+	 sendGoal(jta_msg); 
+  }
 }
 
 int main(int argc, char** argv)
