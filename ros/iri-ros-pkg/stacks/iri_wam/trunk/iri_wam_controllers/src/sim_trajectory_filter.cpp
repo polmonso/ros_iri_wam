@@ -8,27 +8,29 @@ namespace sim_trajectory_filter
    id_path(""),
    controller_name("")
   {
-	  public_hand_.param<std::string>("controller_action_name", controller_name, "action");
+	 // public_hand_.param<std::string>("controller_action_name", controller_name, "/iri_ros_controller/joint_trajectory_action");
 	  bringupSubcribers();
 	  bringupActions();
 	  
   }
   void sim_trajectory_filter::bringupActions()
   {
-	action_server_follow_.reset(new FJTAS(public_hand_,"follow_joint_trajectory",boost::bind(&sim_trajectory_filter::goalCBFollow, this, _1)));
-	ROS_INFO("Server Action Started: follow_joint_trajectory ");
-	    controller_action_client_ = new JointExecutorActionClient(controller_name);
+    controller_action_client_ = new JointExecutorActionClient("/iri_ros_controller/follow_joint_trajectory");
     if(!controller_action_client_) {
       ROS_ERROR("Controller action client hasn't been initialized yet");
       return ;
     }
-    while(!controller_action_client_->waitForActionServerToStart(ros::Duration(1.0))){
+    /*while(!controller_action_client_->waitForActionServerToStart(ros::Duration(1.0))){
       ROS_INFO("Waiting for the joint_trajectory_action server to come up.");
       if(!public_hand_.ok()) {
-      exit(1);
+        return ;
       }
-    }
+    }*/
     ROS_INFO("Connected to the controller");
+	
+		std::string server="server";
+	action_server_follow_.reset(new FJTAS(public_hand_,server,boost::bind(&sim_trajectory_filter::goalCBFollow, this, _1)));
+	
   }
   void sim_trajectory_filter::bringupSubcribers()
   {
@@ -115,7 +117,7 @@ namespace sim_trajectory_filter
 		  msg.points[i].time_from_start= ros::Duration(time*i);
 	  }
   }
-  void sim_trajectory_filter::sendGoal(const pr2_controllers_msgs::JointTrajectoryGoal& msg)
+  void sim_trajectory_filter::sendGoal(const control_msgs::FollowJointTrajectoryGoal& msg)
   {
 	  controller_action_client_->sendGoal(msg);
   }
@@ -127,9 +129,9 @@ namespace sim_trajectory_filter
   }
   void sim_trajectory_filter::sendTrajectory(const trajectory_msgs::JointTrajectory& msg)
   {
-	 pr2_controllers_msgs::JointTrajectoryGoal  jta_msg;
-	 jta_msg.trajectory=msg;
-	 sendGoal(jta_msg); 
+    control_msgs::FollowJointTrajectoryGoal goal;  
+    goal.trajectory = msg;
+	 sendGoal(goal); 
   }
 }
 

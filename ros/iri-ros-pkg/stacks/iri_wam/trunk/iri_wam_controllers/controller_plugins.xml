@@ -1,3 +1,4 @@
+<!--
 <library path="lib/libiri_wam_cart_controller">
   <class name="iri_wam_controllers/IriWamCartController" 
          type="iri_wam_controllers::IriWamCartControllerClass"           
@@ -8,3 +9,4 @@
          type="iri_wam_controllers::IriWamControllerClass"           
          base_class_type="pr2_controller_interface::Controller" />
 </library>
+-->

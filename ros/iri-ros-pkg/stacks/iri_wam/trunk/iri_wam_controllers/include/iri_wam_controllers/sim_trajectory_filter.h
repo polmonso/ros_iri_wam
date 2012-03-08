@@ -17,7 +17,7 @@ namespace sim_trajectory_filter
   // Action typedefs for the new follow joint trajectory action
   typedef actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> FJTAS;
   typedef FJTAS::GoalHandle GoalHandleFollow;	
-  typedef actionlib::ActionClient<pr2_controllers_msgs::JointTrajectoryAction> JointExecutorActionClient;
+  typedef actionlib::ActionClient<control_msgs::FollowJointTrajectoryAction> JointExecutorActionClient;
 	private:
 		ros::NodeHandle public_hand_;
 		ros::NodeHandle private_hand_;
@@ -28,7 +28,8 @@ namespace sim_trajectory_filter
 		std::string controller_name;
 		ros::Duration time_for_path;
 		JointExecutorActionClient* controller_action_client_;
-		
+		JointExecutorActionClient::GoalHandle controller_goal_handle_;
+		//ControllerStatus controller_status_;
 		void durationCB(const iri_wam_controllers::PathDuration::ConstPtr& msg);
 		void goalCBFollow(GoalHandleFollow gh);
 		void cancelCBFollow(GoalHandleFollow gh);
@@ -43,9 +44,10 @@ namespace sim_trajectory_filter
 		void accelToMsg(trajectory_msgs::JointTrajectory& msg,const double& dt);
 		void getPositionMsg(const trajectory_msgs::JointTrajectory& msg,const int& index,const int& indexJoint,double& pos);
 		void getVelocityMsg(const trajectory_msgs::JointTrajectory& msg,const int& index,const int& indexJoint,double& vel);
-		void sendGoal(const pr2_controllers_msgs::JointTrajectoryGoal& msg);
+		void sendGoal(const control_msgs::FollowJointTrajectoryGoal& msg);
 		void copyMsg(const trajectory_msgs::JointTrajectory& a,trajectory_msgs::JointTrajectory& b);
 		void sendTrajectory(const trajectory_msgs::JointTrajectory& msg);
+	//	void controllerTransitionCallback(JointExecutorActionClient::GoalHandle gh) ;
 	public:
 		sim_trajectory_filter();
 		~sim_trajectory_filter(){};
