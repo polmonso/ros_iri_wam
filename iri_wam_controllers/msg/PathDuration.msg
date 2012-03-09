@@ -1,2 +1,0 @@
-Header header
-duration duration_path_expected
