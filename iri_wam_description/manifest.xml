@@ -1,19 +1,11 @@
 <package>
   <description brief="iri_wam_description">
     <p>
-     This package contains URDF Files for WAM robot arm. Arranged in the following directories:
-      <b>xacro</b> This directory contains 3 xacro files.
-                     <b>trasmission.urdf.xacro</b> This file contains all description of transmission
-                     <b>wam.urdf.xacro</b>This file contains all description of the wam
-                     <b>wam_sim.urdf.xacro</b>This file contains all description of the wam for use in the Gazebo
-      <b>mesh</b>  This directory contains all STL files (use mesh tag in urdf)
-      <b>urdf</b>  This directory contains all URDF files building from XACRO file(in xacro directory)
-                      <b>wam.urdf</b> This file comes from wam.urdf.xacro
-                      <b>wam_sim.urdf</b> This file comes from wam_sim.urdf.xacro
+     This package contains URDF & XACRO Files for WAM robot arm. Also contain the launch of vertical stick for gazebo
    </p>
   </description>
   <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
-  <license>BSD</license>
+  <license>LGPL</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_description</url>
 
