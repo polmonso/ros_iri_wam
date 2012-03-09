@@ -1,3 +1,0 @@
-<launch>
-	<node pkg="iri_wam_controllers" type="sim_trajectory_server" name="sim_trajectory_server"/>
-</launch>

@@ -1,6 +1,0 @@
-<launch>
-	<remap from="/server" to="/iri_ros_controller/syn_follow_joint_trajectory"/>
-	<remap from="/cliente" to="/iri_ros_controller/follow_joint_trajectory"/>
-	<node pkg="iri_wam_controllers" type="sim_trajectory_filter" name="sim_trajectory_filter"/>
-	
-</launch>

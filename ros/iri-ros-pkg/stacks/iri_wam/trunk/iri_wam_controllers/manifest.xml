@@ -1,19 +1,13 @@
 <package>
   <description brief="iri_wam_controllers">
 
-     iri_wam_controller
-
+    This's package contain the PID configuration of real WAm to simulated WAM. This's pack use pr2_controllers & pr2_simulator packages
+     
   </description>
   <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
-  <license>BSD</license>
+  <license>LGPL</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_controller</url>
-  <!--<depend package="pr2_controller_interface"/>
-  <depend package="pr2_mechanism_model"/>
-  <depend package="pluginlib"/>
-  <depend package="control_toolbox"/>
-  <depend package="eigen"/>
-  <depend package="kdl"/> -->
   <depend package="roscpp"/>
   <depend package="actionlib"/>
   <depend package="arm_navigation_msgs"/>
@@ -21,9 +15,8 @@
   <depend package="control_msgs"/>
   <depend package="trajectory_msgs"/>
   <depend package="pr2_controllers_msgs"/>
-  <!--<export>
-    <pr2_controller_interface plugin="${prefix}/controller_plugins.xml" />
-  </export>-->
+  <depend package="pr2_controllers"/>
+  <depend package="pr2_simulator"/>
     <export>
     <cpp cflags="-I${prefix}/msg/cpp -I${prefix}/include"/>
   </export>  
