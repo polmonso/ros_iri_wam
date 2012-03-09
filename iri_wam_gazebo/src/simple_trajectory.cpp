@@ -59,7 +59,8 @@ public:
     goal.trajectory.joint_names.push_back("j7_joint");
 
     // We will have two waypoints in this goal trajectory
-    goal.trajectory.points.resize(3);
+  //  goal.trajectory.points.resize(3);
+    goal.trajectory.points.resize(1);
 
     // First trajectory point
     // Positions
@@ -83,7 +84,7 @@ public:
 
     // Second trajectory point
     // Positions
-    ind += 1;
+    /*ind += 1;
     goal.trajectory.points[ind].positions.resize(7);
     goal.trajectory.points[ind].positions[0] = 0.0;
     goal.trajectory.points[ind].positions[1] = 0.0;
@@ -120,7 +121,7 @@ public:
     }
     // To be reached 2 seconds after starting along the trajectory
     goal.trajectory.points[ind].time_from_start = ros::Duration(2.0);
-
+*/
     //we are done; return the goal
     return goal;
   }

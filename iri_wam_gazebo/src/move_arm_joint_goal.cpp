@@ -29,7 +29,7 @@ int main(int argc, char **argv){
   goalA.motion_plan_request.num_planning_attempts = 2;
   goalA.motion_plan_request.allowed_planning_time = ros::Duration(5.0);
   goalA.motion_plan_request.expected_path_dt = ros::Duration(60.0);
-  goalA.motion_plan_request.expected_path_duration = ros::Duration(60.0);
+  //goalA.motion_plan_request.expected_path_duration = ros::Duration(1.0);
 
   
   goalA.motion_plan_request.planner_id = std::string("");
@@ -42,14 +42,14 @@ int main(int argc, char **argv){
     goalA.motion_plan_request.goal_constraints.joint_constraints[i].joint_name = names[i];
     goalA.motion_plan_request.goal_constraints.joint_constraints[i].position =0.00;
 
-    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = strtod(argv[i+1],NULL) -0.1;
-    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = strtod(argv[i+1],NULL) +0.1;
-    if(strtod(argv[i+1],NULL) == 0.0){
+    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = strtod(argv[i+1],NULL) -0.500001;
+    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = strtod(argv[i+1],NULL) +0.500001;
+    if(goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below < 0.0){
      goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below *= -1;
 	 }
-    if(strtod(argv[i+1],NULL) < 0.0){
+    if(goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above < 0.0){
      goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above *= -1;
-          goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below *= -1;
+          //goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below *= -1;
 	 }
 	
   
@@ -57,7 +57,7 @@ int main(int argc, char **argv){
     goalA.motion_plan_request.path_constraints.joint_constraints[i].position =0.00; 
     goalA.motion_plan_request.path_constraints.joint_constraints[i].tolerance_below = 100;
     goalA.motion_plan_request.path_constraints.joint_constraints[i].tolerance_above = 100;
-    // goalA.motion_plan_request.goal_constraints.joint_constraints[i].weight = 1.0;
+  //  goalA.motion_plan_request.goal_constraints.joint_constraints[i].weight = 1.0;
   }
 
   goalA.motion_plan_request.goal_constraints.joint_constraints[0].position = strtod(argv[1],NULL);
