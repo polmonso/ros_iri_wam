@@ -1,7 +1,7 @@
 <package>
   <description brief="iri_wam_controllers">
 
-    This's package contain the PID configuration of real WAm to simulated WAM. This's pack use pr2_controllers & pr2_simulator packages
+    This's package contain the PID configuration of real WAm to simulated WAM. This's pack use pr2_controllers and pr2_simulator packages
      
   </description>
   <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
