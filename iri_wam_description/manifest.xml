@@ -1,7 +1,7 @@
 <package>
   <description brief="iri_wam_description">
     <p>
-     This package contains URDF & XACRO Files for WAM robot arm. Also contain the launch of vertical stick for gazebo
+     This package contains URDF and XACRO Files for WAM robot arm. Also contain the launch of vertical stick for gazebo
    </p>
   </description>
   <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
