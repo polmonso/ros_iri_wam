@@ -28,7 +28,7 @@ int main(int argc, char **argv){
   goalA.motion_plan_request.group_name="iri_wam";
   goalA.motion_plan_request.num_planning_attempts = 2;
   goalA.motion_plan_request.allowed_planning_time = ros::Duration(5.0);
-  goalA.motion_plan_request.expected_path_dt = ros::Duration(60.0);
+  goalA.motion_plan_request.expected_path_dt = ros::Duration(30.0);
   //goalA.motion_plan_request.expected_path_duration = ros::Duration(1.0);
 
   
@@ -42,8 +42,8 @@ int main(int argc, char **argv){
     goalA.motion_plan_request.goal_constraints.joint_constraints[i].joint_name = names[i];
     goalA.motion_plan_request.goal_constraints.joint_constraints[i].position =0.00;
 
-    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = strtod(argv[i+1],NULL) -0.500001;
-    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = strtod(argv[i+1],NULL) +0.500001;
+    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = strtod(argv[i+1],NULL) -0.100001;
+    goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = strtod(argv[i+1],NULL) +0.100001;
     if(goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below < 0.0){
      goalA.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below *= -1;
 	 }
@@ -79,7 +79,7 @@ int main(int argc, char **argv){
   {
     bool finished_within_time = false;
     move_arm.sendGoal(goalA);
-    finished_within_time = move_arm.waitForResult(ros::Duration(300.0));
+    finished_within_time = move_arm.waitForResult(ros::Duration(200.0));
     if (!finished_within_time)
     {
       move_arm.cancelGoal();
