@@ -40,12 +40,7 @@ public:
     traj_client_->sendGoal(goal);
   }
 
-  //! Generates a simple trajectory with two waypoints, used as an example
-  /*! Note that this trajectory contains two waypoints, joined together
-      as a single trajectory. Alternatively, each of these waypoints could
-      be in its own trajectory - a trajectory can have one or more waypoints
-      depending on the desired application.
-  */
+
   pr2_controllers_msgs::JointTrajectoryGoal armExtensionTrajectory()
   {
     //our goal variable
