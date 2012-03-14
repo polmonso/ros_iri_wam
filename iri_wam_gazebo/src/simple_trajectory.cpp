@@ -10,13 +10,15 @@ private:
   // Action client for the joint trajectory action 
   // used to trigger the arm movement action
   TrajClient* traj_client_;
+  ros::Duration time_move;
+  std::vector<double> pos;
 
 public:
   //! Initialize the action client and wait for action server to come up
   RobotArm() 
   {
     // tell the action client that we want to spin a thread by default
-    traj_client_ = new TrajClient("iri_wam_pr2_controller/joint_trajectory_action", true);
+    traj_client_ = new TrajClient("iri_ros_controller/joint_trajectory_action", true);
 
     // wait for action server to come up
     while(!traj_client_->waitForServer(ros::Duration(5.0))){
@@ -59,69 +61,22 @@ public:
     goal.trajectory.joint_names.push_back("j7_joint");
 
     // We will have two waypoints in this goal trajectory
-  //  goal.trajectory.points.resize(3);
     goal.trajectory.points.resize(1);
 
-    // First trajectory point
     // Positions
-    int ind = 0;
-    goal.trajectory.points[ind].positions.resize(7);
-    goal.trajectory.points[ind].positions[0] = 1.0;
-    goal.trajectory.points[ind].positions[1] = 0.0;
-    goal.trajectory.points[ind].positions[2] = 0.0;
-    goal.trajectory.points[ind].positions[3] = 2.0;
-    goal.trajectory.points[ind].positions[4] = 0.0;
-    goal.trajectory.points[ind].positions[5] = 0.0;
-    goal.trajectory.points[ind].positions[6] = 0.0;
-    // Velocities
-    goal.trajectory.points[ind].velocities.resize(7);
-    for (size_t j = 0; j < 7; ++j)
+    goal.trajectory.points[0].positions.resize(7);
+    goal.trajectory.points[0].velocities.resize(7);
+    goal.trajectory.points[0].accelerations.resize(7);
+    for(int i=0; i < 7; ++i)
     {
-      goal.trajectory.points[ind].velocities[j] = 0.0;
-    }
+	  goal.trajectory.points[0].positions[i] = pos[i];	
+	  goal.trajectory.points[0].velocities[i] = 0.0;
+      goal.trajectory.points[0].accelerations[i] = 0.0;
+	}
+	
     // To be reached 1 second after starting along the trajectory
-    goal.trajectory.points[ind].time_from_start = ros::Duration(1.0);
+    goal.trajectory.points[0].time_from_start = time_move;
 
-    // Second trajectory point
-    // Positions
-    /*ind += 1;
-    goal.trajectory.points[ind].positions.resize(7);
-    goal.trajectory.points[ind].positions[0] = 0.0;
-    goal.trajectory.points[ind].positions[1] = 0.0;
-    goal.trajectory.points[ind].positions[2] = 0.0;
-    goal.trajectory.points[ind].positions[3] = 0.0;
-    goal.trajectory.points[ind].positions[4] = 0.0;
-    goal.trajectory.points[ind].positions[5] = 0.0;
-    goal.trajectory.points[ind].positions[6] = 0.0;
-    // Velocities
-    goal.trajectory.points[ind].velocities.resize(7);
-    for (size_t j = 0; j < 7; ++j)
-    {
-      goal.trajectory.points[ind].velocities[j] = 0.0;
-    }
-    // To be reached 2 seconds after starting along the trajectory
-    goal.trajectory.points[ind].time_from_start = ros::Duration(2.0);
-
-    // Third trajectory point
-    // Positions
-    ind += 1;
-    goal.trajectory.points[ind].positions.resize(7);
-    goal.trajectory.points[ind].positions[0] = -1.0;
-    goal.trajectory.points[ind].positions[1] = 0.0;
-    goal.trajectory.points[ind].positions[2] = 0.0;
-    goal.trajectory.points[ind].positions[3] = 2.0;
-    goal.trajectory.points[ind].positions[4] = 0.0;
-    goal.trajectory.points[ind].positions[5] = 0.0;
-    goal.trajectory.points[ind].positions[6] = 0.0;
-    // Velocities
-    goal.trajectory.points[ind].velocities.resize(7);
-    for (size_t j = 0; j < 7; ++j)
-    {
-      goal.trajectory.points[ind].velocities[j] = 0.0;
-    }
-    // To be reached 2 seconds after starting along the trajectory
-    goal.trajectory.points[ind].time_from_start = ros::Duration(2.0);
-*/
     //we are done; return the goal
     return goal;
   }
@@ -131,6 +86,19 @@ public:
   {
     return traj_client_->getState();
   }
+  void getTrajectory(int argc, char** argv)
+  {
+	 if(argc < 8 || argc > 9) 
+	 {
+	   ROS_FATAL("Error: The numbers of parameters out of bound"); 
+	   exit(1);
+	 }
+	 pos.resize(7);
+	 for(int i =1; i <=7; ++i) pos[i-1]=strtod(argv[i],NULL);
+
+	 time_move= (argc == 9)?ros::Duration(strtod(argv[8],NULL)):ros::Duration(3.0);
+	 
+  }
  
 };
 
@@ -138,9 +106,9 @@ int main(int argc, char** argv)
 {
   // Init the ROS node
   ros::init(argc, argv, "robot_driver");
-
   RobotArm arm;
   // Start the trajectory
+  arm.getTrajectory(argc,argv);
   arm.startTrajectory(arm.armExtensionTrajectory());
   // Wait for trajectory completion
   while(!arm.getState().isDone() && ros::ok())
