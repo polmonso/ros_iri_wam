@@ -1,0 +1,7 @@
+<launch>
+
+
+    <node name="iri_wam_move_iri_wam" pkg="iri_wam_move_arm" type="iri_wam_move_arm" output="screen"  args="" />
+
+
+</launch>
