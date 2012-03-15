@@ -56,7 +56,7 @@ class MoveArm
 	{
 	 if(argc < 8 || argc > 9) 
 	 {
-	   ROS_FATAL("Error: The numbers of parameters out of bound"); 
+	   ROS_FATAL("Error: The numbers of parameters out of bound "); 
 	   exit(1);
 	 }
 	 pos.resize(7);
