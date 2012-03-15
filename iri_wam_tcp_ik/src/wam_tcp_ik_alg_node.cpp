@@ -4,7 +4,7 @@ WamTcpIkAlgNode::WamTcpIkAlgNode(void) :
   algorithm_base::IriBaseAlgorithm<WamTcpIkAlgorithm>()
 {
   //string for port names
-  std::string port_name;
+    frame_tcp_str_ = "/bhand_tcp";
   
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -18,9 +18,6 @@ WamTcpIkAlgNode::WamTcpIkAlgNode(void) :
   
   // [init clients]
   get_ik_client_ = this->public_node_handle_.serviceClient<iri_wam_common_msgs::wamInverseKinematics>("wamik");
-  
-  iri_wam_common_msgs::wamInverseKinematics tato;
-  std::cout << get_ik_client_.exists() << std::endl;
   
   // [init action servers]
   
@@ -76,14 +73,16 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
   try{
     ros::Time now = ros::Time::now();
     ros::Duration interval = ros::Duration(1.0);
-    listener_.waitForTransform("/spad_tcp", "/wam_tcp", now, interval);
-    listener_.lookupTransform("/spad_tcp", "/wam_tcp", now, tcp_H_wam7_);
+    if(!listener_.waitForTransform(frame_tcp_str_, "/wam_tcp", now, interval)){
+        ROS_ERROR("Timeout while waiting for transform between frames %s and /wam_tcp/ ", frame_tcp_str_.c_str()); 
+    }
+    listener_.lookupTransform(frame_tcp_str_, "/wam_tcp", now, tcp_H_wam7_);
   }catch (tf::TransformException ex){
     ROS_ERROR("lookup transform error: %s", ex.what());
     return false;
   }
 
-  ROS_INFO("[WamTcpIkAlgNode] spad_tcp_H_7 Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
+  ROS_INFO("[WamTcpIkAlgNode] %s_H_7 Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",frame_tcp_str_.c_str(),
             tcp_H_wam7_.getOrigin().x(),
             tcp_H_wam7_.getOrigin().y(),
             tcp_H_wam7_.getOrigin().z(),
@@ -130,7 +129,7 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
         base_pose_msg_.response.joints.position[6] );
     result = true;
   }else{
-    ROS_ERROR("Failed to call service pose_move");
+    ROS_ERROR("Failed to call service %s", get_ik_client_.getService().c_str());
     result = false;
   }
   
@@ -161,6 +160,10 @@ void WamTcpIkAlgNode::node_config_update(Config &config, uint32_t level)
 {
   this->alg_.lock();
 
+  ROS_INFO("tcp frame change %s",config.frame_tcp.c_str());
+  frame_tcp_str_ = config.frame_tcp;
+  if(!listener_.frameExists(config.frame_tcp))
+      ROS_WARN("Frame %s does not exist, IK won't work until it is published",config.frame_tcp.c_str()); 
   this->alg_.unlock();
 }
 
