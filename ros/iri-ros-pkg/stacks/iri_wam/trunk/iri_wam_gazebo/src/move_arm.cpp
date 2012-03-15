@@ -105,15 +105,15 @@ class MoveArm
 	 {
 	  goal.motion_plan_request.path_constraints.joint_constraints[i].joint_name = names[i];
       goal.motion_plan_request.path_constraints.joint_constraints[i].position =0.00; 
-      goal.motion_plan_request.path_constraints.joint_constraints[i].tolerance_below = 1.10001;
-      goal.motion_plan_request.path_constraints.joint_constraints[i].tolerance_above = 1.10001;
+      goal.motion_plan_request.path_constraints.joint_constraints[i].tolerance_below = 10.10001;
+      goal.motion_plan_request.path_constraints.joint_constraints[i].tolerance_above = 10.10001;
      }
 	}	
 };
 int main(int argc, char** argv)
 {
   // Init the ROS node
-  ros::init(argc, argv, "moving_arm");
+  ros::init(argc, argv, "move_arm_node");
   MoveArm arm;
   arm_navigation_msgs::MoveArmGoal move;
   // Start the trajectory  
@@ -129,9 +129,9 @@ int main(int argc, char** argv)
     usleep(50000);
   }
       
-      bool success = (arm.getState() == actionlib::SimpleClientGoalState::SUCCEEDED);
-      if(success)
-        ROS_INFO("Action finished: %s",arm.getState().toString().c_str());
-      else
-        ROS_INFO("Action failed: %s",arm.getState().toString().c_str());
+ bool success = (arm.getState() == actionlib::SimpleClientGoalState::SUCCEEDED);
+  if(success)
+   ROS_INFO("Action finished: %s",arm.getState().toString().c_str());
+  else
+   ROS_INFO("Action failed: %s",arm.getState().toString().c_str());
 }
