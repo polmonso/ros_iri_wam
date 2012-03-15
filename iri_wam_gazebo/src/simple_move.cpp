@@ -100,7 +100,7 @@ public:
 int main(int argc, char** argv)
 {
   // Init the ROS node
-  ros::init(argc, argv, "robot_driver");
+  ros::init(argc, argv, "simple_move_node");
   RobotArm arm;
   // Start the trajectory
   arm.getTrajectory(argc,argv);
@@ -110,4 +110,9 @@ int main(int argc, char** argv)
   {
     usleep(50000);
   }
+   bool success = (arm.getState() == actionlib::SimpleClientGoalState::SUCCEEDED);
+  if(success)
+   ROS_INFO("Action finished: %s",arm.getState().toString().c_str());
+  else
+   ROS_INFO("Action failed: %s",arm.getState().toString().c_str());
 }
