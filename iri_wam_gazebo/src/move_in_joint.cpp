@@ -13,7 +13,7 @@ class MoveArm
 {
   private:
 	// Action client for the joint trajectory action 
-    // used to trigger the arm movement action
+    // used to trigger the   arm movement action
 	TrajClient* traj_client_;
 	ros::Duration time_move;
 	std::vector<double> pos;
