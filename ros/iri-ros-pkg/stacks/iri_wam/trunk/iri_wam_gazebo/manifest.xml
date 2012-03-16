@@ -1,6 +1,6 @@
 <package>
   <description brief="iri_wam_gazebo">
-	The iri_wam_gazebo contain the configuration for use the controller for Gazebo. This controllers made by ROS
+     The iri_wam_gazebo contain the configuration for use the controller for Gazebo.
   </description>
   <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
   <license>LGPL</license>
@@ -9,6 +9,7 @@
   <depend package="gazebo"/>
   <!--<depend package="gazebo_plugins"/>-->
   <depend package="roscpp"/>
+  <depend package="iri_wam_ik" />
   <depend package="arm_navigation_msgs" />
   <depend package="geometry_msgs" />
   <depend package="kinematics_msgs" />
