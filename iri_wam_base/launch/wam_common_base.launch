@@ -3,12 +3,11 @@
     <include file="$(find iri_wam_description)/launch/iri_wam_description.launch" />
 
     <!-- Controller Manager -->
-    <remap from="joint_states" to="wam_wrapper/joint_states"/>
     <include file="$(find pr2_controller_manager)/controller_manager.launch" />
 
     <!-- Publish Inverse Kinematics -->
     <node name="wam_ik" pkg="iri_wam_ik" type="wam_ikac">
-      <remap from="wam_ik/joint_states" to="wam_wrapper/joint_states"/>
-      <remap from="wam_ik/joint_move"   to="wam_wrapper/joints_move"/>
+      <remap from="wam_ik/joint_states" to="joint_states"/>
+      <remap from="wam_ik/joint_move"   to="joints_move"/>
     </node>
 </launch>
