@@ -1,0 +1,13 @@
+<launch> 
+    <!-- Load URDF WAM model -->
+    <include file="$(find iri_wam_description)/launch/iri_wam_description.launch" />
+
+    <!-- Controller Manager -->
+    <include file="$(find pr2_controller_manager)/controller_manager.launch" />
+
+    <!-- Publish Inverse Kinematics -->
+    <node name="wam_ik" pkg="iri_wam_ik" type="wam_ikac">
+      <remap from="wam_ik/joint_states" to="joint_states"/>
+      <remap from="wam_ik/joint_move"   to="joints_move"/>
+    </node>
+</launch>
