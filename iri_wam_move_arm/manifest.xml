@@ -1,6 +1,7 @@
 <package>
   <description brief="iri_wam_move_arm">
-	This is a modified version of move_arm package, which allows to set timestamps to a execute path.
+	This is a modified version of move_arm package, which allows to set timestamps to a execute path. 
+	Also, contains the source code bridge between the user and  navegation stack.
 
 	  </description>
   <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
@@ -24,6 +25,7 @@
   <depend package="kinematics_msgs"/>
   <depend package="arm_navigation_msgs"/>
   <depend package="interactive_markers"/>
+  <depend package="pr2_controllers_msgs"/>
 
   <export>
     <cpp cflags="-I${prefix}/msg/cpp -I${prefix}/include"/>

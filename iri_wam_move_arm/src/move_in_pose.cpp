@@ -8,7 +8,6 @@
 #include <stdlib.h>
 
 typedef actionlib::SimpleActionClient<arm_navigation_msgs::MoveArmAction> TrajClient;
-
 class MoveArm
 {
   private:
@@ -16,7 +15,8 @@ class MoveArm
     // used to trigger the arm movement action
 	TrajClient* traj_client_;
 	ros::Duration time_move;
-	std::vector<double> pos;
+	std::vector<double> posicion;
+	std::vector<double> rotacion;
 	std::vector<std::string> names;
   public:
    //! Initialize the action client and wait for action server to come up
@@ -59,9 +59,12 @@ class MoveArm
 	   ROS_FATAL("Error: The numbers of parameters out of bound "); 
 	   exit(1);
 	 }
-	 pos.resize(7);
-	 for(int i =1; i <=7; ++i) pos[i-1]=strtod(argv[i],NULL);
-
+	 posicion.resize(3);
+	 rotacion.resize(4);
+	 for(int i =1; i <=7; ++i) 
+	 {
+	  (i < 4)? posicion[i-1]=strtod(argv[i],NULL):rotacion[i-4]=strtod(argv[i],NULL);
+     }
 	 time_move= (argc == 9)?ros::Duration(strtod(argv[8],NULL)):ros::Duration(3.0);
 	}  
     //! Returns the current state of the action
@@ -80,35 +83,60 @@ class MoveArm
 		goal.motion_plan_request.expected_path_dt = time_move;
 	}
 	//!Defined Goal Constraint Parameters
-	void setPlannerRequestGoalConstraint(arm_navigation_msgs::MoveArmGoal& goal)
+	void setPlannerRequestPose(arm_navigation_msgs::MoveArmGoal& goal)
 	{ 
-	  goal.motion_plan_request.goal_constraints.joint_constraints.resize(names.size());
-	  for (unsigned int i = 0 ; i < names.size(); ++i)
-	  {
-       goal.motion_plan_request.goal_constraints.joint_constraints[i].joint_name = names[i];
-       goal.motion_plan_request.goal_constraints.joint_constraints[i].position = pos[i];
-       goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = pos[i] -0.100001;
-	   goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = pos[i] +0.100001;
-	   if(goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below < 0.0){
-		goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below *= -1;
-	   }
-	   if(goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above < 0.0){
-		goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above *= -1;
-	   }
-	  }
+		ros::NodeHandle nh("/");
+	    arm_navigation_msgs::SimplePoseConstraint desired_pose;
+		if(!nh.hasParam("/move_arm/tip_name"))
+		{
+			ROS_FATAL("tip_name undefined");
+			exit(1);
+		} 	
+		std::string tip_name="";	 
+		nh.param("/move_arm/tip_name", desired_pose.link_name, tip_name);
+		if(!nh.hasParam("/move_arm/root_name"))
+		{
+			ROS_FATAL("root_name undefined");
+			exit(1);
+		} 
+		std::string root_name="";
+		nh.param("/move_arm/root_name", desired_pose.header.frame_id,root_name);
+
+		
+		desired_pose.pose.position.x = posicion[0];
+		desired_pose.pose.position.y = posicion[1];
+		desired_pose.pose.position.z = posicion[2];
+
+		
+		desired_pose.pose.orientation.x = rotacion[0];
+		desired_pose.pose.orientation.y = rotacion[1];
+		desired_pose.pose.orientation.z = rotacion[2];
+		desired_pose.pose.orientation.w = rotacion[3];
+		
+		double tolerance_x;
+		double tolerance_y;
+		double tolerance_z;
+		double tolerance_roll;
+		double tolerance_pitch;
+		double tolerance_yaw;
+		
+		nh.param("/move_arm/position/tolerance_x", tolerance_x, 0.02);
+		nh.param("/move_arm/position/tolerance_y", tolerance_y, 0.02);
+		nh.param("/move_arm/position/tolerance_z", tolerance_z, 0.02);
+		nh.param("/move_arm/rotation/tolerance_roll", tolerance_roll, 0.04);
+		nh.param("/move_arm/rotation/tolerance_pitch", tolerance_pitch,0.04);
+		nh.param("/move_arm/rotation/tolerance_yaw", tolerance_yaw, 0.04);
+				
+		desired_pose.absolute_position_tolerance.x = tolerance_x;
+		desired_pose.absolute_position_tolerance.y = tolerance_y;
+		desired_pose.absolute_position_tolerance.z = tolerance_z;
+		
+		desired_pose.absolute_roll_tolerance = tolerance_roll;
+		desired_pose.absolute_pitch_tolerance = tolerance_pitch;
+		desired_pose.absolute_yaw_tolerance = tolerance_yaw;
+		
+		arm_navigation_msgs::addGoalConstraintToMoveArmGoal(desired_pose,goal);
 	}
-	//!Defined Path Constraint Parameters
-	void setPlannerRequestPathConstraint(arm_navigation_msgs::MoveArmGoal& goal)
-	{
-	 goal.motion_plan_request.path_constraints.joint_constraints.resize(names.size());	
-     for(unsigned int i = 0 ; i < names.size(); ++i)
-	 {
-	  goal.motion_plan_request.path_constraints.joint_constraints[i].joint_name = names[i];
-      goal.motion_plan_request.path_constraints.joint_constraints[i].position =0.00; 
-      goal.motion_plan_request.path_constraints.joint_constraints[i].tolerance_below = 10.10001;
-      goal.motion_plan_request.path_constraints.joint_constraints[i].tolerance_above = 10.10001;
-     }
-	}	
 };
 int main(int argc, char** argv)
 {
@@ -120,8 +148,7 @@ int main(int argc, char** argv)
   arm.getTrajectory(argc,argv);
   arm.setNamesJoint();
   arm.setPlannerRequest(move);
-  arm.setPlannerRequestGoalConstraint(move);
-  arm.setPlannerRequestPathConstraint(move); 
+  arm.setPlannerRequestPose(move);
   arm.startTrajectory(move);
   // Wait for trajectory completion
   while(!arm.getState().isDone() && ros::ok())
