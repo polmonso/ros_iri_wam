@@ -3,8 +3,8 @@
 WamTcpIkAlgNode::WamTcpIkAlgNode(void) :
   algorithm_base::IriBaseAlgorithm<WamTcpIkAlgorithm>()
 {
-  //string for port names
-    frame_tcp_str_ = "/bhand_tcp";
+  // get the frame from the parameter server
+  public_node_handle_.param<std::string>("frame_tcp", frame_tcp_str_, "iri_wam_tcp_ik");
   
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
