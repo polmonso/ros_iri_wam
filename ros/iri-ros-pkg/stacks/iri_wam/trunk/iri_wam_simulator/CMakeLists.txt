@@ -15,14 +15,6 @@ rosbuild_init()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-rosbuild_add_boost_directories()
-#rosbuild_add_library(wam_gazebo src/wam_gazebo.cpp)
-#rosbuild_link_boost(wam_gazebo thread)
-
-rosbuild_add_executable(move_in_joint src/move_in_joint.cpp)
-rosbuild_add_executable(simple_move src/simple_move.cpp)
-rosbuild_add_executable(vertical_stick src/vertical_stick.cpp)
-rosbuild_add_executable(box src/box.cpp)
 
 #uncomment if you have defined messages
 #rosbuild_genmsg()

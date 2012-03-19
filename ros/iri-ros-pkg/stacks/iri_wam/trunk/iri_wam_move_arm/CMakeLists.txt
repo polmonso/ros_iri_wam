@@ -10,12 +10,14 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 #rosbuild_genmsg()
 
-#rosbuild_add_executable(move_arm_monitor src/move_arm_setup.cpp src/move_arm_monitor.cpp)
-#rosbuild_link_boost(move_arm_monitor thread)
 
+### MOVE ARM INTERFACE ####
+rosbuild_add_executable(move_in_joints src/move_in_joints.cpp)
+rosbuild_add_executable(move_in_pose src/move_in_pose.cpp)
+rosbuild_add_executable(simple_move_joints src/simple_move_joints.cpp)
+rosbuild_add_executable(simple_move_pose src/simple_move_pose.cpp)
+
+
+### MOVE ARM SOURCE ####
 rosbuild_add_executable(iri_wam_move_arm src/move_arm_simple_action.cpp)
 rosbuild_link_boost(iri_wam_move_arm thread)
-
-#rosbuild_add_executable(planning_components_visualizer src/planning_components_visualizer.cpp)
-#rosbuild_link_boost(planning_components_visualizer thread)
-
