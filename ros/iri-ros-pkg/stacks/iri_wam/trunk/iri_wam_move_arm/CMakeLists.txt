@@ -15,7 +15,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 rosbuild_add_executable(move_in_joints src/move_in_joints.cpp)
 rosbuild_add_executable(move_in_pose src/move_in_pose.cpp)
 rosbuild_add_executable(simple_move_joints src/simple_move_joints.cpp)
-rosbuild_add_executable(simple_move_pose src/simple_move_pose.cpp)
+
 
 
 ### MOVE ARM SOURCE ####
