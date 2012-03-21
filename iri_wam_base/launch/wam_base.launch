@@ -3,8 +3,6 @@
     <arg name="IP" />
 
     <!-- WAM low level driver -->
-    <remap from="wam_wrapper/joint_states" to="joint_states" />
-    <remap from="wam_wrapper/joints_moves" to="joints_move" />
     <include file="$(find iri_wam_wrapper)/launch/iri_wam_wrapper.launch">
        <arg name="IP" value="$(arg IP)"/>
     </include>
