@@ -38,7 +38,7 @@ WamIKJ::WamIKJ() {
   this->wamik_server = this->nh_.advertiseService(port_name, &WamIKJ::wamikCallback, this);
   
   // [init clients]
-  port_name = ros::names::append(ros::this_node::getName(), "joint_move"); 
+  port_name = ros::names::append(ros::this_node::getName(), "joints_move"); 
   joint_move_client = this->nh_.serviceClient<iri_wam_common_msgs::joints_move>(port_name);
   
 
