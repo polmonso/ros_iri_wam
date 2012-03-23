@@ -338,7 +338,6 @@ private:
     arm_navigation_msgs::FilterJointTrajectoryWithConstraints::Request  req;
     arm_navigation_msgs::FilterJointTrajectoryWithConstraints::Response res;
     fillTrajectoryMsg(trajectory_in, req.trajectory);
-
     if(trajectory_filter_allowed_time_ == 0.0)
     {
       trajectory_out = req.trajectory;
@@ -356,6 +355,7 @@ private:
     ros::Time smoothing_time = ros::Time::now();
     if(filter_trajectory_client_.call(req,res))
     {
+		
       move_arm_stats_.trajectory_duration = (res.trajectory.points.back().time_from_start-res.trajectory.points.front().time_from_start).toSec();
       move_arm_stats_.smoothing_time = (ros::Time::now()-smoothing_time).toSec();
       trajectory_out = res.trajectory;
@@ -962,7 +962,9 @@ private:
 	    
 	    current_trajectory_ = res.trajectory.joint_trajectory;
 	    visualizePlan(current_trajectory_);
-	    //          printTrajectory(current_trajectory_);
+	          //  printTrajectory(current_trajectory_);
+		ROS_ERROR_STREAM("TOTAL PTOS DESDE OMPL"<<current_trajectory_.points.size());
+		getchar();
 	    state_ = START_CONTROL;
 	    ROS_DEBUG("Done planning. Transitioning to control");
 	  }
@@ -979,7 +981,7 @@ private:
             action_server_->setAborted(move_arm_action_result_);
             return true;
           }
-        }
+        }   
         else
         {
           ROS_ERROR("create plan failed");
@@ -1034,6 +1036,8 @@ private:
             ROS_DEBUG("Trajectory validity check was successful");
           }
           current_trajectory_ = filtered_trajectory;
+          		ROS_ERROR_STREAM("TOTAL PTOS DESDE Filter"<<current_trajectory_.points.size());
+		getchar();
         } else {
           resetStateMachine();
           ROS_INFO_STREAM("Setting aborted because trajectory filter call failed");
@@ -1042,6 +1046,8 @@ private:
         }
         ROS_DEBUG("Sending trajectory");
         move_arm_stats_.time_to_execution = (ros::Time::now() - ros::Time(move_arm_stats_.time_to_execution)).toSec();
+        		ROS_ERROR_STREAM("TOTAL PTOS Hacia gazebo"<<current_trajectory_.points.size());
+		getchar();
         if(sendTrajectory(current_trajectory_))
         {
           state_ = MONITOR;
@@ -1295,8 +1301,9 @@ private:
       std::stringstream ss;
       for (unsigned int j = 0 ; j < trajectory.points[i].positions.size() ; ++j)
         ss << trajectory.points[i].positions[j] << " ";
-      ss << trajectory.points[i].time_from_start.toSec();
+      ss << "@"<<trajectory.points[i].time_from_start.toSec();
       ROS_DEBUG("%s", ss.str().c_str());
+      ROS_ERROR("%s", ss.str().c_str());
     }
   }	 
   void visualizeJointGoal(arm_navigation_msgs::GetMotionPlan::Request &req)
