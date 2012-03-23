@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 typedef actionlib::SimpleActionClient<arm_navigation_msgs::MoveArmAction> TrajClient;
-class MoveArm
+class MoveInPose
 {
   private:
 	// Action client for the joint trajectory action 
@@ -142,7 +142,7 @@ int main(int argc, char** argv)
 {
   // Init the ROS node
   ros::init(argc, argv, "move_arm_node");
-  MoveArm arm;
+  MoveInPose arm;
   arm_navigation_msgs::MoveArmGoal move;
   // Start the trajectory  
   arm.getTrajectory(argc,argv);
