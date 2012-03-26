@@ -20,10 +20,10 @@ class MoveInJoints
 	std::vector<std::string> names;
   public:
    //! Initialize the action client and wait for action server to come up
-	MoveArm() 
+	MoveInJoints() 
 	{
 		// tell the action client that we want to spin a thread by default
-		traj_client_ = new TrajClient("move_iri_wam", true);
+		traj_client_ = new TrajClient("/move_iri_wam", true);
 		
 		// wait for action server to come up
 		while(!traj_client_->waitForServer(ros::Duration(5.0))){
@@ -31,7 +31,7 @@ class MoveInJoints
 		}
 	}
 	//! Clean up the action client
-	~MoveArm()
+	~MoveInJoints()
 	{
      delete traj_client_;
 	}
@@ -126,6 +126,7 @@ int main(int argc, char** argv)
   // Wait for trajectory completion
   while(!arm.getState().isDone() && ros::ok())
   {
+	  ROS_DEBUG("WAIT To END TRAJECTORY");
     usleep(50000);
   }
       
