@@ -4,7 +4,7 @@
 
 typedef actionlib::SimpleActionClient< pr2_controllers_msgs::JointTrajectoryAction > TrajClient;
 
-class RobotArm
+class SimpleMoveJoints
 {
 private:
   // Action client for the joint trajectory action 
@@ -15,7 +15,7 @@ private:
 
 public:
   //! Initialize the action client and wait for action server to come up
-  RobotArm() 
+  SimpleMoveJoints() 
   {
     // tell the action client that we want to spin a thread by default
     traj_client_ = new TrajClient("iri_ros_controller/joint_trajectory_action", true);
@@ -27,7 +27,7 @@ public:
   }
 
   //! Clean up the action client
-  ~RobotArm()
+  ~SimpleMoveJoints()
   {
     delete traj_client_;
   }
@@ -101,7 +101,7 @@ int main(int argc, char** argv)
 {
   // Init the ROS node
   ros::init(argc, argv, "simple_move_node");
-  RobotArm arm;
+  SimpleMoveJoints arm;
   // Start the trajectory
   arm.getTrajectory(argc,argv);
   arm.startTrajectory(arm.armExtensionTrajectory());

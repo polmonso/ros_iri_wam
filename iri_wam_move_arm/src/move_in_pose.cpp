@@ -20,7 +20,7 @@ class MoveInPose
 	std::vector<std::string> names;
   public:
    //! Initialize the action client and wait for action server to come up
-	MoveArm() 
+	MoveInPose() 
 	{
 		// tell the action client that we want to spin a thread by default
 		traj_client_ = new TrajClient("move_iri_wam", true);
@@ -31,7 +31,7 @@ class MoveInPose
 		}
 	}
 	//! Clean up the action client
-	~MoveArm()
+	~MoveInPose()
 	{
      delete traj_client_;
 	}
