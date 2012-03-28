@@ -907,10 +907,10 @@ private:
         move_arm_action_feedback_.time_to_completion = ros::Duration(req.motion_plan_request.allowed_planning_time);
         action_server_->publishFeedback(move_arm_action_feedback_);
 
-        if(!doPrePlanningChecks(req,res))
-          return true;
+       // if(!doPrePlanningChecks(req,res))
+         // return true;
 
-        visualizeJointGoal(req);
+        //visualizeJointGoal(req);
         resetToStartState(planning_scene_state_);
         if(collision_models_->isKinematicStateValid(*planning_scene_state_,
                                                     group_joint_names_,
