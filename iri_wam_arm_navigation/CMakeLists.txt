@@ -18,6 +18,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_add_executable(obstacle src/obstacle.cpp)
 rosbuild_add_executable(vertical_stick src/vertical_stick.cpp)
 rosbuild_add_executable(box src/box.cpp)
+rosbuild_add_executable(ompl_testing src/ompl_testing.cpp)
 
 #uncomment if you have defined messages
 #rosbuild_genmsg()
