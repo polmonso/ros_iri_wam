@@ -10,6 +10,7 @@
       <param name="wam_ip"       value="$(arg IP)" />
       <param name="port"         value="$(arg port)" />
       <param name="refresh_rate" value="$(arg refresh_rate)" />
+      <remap from="wam_wrapper/joint_states" to="joint_states"/>
    </node>
 
 </launch>
