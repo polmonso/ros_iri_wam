@@ -11,9 +11,11 @@
   <depend package="planning_environment"/>
   <depend package="arm_kinematics_constraint_aware"/>
   <depend package="ompl_ros_interface"/>
+  <depend package="ompl"/>
   <depend package="trajectory_filter_server"/>
   <depend package="constraint_aware_spline_smoother"/>
   <depend package="iri_wam_move_arm"/>
+  <depend package="geometry_msgs"/>
 
 </package>
 
