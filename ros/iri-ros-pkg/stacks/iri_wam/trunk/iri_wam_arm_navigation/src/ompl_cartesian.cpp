@@ -6,6 +6,7 @@
 #include <ompl/base/spaces/SE3StateSpace.h>
 #include <ompl/base/spaces/SO3StateSpace.h>
 #include <ompl/geometric/planners/rrt/RRTConnect.h>
+#include <ompl/geometric/planners/sbl/SBL.h>
 #include <ompl/geometric/SimpleSetup.h>
 #include <ompl/config.h>
 
@@ -24,38 +25,14 @@ class OMPL_3D
 	pose_recieve_(false)
 	{
 		initOmplStructures();
-		initCallbacks();
-
-            //ompl_base::ScopedState<> start(space);
-    //start.random();
-            //ompl_base::ScopedState<> goal(space);
-    //goal.random();
-        //// set the start and goal states
-    //simple_setup->setStartAndGoalStates(start, goal);
-
-    //// this call is optional, but we put it in to get more output information
-    //simple_setup->setup();
-    //simple_setup->print();
-
-    //// attempt to solve the problem within one second of planning time
-    //bool solved = simple_setup->solve(1.0);
-
-    //if (solved)
-    //{
-        //std::cout << "Found solution:" << std::endl;
-        //// print the path to screen
-        //simple_setup->simplifySolution();
-        //simple_setup->getSolutionPath().print(std::cout);
-    //}
-    //else
-        //std::cout << "No solution found" << std::endl;
-        
+ 	    initCallbacks();      
 	}
 	~OMPL_3D()
 	{
 		delete bounds_;
 		delete simple_setup_;
 	}
+// hay 2 subespacios un RealVectorSpace representando traslacion y un SO3 representacion rotacion		
 	void initOmplStructures()
 	{
 		ompl_base::StateSpacePtr sp(new ompl_base::SE3StateSpace());
@@ -65,35 +42,29 @@ class OMPL_3D
 		vb.setHigh(2);
 		bounds_=&vb;
 		space_->as<ompl_base::SE3StateSpace>()->setBounds(vb);
-// hay 2 subespacios un RealVectorSpace representando traslacion y un SO3 representacion rotacion		
-//		(space_->as<ompl_base::SE3StateSpace>())->getSubSpaceCount(); 0 ->t 1 -> qâ
-
-	//	(space_->as<ompl_base::SE3StateSpace>())->getSubSpace(1).setAxisAngle(0.0,0.0,0.0,1.0);
-
-       std::vector< ompl_base::StateSpacePtr > v=(space_->as<ompl_base::SE3StateSpace>())->getSubSpaces();
-       //->setAxisAngle(0.0,0.0,0.0,1.0);
-      ompl_base::StateSpacePtr pt= v[1];
-      ompl_base::SO3StateSpace::StateType str;
-      std::cout<<pt->getName()<<std::endl;
-      pt::StateType.w=0.0;
+		ompl::base::ScopedState<ompl::base::SE3StateSpace> state(space_);
+		current_pose_ompl_= new ompl::base::ScopedState<ompl::base::SE3StateSpace>(space_);
+		goal_pose_ompl_= new ompl::base::ScopedState<ompl::base::SE3StateSpace>(space_);
 		ompl_geometric::SimpleSetup ss(space_);
-		simple_setup_=&ss;
+		simple_setup_=new ompl_geometric::SimpleSetup (space_);
 	}
 	void initCallbacks()
-	 {
+	{
 		simple_setup_->setStateValidityChecker(boost::bind(&isStateValid, _1));
         pose_listener_ = root_handle_.subscribe("pose_state", 1, &OMPL_3D::poseCB, this);
-	 }
-	 
-
-	
-	
+	}	
+	void initPlanners()
+	{
+	  ompl_base::PlannerPtr planner(new ompl_geometric::SBL(simple_setup_->getSpaceInformation()));
+  	  simple_setup_->setPlanner(planner);		
+	}
 	private:
 	
-
 	ompl_base::StateSpacePtr space_;
 	ompl_base::RealVectorBounds *bounds_;
 	ompl_geometric::SimpleSetup *simple_setup_;
+	ompl::base::ScopedState<ompl::base::SE3StateSpace> * current_pose_ompl_;
+	ompl::base::ScopedState<ompl::base::SE3StateSpace> * goal_pose_ompl_;
 	
 	ros::NodeHandle root_handle_;
 	ros::NodeHandle private_handle_;
@@ -118,6 +89,27 @@ class OMPL_3D
 	}
 	void computeCB(const geometry_msgs::PoseStamped::ConstPtr& msg)
 	{
+		(*goal_pose_ompl_)->setXYZ(msg->pose.position.x,msg->pose.position.y,msg->pose.position.z);
+		(*goal_pose_ompl_)->rotation().setAxisAngle(msg->pose.orientation.x,msg->pose.orientation.y,msg->pose.orientation.z,msg->pose.orientation.w);	
+	 	 simple_setup_->setStartAndGoalStates(*current_pose_ompl_, *goal_pose_ompl_);
+		simple_setup_->setup();
+		simple_setup_->print();	
+		bool solved = simple_setup_->solve(1.0);
+		if (solved)
+		{
+        std::cout << "Found solution:" << std::endl;
+        // print the path to screen
+        simple_setup_->simplifySolution();
+        simple_setup_->getSolutionPath().print(std::cout);
+		}
+		else
+        std::cout << "No solution found" << std::endl;
+		
+		}
+	void ros_to_ompl(geometry_msgs::PoseStamped& msg)
+	{
+		(*current_pose_ompl_)->setXYZ(msg.pose.position.x,msg.pose.position.y,msg.pose.position.z);
+		(*current_pose_ompl_)->rotation().setAxisAngle(msg.pose.orientation.x,msg.pose.orientation.y,msg.pose.orientation.z,msg.pose.orientation.w);
 	}
 
 	

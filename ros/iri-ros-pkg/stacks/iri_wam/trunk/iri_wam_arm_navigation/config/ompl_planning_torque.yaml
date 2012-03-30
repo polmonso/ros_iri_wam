@@ -6,7 +6,7 @@ planner_configs:
 groups:
   - iri_wam
 iri_wam:
-  parent_frame: wam_fk/wam0
+  parent_frame: world
   physical_group: iri_wam
   planner_type: RPYIKTaskSpacePlanner
   state_spaces:
@@ -39,6 +39,6 @@ iri_wam:
     - LBKPIECEkConfig1
   kinematics_solver: arm_kinematics_constraint_aware/KDLArmKinematicsPlugin
   tip_name: wam_fk/wam7
-  root_name: wam_fk/wam0
+  root_name: world
   projection_evaluator: joint_state
   longest_valid_segment_fraction: 0.001
