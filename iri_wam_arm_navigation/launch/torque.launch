@@ -1,10 +1,16 @@
 <launch>
-    <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_planning_environment.launch" />
-    <include file="$(find planning_environment)/launch/environment_server.launch">
+   <!-- 
+   <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_planning_environment.launch" />
+   <include file="$(find planning_environment)/launch/environment_server.launch">
         <arg name="use_monitor" value="true" />
         <arg name="use_collision_map" value="false" />
     </include>
-       <!--<include file="$(find iri_wam_arm_navigation)/launch/constraint_aware_kinematics.launch" />-->
+    <include file="$(find iri_wam_arm_navigation)/launch/constraint_aware_kinematics.launch" /> 
     <include file="$(find iri_wam_arm_navigation)/launch/ompl_planning_torque.launch" />
+   -->
     <include file="$(find iri_wam_simulator)/launch/wam_sim_base.launch"/>
+    <node pkg="iri_wam_arm_navigation" type="bridge_gazebo" name="bridge_gazebo" />
+    <node pkg="iri_wam_arm_navigation" type="ompl_cartesian" name="Testing_ompl_cartesian" />
+
+    
 </launch>
