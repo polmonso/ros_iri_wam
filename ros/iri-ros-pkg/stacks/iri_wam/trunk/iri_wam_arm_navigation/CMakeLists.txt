@@ -20,6 +20,8 @@ rosbuild_add_executable(vertical_stick src/vertical_stick.cpp)
 rosbuild_add_executable(box src/box.cpp)
 rosbuild_add_executable(ompl_testing src/ompl_testing.cpp)
 rosbuild_add_executable(ompl_cartesian src/ompl_cartesian.cpp)
+rosbuild_add_executable(bridge_gazebo src/gazebo_to_ros.cpp)
+rosbuild_add_executable(ompl_key src/Ompl_Test_Cart.cpp)
 rosbuild_gensrv()
 #uncomment if you have defined messages
 #rosbuild_genmsg()

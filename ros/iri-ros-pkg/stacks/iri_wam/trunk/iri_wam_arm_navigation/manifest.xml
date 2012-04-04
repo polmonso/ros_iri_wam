@@ -16,6 +16,7 @@
   <depend package="constraint_aware_spline_smoother"/>
   <depend package="iri_wam_move_arm"/>
   <depend package="geometry_msgs"/>
+  <depend package="gazebo_msgs"/>
 
 </package>
 
