@@ -58,18 +58,12 @@ class OMPL_3D
 	 */ 
 	void initOmplStructures()
 	{
-		space_.reset(new ompl_base::SE3StateSpace());
-		ompl_base::RealVectorBounds vb(3);
-		bounds_ = new ompl_base::RealVectorBounds (3);
-		vb.setLow(-2);
-		vb.setHigh(2);
-		*bounds_=vb;
-		space_->as<ompl_base::SE3StateSpace>()->setBounds(vb);
-		space_->setLongestValidSegmentFraction(0.0001);
+		initStateSpace();
 		simple_setup_=new ompl_geometric::SimpleSetup (space_);
 		current_pose_ompl_= new ompl::base::ScopedState<ompl::base::SE3StateSpace>(space_);
 		goal_pose_ompl_= new ompl::base::ScopedState<ompl::base::SE3StateSpace>(space_);		
 	}
+	
 	/**
 	 * Initialize ROS Service
 	 */ 	
@@ -204,6 +198,20 @@ class OMPL_3D
          p.pose.orientation.y= state->as<ompl::base::SE3StateSpace::StateType>()->rotation().y;
          p.pose.orientation.z= state->as<ompl::base::SE3StateSpace::StateType>()->rotation().z;
          p.pose.orientation.w= state->as<ompl::base::SE3StateSpace::StateType>()->rotation().w;		
+	}
+	void initStateSpace()
+	{
+
+		space_.reset(new ompl_base::SE3StateSpace());		
+		ompl_base::StateSpacePtr real_vector_state_space = space_->as<ompl_base::SE3StateSpace>()->getSubSpace("RealVectorSpace2");
+
+		real_vector_state_space->as<ompl::base::RealVectorStateSpace>()->addDimension("x",-2.0,2.0);    
+		real_vector_state_space->as<ompl::base::RealVectorStateSpace>()->addDimension("y",-2.0,2.0);    
+		real_vector_state_space->as<ompl::base::RealVectorStateSpace>()->addDimension("z",-2.0,2.0);    
+		real_vector_state_space->as<ompl::base::RealVectorStateSpace>()->addDimension("roll",-M_PI,M_PI);    
+		real_vector_state_space->as<ompl::base::RealVectorStateSpace>()->addDimension("pith",-M_PI,M_PI);    
+		real_vector_state_space->as<ompl::base::RealVectorStateSpace>()->addDimension("yaw",-M_PI,M_PI);    
+		space_->setLongestValidSegmentFraction(0.0001);
 	}
 };
 int main(int argc,char **argv)
