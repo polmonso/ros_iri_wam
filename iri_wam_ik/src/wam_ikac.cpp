@@ -26,8 +26,6 @@ WamIKAC::WamIKAC() {
   this->joint_states_subscriber = this->nh_.subscribe(port_name, 5, &WamIKAC::joint_states_callback, this);
   
   // [init services]
-  port_name = ros::names::append(ros::this_node::getName(), "pose_move"); 
-  this->pose_move_server = this->nh_.advertiseService(port_name, &WamIKAC::pose_moveCallback, this);
   port_name = ros::names::append(ros::this_node::getName(), "wamik"); 
   this->wamik_server = this->nh_.advertiseService(port_name, &WamIKAC::wamikCallback, this);
   
@@ -58,90 +56,27 @@ void WamIKAC::joint_states_callback(const sensor_msgs::JointState::ConstPtr& msg
 }
 
 /*  [service callbacks] */
-bool WamIKAC::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, iri_wam_common_msgs::pose_move::Response &res) 
-{ 
-  bool result;
-
-  ROS_INFO("Received Pose: %f %f %f  %f %f %f %f\n",
-            req.pose.position.x,
-            req.pose.position.y,
-            req.pose.position.z, 
-            req.pose.orientation.x,
-            req.pose.orientation.y,
-            req.pose.orientation.z,
-            req.pose.orientation.w);
-
-  Quaternion<float> quat( req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z);
-  Matrix3f mat = quat.toRotationMatrix();
-
-  std::vector <double> pose(16,0);
-  std::vector <double> joints(7,0);
-
-  pose[3] = req.pose.position.x;
-  pose[7] = req.pose.position.y;
-  pose[11] = req.pose.position.z;
-  pose[15] = 1;
-  for(int i=0; i<12; i++){
-   if(i%4 != 3){
-     pose[i] = mat(i/4,i%4);
-   }
-  }
-  ROS_INFO("wamik Service Received Pose:\n %f %f %f %f\n %f %f %f %f\n %f %f %f %f\n %f %f %f %f\n",
-        pose[0],pose[1],pose[2],pose[3],
-        pose[4],pose[5],pose[6],pose[7],
-        pose[8],pose[9],pose[10],pose[11],
-        pose[12],pose[13],pose[14],pose[15]);
-
-  if(!WamIKAC::ik(pose, currentjoints, joints)){
-      ROS_ERROR("IK solution not found. Requested pose:\n %f %f %f %f\n %f %f %f %f\n %f %f %f %f\n %f %f %f %f\n",
-        pose[0],pose[1],pose[2],pose[3],
-        pose[4],pose[5],pose[6],pose[7],
-        pose[8],pose[9],pose[10],pose[11],
-        pose[12],pose[13],pose[14],pose[15]);
-      result = false;
-  }else{
-
-      ROS_INFO("wamik Service computed joints:\n %f %f %f %f %f %f %f\n", joints.at(0), joints.at(1), joints.at(2), joints.at(3), joints.at(4), joints.at(5), joints.at(6));
-      joints_.resize(7);
-      joint_move_srv.request.joints.resize(7);
-      for(int i=0;i<7;i++){
-        joint_move_srv.request.joints[i] = joints.at(i);
-        joints_(i)=joints.at(i);
-      }
-      ikPub();
-      if (this->joint_move_client.call(joint_move_srv)) 
-      { 
-        ROS_INFO(" %d\n",joint_move_srv.response.success); 
-        result = true;
-      }else { 
-        ROS_ERROR("Failed to call service joint_move"); 
-        result = false;
-      }
-  }
-  res.success = result;
-  return result;
-}
-
 bool WamIKAC::wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &req, iri_wam_common_msgs::wamInverseKinematics::Response &res){
 
-  ROS_INFO("[WamIKAC] Received Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
-            req.pose.position.x, 
-            req.pose.position.y,
-            req.pose.position.z,
-            req.pose.orientation.x,
-            req.pose.orientation.y,
-            req.pose.orientation.z,
-            req.pose.orientation.w);
+  ROS_INFO("[WamIKAC] Received Pose from frame_id %s (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
+            req.pose.header.frame_id.c_str(), 
+            req.pose.pose.position.x, 
+            req.pose.pose.position.y,
+            req.pose.pose.position.z,
+            req.pose.pose.orientation.x,
+            req.pose.pose.orientation.y,
+            req.pose.pose.orientation.z,
+            req.pose.pose.orientation.w);
   
-  Quaternion<float> quat( req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z);
+  Quaternion<float> quat( req.pose.pose.orientation.w, req.pose.pose.orientation.x, req.pose.pose.orientation.y, req.pose.pose.orientation.z);
   Matrix3f mat = quat.toRotationMatrix();
 
   std::vector <double> pose(16,0);
   std::vector <double> joints(7,0);
 
-  pose[3] = req.pose.position.x;
-  pose[7] = req.pose.position.y;
-  pose[11] = req.pose.position.z;
+  pose[3] = req.pose.pose.position.x;
+  pose[7] = req.pose.pose.position.y;
+  pose[11] = req.pose.pose.position.z;
   pose[15] = 1;
   for(int i=0; i<12; i++){
    if(i%4 != 3){
