@@ -40,8 +40,6 @@ class WamIKAC {
     std::vector<double> currentjoints;
 
     // [service attributes]
-    ros::ServiceServer pose_move_server;
-    bool pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, iri_wam_common_msgs::pose_move::Response &res);
     ros::ServiceServer wamik_server;
     bool wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &req, iri_wam_common_msgs::wamInverseKinematics::Response &res);
 
