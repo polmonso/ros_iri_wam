@@ -52,6 +52,7 @@ class WamTcpIkAlgNode : public algorithm_base::IriBaseAlgorithm<WamTcpIkAlgorith
 
     tf::TransformListener listener_; 
     tf::StampedTransform tcp_H_wam7_;
+    tf::StampedTransform world_H_wam7_;
     iri_wam_common_msgs::wamInverseKinematics base_pose_msg_;
 
     // [publisher attributes]
