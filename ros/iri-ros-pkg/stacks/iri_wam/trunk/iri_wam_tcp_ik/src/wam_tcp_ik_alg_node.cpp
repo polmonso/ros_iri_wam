@@ -61,15 +61,7 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
   //this->alg_.lock(); 
   //this->get_ik_mutex_.enter(); 
   
-  ROS_INFO("[WamTcpIkAlgNode] Received Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
-            req.pose.position.x,
-            req.pose.position.y, 
-            req.pose.position.z,
-            req.pose.orientation.x,
-            req.pose.orientation.y,
-            req.pose.orientation.z,
-            req.pose.orientation.w);
-  
+  // PREDEFINED_TCP TO WAM_TCP
   try{
     ros::Time now = ros::Time::now();
     ros::Duration interval = ros::Duration(1.0);
@@ -90,29 +82,49 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
             tcp_H_wam7_.getRotation().y(), 
             tcp_H_wam7_.getRotation().z(), 
             tcp_H_wam7_.getRotation().w());
+
+  // RECEIVED POSE 
+  ROS_INFO("[WamTcpIkAlgNode] Received Pose from frame %s (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
+            req.pose.header.frame_id.c_str(),
+            req.pose.pose.position.x,
+            req.pose.pose.position.y, 
+            req.pose.pose.position.z,
+            req.pose.pose.orientation.x,
+            req.pose.pose.orientation.y,
+            req.pose.pose.orientation.z,
+            req.pose.pose.orientation.w);
+  
+  try{
+    ros::Time now = ros::Time::now();
+    ros::Duration interval = ros::Duration(1.0);
+    if(!listener_.waitForTransform("/wam_fk/wam0", req.pose.header.frame_id, now, interval)){
+        ROS_ERROR("Timeout while waiting for transform between frames /wam_fk/wam0/ and %s ", req.pose.header.frame_id.c_str()); 
+    }
+    listener_.lookupTransform("/wam_fk/wam0", req.pose.header.frame_id, now, world_H_wam7_);
+  }catch (tf::TransformException ex){
+    ROS_ERROR("lookup transform error: %s", ex.what());
+    return false;
+  }
  
-  tf::Quaternion world_quat_tcp( req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z, req.pose.orientation.w);
-  tf::Vector3 world_pos_tcp( req.pose.position.x, req.pose.position.y, req.pose.position.z);
-  tf::Transform world_H_wam7( world_quat_tcp, world_pos_tcp);
+  world_H_wam7_ *= tcp_H_wam7_;
   
-  world_H_wam7 *= tcp_H_wam7_;
-  
-  base_pose_msg_.request.pose.position.x    = world_H_wam7.getOrigin().x(); 
-  base_pose_msg_.request.pose.position.y    = world_H_wam7.getOrigin().y(); 
-  base_pose_msg_.request.pose.position.z    = world_H_wam7.getOrigin().z(); 
-  base_pose_msg_.request.pose.orientation.x = world_H_wam7.getRotation().x(); 
-  base_pose_msg_.request.pose.orientation.y = world_H_wam7.getRotation().y(); 
-  base_pose_msg_.request.pose.orientation.z = world_H_wam7.getRotation().z(); 
-  base_pose_msg_.request.pose.orientation.w = world_H_wam7.getRotation().w(); 
+  base_pose_msg_.request.pose.header.frame_id = "/wam_fk/wam0"; 
+  base_pose_msg_.request.pose.pose.position.x    = world_H_wam7_.getOrigin().x(); 
+  base_pose_msg_.request.pose.pose.position.y    = world_H_wam7_.getOrigin().y(); 
+  base_pose_msg_.request.pose.pose.position.z    = world_H_wam7_.getOrigin().z(); 
+  base_pose_msg_.request.pose.pose.orientation.x = world_H_wam7_.getRotation().x(); 
+  base_pose_msg_.request.pose.pose.orientation.y = world_H_wam7_.getRotation().y(); 
+  base_pose_msg_.request.pose.pose.orientation.z = world_H_wam7_.getRotation().z(); 
+  base_pose_msg_.request.pose.pose.orientation.w = world_H_wam7_.getRotation().w(); 
 
   ROS_INFO("[WamTcpIkAlgNode] 0_H_7 Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
-           world_H_wam7.getOrigin().x(),
-           world_H_wam7.getOrigin().y(),
-           world_H_wam7.getOrigin().z(),
-           world_H_wam7.getRotation().x(), 
-           world_H_wam7.getRotation().y(), 
-           world_H_wam7.getRotation().z(), 
-           world_H_wam7.getRotation().w());
+           world_H_wam7_.getOrigin().x(),
+           world_H_wam7_.getOrigin().y(),
+           world_H_wam7_.getOrigin().z(),
+           world_H_wam7_.getRotation().x(), 
+           world_H_wam7_.getRotation().y(), 
+           world_H_wam7_.getRotation().z(), 
+           world_H_wam7_.getRotation().w());
 
   bool result;
   if(get_ik_client_.call(base_pose_msg_)){
