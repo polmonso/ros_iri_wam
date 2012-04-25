@@ -59,6 +59,14 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     int state_refresh_rate;
     CWamDriver *wam;
 
+    /**
+     * \brief check if move in joints request is sane
+     *
+     * Control if the vector has the same size of robot joints and
+     * if there is no Nan values
+     */
+    bool is_joints_move_request_valid(const std::vector<double> & angles);
+
   public:
    /**
     * \brief define config type
