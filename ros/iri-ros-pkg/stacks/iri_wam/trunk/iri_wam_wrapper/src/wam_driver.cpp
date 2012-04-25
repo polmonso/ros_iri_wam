@@ -182,10 +182,36 @@ void WamDriver::get_joint_angles(std::vector<double> *angles){
   } 
 }
 
+bool WamDriver::is_joints_move_request_valid(const std::vector<double> & angles){
+    // Check number of joints sent to the robot
+    if (static_cast<signed int>(angles.size()) != get_num_joints()) {
+        ROS_ERROR("Invalid request to move. Joint vector size is %i while the robot has %i joints", 
+                                                                     (int) angles.size(), get_num_joints());
+        return false;
+    }
+
+    // Check valid values of those angles
+    for (std::vector<double>::const_iterator it = angles.begin(); it != angles.end(); it++) {
+        // Until std::isNan (c++11 feature) reach compilers, we use the Nan propiety
+        // of not returning true when comparing against itself
+        if (* it != * it) {
+            ROS_ERROR("Invalid request to move. Joint vector contain a Nan value.");
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void WamDriver::move_in_joints(std::vector<double> *angles){
     uint16_t errormask = 0x00;
 
-    if(this->wam!=NULL){
+    if (this->wam!=NULL) {
+        if (! is_joints_move_request_valid(* angles)) {
+            ROS_ERROR("Joints angles were not valid. Refuse to move.");
+            return;
+        }
+
         wam->moveInJoints(&errormask, angles);
         if(errormask > 0x00){
             string err_msg = wam->errorToString(errormask);
