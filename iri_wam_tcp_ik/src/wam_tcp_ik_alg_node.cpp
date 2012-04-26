@@ -93,7 +93,13 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
             req.pose.pose.orientation.y,
             req.pose.pose.orientation.z,
             req.pose.pose.orientation.w);
-  
+
+  // frame_id pose
+  tf::Quaternion world_quat_tcp( req.pose.pose.orientation.x, req.pose.pose.orientation.y, req.pose.pose.orientation.z, req.pose.pose.orientation.w);
+  tf::Vector3 world_pos_tcp( req.pose.pose.position.x, req.pose.pose.position.y, req.pose.pose.position.z);
+  tf::Transform received_pose( world_quat_tcp, world_pos_tcp);
+
+  // TF from world wam7
   try{
     ros::Time now = ros::Time::now();
     ros::Duration interval = ros::Duration(1.0);
@@ -106,6 +112,7 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
     return false;
   }
  
+  world_H_wam7_ *= received_pose;
   world_H_wam7_ *= tcp_H_wam7_;
   
   base_pose_msg_.request.pose.header.frame_id = "/wam_fk/wam0"; 
