@@ -10,10 +10,10 @@
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
 
-class PlanRigidBody
+class CartesianPlanAlg
 {
 	public:
-	PlanRigidBody()
+	CartesianPlanAlg()
 	{
 	// construct the state space we are planning in
 	space.reset(new ob::SE3StateSpace());
@@ -22,13 +22,10 @@ class PlanRigidBody
 	ob::RealVectorBounds bounds(3);
 	bounds.setLow(-2);
 	bounds.setHigh(2);
-
 	space->as<ob::SE3StateSpace>()->setBounds(bounds);
- int real_vector_index = space->as<ompl::base::CompoundStateSpace>()->getSubSpaceCount();
-std::cout<<"real vector:= "<<real_vector_index<<std::endl;
 	}
 	
-	~PlanRigidBody(){}
+	~CartesianPlanAlg(){}
 	
 	static bool isStateValid(const ob::State *state)
 	{
@@ -138,20 +135,16 @@ std::cout<<"real vector:= "<<real_vector_index<<std::endl;
 
 int main(int argc, char ** argv)
 {
-	PlanRigidBody plan;
+	CartesianPlanAlg plan;
 	int st=0;
     std::cout << "OMPL version: " << OMPL_VERSION << std::endl;
     ob::ScopedState<ompl::base::SE3StateSpace> goal(plan.space);
     ob::ScopedState<ompl::base::SE3StateSpace> start(plan.space);
-	//plan.getTrajectory(argc,argv,goal);
 	plan.getKeyboard("Estado Inicial",start);
-getchar();
-   // std::cout << std::endl << std::endl;
 	plan.getKeyboard("Estado Final",goal);
-getchar();
-		std::cout<<"Ingresa Cantidad de estados deseados(puntos de la trayectorias) "<<std::endl;
-		std::cin>>st;
-		std::cout<<"cantidad de estados ingresado "<<st<<std::endl;		
+	std::cout<<"Ingresa Cantidad de estados deseados(puntos de la trayectorias) "<<std::endl;
+	std::cin>>st;
+	std::cout<<"cantidad de estados ingresado "<<st<<std::endl;		
     plan.planWithSimpleSetup(start,goal,st);
 
     return 0;

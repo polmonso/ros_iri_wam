@@ -5,7 +5,7 @@ multi_dof_joints:
     child_frame_id: world
 groups:
   - name: iri_wam
-    base_link: wam_fk/wam0
+    base_link: world
     tip_link: wam_fk/wam7
 default_collision_operations:
   - object1: wam_fk/wam0

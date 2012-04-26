@@ -16,13 +16,11 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_add_executable(obstacle src/obstacle.cpp)
-rosbuild_add_executable(vertical_stick src/vertical_stick.cpp)
-rosbuild_add_executable(box src/box.cpp)
-rosbuild_add_executable(ompl_testing src/ompl_testing.cpp)
-rosbuild_add_executable(ompl_cartesian src/ompl_cartesian.cpp)
+#rosbuild_add_executable(vertical_stick src/vertical_stick.cpp)
+#rosbuild_add_executable(box src/box.cpp)
 rosbuild_add_executable(bridge_gazebo src/gazebo_to_ros.cpp)
-rosbuild_add_executable(ompl_key src/Ompl_Test_Cart.cpp)
-rosbuild_gensrv()
+rosbuild_add_executable(cartesian_planning_alg src/cartesian_planning_alg.cpp)
+#rosbuild_gensrv()
 #uncomment if you have defined messages
 #rosbuild_genmsg()
 #uncomment if you have defined services
