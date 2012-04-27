@@ -1,6 +1,16 @@
 #include "iri_wam_arm_navigation/cartesian_planning_alg.h"
+using namespace cartesian_planning;
 
 	CartesianPlanAlg::CartesianPlanAlg()
+	{
+
+	}
+	
+	CartesianPlanAlg:: ~CartesianPlanAlg()
+	{
+	}
+	
+	void CartesianPlanAlg::init()
 	{
 	// construct the state space we are planning in
 	space.reset(new ob::SE3StateSpace());
@@ -10,11 +20,6 @@
 	bounds.setHigh(2);
 	space->as<ob::SE3StateSpace>()->setBounds(bounds);
 	}
-	
-	CartesianPlanAlg:: ~CartesianPlanAlg()
-	{
-	}
-	
 	bool CartesianPlanAlg::isStateValid(const ob::State *state)
 	{
 	// cast the abstract state type to the type we expect
@@ -25,21 +30,17 @@
 
 	// extract the second component of the state and cast it to what we expect
 	const ob::SO3StateSpace::StateType *rot = se3state->as<ob::SO3StateSpace::StateType>(1);
-
 	// check validity of state defined by pos & rot
-
-
 	// return a value that is always true but uses the two variables we define, so we avoid compiler warnings
 	return (void*)rot != (void*)pos;
 	}
-	void CartesianPlanAlg::planWithSimpleSetup(ob::ScopedState<ompl::base::SE3StateSpace>& start,ob::ScopedState<ompl::base::SE3StateSpace>& goal, int st)
+	bool CartesianPlanAlg::planWithSimpleSetup(const ob::ScopedState<ompl::base::SE3StateSpace>& start,const ob::ScopedState<ompl::base::SE3StateSpace>& goal,const int& st,og::PathGeometric* ptrPath )
 	{
+	 bool resp=false;
 	// define a simple setup class
 	og::SimpleSetup ss(space);
 	// set state validity checking for this space
 	ss.setStateValidityChecker(boost::bind(&isStateValid, _1));
-	// create a random start state
-
 	// set the start and goal states
 	ss.setStartAndGoalStates(start, goal);
 	// this call is optional, but we put it in to get more output information
@@ -54,12 +55,11 @@
 		ss.simplifySolution();
 		og::PathGeometric path=ss.getSolutionPath();
 		path.interpolate(st);
-		std::cout<<"SIZE "<<path.states.size()<<std::endl;
-		path.print(std::cout);
-		writeFile(path);
+		ptrPath= new og::PathGeometric(path);
+		resp=true;
 	}
-	else
-		std::cout << "No solution found" << std::endl;
+	else	std::cout << "No solution found" << std::endl;
+	return resp;
 	}
 	void CartesianPlanAlg::makeOmplState(std::string estado,ob::ScopedState<ompl::base::SE3StateSpace>& state)
 	{
@@ -119,19 +119,19 @@
 	}
 
 
-int main(int argc, char ** argv)
-{
-	CartesianPlanAlg plan;
-	int st=0;
-    std::cout << "OMPL version: " << OMPL_VERSION << std::endl;
-    ob::ScopedState<ompl::base::SE3StateSpace> goal(plan.getSpace());
-    ob::ScopedState<ompl::base::SE3StateSpace> start(plan.getSpace());
-	plan.makeOmplState("Estado Inicial",start);
-	plan.makeOmplState("Estado Final",goal);
-	std::cout<<"Ingresa Cantidad de estados deseados(puntos de la trayectorias) "<<std::endl;
-	std::cin>>st;
-	std::cout<<"cantidad de estados ingresado "<<st<<std::endl;		
-    plan.planWithSimpleSetup(start,goal,st);
+//int main(int argc, char ** argv)
+//{
+	//CartesianPlanAlg plan;
+	//int st=0;
+    //std::cout << "OMPL version: " << OMPL_VERSION << std::endl;
+    //ob::ScopedState<ompl::base::SE3StateSpace> goal(plan.getSpace());
+    //ob::ScopedState<ompl::base::SE3StateSpace> start(plan.getSpace());
+	//plan.makeOmplState("Estado Inicial",start);
+	//plan.makeOmplState("Estado Final",goal);
+	//std::cout<<"Ingresa Cantidad de estados deseados(puntos de la trayectorias) "<<std::endl;
+	//std::cin>>st;
+	//std::cout<<"cantidad de estados ingresado "<<st<<std::endl;		
+    //plan.planWithSimpleSetup(start,goal,st);
 
-    return 0;
-}
+    //return 0;
+//}
