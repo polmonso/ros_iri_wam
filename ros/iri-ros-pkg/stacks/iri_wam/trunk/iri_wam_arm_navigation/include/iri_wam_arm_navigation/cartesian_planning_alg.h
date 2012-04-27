@@ -7,19 +7,23 @@
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
-namespace ob = ompl::base;
-namespace og = ompl::geometric;
 
+namespace cartesian_planning
+{
+ namespace ob = ompl::base;
+ namespace og = ompl::geometric;
 class CartesianPlanAlg
 {
 	public:
 		CartesianPlanAlg();
 		~CartesianPlanAlg();
-	    void planWithSimpleSetup(ob::ScopedState<ompl::base::SE3StateSpace>& start,ob::ScopedState<ompl::base::SE3StateSpace>& goal, int st);
+	    bool planWithSimpleSetup(const ob::ScopedState<ompl::base::SE3StateSpace>& start,const ob::ScopedState<ompl::base::SE3StateSpace>& goal, const int& st, og::PathGeometric* ptrPath);
 	    void makeOmplState(std::string estado,ob::ScopedState<ompl::base::SE3StateSpace>& state);
 	    void writeFile(og::PathGeometric& path);
 	    static bool isStateValid(const ob::State *state);
 	    ob::StateSpacePtr getSpace() const;
+	    void init();
 	private:
 		ob::StateSpacePtr space;
 };
+}

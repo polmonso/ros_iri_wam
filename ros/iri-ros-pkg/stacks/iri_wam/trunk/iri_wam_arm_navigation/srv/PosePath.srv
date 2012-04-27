@@ -1,3 +1,4 @@
-geometry_msgs/Pose pose_stamped
+geometry_msgs/Pose pose
 ---
-geometry_msgs/Pose[] pose_stamped
+geometry_msgs/Pose[] poses_solution
+bool solution_found
