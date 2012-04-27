@@ -1,23 +1,9 @@
-#include <ompl/base/SpaceInformation.h>
-#include <ompl/base/spaces/SE3StateSpace.h>
-#include <ompl/geometric/planners/rrt/RRTConnect.h>
-#include <ompl/geometric/SimpleSetup.h>
+#include "iri_wam_arm_navigation/cartesian_planning_alg.h"
 
-#include <ompl/config.h>
-#include <iostream>
-#include <fstream>
-#include <stdio.h>
-namespace ob = ompl::base;
-namespace og = ompl::geometric;
-
-class CartesianPlanAlg
-{
-	public:
-	CartesianPlanAlg()
+	CartesianPlanAlg::CartesianPlanAlg()
 	{
 	// construct the state space we are planning in
 	space.reset(new ob::SE3StateSpace());
-
 	// set the bounds for the R^3 part of SE(3)
 	ob::RealVectorBounds bounds(3);
 	bounds.setLow(-2);
@@ -25,9 +11,11 @@ class CartesianPlanAlg
 	space->as<ob::SE3StateSpace>()->setBounds(bounds);
 	}
 	
-	~CartesianPlanAlg(){}
+	CartesianPlanAlg:: ~CartesianPlanAlg()
+	{
+	}
 	
-	static bool isStateValid(const ob::State *state)
+	bool CartesianPlanAlg::isStateValid(const ob::State *state)
 	{
 	// cast the abstract state type to the type we expect
 	const ob::SE3StateSpace::StateType *se3state = state->as<ob::SE3StateSpace::StateType>();
@@ -44,8 +32,7 @@ class CartesianPlanAlg
 	// return a value that is always true but uses the two variables we define, so we avoid compiler warnings
 	return (void*)rot != (void*)pos;
 	}
-
-	void planWithSimpleSetup(ob::ScopedState<ompl::base::SE3StateSpace>& start,ob::ScopedState<ompl::base::SE3StateSpace>& goal, int st)
+	void CartesianPlanAlg::planWithSimpleSetup(ob::ScopedState<ompl::base::SE3StateSpace>& start,ob::ScopedState<ompl::base::SE3StateSpace>& goal, int st)
 	{
 	// define a simple setup class
 	og::SimpleSetup ss(space);
@@ -65,9 +52,7 @@ class CartesianPlanAlg
 		std::cout << "Found solution:" << std::endl;
 		// print the path to screen
 		ss.simplifySolution();
-		//ss.getSolutionPath().print(std::cout);
 		og::PathGeometric path=ss.getSolutionPath();
-		//std::cout<<"SIZE "<<path.states_<<std::endl;
 		path.interpolate(st);
 		std::cout<<"SIZE "<<path.states.size()<<std::endl;
 		path.print(std::cout);
@@ -76,9 +61,7 @@ class CartesianPlanAlg
 	else
 		std::cout << "No solution found" << std::endl;
 	}
-
-
-	void getKeyboard(std::string estado,ob::ScopedState<ompl::base::SE3StateSpace>& state)
+	void CartesianPlanAlg::makeOmplState(std::string estado,ob::ScopedState<ompl::base::SE3StateSpace>& state)
 	{
 		std::cout<<"Ingresa el "<<estado<<std::endl;
 		float tx,ty,tz,qx,qy,qz,qw;
@@ -110,7 +93,7 @@ class CartesianPlanAlg
 		state->rotation().w=qw;
 		state.print();		
 	}
-	void writeFile(og::PathGeometric& path)
+	void CartesianPlanAlg::writeFile(og::PathGeometric& path)
 	{
 		std::ofstream traj;
 		traj.open("/home/irojas/Desktop/trajectories.txt", std::ofstream::out);
@@ -130,18 +113,21 @@ class CartesianPlanAlg
 		}
 		traj.close();
 	}
-	ob::StateSpacePtr space;
-};
+	ob::StateSpacePtr CartesianPlanAlg::getSpace() const
+	{
+		return space;
+	}
+
 
 int main(int argc, char ** argv)
 {
 	CartesianPlanAlg plan;
 	int st=0;
     std::cout << "OMPL version: " << OMPL_VERSION << std::endl;
-    ob::ScopedState<ompl::base::SE3StateSpace> goal(plan.space);
-    ob::ScopedState<ompl::base::SE3StateSpace> start(plan.space);
-	plan.getKeyboard("Estado Inicial",start);
-	plan.getKeyboard("Estado Final",goal);
+    ob::ScopedState<ompl::base::SE3StateSpace> goal(plan.getSpace());
+    ob::ScopedState<ompl::base::SE3StateSpace> start(plan.getSpace());
+	plan.makeOmplState("Estado Inicial",start);
+	plan.makeOmplState("Estado Final",goal);
 	std::cout<<"Ingresa Cantidad de estados deseados(puntos de la trayectorias) "<<std::endl;
 	std::cin>>st;
 	std::cout<<"cantidad de estados ingresado "<<st<<std::endl;		
