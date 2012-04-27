@@ -20,7 +20,8 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_add_executable(box src/box.cpp)
 rosbuild_add_executable(bridge_gazebo src/gazebo_to_ros.cpp)
 rosbuild_add_executable(cartesian_planning_alg src/cartesian_planning_alg.cpp)
-#rosbuild_gensrv()
+rosbuild_add_executable(cartesian_planning_alg_node src/cartesian_planning_alg_node.cpp)
+rosbuild_gensrv()
 #uncomment if you have defined messages
 #rosbuild_genmsg()
 #uncomment if you have defined services
