@@ -26,7 +26,7 @@ class GazeboRos
 	
 	void initPublisher()
 	{
-		ros=root_handle_.advertise<geometry_msgs::PoseStamped>("pose_state",5);
+		ros=root_handle_.advertise<geometry_msgs::Pose>("current_pose",5);
 	}
 
 	private:
@@ -35,11 +35,12 @@ class GazeboRos
 	 ros::NodeHandle private_handle_;
 	 ros::Subscriber gazebo;
 	 ros::Publisher  ros;
+	// boost::mutex lock;
 	 
 	void gazeboCB(const gazebo_msgs::LinkStates::ConstPtr &state)
 	{
-
-		std::string tcp="iri_wam::wam_fk/wam7";
+		//lock.lock();
+ /*	std::string tcp="iri_wam::wam_fk/wam7";
 		int position;
 		findPositionLink(tcp,state->name,position);
 	    std::vector<geometry_msgs::Pose> vec=state->pose;
@@ -54,7 +55,10 @@ class GazeboRos
 		ps.pose.orientation.w=pos.orientation.w;
 		ps.header.frame_id="/world";
 		ps.header.stamp=ros::Time::now();
-		ros.publish(ps);
+		ros.publish(ps);*/
+		geometry_msgs::Pose pos=state->pose[9];
+		ros.publish(pos);
+		//lock.unlock();
 	}
 	void findPositionLink(const std::string s1, const std::vector<std::string> v1, int& pos)
 	{	

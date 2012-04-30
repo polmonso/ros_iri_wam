@@ -10,7 +10,7 @@ CartesianPlanAlgNode::CartesianPlanAlgNode():
 		alg_.init();
 		goal= new ob::ScopedState<ompl::base::SE3StateSpace>(alg_.getSpace());
 		current= new ob::ScopedState<ompl::base::SE3StateSpace>(alg_.getSpace());
-		root_handle_.advertiseService("get_pose_path",&CartesianPlanAlgNode::getPath,this);
+		solution_service=root_handle_.advertiseService("get_pose_path",&CartesianPlanAlgNode::getPath,this);
 		private_handle_.param<int>("number_of_states", number_states, 10);
 
 	}
@@ -87,6 +87,7 @@ void CartesianPlanAlgNode::OmpltoRosMsg(og::PathGeometric* ptrPath,std::vector<g
 int main(int argc, char ** argv)
 {
  ros::init(argc,argv,"Cartesian_Planning");
+ CartesianPlanAlgNode alg;
  ros::spin();
 
 return 0;
