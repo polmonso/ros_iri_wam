@@ -17,7 +17,8 @@ rosbuild_add_executable(move_in_joints src/move_in_joints.cpp)
 #rosbuild_add_executable(ompl_test src/test_ompl.cpp)
 rosbuild_add_executable(move_in_pose src/move_in_pose.cpp)
 rosbuild_add_executable(simple_move_joints src/simple_move_joints.cpp)
-
+rosbuild_add_executable(iri_move_arm src/iri_move_arm.cpp)
+rosbuild_add_library(iri_move_controllers src/iri_move_controller.cpp)
 
 
 ### MOVE ARM SOURCE ####
