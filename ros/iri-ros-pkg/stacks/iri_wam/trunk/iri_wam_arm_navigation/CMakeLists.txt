@@ -15,10 +15,13 @@ rosbuild_init()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-#rosbuild_add_executable(obstacle src/obstacle.cpp)
-#rosbuild_add_executable(vertical_stick src/vertical_stick.cpp)
-#rosbuild_add_executable(box src/box.cpp)
+
+#rosbuild_add_executable(vertical_stick test/vertical_stick.cpp)
+#rosbuild_add_executable(box test/box.cpp)
+rosbuild_add_executable(test_service test/test_service.cpp)
 rosbuild_add_executable(bridge_gazebo src/gazebo_to_ros.cpp)
+rosbuild_add_executable(rigid_body test/planning_rigid_body.cpp)
+
 rosbuild_add_library(cartesian_planning_alg_lib src/cartesian_planning_alg.cpp)
 rosbuild_add_executable(cartesian_planning_alg_node src/cartesian_planning_alg_node.cpp)
 target_link_libraries(cartesian_planning_alg_node cartesian_planning_alg_lib)
