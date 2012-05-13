@@ -56,6 +56,13 @@ class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgo
     // [client attributes]
 
     // [action server attributes]
+    IriActionServer<control_msgs::FollowJointTrajectoryAction> syn_controller_aserver_;
+    void syn_controllerStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal);
+    void syn_controllerStopCallback(void);
+    bool syn_controllerIsFinishedCallback(void);
+    bool syn_controllerHasSucceedCallback(void);
+    void syn_controllerGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result);
+    void syn_controllerGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback);
     IriActionServer<arm_navigation_msgs::MoveArmAction> move_arm_aserver_;
     void move_armStartCallback(const arm_navigation_msgs::MoveArmGoalConstPtr& goal);
     void move_armStopCallback(void);
@@ -84,6 +91,8 @@ class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgo
 
 	bool send_msg_;
 	control_msgs::FollowJointTrajectoryGoal tmp_msg_;
+	arm_navigation_msgs::MoveArmResult move_result;
+	arm_navigation_msgs::MoveArmFeedback move_feedback;
 	actionlib::SimpleClientGoalState *goal_state_;
 	void makeMsg(control_msgs::FollowJointTrajectoryGoal& msg);
 	void move_arm(const arm_navigation_msgs::MoveArmGoalConstPtr& goal);
