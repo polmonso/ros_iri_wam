@@ -39,5 +39,8 @@ INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ./include)
 #rosbuild_add_boost_directories()
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 rosbuild_add_executable(${PROJECT_NAME} src/wam_move_arm_alg.cpp src/wam_move_arm_alg_node.cpp)
+rosbuild_add_executable(move_in_pose src/move_in_pose.cpp)
+rosbuild_add_executable(move_in_joints src/move_in_joints.cpp)
+rosbuild_add_executable(simple_move_joints src/simple_move_joints.cpp)
 
 target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY})

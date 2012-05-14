@@ -63,6 +63,9 @@ class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgo
     bool syn_controllerHasSucceedCallback(void);
     void syn_controllerGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result);
     void syn_controllerGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback);
+    bool finish;
+    bool success_contr;
+   
     IriActionServer<arm_navigation_msgs::MoveArmAction> move_arm_aserver_;
     void move_armStartCallback(const arm_navigation_msgs::MoveArmGoalConstPtr& goal);
     void move_armStopCallback(void);
@@ -97,6 +100,9 @@ class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgo
 	void makeMsg(control_msgs::FollowJointTrajectoryGoal& msg);
 	void move_arm(const arm_navigation_msgs::MoveArmGoalConstPtr& goal);
 	void getTime(const arm_navigation_msgs::MoveArmGoal& msg, ros::Duration& time);
+	
+	control_msgs::FollowJointTrajectoryFeedback feedback_controller;
+	control_msgs::FollowJointTrajectoryResult	result_controller;
 
   public:
    /**
