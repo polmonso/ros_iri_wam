@@ -72,6 +72,9 @@ void WamMoveArmAlgNode::syn_controllerStartCallback(const control_msgs::FollowJo
     send_msg_=true;
     finish=false;
     success_contr=false;
+    makeMsg(tmp_msg_);
+    cliente_goal_=tmp_msg_;
+    clienteMakeActionRequest();
     //execute goal 
   alg_.unlock(); 
 } 
@@ -81,6 +84,7 @@ void WamMoveArmAlgNode::syn_controllerStopCallback(void)
   alg_.lock(); 
     //stop action 
     send_msg_=false;
+    clienteMakeActionRequest();
   alg_.unlock(); 
 } 
 
@@ -309,11 +313,11 @@ void WamMoveArmAlgNode::makeMsg(control_msgs::FollowJointTrajectoryGoal& msg)
 {
 	if(send_msg_)
 	{
-		trajectory_msgs::JointTrajectory tmp_traj=tmp_msg_.trajectory;
+		trajectory_msgs::JointTrajectory tmp_traj=msg.trajectory;
 		this->alg_.restoreTime(tmp_traj,this->alg_.getTime());
 		this->alg_.restoreVelocity(tmp_traj,this->alg_.getTime());
 		this->alg_.restoreAccel(tmp_traj,this->alg_.getTime());
-		tmp_msg_.trajectory=tmp_traj;		
+		msg.trajectory=tmp_traj;		
 		send_msg_=false;
 		ROS_WARN_STREAM(""<<tmp_traj);
 	}
