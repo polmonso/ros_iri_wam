@@ -1,0 +1,17 @@
+<package>
+  <description brief="iri_wam_cartesian_planning">
+
+     iri_wam_cartesian_planning
+
+  </description>
+  <author>Ivan Rojas</author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_cartesian_planning</url>
+  <depend package="roscpp"/>
+  <depend package="collada_urdf"/>
+  <depend package="iri_base_algorithm"/>
+  
+</package>
+
+
