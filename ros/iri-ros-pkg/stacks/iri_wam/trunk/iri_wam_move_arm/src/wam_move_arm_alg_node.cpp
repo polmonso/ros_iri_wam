@@ -291,7 +291,7 @@ void WamMoveArmAlgNode::clienteMakeActionRequest()
 
   //send a goal to the action 
   //cliente_goal_.data = my_desired_goal; 
-  makeMsg(cliente_goal_);
+ // makeMsg(cliente_goal_);
   controller_client_.sendGoal(cliente_goal_, 
               boost::bind(&WamMoveArmAlgNode::clienteDone,     this, _1, _2), 
               boost::bind(&WamMoveArmAlgNode::clienteActive,   this), 
@@ -319,7 +319,7 @@ void WamMoveArmAlgNode::makeMsg(control_msgs::FollowJointTrajectoryGoal& msg)
 		this->alg_.restoreAccel(tmp_traj,this->alg_.getTime());
 		msg.trajectory=tmp_traj;		
 		send_msg_=false;
-		ROS_WARN_STREAM(""<<tmp_traj);
+		//ROS_WARN_STREAM(""<<tmp_traj);
 	}
 	else
 	{
