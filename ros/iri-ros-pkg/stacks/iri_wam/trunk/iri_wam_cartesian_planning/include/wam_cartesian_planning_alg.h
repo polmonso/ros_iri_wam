@@ -27,17 +27,27 @@
 
 
 #include <iri_wam_cartesian_planning/WamCartesianPlanningConfig.h>
-
+#include <ompl/base/SpaceInformation.h>
+#include <ompl/base/spaces/SE3StateSpace.h>
+#include <ompl/geometric/planners/rrt/RRTConnect.h>
+#include <ompl/geometric/SimpleSetup.h>
+#include <ompl/config.h>
 
 #include "mutex.h"
 
 //include wam_cartesian_planning_alg main library
-#include <collada_urdf/collada_urdf.h>
+
+#include <geometry_msgs/PoseStamped.h>
+#include <iostream>
+#include <fstream>
+#include <stdio.h>
 /**
  * \brief IRI ROS Specific Driver Class
  *
  *
  */
+
+
 class WamCartesianPlanningAlgorithm
 {
   protected:
@@ -125,15 +135,14 @@ class WamCartesianPlanningAlgorithm
     */
     ~WamCartesianPlanningAlgorithm(void);
     
-    bool loadModel(const std::string& model);
+    static bool isStateValid(const ompl::base::State *state);
+    void planWithSimpleSetup(ompl::base::ScopedState<ompl::base::SE3StateSpace>& start,ompl::base::ScopedState<ompl::base::SE3StateSpace>& goal, const int& st,std::vector<geometry_msgs::PoseStamped>& vector);
+    void writeFile(ompl::geometric::PathGeometric& path,std::string& pathDir);
+	void omplToRos(ompl::geometric::PathGeometric& path, std::vector<geometry_msgs::PoseStamped>& vect);
+
+    ompl::base::StateSpacePtr space;
     
-    bool toFile(const std::string& nom_dae);
-    
-    boost::shared_ptr<DAE> dom;
-    
-    std::string urdf_string_model;
-    
-    const std::string path_save="/tmp/"
+
 };
 
 #endif

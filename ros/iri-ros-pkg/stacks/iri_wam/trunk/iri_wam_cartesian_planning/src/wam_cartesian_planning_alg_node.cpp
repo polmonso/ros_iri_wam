@@ -11,6 +11,7 @@ WamCartesianPlanningAlgNode::WamCartesianPlanningAlgNode(void) :
   // [init subscribers]
   
   // [init services]
+  this->path_planning_server_ = this->public_node_handle_.advertiseService("path_planning", &WamCartesianPlanningAlgNode::path_planningCallback, this);
   
   // [init clients]
   
@@ -38,6 +39,20 @@ void WamCartesianPlanningAlgNode::mainNodeThread(void)
 /*  [subscriber callbacks] */
 
 /*  [service callbacks] */
+bool WamCartesianPlanningAlgNode::path_planningCallback(iri_wam_cartesian_planning::PosePath::Request &req, iri_wam_cartesian_planning::PosePath::Response &res) 
+{ 
+  ROS_INFO("WamCartesianPlanningAlgNode::path_planningCallback: New Request Received!"); 
+  std::vector<geometry_msgs::PoseStamped> vector;
+  //use appropiate mutex to shared variables if necessary 
+  this->alg_.lock(); 
+	ompl::base::ScopedState<ompl::base::SE3StateSpace> st1 =rosToOmpl(req.init_pose);
+	ompl::base::ScopedState<ompl::base::SE3StateSpace> st2 =rosToOmpl(req.goal_pose);
+	this->alg_.planWithSimpleSetup(st1,st2,req.states,vector);
+	res.poses_solution=vector;
+	res.solution_found=(vector.size() >0)? true: false;
+	this->alg_.unlock(); 
+  return true; 
+}
 
 /*  [action callbacks] */
 
@@ -52,6 +67,17 @@ void WamCartesianPlanningAlgNode::node_config_update(Config &config, uint32_t le
 
 void WamCartesianPlanningAlgNode::addNodeDiagnostics(void)
 {
+}
+
+ompl::base::ScopedState<ompl::base::SE3StateSpace> WamCartesianPlanningAlgNode::rosToOmpl(const geometry_msgs::PoseStamped& msg)
+{
+  ompl::base::ScopedState<ompl::base::SE3StateSpace> st(this->alg_.space);	
+  st->setXYZ(msg.pose.position.x,msg.pose.position.y,msg.pose.position.z);
+  st->rotation().x=msg.pose.orientation.x;
+  st->rotation().y=msg.pose.orientation.y;
+  st->rotation().z=msg.pose.orientation.z;
+  st->rotation().w=msg.pose.orientation.w;
+  return st;
 }
 
 /* main function */
