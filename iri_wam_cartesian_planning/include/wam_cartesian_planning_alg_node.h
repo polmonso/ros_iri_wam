@@ -27,10 +27,12 @@
 
 #include <iri_base_algorithm/iri_base_algorithm.h>
 #include "wam_cartesian_planning_alg.h"
+#include <geometry_msgs/PoseStamped.h>
 
 // [publisher subscriber headers]
 
 // [service client headers]
+#include <iri_wam_cartesian_planning/PosePath.h>
 
 // [action server client headers]
 
@@ -46,6 +48,9 @@ class WamCartesianPlanningAlgNode : public algorithm_base::IriBaseAlgorithm<WamC
     // [subscriber attributes]
 
     // [service attributes]
+    ros::ServiceServer path_planning_server_;
+    bool path_planningCallback(iri_wam_cartesian_planning::PosePath::Request &req, iri_wam_cartesian_planning::PosePath::Response &res);
+    CMutex path_planning_mutex_;
 
     // [client attributes]
 
@@ -110,6 +115,9 @@ class WamCartesianPlanningAlgNode : public algorithm_base::IriBaseAlgorithm<WamC
     // [diagnostic functions]
     
     // [test functions]
+    
+    
+     ompl::base::ScopedState<ompl::base::SE3StateSpace> rosToOmpl(const geometry_msgs::PoseStamped& msg);
 };
 
 #endif
