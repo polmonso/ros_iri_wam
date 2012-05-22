@@ -76,6 +76,7 @@ void WamMoveArmAlgNode::syn_controllerStartCallback(const control_msgs::FollowJo
     cliente_goal_=tmp_msg_;
     clienteMakeActionRequest();
     //execute goal 
+    
   alg_.unlock(); 
 } 
 
