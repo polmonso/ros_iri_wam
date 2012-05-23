@@ -27,7 +27,10 @@
 
 #include <iri_wam_arm_navigation/WamArmNavigationConfig.h>
 #include <geometry_msgs/PoseStamped.h>
-#include <arm_navigation_msgs/utils.h>
+#include <arm_navigation_msgs/SimplePoseConstraint.h>
+#include <arm_navigation_msgs/PositionConstraint.h>
+#include <arm_navigation_msgs/OrientationConstraint.h>
+#include <arm_navigation_msgs/convert_messages.h>
 #include <arm_navigation_msgs/MoveArmAction.h>
 #include "mutex.h"
 
@@ -132,6 +135,7 @@ class WamArmNavigationAlgorithm
     bool hasPose();
     void setPlannerRequestPose(arm_navigation_msgs::MoveArmGoal& goal);
     void setPlannerRequest(arm_navigation_msgs::MoveArmGoal& goal);
+    void addGoalConstraintToMoveArmGoal(const arm_navigation_msgs::SimplePoseConstraint &pose_constraint, arm_navigation_msgs::MoveArmGoal &move_arm_goal);
     void sendedPose();
      
 };
