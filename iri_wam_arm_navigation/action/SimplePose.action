@@ -1,0 +1,10 @@
+#Goal Definition
+geometry_msgs/PoseStamped goal
+string frame_id # This is the name of link to move, and not necessary is the same frame_id of PoseStamped
+---
+#Feedback Definition
+# An error code reflecting what went wrong
+arm_navigation_msgs/ArmNavigationErrorCodes error_code
+---
+#Result Definition
+bool succesed
