@@ -3,7 +3,8 @@
 WamArmNavigationAlgNode::WamArmNavigationAlgNode(void) :
   algorithm_base::IriBaseAlgorithm<WamArmNavigationAlgorithm>(),
   move_iri_wam_client_("move_iri_wam", true),
-  simple_pose_move_aserver_(public_node_handle_, "simple_pose_move")
+  simple_pose_move_aserver_(public_node_handle_, "simple_pose_move"),
+  state_msg("")
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -56,7 +57,7 @@ void WamArmNavigationAlgNode::move_iri_wamDone(const actionlib::SimpleClientGoal
     ROS_INFO("WamArmNavigationAlgNode::move_iri_wamDone: Goal Achieved!"); 
   else 
     ROS_INFO("WamArmNavigationAlgNode::move_iri_wamDone: %s", state.toString().c_str()); 
-
+  code_result=result->error_code;
   //copy & work with requested result 
 } 
 
@@ -73,7 +74,7 @@ void WamArmNavigationAlgNode::move_iri_wamFeedback(const arm_navigation_msgs::Mo
 
   //analyze feedback 
   //my_var = feedback->var; 
-
+  state_msg= feedback->state;
   //if feedback is not what expected, cancel requested goal 
   if( !feedback_is_ok ) 
   { 
@@ -88,6 +89,7 @@ void WamArmNavigationAlgNode::simple_pose_moveStartCallback(const iri_wam_arm_na
     this->alg_.setTarget(goal->goal,goal->frame_id);
     arm_navigation_msgs::MoveArmGoal move_arm;
     makeMoveMsg(move_arm);
+    move_iri_wamMakeActionRequest(move_arm);
     //execute goal 
   alg_.unlock(); 
 } 
@@ -96,8 +98,9 @@ void WamArmNavigationAlgNode::simple_pose_moveStopCallback(void)
 { 
   alg_.lock(); 
     //stop action 
-        arm_navigation_msgs::MoveArmGoal move_arm;
+    arm_navigation_msgs::MoveArmGoal move_arm;
     makeMoveMsg(move_arm);
+    move_iri_wamMakeActionRequest(move_arm);
   alg_.unlock(); 
 } 
 
@@ -107,7 +110,13 @@ bool WamArmNavigationAlgNode::simple_pose_moveIsFinishedCallback(void)
 
   alg_.lock(); 
     //if action has finish for any reason 
-    //ret = true; 
+    if( (state_msg.compare("SUCCEEDED") == 0 )  ||
+		(state_msg.compare("LOST") == 0 ) || 
+		(state_msg.compare("ABORTED") == 0 ) ||
+		(state_msg.compare("FAILED") == 0 ) )
+		{
+         ret = true; 
+		}
   alg_.unlock(); 
 
   return ret; 
@@ -119,6 +128,7 @@ bool WamArmNavigationAlgNode::simple_pose_moveHasSucceedCallback(void)
 
   alg_.lock(); 
     //if goal was accomplished 
+    if(code_result.val==arm_navigation_msgs::ArmNavigationErrorCodes::SUCCESS)ret=true;
     //ret = true 
   alg_.unlock(); 
 
@@ -129,6 +139,7 @@ void WamArmNavigationAlgNode::simple_pose_moveGetResultCallback(iri_wam_arm_navi
 { 
   alg_.lock(); 
     //update result data to be sent to client 
+    result->error_code=code_result;
     //result->data = data; 
   alg_.unlock(); 
 } 
@@ -137,6 +148,8 @@ void WamArmNavigationAlgNode::simple_pose_moveGetFeedbackCallback(iri_wam_arm_na
 { 
   alg_.lock(); 
     //keep track of feedback 
+    feedback->state=state_msg;
+    feedback->succesed=(state_msg.compare("SUCCEEDED"))?true:false;
     //ROS_INFO("feedback: %s", feedback->data.c_str()); 
   alg_.unlock(); 
 }
