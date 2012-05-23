@@ -71,7 +71,8 @@ class WamArmNavigationAlgNode : public algorithm_base::IriBaseAlgorithm<WamArmNa
     void move_iri_wamActive();
     void move_iri_wamFeedback(const arm_navigation_msgs::MoveArmFeedbackConstPtr& feedback);
 
-
+    arm_navigation_msgs::ArmNavigationErrorCodes code_result;
+    std::string state_msg;
   public:
    /**
     * \brief Constructor
