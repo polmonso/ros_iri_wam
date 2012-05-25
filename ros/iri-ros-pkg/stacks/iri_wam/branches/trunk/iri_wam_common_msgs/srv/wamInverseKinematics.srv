@@ -1,5 +1,0 @@
-#request
-geometry_msgs/PoseStamped pose
----
-#response
-sensor_msgs/JointState joints
