@@ -1,6 +1,0 @@
-\subsubsection parameters ROS parameters
-
-Reads and maintains the following parameters on the ROS server
-
-- \b "~frame_tcp" : \b [str] Frame that will moved to target pose min: , default: /bhand_tcp, max: 
-
