@@ -1,0 +1,18 @@
+<package>
+  <description brief="iri_wam_tcp_ik">
+
+     iri_wam_tcp_ik
+
+  </description>
+  <author>sfoix</author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_tcp_ik</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="iri_wam_common_msgs"/>
+  <depend package="tf"/>
+
+</package>
+
+

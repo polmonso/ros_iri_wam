@@ -1,0 +1,12 @@
+<package>
+  <description brief="iri_wam_base">
+      Base package to host launch and config files of IRI WAM driver
+  </description>
+  <author>Jose Luis Rivero</author>
+  <license>LGPL</license>
+  <url>http://ros.org/wiki/iri_wam_base</url>
+  <depend package="iri_wam_wrapper" />
+  <depend package="iri_wam_ik" />
+</package>
+
+
