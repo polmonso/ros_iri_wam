@@ -6,7 +6,7 @@
 
     <link name="world"/>
 
-    <link name="wam_fk/wam0">
+    <link name="lk_wam0">
         <inertial>
             <mass value="20" />
             <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
@@ -14,7 +14,7 @@
         </inertial>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-            <geometry name="wam_fk/wam0_visual">
+            <geometry name="lk_wam0_visual">
                 <mesh filename="package://iri_wam_description/mesh/wambase.stl" scale="1.0 1.0 1.0" />
             </geometry>
             <material name="Grey" >
@@ -23,7 +23,7 @@
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
-            <geometry name="wam_fk/wam0_collision">
+            <geometry name="lk_wam0_collision">
                 <mesh filename="package://iri_wam_description/mesh/wambase.stl" scale="1.0 1.0 1.0" />
 <!--
                 <box size="0.20 0.40 0.40"/>
@@ -32,14 +32,14 @@
             <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
         </collision>
     </link>
-    <gazebo reference="wam_fk/wam0">
+    <gazebo reference="lk_wam0">
         <material>Gazebo/Grey</material>
         <selfCollide>true</selfCollide>
     </gazebo>
 
     <joint name="wam0_fix" type="fixed">
         <parent link="world"/>
-        <child link="wam_fk/wam0"/>
+        <child link="lk_wam0"/>
         <origin xyz="0.22 0.14 0.346" rpy="0 0 0" />
      </joint>
 

@@ -24,21 +24,21 @@
 -->
   <xacro:wam0>
   </xacro:wam0>
-  <xacro:wam1 parent="wam_fk/wam0">
+  <xacro:wam1 parent="lk_wam0">
   </xacro:wam1>
-  <xacro:wam2 parent="wam_fk/wam1">
+  <xacro:wam2 parent="lk_wam1">
   </xacro:wam2>
-  <xacro:wam3 parent="wam_fk/wam2">
+  <xacro:wam3 parent="lk_wam2">
   </xacro:wam3>
-  <xacro:wam4 parent="wam_fk/wam3">
+  <xacro:wam4 parent="lk_wam3">
   </xacro:wam4>
-  <xacro:wam5 parent="wam_fk/wam4">
+  <xacro:wam5 parent="lk_wam4">
   </xacro:wam5>
-  <xacro:wam6 parent="wam_fk/wam5">
+  <xacro:wam6 parent="lk_wam5">
   </xacro:wam6>
-  <xacro:wam7 parent="wam_fk/wam6">
+  <xacro:wam7 parent="lk_wam6">
   </xacro:wam7>
-  <xacro:wamtcp parent="wam_fk/wam7">
+  <xacro:wamtcp parent="lk_wam7">
   </xacro:wamtcp>
 </robot>
 
