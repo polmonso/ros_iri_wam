@@ -28,6 +28,7 @@
 #include <iri_base_algorithm/iri_base_algorithm.h>
 #include "wam_move_arm_alg.h"
 #include <trajectory_msgs/JointTrajectory.h>
+#include <trajectory_msgs/JointTrajectoryPoint.h>
 
 // [publisher subscriber headers]
 
@@ -36,6 +37,7 @@
 // [action server client headers]
 #include <iri_action_server/iri_action_server.h>
 #include <arm_navigation_msgs/MoveArmAction.h>
+#include <arm_navigation_msgs/ArmNavigationErrorCodes.h>
 #include <actionlib/client/simple_action_client.h>
 #include <actionlib/client/terminal_state.h>
 #include <control_msgs/FollowJointTrajectoryAction.h>
@@ -63,8 +65,23 @@ class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgo
     bool syn_controllerHasSucceedCallback(void);
     void syn_controllerGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result);
     void syn_controllerGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback);
-    bool finish;
-    bool success_contr;
+    
+    bool has_move_arm_feedback;
+    ros::Duration time_move_arm_feedback;
+    std::string state_move_arm_feedback;
+    
+    bool has_move_arm_result;
+    arm_navigation_msgs::ArmNavigationErrorCodes error_code_move_arm;
+    std::vector<arm_navigation_msgs::ContactInformation> contact_information_move_arm;
+    std::string state_move_arm_goal;
+    
+    bool has_follow_feedback;
+    std::vector<std::string> follow_joint_names;
+    trajectory_msgs::JointTrajectoryPoint follow_desired_pos;
+    trajectory_msgs::JointTrajectoryPoint follow_actual_pos;
+    trajectory_msgs::JointTrajectoryPoint follow_error_pos;
+    std::string state_follow_goal;
+    int follow_error_code_result;
    
     IriActionServer<arm_navigation_msgs::MoveArmAction> move_arm_aserver_;
     void move_armStartCallback(const arm_navigation_msgs::MoveArmGoalConstPtr& goal);
