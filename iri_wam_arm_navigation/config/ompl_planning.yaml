@@ -13,7 +13,7 @@ iri_wam:
     - LBKPIECEkConfig1
   projection_evaluator: joint_state
 iri_wam_cartesian:
-  parent_frame: wam_fk/wam0
+  parent_frame: lk_wam0
   physical_group: iri_wam
   planner_type: RPYIKTaskSpacePlanner
   state_spaces:
@@ -46,6 +46,6 @@ iri_wam_cartesian:
     - LBKPIECEkConfig1
   kinematics_solver: arm_kinematics_constraint_aware/KDLArmKinematicsPlugin
   tip_name: wam_tcp
-  root_name: wam_fk/wam0
+  root_name: lk_wam0
   projection_evaluator: joint_state
   longest_valid_segment_fraction: 0.001

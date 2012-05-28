@@ -91,6 +91,7 @@ void WamArmNavigationAlgNode::simple_pose_moveStartCallback(const iri_wam_arm_na
     makeMoveMsg(move_arm);
     move_iri_wamMakeActionRequest(move_arm);
     //execute goal 
+    ROS_WARN("£££££");
   alg_.unlock(); 
 } 
 
@@ -147,10 +148,11 @@ void WamArmNavigationAlgNode::simple_pose_moveGetResultCallback(iri_wam_arm_navi
 void WamArmNavigationAlgNode::simple_pose_moveGetFeedbackCallback(iri_wam_arm_navigation::SimplePoseFeedbackPtr& feedback) 
 { 
   alg_.lock(); 
+    //    ROS_INFO("feedback: %s", state_msg.c_str());
     //keep track of feedback 
     feedback->state=state_msg;
     feedback->succesed=(state_msg.compare("SUCCEEDED"))?true:false;
-    //ROS_INFO("feedback: %s", feedback->data.c_str()); 
+     
   alg_.unlock(); 
 }
 
