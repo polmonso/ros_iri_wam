@@ -1,7 +1,7 @@
 iri_ros_pose_controller:
   type: "robot_mechanism_controllers/CartesianPoseController"
-  root_name: wam_fk/wam0
-  tip_name: wam_fk/wam7
+  root_name: lk_wam0
+  tip_name: lk_wam7
   fb_trans:
     p: 20.0
   fb_rot:
