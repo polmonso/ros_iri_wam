@@ -6,7 +6,7 @@
 
   <xacro:macro name="wam7" params="parent">
 
-    <link name="lk_wam7">
+    <link name="wam_link7">
         <inertial>
             <origin xyz="0 0 0" rpy="0 0 0" />
              <mass value="0.0557" />
@@ -14,7 +14,7 @@
         </inertial>
         <visual>
             <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
-            <geometry name="lk_wam7_visual">
+            <geometry name="wam_link7_visual">
                 <mesh filename="package://iri_wam_description/mesh/wam7.stl" scale="1.0 1.0 1.0" />
             </geometry>
             <material name="Grey" >
@@ -23,21 +23,21 @@
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
-            <geometry name="lk_wam7_collision">
+            <geometry name="wam_link7_collision">
                 <mesh filename="package://iri_wam_description/mesh/wam7.stl" scale="1.0 1.0 1.0" />
 <!--                <box size="0.10 0.10 0.10"/> -->
             </geometry>
             <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
         </collision>
     </link>
-    <gazebo reference="lk_wam7">
+    <gazebo reference="wam_link7">
         <material>Gazebo/Grey</material>
         <selfCollide>true</selfCollide>
     </gazebo>
 
     <joint name="j7_joint" type="revolute">
         <parent link="${parent}"/>
-        <child link="lk_wam7"/>
+        <child link="wam_link7"/>
         <origin xyz="0.0 0.0 0.0" rpy="${M_PI/2} 0 0" />
         <axis xyz="0 0 1" />
         <limit lower="-2.2" upper="2.2" effort="30" velocity="2.0"/>

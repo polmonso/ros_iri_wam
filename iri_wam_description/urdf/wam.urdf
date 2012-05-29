@@ -38,7 +38,7 @@
     <parent link="world"/>
     <child link="wambase"/>
   </joint>
-  <link name="lk_wam1">
+  <link name="wam_link1">
     <inertial>
       <mass value="8.3936"/>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
@@ -46,7 +46,7 @@
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam1_visual">
+      <geometry name="wam_link1_visual">
         <mesh filename="package://iri_wam_description/mesh/wam1.stl" scale="1.0 1.0 1.0"/>
       </geometry>
       <material name="Grey">
@@ -55,7 +55,7 @@
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam1_collision">
+      <geometry name="wam_link1_collision">
         <mesh filename="package://iri_wam_description/mesh/wam1.stl" scale="1.0 1.0 1.0"/>
         <!--                <box size="0.20 0.40 0.40"/>
 -->
@@ -63,13 +63,13 @@
       <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
     </collision>
   </link>
-  <gazebo reference="lk_wam1">
+  <gazebo reference="wam_link1">
     <material>Gazebo/Grey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
   <joint name="j1_joint" type="revolute">
     <parent link="wambase"/>
-    <child link="lk_wam1"/>
+    <child link="wam_link1"/>
     <origin rpy="0 0 0" xyz="0.22 0.14 0.346"/>
     <axis xyz="0 0 1"/>
     <limit effort="30" lower="-2.6" upper="2.6" velocity="2.0"/>
@@ -82,7 +82,7 @@
     <mechanicalReduction>1</mechanicalReduction>
     <motorTorqueConstant>1</motorTorqueConstant>
   </transmission>
-  <link name="lk_wam2">
+  <link name="wam_link2">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="4.8487"/>
@@ -90,7 +90,7 @@
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam2_visual">
+      <geometry name="wam_link2_visual">
         <mesh filename="package://iri_wam_description/mesh/wam2.stl" scale="1.0 1.0 1.0"/>
       </geometry>
       <material name="Grey">
@@ -99,20 +99,20 @@
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam2_collision">
+      <geometry name="wam_link2_collision">
         <mesh filename="package://iri_wam_description/mesh/wam2.stl" scale="1.0 1.0 1.0"/>
         <!--                <box size="0.10 0.10 0.10"/> -->
       </geometry>
       <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
     </collision>
   </link>
-  <gazebo reference="lk_wam2">
+  <gazebo reference="wam_link2">
     <material>Gazebo/Grey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
   <joint name="j2_joint" type="revolute">
-    <parent link="lk_wam1"/>
-    <child link="lk_wam2"/>
+    <parent link="wam_link1"/>
+    <child link="wam_link2"/>
     <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     <axis xyz="0 1 0"/>
     <limit effort="30" lower="-2.0" upper="2.0" velocity="2.0"/>
@@ -126,7 +126,7 @@
     <motorTorqueConstant>1</motorTorqueConstant>
     <!--<pulsesPerRevolution>90000</pulsesPerRevolution>-->
   </transmission>
-  <link name="lk_wam3">
+  <link name="wam_link3">
     <inertial>
       <mass value="1.7251"/>
       <origin rpy="0 0 0" xyz="0 0 0.225"/>
@@ -134,7 +134,7 @@
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam3_visual">
+      <geometry name="wam_link3_visual">
         <mesh filename="package://iri_wam_description/mesh/wam3.stl" scale="1.0 1.0 1.0"/>
       </geometry>
       <material name="Grey">
@@ -143,20 +143,20 @@
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam3_collision">
+      <geometry name="wam_link3_collision">
         <mesh filename="package://iri_wam_description/mesh/wam3.stl" scale="1.0 1.0 1.0"/>
         <!--                <box size="0.10 0.10 0.10"/> -->
       </geometry>
       <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
     </collision>
   </link>
-  <gazebo reference="lk_wam3">
+  <gazebo reference="wam_link3">
     <material>Gazebo/Grey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
   <joint name="j3_joint" type="revolute">
-    <parent link="lk_wam2"/>
-    <child link="lk_wam3"/>
+    <parent link="wam_link2"/>
+    <child link="wam_link3"/>
     <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     <axis xyz="0 0 1"/>
     <limit effort="30" lower="-2.8" upper="2.8" velocity="2.0"/>
@@ -170,7 +170,7 @@
     <motorTorqueConstant>1</motorTorqueConstant>
     <!-- <pulsesPerRevolution>90000</pulsesPerRevolution>-->
   </transmission>
-  <link name="lk_wam4">
+  <link name="wam_link4">
     <inertial>
       <mass value="2.0824"/>
       <origin rpy="0 0 0" xyz="-0.045 -0.15 0"/>
@@ -178,7 +178,7 @@
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam4_visual">
+      <geometry name="wam_link4_visual">
         <mesh filename="package://iri_wam_description/mesh/wam4.stl" scale="1.0 1.0 1.0"/>
       </geometry>
       <material name="Grey">
@@ -187,20 +187,20 @@
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam4_collision">
+      <geometry name="wam_link4_collision">
         <mesh filename="package://iri_wam_description/mesh/wam4.stl" scale="1.0 1.0 1.0"/>
         <!--                <box size="0.10 0.10 0.10"/> -->
       </geometry>
       <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
     </collision>
   </link>
-  <gazebo reference="lk_wam4">
+  <gazebo reference="wam_link4">
     <material>Gazebo/Grey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
   <joint name="j4_joint" type="revolute">
-    <parent link="lk_wam3"/>
-    <child link="lk_wam4"/>
+    <parent link="wam_link3"/>
+    <child link="wam_link4"/>
     <origin rpy="-1.57079632679 0 0" xyz="0.045 0.0 0.55"/>
     <axis xyz="0 0 1"/>
     <limit effort="35" lower="-0.9" upper="2.8" velocity="2.0"/>
@@ -214,7 +214,7 @@
     <motorTorqueConstant>1</motorTorqueConstant>
     <!--<pulsesPerRevolution>90000</pulsesPerRevolution>-->
   </transmission>
-  <link name="lk_wam5">
+  <link name="wam_link5">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.3067"/>
@@ -222,7 +222,7 @@
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam5_visual">
+      <geometry name="wam_link5_visual">
         <mesh filename="package://iri_wam_description/mesh/wam5.stl" scale="1.0 1.0 1.0"/>
       </geometry>
       <material name="Grey">
@@ -231,20 +231,20 @@
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam5_collision">
+      <geometry name="wam_link5_collision">
         <mesh filename="package://iri_wam_description/mesh/wam5.stl" scale="1.0 1.0 1.0"/>
         <!--                <box size="0.10 0.10 0.10"/> -->
       </geometry>
       <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
     </collision>
   </link>
-  <gazebo reference="lk_wam5">
+  <gazebo reference="wam_link5">
     <material>Gazebo/Grey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
   <joint name="j5_joint" type="revolute">
-    <parent link="lk_wam4"/>
-    <child link="lk_wam5"/>
+    <parent link="wam_link4"/>
+    <child link="wam_link5"/>
     <origin rpy="1.57079632679 0 0" xyz="-0.045 -0.3 0.0"/>
     <axis xyz="0 0 1"/>
     <limit effort="30" lower="-4.8" upper="1.3" velocity="2.0"/>
@@ -258,7 +258,7 @@
     <motorTorqueConstant>1</motorTorqueConstant>
     <!--  <pulsesPerRevolution>90000</pulsesPerRevolution>-->
   </transmission>
-  <link name="lk_wam6">
+  <link name="wam_link6">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.4278"/>
@@ -266,7 +266,7 @@
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam6_visual">
+      <geometry name="wam_link6_visual">
         <mesh filename="package://iri_wam_description/mesh/wam6.stl" scale="1.0 1.0 1.0"/>
       </geometry>
       <material name="Grey">
@@ -275,20 +275,20 @@
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam6_collision">
+      <geometry name="wam_link6_collision">
         <mesh filename="package://iri_wam_description/mesh/wam6.stl" scale="1.0 1.0 1.0"/>
         <!--                <box size="0.10 0.10 0.10"/> -->
       </geometry>
       <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
     </collision>
   </link>
-  <gazebo reference="lk_wam6">
+  <gazebo reference="wam_link6">
     <material>Gazebo/Grey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
   <joint name="j6_joint" type="revolute">
-    <parent link="lk_wam5"/>
-    <child link="lk_wam6"/>
+    <parent link="wam_link5"/>
+    <child link="wam_link6"/>
     <origin rpy="-1.57079632679 0 0" xyz="0.0 0.0 0.0"/>
     <axis xyz="0 0 1"/>
     <limit effort="30" lower="-1.6" upper="1.6" velocity="2.0"/>
@@ -302,7 +302,7 @@
     <motorTorqueConstant>1</motorTorqueConstant>
     <!--  <pulsesPerRevolution>90000</pulsesPerRevolution>-->
   </transmission>
-  <link name="lk_wam7">
+  <link name="wam_link7">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <mass value="0.0557"/>
@@ -310,7 +310,7 @@
     </inertial>
     <visual>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam7_visual">
+      <geometry name="wam_link7_visual">
         <mesh filename="package://iri_wam_description/mesh/wam7.stl" scale="1.0 1.0 1.0"/>
       </geometry>
       <material name="Grey">
@@ -319,20 +319,20 @@
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
-      <geometry name="lk_wam7_collision">
+      <geometry name="wam_link7_collision">
         <mesh filename="package://iri_wam_description/mesh/wam7.stl" scale="1.0 1.0 1.0"/>
         <!--                <box size="0.10 0.10 0.10"/> -->
       </geometry>
       <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
     </collision>
   </link>
-  <gazebo reference="lk_wam7">
+  <gazebo reference="wam_link7">
     <material>Gazebo/Grey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
   <joint name="j7_joint" type="revolute">
-    <parent link="lk_wam6"/>
-    <child link="lk_wam7"/>
+    <parent link="wam_link6"/>
+    <child link="wam_link7"/>
     <origin rpy="1.57079632679 0 0" xyz="0.0 0.0 0.0"/>
     <axis xyz="0 0 1"/>
     <limit effort="30" lower="-2.2" upper="2.2" velocity="2.0"/>
