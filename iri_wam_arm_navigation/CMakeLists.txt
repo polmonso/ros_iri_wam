@@ -10,9 +10,9 @@ set(PROJECT_NAME wam_arm_navigation_alg_node)
 #  RelWithDebInfo : w/ debug symbols, w/ optimization
 #  MinSizeRel     : w/o debug symbols, w/ optimization, stripped binaries
 #set(ROS_BUILD_TYPE RelWithDebInfo)
-rosbuild_find_ros_package(actionlib_msgs)
-include(${actionlib_msgs_PACKAGE_PATH}/cmake/actionbuild.cmake)
-genaction()
+#rosbuild_find_ros_package(actionlib_msgs)
+#include(${actionlib_msgs_PACKAGE_PATH}/cmake/actionbuild.cmake)
+#genaction()
 
 rosbuild_init()
 
@@ -22,14 +22,14 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 #uncomment if you have defined messages
-rosbuild_genmsg()
+#rosbuild_genmsg()
 #uncomment if you have defined services
 #rosbuild_gensrv()
 
 # added to include support for dynamic reconfiguration
-rosbuild_find_ros_package(dynamic_reconfigure)
-include(${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake)
-gencfg()
+#rosbuild_find_ros_package(dynamic_reconfigure)
+#include(${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake)
+#gencfg()
 # end dynamic reconfiguration
 
 FIND_PACKAGE(iriutils REQUIRED)
@@ -41,6 +41,6 @@ INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ./include)
 #target_link_libraries(${PROJECT_NAME} another_library)
 #rosbuild_add_boost_directories()
 #rosbuild_link_boost(${PROJECT_NAME} thread)
-rosbuild_add_executable(${PROJECT_NAME} src/wam_arm_navigation_alg.cpp src/wam_arm_navigation_alg_node.cpp)
-
-target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY})
+#rosbuild_add_executable(${PROJECT_NAME} src/wam_arm_navigation_alg.cpp src/wam_arm_navigation_alg_node.cpp)
+rosbuild_add_executable(box test/box.cpp)
+#target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY})

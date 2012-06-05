@@ -1,7 +1,8 @@
 <launch> 
     <!-- Load URDF WAM model -->
     <include file="$(find iri_wam_description)/launch/iri_wam_description.launch" />
-
+		<!-- Name of Action Server (controllers) -->
+	        <param name="/iri_wam_move_arm/controller_action_name" type="string" value="/iri_ros_controller/follow_joint_trajectory" />
     <!-- Controller Manager -->
     <group>
       <remap from="joint_states" to="wam_wrapper/joint_states"/>

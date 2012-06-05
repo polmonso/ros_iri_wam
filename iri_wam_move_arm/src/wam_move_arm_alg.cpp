@@ -1,5 +1,6 @@
 #include "wam_move_arm_alg.h"
-
+#include <iostream>
+#include <fstream>
 WamMoveArmAlgorithm::WamMoveArmAlgorithm(void)
 {
 }
@@ -39,6 +40,9 @@ void WamMoveArmAlgorithm::restoreVelocity(trajectory_msgs::JointTrajectory &curr
 {
   double q1,q0;
   double dTime = T_total.toSec() /current_trajectory.points.size();
+   std::ofstream f2;
+   f2.open("/home/irojas/Desktop/trajectorias.txt", std::ofstream::out);
+  
   for(unsigned int i=0; i < current_trajectory.points.size(); ++i)
   {
 	 for(unsigned int j=0; j < current_trajectory.points[i].velocities.size(); ++j)
@@ -51,7 +55,9 @@ void WamMoveArmAlgorithm::restoreVelocity(trajectory_msgs::JointTrajectory &curr
 			  current_trajectory.points[i].velocities[j]= ((q1-q0)/dTime);		 
 			}			 
 	 }
-  }	  
+	 f2<<current_trajectory.points[i].positions[0]<<" "<<current_trajectory.points[i].positions[1]<<" "<<current_trajectory.points[i].positions[2]<<" "<<current_trajectory.points[i].positions[3]<<" "<<current_trajectory.points[i].positions[4]<<" "<<current_trajectory.points[i].positions[5]<<" "<<current_trajectory.points[i].positions[6]<<"\r";
+  }	 
+  f2.close(); 
   
 }
 void WamMoveArmAlgorithm::restoreAccel(trajectory_msgs::JointTrajectory &current_trajectory,const ros::Duration& T_total)
