@@ -1,6 +1,0 @@
-\subsubsection usage Usage
-\verbatim
-<node name="WamCartesianPlanningAlgorithm" pkg="iri_wam_cartesian_planning" type="WamCartesianPlanningAlgorithm">
-</node>
-\endverbatim
-

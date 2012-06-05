@@ -1,5 +1,0 @@
-int32 action
-int32 hand
-int32 zone
----
-int8 success
