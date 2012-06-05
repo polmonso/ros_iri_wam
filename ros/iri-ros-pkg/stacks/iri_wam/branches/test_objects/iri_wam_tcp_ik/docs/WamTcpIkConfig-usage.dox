@@ -1,0 +1,7 @@
+\subsubsection usage Usage
+\verbatim
+<node name="WamTcpIkAlgorithm" pkg="iri_wam_tcp_ik" type="WamTcpIkAlgorithm">
+  <param name="frame_tcp" type="str" value="/bhand_tcp" />
+</node>
+\endverbatim
+
