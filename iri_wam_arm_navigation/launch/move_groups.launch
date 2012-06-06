@@ -1,5 +1,5 @@
 <launch>
 
-    <include file="$(find iri_wam_arm_navigation)/launch/move_iri_wam.launch" />
+    <include file="$(find iri_wam_arm_navigation)/launch/move_iri_wam_real.launch" />
 
 </launch>

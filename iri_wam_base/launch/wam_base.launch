@@ -1,7 +1,7 @@
 <!-- Remember to set the IP argument of wam computer -->
 <launch> 
     <arg name="IP" />
-
+    <remap from="follow_joint_trajectory" to="iri_ros_controller/follow_joint_trajectory" />
     <!-- WAM low level driver -->
     <include file="$(find iri_wam_wrapper)/launch/iri_wam_wrapper.launch">
        <arg name="IP" value="$(arg IP)"/>
