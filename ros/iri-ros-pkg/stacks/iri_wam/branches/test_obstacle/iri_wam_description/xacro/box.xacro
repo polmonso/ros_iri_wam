@@ -42,6 +42,7 @@
   </link>
   <gazebo reference="box">
     <material>Gazebo/Blue</material>
+    <turnGravityOff>true</turnGravityOff>
   </gazebo>
        
        
