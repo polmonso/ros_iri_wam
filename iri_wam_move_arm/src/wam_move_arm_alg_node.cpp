@@ -133,7 +133,7 @@ void WamMoveArmAlgNode::syn_controllerGetFeedbackCallback(control_msgs::FollowJo
   alg_.unlock(); 
 }
 void WamMoveArmAlgNode::syn_move_armDone(const actionlib::SimpleClientGoalState& state,  const arm_navigation_msgs::MoveArmResultConstPtr& result) 
-{ 
+{ ROS_INFO_STREAM("###");
   if( state.toString().compare("SUCCEEDED") == 0 ) 
     ROS_INFO("WamMoveArmAlgNode::syn_move_armDone: Goal Achieved!"); 
     
@@ -167,14 +167,14 @@ void WamMoveArmAlgNode::syn_move_armFeedback(const arm_navigation_msgs::MoveArmF
 }
 void WamMoveArmAlgNode::move_armStartCallback(const arm_navigation_msgs::MoveArmGoalConstPtr& goal)
 { 
-  alg_.lock(); 
+  //alg_.lock(); 
     //check goal 
     move_arm(goal);
 
     syn_move_armMakeActionRequest(*goal);
     //sendGoal();
     //execute goal 
-  alg_.unlock(); 
+ // alg_.unlock(); 
 } 
 
 void WamMoveArmAlgNode::move_armStopCallback(void) 
