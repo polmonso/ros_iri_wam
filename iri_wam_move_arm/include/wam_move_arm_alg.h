@@ -129,6 +129,9 @@ class WamMoveArmAlgorithm
 	void restoreAccel(trajectory_msgs::JointTrajectory &current_trajectory,const ros::Duration& T_total);
 	void setTime(const ros::Duration msg);
 	ros::Duration getTime();
+	std::vector<double> getMaxVelocities(std::vector<std::string> vecNames);
+	void getLongerTime(trajectory_msgs::JointTrajectory &current_trajectory,const std::vector<double> maxVel);
+	double getLongerTime(const std::vector<double> positions,const std::vector<double> maxVel);
 };
 
 #endif
