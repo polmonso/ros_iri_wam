@@ -91,7 +91,7 @@ class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgo
     void clienteFeedback(const control_msgs::FollowJointTrajectoryFeedbackConstPtr& feedback);
 
 
-
+	std::vector<double> getMaxVelocities();
 	bool send_msg_;
 	control_msgs::FollowJointTrajectoryGoal tmp_msg_;
 	arm_navigation_msgs::MoveArmResult move_result;

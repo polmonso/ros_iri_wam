@@ -62,7 +62,7 @@ class MoveInJoints
 	 pos.resize(7);
 	 for(int i =1; i <=7; ++i) pos[i-1]=strtod(argv[i],NULL);
 
-	 time_move= (argc == 9)?ros::Duration(strtod(argv[8],NULL)):ros::Duration(3.0);
+	 time_move= (argc == 9)?ros::Duration(strtod(argv[8],NULL)):ros::Duration(0.0);
 	}  
     //! Returns the current state of the action
     actionlib::SimpleClientGoalState getState()
