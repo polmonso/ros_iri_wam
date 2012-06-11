@@ -96,7 +96,7 @@ class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgo
 	control_msgs::FollowJointTrajectoryGoal tmp_msg_;
 	arm_navigation_msgs::MoveArmResult move_result;
 	arm_navigation_msgs::MoveArmFeedback move_feedback;
-	actionlib::SimpleClientGoalState *goal_state_;
+
 	void makeMsg(control_msgs::FollowJointTrajectoryGoal& msg);
 	void move_arm(const arm_navigation_msgs::MoveArmGoalConstPtr& goal);
 	void getTime(const arm_navigation_msgs::MoveArmGoal& msg, ros::Duration& time);

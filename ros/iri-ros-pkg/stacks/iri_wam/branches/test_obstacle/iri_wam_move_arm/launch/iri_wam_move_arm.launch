@@ -4,6 +4,7 @@
  <remap from="syn_move_arm" to="/syn_move_iri_wam" />
  <remap from="controller_client_" to="/iri_ros_controller/follow_joint_trajectory" />
 
- <node launch-prefix="xterm -e gdb --args" name="iri_wam_move_arm_node"  type="iri_wam_move_arm"  pkg="iri_wam_move_arm" output="screen" />
+ <!-- <node launch-prefix="xterm -e gdb args" name="iri_wam_move_arm_node"  type="iri_wam_move_arm"  pkg="iri_wam_move_arm" output="screen" /> -->
+ <node name="iri_wam_move_arm_node"  type="iri_wam_move_arm"  pkg="iri_wam_move_arm" output="screen" />
  
 </launch> 
