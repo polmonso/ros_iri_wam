@@ -61,9 +61,11 @@ void WamMoveArmAlgorithm::restoreVelocity(trajectory_msgs::JointTrajectory &curr
 			  q1=current_trajectory.points[i].positions[j];
 			  q0=current_trajectory.points[i-1].positions[j];
 			  current_trajectory.points[i].velocities[j]= ((q1-q0)/dTime);		 
-			}			 
+			  
+			}
+			f2<<current_trajectory.points[i].velocities[j]<<"\r";		 
 	 }
-	 f2<<current_trajectory.points[i].positions[0]<<" "<<current_trajectory.points[i].positions[1]<<" "<<current_trajectory.points[i].positions[2]<<" "<<current_trajectory.points[i].positions[3]<<" "<<current_trajectory.points[i].positions[4]<<" "<<current_trajectory.points[i].positions[5]<<" "<<current_trajectory.points[i].positions[6]<<"\r";
+	// f2<<current_trajectory.points[i].positions[0]<<" "<<current_trajectory.points[i].positions[1]<<" "<<current_trajectory.points[i].positions[2]<<" "<<current_trajectory.points[i].positions[3]<<" "<<current_trajectory.points[i].positions[4]<<" "<<current_trajectory.points[i].positions[5]<<" "<<current_trajectory.points[i].positions[6]<<"\r";
   }	 
   f2.close(); 
   
