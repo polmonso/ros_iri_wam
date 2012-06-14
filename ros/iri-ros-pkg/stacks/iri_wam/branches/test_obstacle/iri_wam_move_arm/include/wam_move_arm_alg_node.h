@@ -24,6 +24,9 @@
 
 #ifndef _wam_move_arm_alg_node_h_
 #define _wam_move_arm_alg_node_h_
+#include <boost/scoped_ptr.hpp>
+#include <boost/thread/recursive_mutex.hpp>
+#include <actionlib/server/simple_action_server.h>
 
 #include <iri_base_algorithm/iri_base_algorithm.h>
 #include "wam_move_arm_alg.h"
@@ -39,11 +42,14 @@
 #include <actionlib/client/simple_action_client.h>
 #include <actionlib/client/terminal_state.h>
 #include <control_msgs/FollowJointTrajectoryAction.h>
-
+#include <arm_navigation_msgs/ArmNavigationErrorCodes.h>
 /**
  * \brief IRI ROS Specific Algorithm Class
  *
  */
+  typedef actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> FJTAS;
+
+typedef  actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle GoalHandle;	
 class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgorithm>
 {
   private:
@@ -56,15 +62,16 @@ class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgo
     // [client attributes]
 
     // [action server attributes]
-    IriActionServer<control_msgs::FollowJointTrajectoryAction> syn_controller_aserver_;
+    /*IriActionServer<control_msgs::FollowJointTrajectoryAction> syn_controller_aserver_;
+    
     void syn_controllerStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal);
     void syn_controllerStopCallback(void);
     bool syn_controllerIsFinishedCallback(void);
     bool syn_controllerHasSucceedCallback(void);
     void syn_controllerGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result);
-    void syn_controllerGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback);
-    bool finish;
-    bool success_contr;
+    void syn_controllerGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback);*/
+  //  bool finish;
+   // bool success_contr;
    
     IriActionServer<arm_navigation_msgs::MoveArmAction> move_arm_aserver_;
     void move_armStartCallback(const arm_navigation_msgs::MoveArmGoalConstPtr& goal);
@@ -103,6 +110,14 @@ class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgo
 	
 	control_msgs::FollowJointTrajectoryFeedback feedback_controller;
 	control_msgs::FollowJointTrajectoryResult	result_controller;
+	
+	boost::scoped_ptr<FJTAS> action_server_follow_;
+	void goalCBFollow(GoalHandle goal);
+	void cancelCBFollow(GoalHandle gh);
+	GoalHandle goal_h;
+	int final_state;
+	
+	void f(const actionlib::SimpleClientGoalState& state);
 
   public:
    /**

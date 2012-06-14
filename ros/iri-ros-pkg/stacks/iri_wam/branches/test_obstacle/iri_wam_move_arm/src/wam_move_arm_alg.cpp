@@ -29,7 +29,7 @@ ros::Duration WamMoveArmAlgorithm::getTime()
 	return path_time_;
 }
 void WamMoveArmAlgorithm::restoreTime(trajectory_msgs::JointTrajectory &current_trajectory,const ros::Duration& T_total)
-{
+{ROS_WARN_STREAM("TOTAL TIME"<<T_total.toSec());
 	if(T_total.toSec() > 0.0)
 	{
 	  double dTime = T_total.toSec() / current_trajectory.points.size();
@@ -37,11 +37,21 @@ void WamMoveArmAlgorithm::restoreTime(trajectory_msgs::JointTrajectory &current_
 	  {
 		  current_trajectory.points[i].time_from_start = ros::Duration(i*dTime);
 	  }	 
+	  ROS_WARN_STREAM("TIME"<<"#"<<dTime);
     }
     else 
     {
-		std::vector<double> MaxVel = getMaxVelocities(current_trajectory.joint_names);
-		getLongerTime(current_trajectory,MaxVel);
+		//std::vector<double> MaxVel = getMaxVelocities(current_trajectory.joint_names);
+		//getLongerTime(current_trajectory,MaxVel);
+		double time;
+		eucledian_distance(current_trajectory,time);
+			  double dTime = time / current_trajectory.points.size();
+	  for(unsigned int i=0; i < current_trajectory.points.size(); ++i)
+	  {
+		  current_trajectory.points[i].time_from_start = ros::Duration(i*dTime);
+	  }	 
+		ROS_WARN_STREAM("TIME"<<time<<"#"<<dTime);
+		//getchar();
 	}
 }
 void WamMoveArmAlgorithm::restoreVelocity(trajectory_msgs::JointTrajectory &current_trajectory,const ros::Duration& T_total)
@@ -55,14 +65,14 @@ void WamMoveArmAlgorithm::restoreVelocity(trajectory_msgs::JointTrajectory &curr
   {
 	 for(unsigned int j=0; j < current_trajectory.points[i].velocities.size(); ++j)
 	 {
-			if(i == 0)current_trajectory.points[i].velocities[j]= 0.0;
-			else
-			{		 
-			  q1=current_trajectory.points[i].positions[j];
-			  q0=current_trajectory.points[i-1].positions[j];
-			  current_trajectory.points[i].velocities[j]= ((q1-q0)/dTime);		 
+			//if(i == 0)current_trajectory.points[i].velocities[j]= 0.0;
+			//else
+			//{		 
+			 // q1=current_trajectory.points[i].positions[j];
+			 // q0=current_trajectory.points[i-1].positions[j];
+			//  current_trajectory.points[i].velocities[j]= ((q1-q0)/dTime);		 
 			  
-			}
+			//}
 			f2<<current_trajectory.points[i].velocities[j]<<"\r";		 
 	 }
 	// f2<<current_trajectory.points[i].positions[0]<<" "<<current_trajectory.points[i].positions[1]<<" "<<current_trajectory.points[i].positions[2]<<" "<<current_trajectory.points[i].positions[3]<<" "<<current_trajectory.points[i].positions[4]<<" "<<current_trajectory.points[i].positions[5]<<" "<<current_trajectory.points[i].positions[6]<<"\r";
@@ -122,4 +132,34 @@ std::vector<double> WamMoveArmAlgorithm::getMaxVelocities(std::vector<std::strin
 	 public_node_handle_.param<double>("/trajectory_filter_server/joint_limits/"+vecNames[i]+"/max_velocity", vec[i], 1.0);
     }
 	return vec;
+}
+
+void WamMoveArmAlgorithm::eucledian_distance(const std::vector<double>& a,const std::vector<double>& b, double& distance)
+{
+	if(a.size() != b.size())
+	{
+		ROS_ERROR("Size of vectors not the same");
+		exit(1);
+	}
+	double acum=0.0, ax=0.0;
+	for(int i=0; i < a.size(); ++i)
+	{
+		ax=a[i]-b[i];
+		ax*=ax;
+		acum+=ax;
+	}
+	distance=sqrt(acum);
+}
+void WamMoveArmAlgorithm::eucledian_distance(const trajectory_msgs::JointTrajectory& traj,double& t)
+{
+	double d;
+	int y;
+	for(int i =0 ; i < traj.points.size()-1; ++i)
+	{
+		eucledian_distance(traj.points[i].positions,traj.points[i+1].positions,d);
+		t+=d;
+		y=i;
+		//distances.push_back(d);
+	}
+	ROS_ERROR_STREAM("TERMINO EN I:"<<y<<" leng:"<<traj.points.size()<<" time"<<t);
 }

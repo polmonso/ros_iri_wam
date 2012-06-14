@@ -28,6 +28,7 @@
 #include <iri_wam_move_arm/WamMoveArmConfig.h>
 #include "mutex.h"
 #include <trajectory_msgs/JointTrajectory.h>
+#include <math.h>
 //include wam_move_arm_alg main library
 
 /**
@@ -132,6 +133,10 @@ class WamMoveArmAlgorithm
 	std::vector<double> getMaxVelocities(std::vector<std::string> vecNames);
 	void getLongerTime(trajectory_msgs::JointTrajectory &current_trajectory,const std::vector<double> maxVel);
 	double getLongerTime(const std::vector<double> positions,const std::vector<double> maxVel);
+	
+	
+	void eucledian_distance(const std::vector<double>& a,const std::vector<double>& b, double& distance);
+	void eucledian_distance(const trajectory_msgs::JointTrajectory &traj,double& t);
 };
 
 #endif
