@@ -76,6 +76,7 @@ class MoveInJoints
 		goal.motion_plan_request.num_planning_attempts = 1;
 		goal.motion_plan_request.allowed_planning_time = ros::Duration(5.0);
 		goal.motion_plan_request.planner_id = std::string("");
+		//goal.accept_invalid_goals=true;
 		goal.planner_service_name=std::string("ompl_planning/plan_kinematic_path");
 		goal.motion_plan_request.expected_path_dt = time_move;
 	}
@@ -87,8 +88,8 @@ class MoveInJoints
 	  {
        goal.motion_plan_request.goal_constraints.joint_constraints[i].joint_name = names[i];
        goal.motion_plan_request.goal_constraints.joint_constraints[i].position = pos[i];
-       goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = pos[i] -0.100001;
-	   goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above =  pos[i] +0.100001;
+       goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = pos[i]+ 0.0019999;
+	   goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = pos[i] -0.0019999;
 	   if(goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below < 0.0){
 		goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below *= -1;
 	   }
@@ -100,14 +101,14 @@ class MoveInJoints
 	//!Defined Path Constraint Parameters
 	void setPlannerRequestPathConstraint(arm_navigation_msgs::MoveArmGoal& goal)
 	{
-	 goal.motion_plan_request.path_constraints.joint_constraints.resize(names.size());	
+	/* goal.motion_plan_request.path_constraints.joint_constraints.resize(names.size());	
      for(unsigned int i = 0 ; i < names.size(); ++i)
 	 {
 	  goal.motion_plan_request.path_constraints.joint_constraints[i].joint_name = names[i];
       goal.motion_plan_request.path_constraints.joint_constraints[i].position =0.00; 
       goal.motion_plan_request.path_constraints.joint_constraints[i].tolerance_below = 10.10001;
       goal.motion_plan_request.path_constraints.joint_constraints[i].tolerance_above = 10.10001;
-     }
+     }*/
 	}	
 };
 int main(int argc, char** argv)
@@ -127,7 +128,7 @@ int main(int argc, char** argv)
   while(!arm.getState().isDone() && ros::ok())
   {
 	  ROS_DEBUG("WAIT To END TRAJECTORY");
-    usleep(50000);
+   // usleep(50000);
   }
       
  bool success = (arm.getState() == actionlib::SimpleClientGoalState::SUCCEEDED);
