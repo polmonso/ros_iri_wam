@@ -88,8 +88,8 @@ class MoveInJoints
 	  {
        goal.motion_plan_request.goal_constraints.joint_constraints[i].joint_name = names[i];
        goal.motion_plan_request.goal_constraints.joint_constraints[i].position = pos[i];
-       goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = pos[i]+ 0.0019999;
-	   goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = pos[i] -0.0019999;
+       goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = pos[i]+ 0.0119999;
+	   goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = pos[i] -0.0119999;
 	   if(goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below < 0.0){
 		goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below *= -1;
 	   }
