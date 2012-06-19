@@ -15,7 +15,7 @@
 
 
  <!-- Gazebo -->
- <param name="$(arg name_obstacle_)" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/box.xacro'" />
+ <param name="$(arg name_obstacle_)" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/box.urdf.xacro'" />
  <node name="spawn_simple_$(arg name_obstacle_)" pkg="gazebo" type="spawn_model" args="-urdf -param $(arg name_obstacle_) -model $(arg name_obstacle_) -x $(arg pos_box_x) -y $(arg pos_box_y) -z $(arg pos_box_z)" respawn="false" output="screen" />
 
  <!--		ROS			-->
@@ -33,7 +33,7 @@
 	<param name="height"   value="$(arg height_)" />
  </node>
  
- <node pkg="tf" type="static_transform_publisher" name="box_broadcaster_$(arg name_obstacle_)" args="$(arg pos_box_x) $(arg pos_box_y) $(arg pos_box_z) $(arg rot_box_x) $(arg rot_box_y) $(arg rot_box_z) $(arg rot_box_w) /world /$(arg name_obstacle_) 100" />
+ <node pkg="tf" type="static_transform_publisher" name="box_broadcaster_$(arg name_obstacle_)" args="$(arg pos_box_x) $(arg pos_box_y) $(arg pos_box_z) $(arg rot_box_x) $(arg rot_box_y) $(arg rot_box_z) $(arg rot_box_w) /world /box 100" />
  
  
  
