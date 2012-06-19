@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-
+#include <kdl/frames.hpp>
 #include <arm_navigation_msgs/CollisionObject.h>
 #include <arm_navigation_msgs/Shape.h>
 
@@ -13,49 +13,59 @@ int main(int argc, char** argv) {
   XmlRpc::XmlRpcValue val1;
   double tx,ty,tz,qx,qy,qz,qw;
   
-  nh.getParam("posicion_x",val1); 
-  tx=(double)val1;
+  nh.param<double>("posicion_x", tx, 0.01);
   ROS_WARN_STREAM("posicion_x: "<<tx); 
   
-  nh.getParam("posicion_y",val1); 
-  ty=(double)val1;
+  nh.param<double>("posicion_y", ty, 0.01);
   ROS_WARN_STREAM("posicion_y: "<<ty); 
   
-  nh.getParam("posicion_z",val1); 
-  tz=(double)val1;
+  nh.param<double>("posicion_z", tz, 0.01);
   ROS_WARN_STREAM("posicion_z: "<<tz); 
   
-  nh.getParam("rotacion_x",val1); 
-  qx=(double)val1;
-  ROS_WARN_STREAM("rotacion_x: "<<qx); 
+  if(quatern){
+	  nh.param<double>("rotacion_x", qx, 0.01);
+	  ROS_WARN_STREAM("rotacion_x: "<<qx); 
+	  
+	  nh.param<double>("rotacion_y", qy, 0.01);
+	  ROS_WARN_STREAM("rotacion_y: "<<qy); 
+	  
+	  nh.param<double>("rotacion_z", qz, 0.01);
+	  ROS_WARN_STREAM("rotacion_z: "<<qz); 
+	  
+	  nh.param<double>("rotacion_w", qw, 0.01);
+	  ROS_WARN_STREAM("rotacion_w: "<<qw); 
+  }
+  else if(rpy)
+  {
+	double r,p,y;
+	  nh.param<double>("roll", r, 0.01);
+	  ROS_WARN_STREAM("Roll: "<<r); 
+	  
+	  nh.param<double>("pitch", p, 0.01);
+	  ROS_WARN_STREAM("Pitch: "<<p); 
+	  
+	  nh.param<double>("yaw", y, 0.01);
+	  ROS_WARN_STREAM("Yaw: "<<y); 
+	  
+	  KDL::Rotation handRotation= KDL::Rotation::RPY(r,p,y);
+      handRotation.GetQuaternion(qx,qy,qz,qw);
+      ROS_WARN_STREAM("rotacion_x: "<<qx); 
+      ROS_WARN_STREAM("rotacion_y: "<<qy); 
+      ROS_WARN_STREAM("rotacion_z: "<<qz); 
+      ROS_WARN_STREAM("rotacion_w: "<<qw); 
+  }
   
-  nh.getParam("rotacion_y",val1); 
-  qy=(double)val1;
-  ROS_WARN_STREAM("rotacion_y: "<<qy); 
-  
-  nh.getParam("rotacion_z",val1); 
-  qz=(double)val1;
-  ROS_WARN_STREAM("rotacion_z: "<<qz); 
-  
-  nh.getParam("rotacion_w",val1); 
-  qw=(double)val1;
-  ROS_WARN_STREAM("rotacion_w: "<<qw); 
+  std::string name_frame;
+  nh.param<std::string>("name_obstacle", name_frame, "loool");
+  ROS_WARN_STREAM("name_obstacle: "<<name_frame);   
 
   double ancho,alto,largo;
-  nh.getParam("width",val1); 
-  ancho=(double)val1;
+  nh.param<double>("width", ancho, 0.001);
   ROS_WARN_STREAM("width: "<<ancho); 
-  nh.getParam("length",val1); 
-  largo=(double)val1;
+  nh.param<double>("length", largo, 0.001);
   ROS_WARN_STREAM("length: "<<largo); 
-  nh.getParam("height",val1); 
-  alto=(double)val1;
+  nh.param<double>("height", alto, 0.001);
   ROS_WARN_STREAM("height: "<<alto); 
-  std::string name_frame;
-  nh.getParam("name_obstacle",val1); 
-
-  name_frame=(std::string)val1;
-  ROS_WARN_STREAM("name_obstacle: "<<name_frame);   
   
   ros::Publisher object_in_map_pub_;
   object_in_map_pub_  = pub.advertise<arm_navigation_msgs::CollisionObject>("collision_object", 10);

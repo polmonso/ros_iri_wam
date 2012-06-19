@@ -15,65 +15,53 @@ int main(int argc, char** argv) {
   XmlRpc::XmlRpcValue val1;
   double rad,length;
   bool rpy,quatern;
-  nh.getParam("rpy",val1); 
+  /*nh.getParam("rpy",val1); 
   rpy=(bool)val1;
   nh.getParam("quaternion",val1); 
   quatern=(bool)val1;
-  ROS_ERROR_STREAM("RPY "<<rpy);
-	  
-  nh.getParam("radius",val1); 
-  rad=(double)val1;
-  ROS_WARN_STREAM("radius: "<<rad); 
+  ROS_ERROR_STREAM("RPY "<<rpy);*/
   
-  nh.getParam("length",val1); 
-  length=(double)val1;
-  ROS_WARN_STREAM("length: "<<length); 
+  nh.param<bool>("rpy", rpy, false);
+  nh.param<bool>("quaternion", quatern, false);
+  nh.param<double>("radius", rad, 0.01);
+  nh.param<double>("length", rad, 0.01);
   
   double tx,ty,tz,qx,qy,qz,qw;
   
-  nh.getParam("posicion_x",val1); 
-  tx=(double)val1;
+  nh.param<double>("posicion_x", tx, 0.01);
   ROS_WARN_STREAM("posicion_x: "<<tx); 
   
-  nh.getParam("posicion_y",val1); 
-  ty=(double)val1;
+  nh.param<double>("posicion_y", ty, 0.01);
   ROS_WARN_STREAM("posicion_y: "<<ty); 
   
-  nh.getParam("posicion_z",val1); 
-  tz=(double)val1;
+  nh.param<double>("posicion_z", tz, 0.01);
   ROS_WARN_STREAM("posicion_z: "<<tz); 
   
   if(quatern){
-	  nh.getParam("rotacion_x",val1); 
-	  qx=(double)val1;
+	  nh.param<double>("rotacion_x", qx, 0.01);
 	  ROS_WARN_STREAM("rotacion_x: "<<qx); 
 	  
-	  nh.getParam("rotacion_y",val1); 
-	  qy=(double)val1;
+	  nh.param<double>("rotacion_y", qy, 0.01);
 	  ROS_WARN_STREAM("rotacion_y: "<<qy); 
 	  
-	  nh.getParam("rotacion_z",val1); 
-	  qz=(double)val1;
+	  nh.param<double>("rotacion_z", qz, 0.01);
 	  ROS_WARN_STREAM("rotacion_z: "<<qz); 
 	  
-	  nh.getParam("rotacion_w",val1); 
-	  qw=(double)val1;
+	  nh.param<double>("rotacion_w", qw, 0.01);
 	  ROS_WARN_STREAM("rotacion_w: "<<qw); 
   }
   else if(rpy)
   {
 	double r,p,y;
-	  nh.getParam("roll",val1); 
-	  r=(double)val1;
+	  nh.param<double>("roll", r, 0.01);
 	  ROS_WARN_STREAM("Roll: "<<r); 
 	  
-	  nh.getParam("pitch",val1); 
-	  p=(double)val1;
+	  nh.param<double>("pitch", p, 0.01);
 	  ROS_WARN_STREAM("Pitch: "<<p); 
 	  
-	  nh.getParam("yaw",val1); 
-	  y=(double)val1;
+	  nh.param<double>("yaw", y, 0.01);
 	  ROS_WARN_STREAM("Yaw: "<<y); 
+	  
 	  KDL::Rotation handRotation= KDL::Rotation::RPY(r,p,y);
       handRotation.GetQuaternion(qx,qy,qz,qw);
       ROS_WARN_STREAM("rotacion_x: "<<qx); 
@@ -82,12 +70,8 @@ int main(int argc, char** argv) {
       ROS_WARN_STREAM("rotacion_w: "<<qw); 
   }
   
-  std::string name_frame="";
-  nh.getParam("name_obstacle",val1); 
-  ROS_ERROR("$"<<name_frame);
-  ROS_WARN_STREAM("name_obstacle: "<<val1);   
-  name_frame=(std::string)val1;
-   ROS_ERROR("$"<<name_frame);
+  std::string name_frame;
+  nh.param<std::string>("name_obstacle", name_frame, "loool");
   ROS_WARN_STREAM("name_obstacle: "<<name_frame);   
 
   //add the cylinder into the collision space
