@@ -53,6 +53,7 @@ int main(int argc, char** argv) {
   ROS_WARN_STREAM("height: "<<alto); 
   std::string name_frame;
   nh.getParam("name_obstacle",val1); 
+
   name_frame=(std::string)val1;
   ROS_WARN_STREAM("name_obstacle: "<<name_frame);   
   
@@ -105,25 +106,10 @@ int main(int argc, char** argv) {
   pose.orientation.w = qw;
   cylinder_object.shapes.push_back(object);
   cylinder_object.poses.push_back(pose);
- 
- /* nh.deleteParam("posicion_x"); 
-  nh.deleteParam("posicion_y"); 
-  nh.deleteParam("posicion_z"); 
-  nh.deleteParam("rotacion_x"); 
-  nh.deleteParam("rotacion_y"); 
-  nh.deleteParam("rotacion_z"); 
-  nh.deleteParam("rotacion_w"); 
-  nh.deleteParam("width"); 
-  nh.deleteParam("length"); 
-  nh.deleteParam("height"); 
-  nh.deleteParam("name_obstacle");  
-  */
    
-        ros::Duration(5.0).sleep();
-      object_in_map_pub_.publish(cylinder_object);
-  ROS_INFO("Should have published");
-  
-    ros::Duration(5.0).sleep();
+  object_in_map_pub_.publish(cylinder_object);
+  ROS_INFO("Should have published");  
+  ros::Duration(5.0).sleep();
   ros::shutdown();
 
 }
