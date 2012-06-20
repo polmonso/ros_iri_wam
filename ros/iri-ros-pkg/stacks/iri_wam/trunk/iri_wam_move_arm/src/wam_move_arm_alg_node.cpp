@@ -7,8 +7,8 @@ WamMoveArmAlgNode::WamMoveArmAlgNode(void) :
   controller_client_("controller_client_", true),
   syn_move_arm_client_("syn_move_arm", true),
   send_msg_(false),
-  finish(false),
-  success_contr(false)
+  has_move_arm_feedback(false),
+  has_follow_feedback(false)
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -70,8 +70,6 @@ void WamMoveArmAlgNode::syn_controllerStartCallback(const control_msgs::FollowJo
     //check goal 
     tmp_msg_= *goal;
     send_msg_=true;
-    finish=false;
-    success_contr=false;
     makeMsg(tmp_msg_);
     cliente_goal_=tmp_msg_;
     clienteMakeActionRequest();
@@ -95,7 +93,13 @@ bool WamMoveArmAlgNode::syn_controllerIsFinishedCallback(void)
 
   alg_.lock(); 
     //if action has finish for any reason 
-    if(finish)ret=finish;
+       if ( (state_follow_goal.compare("SUCCEEDED") == 0) ||
+		(state_follow_goal.compare("LOST") == 0) ||
+		(state_follow_goal.compare("ABORTED")== 0))
+		{
+			ret = true; 
+			has_follow_feedback=false;
+		}
     //ret = true; 
   alg_.unlock(); 
 
@@ -108,7 +112,7 @@ bool WamMoveArmAlgNode::syn_controllerHasSucceedCallback(void)
 
   alg_.lock(); 
     //if goal was accomplished 
-    ret=(success_contr)?true:false;
+    ret=(state_follow_goal.compare("SUCCEEDED") == 0 )? true:false;
     //ret = true 
   alg_.unlock(); 
 
@@ -120,7 +124,7 @@ void WamMoveArmAlgNode::syn_controllerGetResultCallback(control_msgs::FollowJoin
   alg_.lock(); 
     //update result data to be sent to client 
     //result->data = data; 
-    *result=result_controller;
+    (*result).error_code=follow_error_code_result;
   alg_.unlock(); 
 } 
 
@@ -129,7 +133,13 @@ void WamMoveArmAlgNode::syn_controllerGetFeedbackCallback(control_msgs::FollowJo
   alg_.lock(); 
     //keep track of feedback 
     //ROS_INFO("feedback: %s", feedback->data.c_str()); 
-  *feedback=feedback_controller;  
+    if(has_follow_feedback)
+    {
+     (*feedback).joint_names=follow_joint_names;
+     (*feedback).desired=follow_desired_pos;
+     (*feedback).actual=follow_actual_pos;
+     (*feedback).error=follow_error_pos;
+    }
   alg_.unlock(); 
 }
 void WamMoveArmAlgNode::syn_move_armDone(const actionlib::SimpleClientGoalState& state,  const arm_navigation_msgs::MoveArmResultConstPtr& result) 
@@ -140,7 +150,9 @@ void WamMoveArmAlgNode::syn_move_armDone(const actionlib::SimpleClientGoalState&
   else 
     ROS_INFO("WamMoveArmAlgNode::syn_move_armDone: %s", state.toString().c_str()); 
 
-  move_result= *result;
+  error_code_move_arm=result->error_code;
+  contact_information_move_arm=result->contacts;
+  state_move_arm_goal=state.toString();
   //copy & work with requested result 
 } 
 
@@ -157,7 +169,9 @@ void WamMoveArmAlgNode::syn_move_armFeedback(const arm_navigation_msgs::MoveArmF
 
   //analyze feedback 
   //my_var = feedback->var; 
-  move_feedback= *feedback;
+ has_move_arm_feedback=true;
+ state_move_arm_feedback=feedback->state;
+ time_move_arm_feedback=feedback->time_to_completion;
   //if feedback is not what expected, cancel requested goal 
   if( !feedback_is_ok ) 
   { 
@@ -170,7 +184,6 @@ void WamMoveArmAlgNode::move_armStartCallback(const arm_navigation_msgs::MoveArm
   alg_.lock(); 
     //check goal 
     move_arm(goal);
-
     syn_move_armMakeActionRequest(*goal);
     //sendGoal();
     //execute goal 
@@ -181,6 +194,8 @@ void WamMoveArmAlgNode::move_armStopCallback(void)
 { 
   alg_.lock(); 
     //stop action 
+    arm_navigation_msgs::MoveArmGoal empty;
+    syn_move_armMakeActionRequest(empty);
   alg_.unlock(); 
 } 
 
@@ -190,8 +205,13 @@ bool WamMoveArmAlgNode::move_armIsFinishedCallback(void)
 
   alg_.lock(); 
     //if action has finish for any reason 
-    ret=goal_state_->isDone();
-    //ret = true; 
+   if ( (state_move_arm_goal.compare("SUCCEEDED") == 0) ||
+		(state_move_arm_goal.compare("LOST") == 0) ||
+		(state_move_arm_goal.compare("ABORTED")== 0))
+		{
+			ret = true; 
+			has_move_arm_feedback=false;
+		}
   alg_.unlock(); 
 
   return ret; 
@@ -203,7 +223,7 @@ bool WamMoveArmAlgNode::move_armHasSucceedCallback(void)
 
   alg_.lock(); 
     //if goal was accomplished 
-    if( goal_state_->toString().compare("SUCCEEDED") == 0 ) ret=true;
+    if( state_move_arm_goal.compare("SUCCEEDED") == 0) ret=true;
   alg_.unlock(); 
 
   return ret; 
@@ -213,8 +233,8 @@ void WamMoveArmAlgNode::move_armGetResultCallback(arm_navigation_msgs::MoveArmRe
 { 
   alg_.lock(); 
     //update result data to be sent to client 
-    *result=move_result;
-    
+    (*result).error_code=error_code_move_arm;
+    (*result).contacts=contact_information_move_arm;
     //result->data = data; 
   alg_.unlock(); 
 } 
@@ -223,7 +243,15 @@ void WamMoveArmAlgNode::move_armGetFeedbackCallback(arm_navigation_msgs::MoveArm
 { 
   alg_.lock(); 
     //keep track of feedback 
-    *feedback=move_feedback;
+    if(has_move_arm_feedback)
+    {
+		(*feedback).state=state_move_arm_feedback;
+		(*feedback).time_to_completion=time_move_arm_feedback;		
+	}
+	else
+	{
+		(*feedback).state="WAIT FOR RESULT";
+	}
     //ROS_INFO("feedback: %s", feedback->data.c_str()); 
   alg_.unlock(); 
 }
@@ -234,10 +262,9 @@ void WamMoveArmAlgNode::clienteDone(const actionlib::SimpleClientGoalState& stat
     ROS_INFO("WamMoveArmAlgNode::clienteDone: Goal Achieved!"); 
   else 
     ROS_INFO("WamMoveArmAlgNode::clienteDone: %s", state.toString().c_str()); 
-
- 	goal_state_=new actionlib::SimpleClientGoalState(state);
- 	result_controller= *result;
- 	 if( state.toString().compare("SUCCEEDED") == 0  || state.toString().compare("LOST") == 0 ) finish=true;
+ 	//goal_state_=new actionlib::SimpleClientGoalState(state);
+follow_error_code_result=result->error_code;
+ 	state_follow_goal=state.toString();
   //copy & work with requested result 
 } 
 
@@ -254,13 +281,17 @@ void WamMoveArmAlgNode::clienteFeedback(const control_msgs::FollowJointTrajector
 
   //analyze feedback 
   //my_var = feedback->var; 
-feedback_controller=*feedback;
-  //if feedback is not what expected, cancel requested goal 
+ //if feedback is not what expected, cancel requested goal 
   if( !feedback_is_ok ) 
   { 
     controller_client_.cancelGoal(); 
     //ROS_INFO("WamMoveArmAlgNode::clienteFeedback: Cancelling Action!"); 
   } 
+  follow_joint_names=feedback->joint_names;
+  follow_desired_pos=feedback->desired;
+  follow_actual_pos=feedback->actual;
+  follow_error_pos=feedback->error;
+  has_follow_feedback=true;
 }
 
 /*  [action requests] */
