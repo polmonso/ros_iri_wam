@@ -85,8 +85,9 @@ class MoveInPose
 	//!Defined Goal Constraint Parameters
 	void setPlannerRequestPose(arm_navigation_msgs::MoveArmGoal& goal)
 	{ 
-		ros::NodeHandle nh("/");
-	    arm_navigation_msgs::SimplePoseConstraint desired_pose;
+		arm_navigation_msgs::SimplePoseConstraint desired_pose;
+		/*ros::NodeHandle nh("/");
+	    
 		if(!nh.hasParam("/move_arm/tip_name"))
 		{
 			ROS_FATAL("tip_name undefined");
@@ -102,7 +103,9 @@ class MoveInPose
 		std::string root_name="";
 		nh.param("/move_arm/root_name", desired_pose.header.frame_id,root_name);
 
-		
+		*/
+		desired_pose.header.frame_id="world";
+		desired_pose.link_name="lk_wam7";
 		desired_pose.pose.position.x = posicion[0];
 		desired_pose.pose.position.y = posicion[1];
 		desired_pose.pose.position.z = posicion[2];
@@ -113,7 +116,7 @@ class MoveInPose
 		desired_pose.pose.orientation.z = rotacion[2];
 		desired_pose.pose.orientation.w = rotacion[3];
 		
-		double tolerance_x;
+		/*double tolerance_x;
 		double tolerance_y;
 		double tolerance_z;
 		double tolerance_roll;
@@ -125,15 +128,15 @@ class MoveInPose
 		nh.param("/move_arm/position/tolerance_z", tolerance_z, 0.02);
 		nh.param("/move_arm/rotation/tolerance_roll", tolerance_roll, 0.04);
 		nh.param("/move_arm/rotation/tolerance_pitch", tolerance_pitch,0.04);
-		nh.param("/move_arm/rotation/tolerance_yaw", tolerance_yaw, 0.04);
+		nh.param("/move_arm/rotation/tolerance_yaw", tolerance_yaw, 0.04);*/
 				
-		desired_pose.absolute_position_tolerance.x = tolerance_x;
-		desired_pose.absolute_position_tolerance.y = tolerance_y;
-		desired_pose.absolute_position_tolerance.z = tolerance_z;
+		desired_pose.absolute_position_tolerance.x = 0.02;
+		desired_pose.absolute_position_tolerance.y = 0.02;
+		desired_pose.absolute_position_tolerance.z = 0.02;
 		
-		desired_pose.absolute_roll_tolerance = tolerance_roll;
-		desired_pose.absolute_pitch_tolerance = tolerance_pitch;
-		desired_pose.absolute_yaw_tolerance = tolerance_yaw;
+		desired_pose.absolute_roll_tolerance = 0.04;
+		desired_pose.absolute_pitch_tolerance = 0.04;
+		desired_pose.absolute_yaw_tolerance = 0.04;
 		
 		arm_navigation_msgs::addGoalConstraintToMoveArmGoal(desired_pose,goal);
 	}
