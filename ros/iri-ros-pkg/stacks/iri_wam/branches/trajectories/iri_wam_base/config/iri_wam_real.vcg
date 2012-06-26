@@ -1,0 +1,119 @@
+Background\ ColorR=0
+Background\ ColorG=0
+Background\ ColorB=0
+Fixed\ Frame=/world
+Target\ Frame=<Fixed Frame>
+Grid.Alpha=0.5
+Grid.Cell\ Size=1
+Grid.ColorR=0.5
+Grid.ColorG=0.5
+Grid.ColorB=0.5
+Grid.Enabled=1
+Grid.Line\ Style=0
+Grid.Line\ Width=0.03
+Grid.Normal\ Cell\ Count=0
+Grid.OffsetX=0
+Grid.OffsetY=0
+Grid.OffsetZ=0
+Grid.Plane=0
+Grid.Plane\ Cell\ Count=10
+Grid.Reference\ Frame=<Fixed Frame>
+Interactive\ Markers.Enabled=1
+Interactive\ Markers.Show\ Axes=0
+Interactive\ Markers.Show\ Descriptions=1
+Interactive\ Markers.Show\ Tool\ Tips=1
+Interactive\ Markers.Update\ Topic=/planning_visualizer_controls/update
+Marker.Enabled=1
+Marker.Marker\ Topic=/planning_scene_markers
+MarkerArray.Enabled=1
+MarkerArray.Marker\ Array\ Topic=/move_iri_wam_markers_array
+PCV\ Markers.Enabled=1
+PCV\ Markers.Marker\ Topic=/planning_components_visualizer
+Planning.Alpha=0.6
+Planning.Collision\ Enabled=1
+Planning.Enabled=1
+Planning.Loop\ Display=0
+Planning.Robot\ Description=
+Planning.State\ Display\ Time=0.05
+Planning.Topic=/display_path
+Planning.Visual\ Enabled=1
+Robot\ Model.Alpha=0.6
+Robot\ Model.Collision\ Enabled=1
+Robot\ Model.Enabled=1
+Robot\ Model.Robot\ Description=robot_description
+Robot\ Model.TF\ Prefix=
+Robot\ Model.Update\ Interval=0
+Robot\ Model.Visual\ Enabled=0
+Robot\:\ Robot\ Model\ Link\ wambaseShow\ Axes=0
+Robot\:\ Robot\ Model\ Link\ wambaseShow\ Trail=0
+TF.All\ Enabled=1
+TF.Enabled=1
+TF.Frame\ Timeout=15
+TF.Marker\ Scale=0.5
+TF.Show\ Arrows=1
+TF.Show\ Axes=1
+TF.Show\ Names=1
+TF.Update\ Interval=0.05
+Tool\ 2D\ Nav\ GoalTopic=goal
+Tool\ 2D\ Pose\ EstimateTopic=initialpose
+Camera\ Type=rviz::OrbitViewController
+Camera\ Config=1.086 5.58087 2.28943 -0.113846 0.363527 -0.253105
+Property\ Grid\ State=selection=;expanded=.Global Options,PCV Markers.Enabled.PCV Markers.Namespaces,Marker.Enabled.Marker.Namespaces,TF./wam_fk/wam1/wam_fk/wam1,TF./wam_fk/wam2/wam_fk/wam2,TF./wam_fk/wam3/wam_fk/wam3,TF./wam_fk/wam4/wam_fk/wam4,TF./wam_fk/wam5/wam_fk/wam5,TF./wam_fk/wam6/wam_fk/wam6,TF./wam_fk/wam7/wam_fk/wam7,TF./wambase/wambase,TF./world/world,TF.Enabled.TF.Tree,TF./worldTree/world,TF./wambaseTree/wambase,TF./wam_fk/wam1Tree/wam_fk/wam1,TF./wam_fk/wam2Tree/wam_fk/wam2,TF./wam_fk/wam3Tree/wam_fk/wam3,TF./wam_fk/wam4Tree/wam_fk/wam4,TF./wam_fk/wam5Tree/wam_fk/wam5,TF./wam_fk/wam6Tree/wam_fk/wam6,TF./wam_fk/wam7Tree/wam_fk/wam7,MarkerArray.Enabled.MarkerArray.Namespaces,Planning.Enabled.Planning.StatusTopStatus,Planning.Enabled.Planning Robot PlanningLinks;scrollpos=0,0;splitterpos=201,404;ispageselected=1
+[Display0]
+Name=Grid
+Package=rviz
+ClassName=rviz::GridDisplay
+[Display1]
+Name=Robot Model
+Package=rviz
+ClassName=rviz::RobotModelDisplay
+[Display2]
+Name=PCV Markers
+Package=rviz
+ClassName=rviz::MarkerDisplay
+[Display3]
+Name=Interactive Markers
+Package=rviz
+ClassName=rviz::InteractiveMarkerDisplay
+[Display4]
+Name=Marker
+Package=rviz
+ClassName=rviz::MarkerDisplay
+[Display5]
+Name=TF
+Package=rviz
+ClassName=rviz::TFDisplay
+[Display6]
+Name=MarkerArray
+Package=rviz
+ClassName=rviz::MarkerArrayDisplay
+[Display7]
+Name=Planning
+Package=motion_planning_rviz_plugin
+ClassName=motion_planning_rviz_plugin::PlanningDisplay
+[Robot\:\ Robot\ Model\ Link\ wam_fk]
+wam1Show\ Axes=0
+wam1Show\ Trail=0
+wam2Show\ Axes=0
+wam2Show\ Trail=0
+wam3Show\ Axes=0
+wam3Show\ Trail=0
+wam4Show\ Axes=0
+wam4Show\ Trail=0
+wam5Show\ Axes=0
+wam5Show\ Trail=0
+wam6Show\ Axes=0
+wam6Show\ Trail=0
+wam7Show\ Axes=0
+wam7Show\ Trail=0
+[TF.]
+wambaseEnabled=1
+worldEnabled=1
+[TF./wam_fk]
+wam1Enabled=1
+wam2Enabled=1
+wam3Enabled=1
+wam4Enabled=1
+wam5Enabled=1
+wam6Enabled=1
+wam7Enabled=1

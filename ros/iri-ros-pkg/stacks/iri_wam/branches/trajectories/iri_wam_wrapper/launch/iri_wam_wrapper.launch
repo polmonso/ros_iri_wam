@@ -1,0 +1,15 @@
+<launch>
+   <arg name="IP" />
+   <arg name="port"         default="4321" />
+   <arg name="refresh_rate" default="100" />
+
+   <node name="wam_wrapper"
+        pkg="iri_wam_wrapper"
+        type="iri_wam_wrapper"
+        output="screen">
+      <param name="wam_ip"       value="$(arg IP)" />
+      <param name="port"         value="$(arg port)" />
+      <param name="refresh_rate" value="$(arg refresh_rate)" />
+   </node>
+
+</launch>

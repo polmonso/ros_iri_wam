@@ -1,0 +1,15 @@
+<package>
+  <description brief="iri_wam_description">
+    <p>
+        This package contains URDF and XACRO Files for WAM robot arm. The files
+        are used by a variety of other components.
+   </p>
+  </description>
+  <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_description</url>
+  <depend package="xacro" />
+</package>
+
+
