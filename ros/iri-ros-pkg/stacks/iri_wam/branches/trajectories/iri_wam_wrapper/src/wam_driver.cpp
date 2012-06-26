@@ -1,4 +1,5 @@
 #include "wam_driver.h"
+#include "wam_packet.h" // from wam low level driver
 
 using namespace std;
 using namespace XmlRpc;
@@ -231,4 +232,23 @@ void WamDriver::hold_current_position(bool on){
   if(this->wam!=NULL){
     this->wam->holdCurrentPosition(on);
   } 
-}   
+}
+
+void
+WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory)
+{
+    uint16_t errormask = 0x00;
+    WAMJointTrajectory low_level_trajectory;
+
+    for (std::vector<trajectory_msgs::JointTrajectoryPoint>::const_iterator it = trajectory.points.begin();
+         it != trajectory.points.end(); it++) {
+            if (! is_joints_move_request_valid(it->positions)) {
+                ROS_ERROR("Joints angles were not valid. Refuse to move.");
+                return;
+            }
+
+            low_level_trajectory.push_back(it->positions);
+    }
+
+    this->wam->moveTrajectoryInJoints(&errormask, &low_level_trajectory);
+}
