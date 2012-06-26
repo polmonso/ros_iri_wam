@@ -50,7 +50,7 @@ public:
     pr2_controllers_msgs::JointTrajectoryGoal goal;
 
     // We will have two waypoints in this goal trajectory
-    goal.trajectory.points.resize(2);
+    goal.trajectory.points.resize(5);
 
     // First trajectory point
     // Positions
@@ -64,19 +64,46 @@ public:
     goal.trajectory.points[ind].positions[5] = 0.0;
     goal.trajectory.points[ind].positions[6] = 0.0;
 
-    // Second trajectory point
-    // Positions
     ind += 1;
     goal.trajectory.points[ind].positions.resize(7);
-    goal.trajectory.points[ind].positions[0] = -0.3;
-    goal.trajectory.points[ind].positions[1] = 0.2;
-    goal.trajectory.points[ind].positions[2] = -0.1;
-    goal.trajectory.points[ind].positions[3] = -1.2;
-    goal.trajectory.points[ind].positions[4] = 1.5;
-    goal.trajectory.points[ind].positions[5] = -0.3;
-    goal.trajectory.points[ind].positions[6] = 0.5;
+    goal.trajectory.points[ind].positions[0] =  0.49259;
+    goal.trajectory.points[ind].positions[1] =  0.212558;
+    goal.trajectory.points[ind].positions[2] = -0.169996;
+    goal.trajectory.points[ind].positions[3] =  2.09482;
+    goal.trajectory.points[ind].positions[4] = -0.14391;
+    goal.trajectory.points[ind].positions[5] =  0.919756;
+    goal.trajectory.points[ind].positions[6] = -0.0255835;
 
-    //we are done; return the goal
+    ind += 1;
+    goal.trajectory.points[ind].positions.resize(7);
+    goal.trajectory.points[ind].positions[0] =  1.67741;
+    goal.trajectory.points[ind].positions[1] =  0.357458;
+    goal.trajectory.points[ind].positions[2] = -0.273308;
+    goal.trajectory.points[ind].positions[3] =  1.74678;
+    goal.trajectory.points[ind].positions[4] = -0.113625;
+    goal.trajectory.points[ind].positions[5] =  1.08573;
+    goal.trajectory.points[ind].positions[6] = -2.00137;
+
+    ind += 1;
+    goal.trajectory.points[ind].positions.resize(7);
+    goal.trajectory.points[ind].positions[0] =  1.67752;
+    goal.trajectory.points[ind].positions[1] =  0.581419;
+    goal.trajectory.points[ind].positions[2] = -0.327541;
+    goal.trajectory.points[ind].positions[3] =  1.31991;
+    goal.trajectory.points[ind].positions[4] = -0.099946;
+    goal.trajectory.points[ind].positions[5] =  1.26008;
+    goal.trajectory.points[ind].positions[6] = -2.00137;
+
+    ind += 1;
+    goal.trajectory.points[ind].positions.resize(7);
+    goal.trajectory.points[ind].positions[0] = 1.67748;
+    goal.trajectory.points[ind].positions[1] = 0.280732;
+    goal.trajectory.points[ind].positions[2] = -0.297391;
+    goal.trajectory.points[ind].positions[3] = 2.00713;
+    goal.trajectory.points[ind].positions[4] = -0.0907737;
+    goal.trajectory.points[ind].positions[5] = 0.802098;
+    goal.trajectory.points[ind].positions[6] = -2.00106;
+
     return goal;
   }
 
