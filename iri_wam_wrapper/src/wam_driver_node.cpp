@@ -219,7 +219,8 @@ bool WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &r
 }
 
 /*  [action callbacks] */
-void WamDriverNode::joint_trajectoryStartCallback(const pr2_controllers_msgs::JointTrajectoryGoalConstPtr& goal)
+void
+WamDriverNode::joint_trajectoryStartCallback(const pr2_controllers_msgs::JointTrajectoryGoalConstPtr& goal)
 {
     // Need to get the list of positions and send it to the driver
     driver_.lock();
@@ -227,30 +228,32 @@ void WamDriverNode::joint_trajectoryStartCallback(const pr2_controllers_msgs::Jo
     driver_.unlock();
 }
 
-void WamDriverNode::joint_trajectoryStopCallback(void) 
-{ 
-  driver_.lock(); 
-    //stop action 
-  driver_.unlock(); 
-} 
+void
+WamDriverNode::joint_trajectoryStopCallback(void) 
+{
+  driver_.lock();
+  //stop action 
+  driver_.unlock();
+}
 
-bool WamDriverNode::joint_trajectoryIsFinishedCallback(void) 
-{ 
-  bool ret = false; 
+bool
+WamDriverNode::joint_trajectoryIsFinishedCallback(void) 
+{
+    bool ret = false;
 
-  driver_.lock(); 
-    //if action has finish for any reason 
-    //ret = true; 
-  driver_.unlock(); 
+    driver_.lock();
+    if (! driver_.is_moving())
+        ret = true;
+    driver_.unlock();
 
-  return ret; 
-} 
+    return ret;
+}
 
 bool WamDriverNode::joint_trajectoryHasSucceedCallback(void) 
 { 
   bool ret = false; 
 
-  driver_.lock(); 
+  driver_.lock();
     //if goal was accomplished 
     //ret = true 
   driver_.unlock(); 
@@ -258,13 +261,11 @@ bool WamDriverNode::joint_trajectoryHasSucceedCallback(void)
   return ret; 
 } 
 
-void WamDriverNode::joint_trajectoryGetResultCallback(pr2_controllers_msgs::JointTrajectoryResultPtr& result) 
-{ 
-  driver_.lock(); 
-    //update result data to be sent to client 
-    //result->data = data; 
-  driver_.unlock(); 
-} 
+void
+WamDriverNode::joint_trajectoryGetResultCallback(pr2_controllers_msgs::JointTrajectoryResultPtr& result) 
+{
+    // MSG has an empty result message
+}
 
 void WamDriverNode::joint_trajectoryGetFeedbackCallback(pr2_controllers_msgs::JointTrajectoryFeedbackPtr& feedback) 
 { 

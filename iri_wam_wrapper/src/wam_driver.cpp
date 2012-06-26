@@ -146,6 +146,15 @@ int WamDriver::get_num_joints(){
   return 0;
 }
 
+bool
+WamDriver::is_moving()
+{
+    if (this->wam != NULL)
+        return this->wam->isMoving();
+
+    return false;
+}
+
 void WamDriver::wait_move_end(){
 
   if(this->wam!=NULL){
