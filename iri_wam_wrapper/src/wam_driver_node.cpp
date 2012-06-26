@@ -4,6 +4,7 @@ using namespace Eigen;
 
 WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
  iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
+  joint_trajectory_aserver_(public_node_handle_, "joint_trajectory"),
 // action_server_(nh,"iri_wam_pr2_controller/joint_trajectory_action",false),
  //action_server_follow_(nh,"iri_wam_pr2_controller/follow_joint_trajectory",false)
  action_server_(nh,"joint_trajectory_action",false),
@@ -12,35 +13,49 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
 
-    //ask wam for the numaxes
-    this->JointState_msg.name.resize(7);
-    this->JointState_msg.position.resize(7); 
+  //ask wam for the numaxes
+  this->JointState_msg.name.resize(7);
+  this->JointState_msg.position.resize(7); 
 
   // [init publishers]
   this->pose_publisher = this->public_node_handle_.advertise<geometry_msgs::PoseStamped>("pose", 5);
   this->joint_states_publisher = this->public_node_handle_.advertise<sensor_msgs::JointState>("joint_states", 5);
-  
-  // [init subscribers]
-  
-  // [init services]
-  this->wam_services_server_ = this->public_node_handle_.advertiseService("wam_services", &WamDriverNode::wam_servicesCallback, this);
-  this->pose_move_server = this->public_node_handle_.advertiseService("pose_move", &WamDriverNode::pose_moveCallback, this);
-  this->joints_move_server = this->public_node_handle_.advertiseService("joints_move", &WamDriverNode::joints_moveCallback, this);
 
-  ROS_INFO("Wam node started"); 
-  
+  // [init subscribers]
+
+  // [init services]
+  wam_services_server_ = public_node_handle_.advertiseService("wam_services",
+                                                              &WamDriverNode::wam_servicesCallback, this);
+  joints_move_server   = public_node_handle_.advertiseService("joints_move",
+                                                              &WamDriverNode::joints_moveCallback, this);
+  /* Pose movement in WAM is still not implemented.
+   * Disable service publication.
+   *
+   * pose_move_server     = public_node_handle_.advertiseService("pose_move",
+   *                                                           &WamDriverNode::pose_moveCallback, this);
+   */
+
   // [init clients]
-  
+
   // [init action servers]
+  joint_trajectory_aserver_.registerStartCallback(boost::bind(&WamDriverNode::joint_trajectoryStartCallback, this, _1));
+  joint_trajectory_aserver_.registerStopCallback(boost::bind(&WamDriverNode::joint_trajectoryStopCallback, this)); 
+  joint_trajectory_aserver_.registerIsFinishedCallback(boost::bind(&WamDriverNode::joint_trajectoryIsFinishedCallback, this)); 
+  joint_trajectory_aserver_.registerHasSucceedCallback(boost::bind(&WamDriverNode::joint_trajectoryHasSucceedCallback, this)); 
+  joint_trajectory_aserver_.registerGetResultCallback(boost::bind(&WamDriverNode::joint_trajectoryGetResultCallback, this, _1)); 
+  joint_trajectory_aserver_.registerGetFeedbackCallback(boost::bind(&WamDriverNode::joint_trajectoryGetFeedbackCallback, this, _1)); 
+  joint_trajectory_aserver_.start();
+
   action_server_.registerGoalCallback(boost::bind(&WamDriverNode::goalCB, this, _1));
   //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelCB, this, _1));
   action_server_.start();
-  
   action_server_follow_.registerGoalCallback(boost::bind(&WamDriverNode::goalFollowCB, this, _1));
   //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelFollowCB, this, _1));
   action_server_follow_.start();
 
   // [init action clients]
+
+  ROS_INFO("Wam node started"); 
 }
 
 void WamDriverNode::mainNodeThread(void)
@@ -204,6 +219,60 @@ bool WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &r
 }
 
 /*  [action callbacks] */
+void WamDriverNode::joint_trajectoryStartCallback(const pr2_controllers_msgs::JointTrajectoryGoalConstPtr& goal)
+{
+    // Need to get the list of positions and send it to the driver
+    driver_.lock();
+    driver_.move_trajectory_in_joints(goal->trajectory);
+    driver_.unlock();
+}
+
+void WamDriverNode::joint_trajectoryStopCallback(void) 
+{ 
+  driver_.lock(); 
+    //stop action 
+  driver_.unlock(); 
+} 
+
+bool WamDriverNode::joint_trajectoryIsFinishedCallback(void) 
+{ 
+  bool ret = false; 
+
+  driver_.lock(); 
+    //if action has finish for any reason 
+    //ret = true; 
+  driver_.unlock(); 
+
+  return ret; 
+} 
+
+bool WamDriverNode::joint_trajectoryHasSucceedCallback(void) 
+{ 
+  bool ret = false; 
+
+  driver_.lock(); 
+    //if goal was accomplished 
+    //ret = true 
+  driver_.unlock(); 
+
+  return ret; 
+} 
+
+void WamDriverNode::joint_trajectoryGetResultCallback(pr2_controllers_msgs::JointTrajectoryResultPtr& result) 
+{ 
+  driver_.lock(); 
+    //update result data to be sent to client 
+    //result->data = data; 
+  driver_.unlock(); 
+} 
+
+void WamDriverNode::joint_trajectoryGetFeedbackCallback(pr2_controllers_msgs::JointTrajectoryFeedbackPtr& feedback) 
+{ 
+  driver_.lock(); 
+    //keep track of feedback 
+    //ROS_INFO("feedback: %s", feedback->data.c_str()); 
+  driver_.unlock(); 
+}
 void WamDriverNode::goalCB(GoalHandle gh)
 {
     gh.setAccepted();
