@@ -2,7 +2,6 @@
 
 WamMoveArmAlgNode::WamMoveArmAlgNode(void) :
   algorithm_base::IriBaseAlgorithm<WamMoveArmAlgorithm>(),
-  syn_controller_aserver_(public_node_handle_, "syn_controller"),
   move_arm_aserver_(public_node_handle_, "move_arm"),
   controller_client_("controller_client_", true),
   syn_move_arm_client_("syn_move_arm", true),
@@ -22,13 +21,13 @@ WamMoveArmAlgNode::WamMoveArmAlgNode(void) :
   // [init clients]
   
   // [init action servers]
-  syn_controller_aserver_.registerStartCallback(boost::bind(&WamMoveArmAlgNode::syn_controllerStartCallback, this, _1)); 
+  /*syn_controller_aserver_.registerStartCallback(boost::bind(&WamMoveArmAlgNode::syn_controllerStartCallback, this, _1)); 
   syn_controller_aserver_.registerStopCallback(boost::bind(&WamMoveArmAlgNode::syn_controllerStopCallback, this)); 
   syn_controller_aserver_.registerIsFinishedCallback(boost::bind(&WamMoveArmAlgNode::syn_controllerIsFinishedCallback, this)); 
   syn_controller_aserver_.registerHasSucceedCallback(boost::bind(&WamMoveArmAlgNode::syn_controllerHasSucceedCallback, this)); 
   syn_controller_aserver_.registerGetResultCallback(boost::bind(&WamMoveArmAlgNode::syn_controllerGetResultCallback, this, _1)); 
   syn_controller_aserver_.registerGetFeedbackCallback(boost::bind(&WamMoveArmAlgNode::syn_controllerGetFeedbackCallback, this, _1)); 
-  syn_controller_aserver_.start();
+  syn_controller_aserver_.start();*/
   move_arm_aserver_.registerStartCallback(boost::bind(&WamMoveArmAlgNode::move_armStartCallback, this, _1)); 
   move_arm_aserver_.registerStopCallback(boost::bind(&WamMoveArmAlgNode::move_armStopCallback, this)); 
   move_arm_aserver_.registerIsFinishedCallback(boost::bind(&WamMoveArmAlgNode::move_armIsFinishedCallback, this)); 
@@ -36,6 +35,10 @@ WamMoveArmAlgNode::WamMoveArmAlgNode(void) :
   move_arm_aserver_.registerGetResultCallback(boost::bind(&WamMoveArmAlgNode::move_armGetResultCallback, this, _1)); 
   move_arm_aserver_.registerGetFeedbackCallback(boost::bind(&WamMoveArmAlgNode::move_armGetFeedbackCallback, this, _1)); 
   move_arm_aserver_.start();
+  
+    action_server_follow_.reset(new FJTAS(public_node_handle_, "syn_controller",
+                                        boost::bind(&WamMoveArmAlgNode::goalCBFollow, this, _1),
+                                        boost::bind(&WamMoveArmAlgNode::cancelCBFollow, this, _1)));
 
   
   // [init action clients]
@@ -64,19 +67,24 @@ void WamMoveArmAlgNode::mainNodeThread(void)
 /*  [service callbacks] */
 
 /*  [action callbacks] */
+/*
 void WamMoveArmAlgNode::syn_controllerStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal)
 { 
   alg_.lock(); 
     //check goal 
+    //feedback_controller.
+    //feedback_controller
     tmp_msg_= *goal;
     send_msg_=true;
     makeMsg(tmp_msg_);
     cliente_goal_=tmp_msg_;
     clienteMakeActionRequest();
+  
     //execute goal 
     
   alg_.unlock(); 
 } 
+
 
 void WamMoveArmAlgNode::syn_controllerStopCallback(void) 
 { 
@@ -142,6 +150,7 @@ void WamMoveArmAlgNode::syn_controllerGetFeedbackCallback(control_msgs::FollowJo
     }
   alg_.unlock(); 
 }
+* */
 void WamMoveArmAlgNode::syn_move_armDone(const actionlib::SimpleClientGoalState& state,  const arm_navigation_msgs::MoveArmResultConstPtr& result) 
 { 
   if( state.toString().compare("SUCCEEDED") == 0 ) 
@@ -163,8 +172,7 @@ void WamMoveArmAlgNode::syn_move_armActive()
 
 void WamMoveArmAlgNode::syn_move_armFeedback(const arm_navigation_msgs::MoveArmFeedbackConstPtr& feedback) 
 { 
-  //ROS_INFO("WamMoveArmAlgNode::syn_move_armFeedback: Got Feedback!"); 
-
+  //ROS_INFO_STREAM("WamMoveArmAlgNode::syn_move_armFeedback: Got Feedback!"<<feedback->state); 
   bool feedback_is_ok = true; 
 
   //analyze feedback 
@@ -176,18 +184,19 @@ void WamMoveArmAlgNode::syn_move_armFeedback(const arm_navigation_msgs::MoveArmF
   if( !feedback_is_ok ) 
   { 
     syn_move_arm_client_.cancelGoal(); 
-    //ROS_INFO("WamMoveArmAlgNode::syn_move_armFeedback: Cancelling Action!"); 
+    ROS_INFO("WamMoveArmAlgNode::syn_move_armFeedback: Cancelling Action!"); 
   } 
+  else move_feedback.time_to_completion= feedback->time_to_completion;
 }
 void WamMoveArmAlgNode::move_armStartCallback(const arm_navigation_msgs::MoveArmGoalConstPtr& goal)
-{ 
-  alg_.lock(); 
-    //check goal 
+{   move_feedback.state="PENDING";
+    final_state=2;
+    alg_.lock(); 
     move_arm(goal);
     syn_move_armMakeActionRequest(*goal);
-    //sendGoal();
-    //execute goal 
-  alg_.unlock(); 
+    
+    move_feedback.time_to_completion =this->alg_.getTime();
+    alg_.unlock(); 
 } 
 
 void WamMoveArmAlgNode::move_armStopCallback(void) 
@@ -257,9 +266,13 @@ void WamMoveArmAlgNode::move_armGetFeedbackCallback(arm_navigation_msgs::MoveArm
 }
 
 void WamMoveArmAlgNode::clienteDone(const actionlib::SimpleClientGoalState& state,  const control_msgs::FollowJointTrajectoryResultConstPtr& result) 
-{ 
+{ ROS_WARN("HOLA$$$$");
   if( state.toString().compare("SUCCEEDED") == 0 ) 
+  {
     ROS_INFO("WamMoveArmAlgNode::clienteDone: Goal Achieved!"); 
+    goal_h.setSucceeded();
+    final_state=0;
+  }
   else 
     ROS_INFO("WamMoveArmAlgNode::clienteDone: %s", state.toString().c_str()); 
  	//goal_state_=new actionlib::SimpleClientGoalState(state);
@@ -267,6 +280,10 @@ follow_error_code_result=result->error_code;
  	state_follow_goal=state.toString();
   //copy & work with requested result 
 } 
+void WamMoveArmAlgNode::f(const actionlib::SimpleClientGoalState& state)
+{
+	 ROS_WARN_STREAM("HOLA$$$$"<<state.toString());
+}
 
 void WamMoveArmAlgNode::clienteActive() 
 { 
@@ -275,10 +292,10 @@ void WamMoveArmAlgNode::clienteActive()
 
 void WamMoveArmAlgNode::clienteFeedback(const control_msgs::FollowJointTrajectoryFeedbackConstPtr& feedback) 
 { 
-  //ROS_INFO("WamMoveArmAlgNode::clienteFeedback: Got Feedback!"); 
+  ROS_INFO("WamMoveArmAlgNode::clienteFeedback: Got Feedback!"); 
 
   bool feedback_is_ok = true; 
-
+ //ROS_WARN_STREAM("Desde Cleinte:"<<state.toString().c_str());
   //analyze feedback 
   //my_var = feedback->var; 
  //if feedback is not what expected, cancel requested goal 
@@ -303,7 +320,7 @@ void WamMoveArmAlgNode::syn_move_armMakeActionRequest(const arm_navigation_msgs:
   //will wait for infinite time 
   syn_move_arm_client_.waitForServer();  
   ROS_INFO("WamMoveArmAlgNode::syn_move_armMakeActionRequest: Server is Available!"); 
-
+	
   //send a goal to the action 
   syn_move_arm_goal_ = goal; 
   syn_move_arm_client_.sendGoal(syn_move_arm_goal_, 
@@ -320,14 +337,11 @@ void WamMoveArmAlgNode::clienteMakeActionRequest()
   //will wait for infinite time 
   controller_client_.waitForServer();  
   ROS_INFO("WamMoveArmAlgNode::clienteMakeActionRequest: Server is Available!"); 
-
-  //send a goal to the action 
-  //cliente_goal_.data = my_desired_goal; 
- // makeMsg(cliente_goal_);
   controller_client_.sendGoal(cliente_goal_, 
               boost::bind(&WamMoveArmAlgNode::clienteDone,     this, _1, _2), 
               boost::bind(&WamMoveArmAlgNode::clienteActive,   this), 
-              boost::bind(&WamMoveArmAlgNode::clienteFeedback, this, _1)); 
+              boost::bind(&WamMoveArmAlgNode::clienteFeedback, this, _1));
+             
   ROS_INFO("WamMoveArmAlgNode::clienteMakeActionRequest: Goal Sent. Wait for Result!"); 
 }
 
@@ -346,9 +360,9 @@ void WamMoveArmAlgNode::makeMsg(control_msgs::FollowJointTrajectoryGoal& msg)
 	if(send_msg_)
 	{
 		trajectory_msgs::JointTrajectory tmp_traj=msg.trajectory;
-		this->alg_.restoreTime(tmp_traj,this->alg_.getTime());
+		//this->alg_.restoreTime(tmp_traj,this->alg_.getTime());
 		this->alg_.restoreVelocity(tmp_traj,this->alg_.getTime());
-		this->alg_.restoreAccel(tmp_traj,this->alg_.getTime());
+	//	this->alg_.restoreAccel(tmp_traj,this->alg_.getTime());
 		msg.trajectory=tmp_traj;		
 		send_msg_=false;
 		//ROS_WARN_STREAM(""<<tmp_traj);
@@ -381,7 +395,22 @@ void WamMoveArmAlgNode::getTime(const arm_navigation_msgs::MoveArmGoal& msg, ros
  time = msg.motion_plan_request.expected_path_dt;
 
 }
-
+void WamMoveArmAlgNode::goalCBFollow(GoalHandle goal)
+{
+	alg_.lock(); 
+    tmp_msg_= *(goal.getGoal());
+    goal_h=goal;
+    goal.setAccepted();
+    send_msg_=true;
+//    finish=false;
+ //   success_contr=false;
+    makeMsg(tmp_msg_);
+    cliente_goal_=tmp_msg_;
+    clienteMakeActionRequest();
+    //execute goal 
+    alg_.unlock(); 
+}
+void WamMoveArmAlgNode::cancelCBFollow(GoalHandle goal){}
 
 /* main function */
 int main(int argc,char *argv[])

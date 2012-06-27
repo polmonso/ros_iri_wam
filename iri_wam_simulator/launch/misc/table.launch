@@ -1,0 +1,15 @@
+<launch>
+   <!-- Start Gazebo -->
+   <node name="gazebo" pkg="gazebo" type="gazebo" args="-s -1 -u $(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen"/>
+   
+   <!-- send table urdf to param server -->
+   <param name="table_description" command="$(find xacro)/xacro.py $(find iri_wam_description)/xacro/table.urdf.xacro" />
+   <!-- push table_description to factory and spawn robot in gazebo -->
+   <node name="spawn_table" pkg="gazebo" type="spawn_model" args="-urdf -pause -param table_description -z 0.00 -model table_model" respawn="false" output="screen" />
+   
+   <!-- Load WAM DESCRIPTION 
+   <param name="/robot_description" command="$(find xacro)/xacro.py '$(find iri_wam_simulator)/gazebo/xacro/iri_wam.gazebo.xacro'" />  -->
+   <!-- Spawm WAM innto Simulator 
+   <node name="spawn_iri_wam_model" pkg="gazebo" type="spawn_model" args="$(optenv ROBOT_INITIAL_POSE) -pause -urdf -param robot_description -model iri_wam -x -0.430 -y 0.645 -z 0.55" respawn="false" output="screen" /> -->
+   
+</launch>

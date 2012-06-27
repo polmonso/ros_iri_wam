@@ -1,5 +1,5 @@
 #include <ros/ros.h>
-
+#include <kdl/frames.hpp>
 #include <arm_navigation_msgs/CollisionObject.h>
 #include <arm_navigation_msgs/Shape.h>
 
