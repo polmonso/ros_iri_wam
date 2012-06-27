@@ -2,7 +2,7 @@
 		<param name="/use_sim_time" value="true" />
 
 		<!-- Controller Manager -->
-		<include file="$(find pr2_controller_manager)/controller_manager.launch" />
+		<include file="$(find pr2_controller_manager)/controller_manager.launch"/>
 	   	
 		<!-- Name of Action Server (controllers) -->
 	        <param name="/iri_wam_move_arm/controller_action_name" type="string" value="/iri_ros_controller/follow_joint_trajectory" />

@@ -62,7 +62,7 @@ class MoveInJoints
 	 pos.resize(7);
 	 for(int i =1; i <=7; ++i) pos[i-1]=strtod(argv[i],NULL);
 
-	 time_move= (argc == 9)?ros::Duration(strtod(argv[8],NULL)):ros::Duration(3.0);
+	 time_move= (argc == 9)?ros::Duration(strtod(argv[8],NULL)):ros::Duration(0.0);
 	}  
     //! Returns the current state of the action
     actionlib::SimpleClientGoalState getState()
@@ -87,8 +87,8 @@ class MoveInJoints
 	  {
        goal.motion_plan_request.goal_constraints.joint_constraints[i].joint_name = names[i];
        goal.motion_plan_request.goal_constraints.joint_constraints[i].position = pos[i];
-       goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = pos[i] -0.100001;
-	   goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above =  pos[i] +0.100001;
+       goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below = pos[i]+ 0.0119999;
+	   goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_above = pos[i] -0.0119999;
 	   if(goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below < 0.0){
 		goal.motion_plan_request.goal_constraints.joint_constraints[i].tolerance_below *= -1;
 	   }
@@ -97,18 +97,6 @@ class MoveInJoints
 	   }
 	  }
 	}
-	//!Defined Path Constraint Parameters
-	void setPlannerRequestPathConstraint(arm_navigation_msgs::MoveArmGoal& goal)
-	{
-	 goal.motion_plan_request.path_constraints.joint_constraints.resize(names.size());	
-     for(unsigned int i = 0 ; i < names.size(); ++i)
-	 {
-	  goal.motion_plan_request.path_constraints.joint_constraints[i].joint_name = names[i];
-      goal.motion_plan_request.path_constraints.joint_constraints[i].position =0.00; 
-      goal.motion_plan_request.path_constraints.joint_constraints[i].tolerance_below = 10.10001;
-      goal.motion_plan_request.path_constraints.joint_constraints[i].tolerance_above = 10.10001;
-     }
-	}	
 };
 int main(int argc, char** argv)
 {
@@ -121,13 +109,11 @@ int main(int argc, char** argv)
   arm.setNamesJoint();
   arm.setPlannerRequest(move);
   arm.setPlannerRequestGoalConstraint(move);
-  arm.setPlannerRequestPathConstraint(move); 
   arm.startTrajectory(move);
   // Wait for trajectory completion
   while(!arm.getState().isDone() && ros::ok())
   {
 	  ROS_DEBUG("WAIT To END TRAJECTORY");
-    usleep(50000);
   }
       
  bool success = (arm.getState() == actionlib::SimpleClientGoalState::SUCCEEDED);
