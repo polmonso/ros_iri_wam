@@ -19,141 +19,68 @@ void WamMoveArmAlgorithm::config_update(Config& new_cfg, uint32_t level)
 }
 
 // WamMoveArmAlgorithm Public API
-void WamMoveArmAlgorithm::setTime(const ros::Duration msg)
+void WamMoveArmAlgorithm::reconfigure_point(arm_navigation_msgs::PositionConstraint &position_constraint)
 {
-	path_time_= msg;
+ position_constraint.position.x=position_constraint.position.x-tool_x;
+ position_constraint.position.y=position_constraint.position.y-tool_y;
+ position_constraint.position.z=position_constraint.position.z-tool_z;
 }
-ros::Duration WamMoveArmAlgorithm::getTime()
+void WamMoveArmAlgorithm::reconfigure_joint(std::vector<arm_navigation_msgs::JointConstraint>& joint_constraints)
 {
-	return path_time_;
+	
 }
-void WamMoveArmAlgorithm::restoreTime(trajectory_msgs::JointTrajectory &current_trajectory,const ros::Duration& T_total)
-{ROS_WARN_STREAM("TOTAL TIME"<<T_total.toSec());
-	if(T_total.toSec() > 0.0)
-	{
-	  double dTime = T_total.toSec() / current_trajectory.points.size();
-	  for(unsigned int i=0; i < current_trajectory.points.size(); ++i)
-	  {
-		  current_trajectory.points[i].time_from_start = ros::Duration(i*dTime);
-	  }	 
-	  ROS_WARN_STREAM("TIME"<<"#"<<dTime);
-    }
-    else 
-    {
-		//std::vector<double> MaxVel = getMaxVelocities(current_trajectory.joint_names);
-		//getLongerTime(current_trajectory,MaxVel);
-		double time;
-		eucledian_distance(current_trajectory,time);
-			  double dTime = time / current_trajectory.points.size();
-	  for(unsigned int i=0; i < current_trajectory.points.size(); ++i)
-	  {
-		  current_trajectory.points[i].time_from_start = ros::Duration(i*dTime);
-	  }	 
-		ROS_WARN_STREAM("TIME"<<time<<"#"<<dTime);
-		//getchar();
-	}
-}
-void WamMoveArmAlgorithm::restoreVelocity(trajectory_msgs::JointTrajectory &current_trajectory,const ros::Duration& T_total)
+void WamMoveArmAlgorithm::calculateFK(const std::vector<double> &pos,const std::string& frame)
 {
-  double q1,q0;
-  double dTime = T_total.toSec() /current_trajectory.points.size();
-  for(unsigned int i=0; i < current_trajectory.points.size(); ++i)
-  {
-	 for(unsigned int j=0; j < current_trajectory.points[i].velocities.size(); ++j)
-	 {
-			//if(i == 0)current_trajectory.points[i].velocities[j]= 0.0;
-			//else
-			//{		 
-			 // q1=current_trajectory.points[i].positions[j];
-			 // q0=current_trajectory.points[i-1].positions[j];
-			//  current_trajectory.points[i].velocities[j]= ((q1-q0)/dTime);		 
-			  
-			//}
-			f2<<current_trajectory.points[i].velocities[j]<<"\r";		 
-	 }
-  }	  
-  
-}
-void WamMoveArmAlgorithm::restoreAccel(trajectory_msgs::JointTrajectory &current_trajectory,const ros::Duration& T_total)
-{
-  double q1,q0;
-  double dTime = T_total.toSec() /current_trajectory.points.size();
-  for(unsigned int i=0; i < current_trajectory.points.size(); ++i)
-  {
-	 for(unsigned int j=0; j < current_trajectory.points[i].accelerations.size(); ++j)
-	 {
-			if(i == 0)current_trajectory.points[i].accelerations[j]= 0.0;
-			else
-			{		 
-			  q1=current_trajectory.points[i].velocities[j];
-			  q0=current_trajectory.points[i-1].velocities[j];
-			  current_trajectory.points[i].accelerations[j]= ((q1-q0)/dTime);		 
-			}			 
-	 }
-  }	  	  
-}
-double WamMoveArmAlgorithm::getLongerTime(const std::vector<double> positions,const std::vector<double> maxVel)
-{
-	if(positions.size() != maxVel.size())
-	{
-		ROS_ERROR("[iri_wam_move_arm] Vector posiciones y vector de maxima velocidad con tamano distinto");
-		exit(1);
-	}
-	double ax=0.0,tmp=0.0;
-	for(size_t i=0; i < maxVel.size(); ++i)
-	{
-		tmp= positions[i] / maxVel[i];
-		if((i == 0)||(ax < tmp))ax=tmp;
-	}
-	return ax;
-}
-void WamMoveArmAlgorithm::getLongerTime(trajectory_msgs::JointTrajectory &current_trajectory,const std::vector<double> maxVel)
-{
-	double time=0.0;
-	for(size_t i=0; i < current_trajectory.points.size(); ++i)
-	{
-		time=getLongerTime(current_trajectory.points[i].positions,maxVel);
-		current_trajectory.points[i].time_from_start =ros::Duration(time);
-	}
-}
-std::vector<double> WamMoveArmAlgorithm::getMaxVelocities(std::vector<std::string> vecNames)
-{
-	std::vector<double> vec;
-	vec.resize(7);
-	ros::NodeHandle public_node_handle_("/");
-	for(size_t i=0; i < vecNames.size(); ++i)
-	{
-	 public_node_handle_.param<double>("/trajectory_filter_server/joint_limits/"+vecNames[i]+"/max_velocity", vec[i], 1.0);
-    }
-	return vec;
-}
+  ros::NodeHandle rh;
+  ros::service::waitForService("pr2_right_arm_kinematics/get_fk_solver_info");
+  ros::service::waitForService("pr2_right_arm_kinematics/get_fk");
+  ros::ServiceClient query_client =   rh.serviceClient<kinematics_msgs::GetKinematicSolverInfo> ("pr2_right_arm_kinematics/get_fk_solver_info");
+  ros::ServiceClient fk_client = rh.serviceClient<kinematics_msgs::GetPositionFK>("pr2_right_arm_kinematics/get_fk");
 
-void WamMoveArmAlgorithm::eucledian_distance(const std::vector<double>& a,const std::vector<double>& b, double& distance)
-{
-	if(a.size() != b.size())
-	{
-		ROS_ERROR("Size of vectors not the same");
-		exit(1);
-	}
-	double acum=0.0, ax=0.0;
-	for(int i=0; i < a.size(); ++i)
-	{
-		ax=a[i]-b[i];
-		ax*=ax;
-		acum+=ax;
-	}
-	distance=sqrt(acum);
+  // define the service messages
+  kinematics_msgs::GetKinematicSolverInfo::Request request;
+  kinematics_msgs::GetKinematicSolverInfo::Response response;
+  if(!query_client.call(request,response))
+  {
+    ROS_ERROR("Could not call query service");
+    ros::shutdown();
+    exit(1);
+  }
+  // define the service messages
+  kinematics_msgs::GetPositionFK::Request  fk_request;
+  kinematics_msgs::GetPositionFK::Response fk_response;
+  fk_request.header.frame_id = frame;
+  link_name = response.kinematic_solver_info.link_names[0];
+  fk_request.fk_link_names = link_name;
+  fk_request.robot_state.joint_state.position=pos;
+  fk_request.robot_state.joint_state.name =  response.kinematic_solver_info.joint_names;
+  
+  if(fk_client.call(fk_request, fk_response))
+  {
+    if(fk_response.error_code.val == fk_response.error_code.SUCCESS)
+    {
+		pose=fk_response.pose_stamped[fk_response.pose_stamped.size()-1];
+    }
+    else
+    {
+      ROS_ERROR("Forward kinematics failed");
+         ros::shutdown();
+    exit(1);
+    }
+  }
+  else
+  {
+    ROS_ERROR("Forward kinematics service call failed");
+       ros::shutdown();
+    exit(1);
+  }
 }
-void WamMoveArmAlgorithm::eucledian_distance(const trajectory_msgs::JointTrajectory& traj,double& t)
+void WamMoveArmAlgorithm::makeMsg(const geometry_msgs::PoseStamped &pose, arm_navigation_msgs::MoveArmGoal& goal, const std::string& link);
 {
-	double d;
-	int y;
-	for(int i =0 ; i < traj.points.size()-1; ++i)
-	{
-		eucledian_distance(traj.points[i].positions,traj.points[i+1].positions,d);
-		t+=d;
-		y=i;
-		//distances.push_back(d);
-	}
-	ROS_ERROR_STREAM("TERMINO EN I:"<<y<<" leng:"<<traj.points.size()<<" time"<<t);
+	arm_navigation_msgs::PositionConstraint position_constraint;
+    arm_navigation_msgs::OrientationConstraint orientation_constraint;
+	poseStampedToPositionOrientationConstraints(pose,link,position_constraint,orientation_constraint,0.01,0.01);
+	reconfigure_point(position_constraint);
+    goal.motion_plan_request.goal_constraints.position_constraints.push_back(position_constraint);
+    goal.motion_plan_request.goal_constraints.orientation_constraints.push_back(orientation_constraints);
 }
