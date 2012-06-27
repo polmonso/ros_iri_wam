@@ -27,7 +27,10 @@
 
 #include <iri_wam_move_arm/WamMoveArmConfig.h>
 #include "mutex.h"
-#include <trajectory_msgs/JointTrajectory.h>
+#include <arm_navigation_msgs/PositionConstraint.h>
+#include <kinematics_msgs/GetKinematicSolverInfo.h>
+#include <kinematics_msgs/GetPositionFK.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <math.h>
 //include wam_move_arm_alg main library
 
@@ -65,7 +68,7 @@ class WamMoveArmAlgorithm
     * Is updated everytime function config_update() is called.
     */
     Config config_;
-	void getAlgo();
+	
    /**
     * \brief constructor
     *
@@ -123,20 +126,21 @@ class WamMoveArmAlgorithm
     */
     ~WamMoveArmAlgorithm(void);
     
+    double tool_x;
+    double tool_y;
+    double tool_z;
+    std::string link_name;
+    void reconfigure_point(arm_navigation_msgs::PositionConstraint &position_constraint);
+    void calculateFK(const std::vector<double> &pos,const std::string& frame);  
+    void reconfigure_joint(std::vector<arm_navigation_msgs::JointConstraint>& joint_constraints);  
+    geometry_msgs::PoseStamped pose;
+    void makeMsg(const geometry_msgs::PoseStamped &pose, arm_navigation_msgs::MoveArmGoal& goal, const std::string& link);
+    /**inline  void poseStampedToPositionOrientationConstraints(const geometry_msgs::PoseStamped &pose_stamped, const std::string &link_name, 
+                                                         arm_navigation_msgs::PositionConstraint &position_constraint, 
+                                                         arm_navigation_msgs::OrientationConstraint &orientation_constraint, 
+                                                         double region_box_dimension=.01,
+                                                         double absolute_rpy_tolerance=.01)**/
     
-    ros::Duration path_time_;
-    void restoreTime(trajectory_msgs::JointTrajectory &current_trajectory,const ros::Duration& T_total);
-	void restoreVelocity(trajectory_msgs::JointTrajectory &current_trajectory,const ros::Duration& T_total);
-	void restoreAccel(trajectory_msgs::JointTrajectory &current_trajectory,const ros::Duration& T_total);
-	void setTime(const ros::Duration msg);
-	ros::Duration getTime();
-	std::vector<double> getMaxVelocities(std::vector<std::string> vecNames);
-	void getLongerTime(trajectory_msgs::JointTrajectory &current_trajectory,const std::vector<double> maxVel);
-	double getLongerTime(const std::vector<double> positions,const std::vector<double> maxVel);
-	
-	
-	void eucledian_distance(const std::vector<double>& a,const std::vector<double>& b, double& distance);
-	void eucledian_distance(const trajectory_msgs::JointTrajectory &traj,double& t);
 };
 
 #endif
