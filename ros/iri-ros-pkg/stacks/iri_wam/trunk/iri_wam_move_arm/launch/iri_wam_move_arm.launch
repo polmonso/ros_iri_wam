@@ -1,9 +1,15 @@
 <launch> 
- <remap from="/iri_wam_move_arm_node/syn_controller" to="/syn_iri_ros_controller/follow_joint_trajectory" /> 
+ <arg name="size_x" default="0" />
+ <arg name="size_y" default="0" />
+ <arg name="size_z" default="0" />
+ 
  <remap from="/iri_wam_move_arm_node/move_arm" to="/move_iri_wam" />
- <remap from="syn_move_arm" to="/syn_move_iri_wam" />
- <remap from="controller_client_" to="/iri_ros_controller/follow_joint_trajectory" />
+ 
 
- <node launch-prefix="xterm -e gdb --args" name="iri_wam_move_arm_node"  type="iri_wam_move_arm"  pkg="iri_wam_move_arm" output="screen" />
+ <node name="iri_wam_move_arm_node"  type="iri_wam_move_arm"  pkg="iri_wam_move_arm" output="screen">
+  <param name="tool_x" value="$(arg size_x)"/>
+  <param name="tool_y" value="$(arg size_y)"/>
+  <param name="tool_z" value="$(arg size_z)"/>
+ </node>
  
 </launch> 
