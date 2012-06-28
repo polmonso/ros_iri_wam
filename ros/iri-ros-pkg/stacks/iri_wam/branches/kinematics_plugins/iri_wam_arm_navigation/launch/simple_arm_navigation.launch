@@ -1,0 +1,3 @@
+<launch>
+<node pkg="iri_wam_arm_navigation" type="iri_wam_arm_navigation" name="simple_arm_navigation"/>
+</launch>

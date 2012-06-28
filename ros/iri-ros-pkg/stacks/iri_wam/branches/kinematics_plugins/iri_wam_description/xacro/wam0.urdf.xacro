@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="wam0">
+
+    <link name="world"/>
+
+    <link name="wam_link0">
+        <inertial>
+            <mass value="20" />
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            <geometry name="wam_link0_visual">
+                <mesh filename="package://iri_wam_description/mesh/wambase.stl" scale="1.0 1.0 1.0" />
+            </geometry>
+            <material name="Grey" >
+                <color rgba="0.75 0.75 0.75 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+            <geometry name="wam_link0_collision">
+                <mesh filename="package://iri_wam_description/mesh/wambase.stl" scale="1.0 1.0 1.0" />
+<!--
+                <box size="0.20 0.40 0.40"/>
+-->
+            </geometry>
+            <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+        </collision>
+    </link>
+    <gazebo reference="wam_link0">
+        <material>Gazebo/Grey</material>
+        <selfCollide>true</selfCollide>
+    </gazebo>
+
+    <joint name="wam0_fix" type="fixed">
+        <parent link="world"/>
+        <child link="wam_link0"/>
+        <origin xyz="0.22 0.14 0.346" rpy="0 0 0" />
+     </joint>
+
+  </xacro:macro>
+
+</robot>

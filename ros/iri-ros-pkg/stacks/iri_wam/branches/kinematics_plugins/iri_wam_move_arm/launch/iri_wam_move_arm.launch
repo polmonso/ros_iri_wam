@@ -1,0 +1,15 @@
+<launch> 
+ <arg name="size_x" default="0" />
+ <arg name="size_y" default="0" />
+ <arg name="size_z" default="0" />
+ 
+ <remap from="/iri_wam_move_arm_node/move_arm" to="/move_iri_wam" />
+ 
+
+ <node name="iri_wam_move_arm_node"  type="iri_wam_move_arm"  pkg="iri_wam_move_arm" output="screen">
+  <param name="tool_x" value="$(arg size_x)"/>
+  <param name="tool_y" value="$(arg size_y)"/>
+  <param name="tool_z" value="$(arg size_z)"/>
+ </node>
+ 
+</launch> 
