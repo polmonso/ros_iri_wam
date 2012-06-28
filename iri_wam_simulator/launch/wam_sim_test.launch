@@ -6,7 +6,7 @@
    <include file="$(find iri_wam_simulator)/launch/wam_sim.launch" />
 
   
-  <include file="$(find iri_wam_description)/launch/box.launch" />
+  <include file="$(find iri_wam_move_arm)/launch/iri_wam_move_arm.launch" />
 
 </launch>
 
