@@ -30,8 +30,6 @@
 
 #include <iri_base_algorithm/iri_base_algorithm.h>
 #include "wam_move_arm_alg.h"
-#include <trajectory_msgs/JointTrajectory.h>
-#include <trajectory_msgs/JointTrajectoryPoint.h>
 
 // [publisher subscriber headers]
 
@@ -43,15 +41,12 @@
 #include <arm_navigation_msgs/ArmNavigationErrorCodes.h>
 #include <actionlib/client/simple_action_client.h>
 #include <actionlib/client/terminal_state.h>
-#include <control_msgs/FollowJointTrajectoryAction.h>
 #include <arm_navigation_msgs/ArmNavigationErrorCodes.h>
 /**
  * \brief IRI ROS Specific Algorithm Class
  *
  */
-  typedef actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> FJTAS;
 
-typedef  actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction>::GoalHandle GoalHandle;	
 class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgorithm>
 {
   private:
@@ -94,8 +89,6 @@ class WamMoveArmAlgNode : public algorithm_base::IriBaseAlgorithm<WamMoveArmAlgo
 
 	arm_navigation_msgs::MoveArmResult move_result;
 	arm_navigation_msgs::MoveArmFeedback move_feedback;
-
-
 
   public:
    /**

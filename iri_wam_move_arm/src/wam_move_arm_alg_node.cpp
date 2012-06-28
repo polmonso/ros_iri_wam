@@ -2,9 +2,9 @@
 
 WamMoveArmAlgNode::WamMoveArmAlgNode(void) :
   algorithm_base::IriBaseAlgorithm<WamMoveArmAlgorithm>(),
+    has_move_arm_feedback(false),
   move_arm_aserver_(public_node_handle_, "move_arm"),
-  syn_move_arm_client_("syn_move_arm", true),
-  has_move_arm_feedback(false)
+  syn_move_arm_client_("syn_move_arm", true)
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -25,7 +25,9 @@ WamMoveArmAlgNode::WamMoveArmAlgNode(void) :
   move_arm_aserver_.registerGetResultCallback(boost::bind(&WamMoveArmAlgNode::move_armGetResultCallback, this, _1)); 
   move_arm_aserver_.registerGetFeedbackCallback(boost::bind(&WamMoveArmAlgNode::move_armGetFeedbackCallback, this, _1)); 
   move_arm_aserver_.start();
- 
+ 	private_node_handle_.param<double>("tool_x", this->alg_.tool_x, 0.0);
+	private_node_handle_.param<double>("tool_y", this->alg_.tool_y, 0.0);
+	private_node_handle_.param<double>("tool_z", this->alg_.tool_z, 0.0);
   // [init action clients]
 }
 
@@ -110,11 +112,10 @@ void WamMoveArmAlgNode::syn_move_armMakeActionRequest(const arm_navigation_msgs:
 void WamMoveArmAlgNode::move_armStartCallback(const arm_navigation_msgs::MoveArmGoalConstPtr& goal)
 {   
 	move_feedback.state="PENDING";
-    final_state=2;
     alg_.lock(); 
-    move_arm(goal);
-    syn_move_armMakeActionRequest(*goal);    
-    move_feedback.time_to_completion =this->alg_.getTime();
+    arm_navigation_msgs::MoveArmGoal mov = *goal;
+    this->alg_.reconfigure(mov);
+    syn_move_armMakeActionRequest(mov);    
     alg_.unlock(); 
 } 
 void WamMoveArmAlgNode::move_armStopCallback(void) 

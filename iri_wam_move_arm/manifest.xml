@@ -13,9 +13,9 @@
   <depend package="iri_action_server"/>
   <depend package="arm_navigation_msgs"/>
   <depend package="actionlib"/>
-  <depend package="control_msgs"/>
-  <depend package="trajectory_msgs"/>
-  <depend package="pr2_controllers_msgs"/>
+  <depend package="kinematics_msgs" />
+  <depend package="geometry_msgs" />
+
 
 </package>
 

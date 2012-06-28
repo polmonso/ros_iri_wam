@@ -28,10 +28,15 @@
 #include <iri_wam_move_arm/WamMoveArmConfig.h>
 #include "mutex.h"
 #include <arm_navigation_msgs/PositionConstraint.h>
+#include <arm_navigation_msgs/OrientationConstraint.h>
+#include <arm_navigation_msgs/JointConstraint.h>
 #include <kinematics_msgs/GetKinematicSolverInfo.h>
 #include <kinematics_msgs/GetPositionFK.h>
 #include <geometry_msgs/PoseStamped.h>
-#include <math.h>
+#include <arm_navigation_msgs/MoveArmAction.h>
+#include <arm_navigation_msgs/convert_messages.h>
+
+
 //include wam_move_arm_alg main library
 
 /**
@@ -131,15 +136,13 @@ class WamMoveArmAlgorithm
     double tool_z;
     std::string link_name;
     void reconfigure_point(arm_navigation_msgs::PositionConstraint &position_constraint);
-    void calculateFK(const std::vector<double> &pos,const std::string& frame);  
-    void reconfigure_joint(std::vector<arm_navigation_msgs::JointConstraint>& joint_constraints);  
-    geometry_msgs::PoseStamped pose;
+    void reconfigure_points(std::vector<arm_navigation_msgs::PositionConstraint> & position_constraint);
+    void calculateFK(const std::vector<double> &pos,geometry_msgs::PoseStamped& pose);  
+    void reconfigure_joint(std::vector<arm_navigation_msgs::JointConstraint>& joint_constraints,arm_navigation_msgs::MoveArmGoal& goal);  
+    void reconfigure(arm_navigation_msgs::MoveArmGoal& goal);
     void makeMsg(const geometry_msgs::PoseStamped &pose, arm_navigation_msgs::MoveArmGoal& goal, const std::string& link);
-    /**inline  void poseStampedToPositionOrientationConstraints(const geometry_msgs::PoseStamped &pose_stamped, const std::string &link_name, 
-                                                         arm_navigation_msgs::PositionConstraint &position_constraint, 
-                                                         arm_navigation_msgs::OrientationConstraint &orientation_constraint, 
-                                                         double region_box_dimension=.01,
-                                                         double absolute_rpy_tolerance=.01)**/
+    bool hasPose(const arm_navigation_msgs::MoveArmGoal& goal);
+    bool hasJoint(const arm_navigation_msgs::MoveArmGoal& goal);
     
 };
 
