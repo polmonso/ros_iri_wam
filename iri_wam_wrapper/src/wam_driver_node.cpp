@@ -229,6 +229,7 @@ void WamDriverNode::trajectory2follow(trajectory_msgs::JointTrajectory traj, boo
 	{
         if(this->driver_.isRunning())
         {
+	    ii=traj.points.size()-1;
             this->driver_.move_in_joints(&traj.points[ii].positions); //this call blocks if the wam faults. The mutex is not freed...!
             this->driver_.unlock();
             this->driver_.wait_move_end();
