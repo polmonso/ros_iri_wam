@@ -1,0 +1,4 @@
+<launch>
+<!-- send iri_wam urdf to param server -->
+    <param name="bhand_description" command="$(find xacro)/xacro.py '$(find iri_bhand_description)/xacro/bhand.urdf.xacro'" />
+</launch>
