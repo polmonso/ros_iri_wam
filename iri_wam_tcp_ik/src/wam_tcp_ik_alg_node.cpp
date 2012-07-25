@@ -103,10 +103,10 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
   try{
     ros::Time now = ros::Time::now();
     ros::Duration interval = ros::Duration(1.0);
-    if(!listener_.waitForTransform("/wam_fk/wam0", req.pose.header.frame_id, now, interval)){
-        ROS_ERROR("Timeout while waiting for transform between frames /wam_fk/wam0/ and %s ", req.pose.header.frame_id.c_str()); 
+    if(!listener_.waitForTransform("/wam_link0", req.pose.header.frame_id, now, interval)){
+        ROS_ERROR("Timeout while waiting for transform between frames /wam_link0 and %s ", req.pose.header.frame_id.c_str()); 
     }
-    listener_.lookupTransform("/wam_fk/wam0", req.pose.header.frame_id, now, world_H_wam7_);
+    listener_.lookupTransform("/wam_link0", req.pose.header.frame_id, now, world_H_wam7_);
   }catch (tf::TransformException ex){
     ROS_ERROR("lookup transform error: %s", ex.what());
     return false;
@@ -115,7 +115,7 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
   world_H_wam7_ *= received_pose;
   world_H_wam7_ *= tcp_H_wam7_;
   
-  base_pose_msg_.request.pose.header.frame_id = "/wam_fk/wam0"; 
+  base_pose_msg_.request.pose.header.frame_id = "/wam_link0"; 
   base_pose_msg_.request.pose.pose.position.x    = world_H_wam7_.getOrigin().x(); 
   base_pose_msg_.request.pose.pose.position.y    = world_H_wam7_.getOrigin().y(); 
   base_pose_msg_.request.pose.pose.position.z    = world_H_wam7_.getOrigin().z(); 
