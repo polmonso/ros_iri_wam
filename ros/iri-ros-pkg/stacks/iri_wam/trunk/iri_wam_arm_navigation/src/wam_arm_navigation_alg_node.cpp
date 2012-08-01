@@ -55,7 +55,7 @@ void WamArmNavigationAlgNode::simple_pose_topic_callback(const iri_wam_arm_navig
   //use appropiate mutex to shared variables if necessary 
   this->alg_.lock(); 
   //this->simple_pose_topic_mutex_.enter(); 
-    this->alg_.setTarget(*msg,msg->header.frame_id);
+    this->alg_.setTarget(msg->goal,msg->header.frame_id);
     arm_navigation_msgs::MoveArmGoal move_arm;
     makeMoveMsg(move_arm);
     move_iri_wamMakeActionRequest(move_arm);
