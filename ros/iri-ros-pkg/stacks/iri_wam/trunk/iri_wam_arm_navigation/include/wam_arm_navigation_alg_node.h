@@ -29,6 +29,7 @@
 #include "wam_arm_navigation_alg.h"
 
 // [publisher subscriber headers]
+#include <iri_wam_arm_navigation/PoseSimple.h>
 
 // [service client headers]
 
@@ -49,6 +50,9 @@ class WamArmNavigationAlgNode : public algorithm_base::IriBaseAlgorithm<WamArmNa
     // [publisher attributes]
 
     // [subscriber attributes]
+    ros::Subscriber simple_pose_topic_subscriber_;
+    void simple_pose_topic_callback(const iri_wam_arm_navigation::PoseSimple::ConstPtr& msg);
+    CMutex simple_pose_topic_mutex_;
 
     // [service attributes]
 
