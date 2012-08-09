@@ -42,7 +42,7 @@ struct ForceRequest
     };
 
     Tstatus status;
-    double force_value = 0.0;
+    double force_value;
 
     void init()
     {
@@ -84,6 +84,10 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     int server_port;
     int state_refresh_rate;
     CWamDriver *wam;
+    /**
+      * Object for handling force estimation request process
+      */
+    ForceRequest force_request_;
 
     /**
      * \brief check if move in joints request is sane
@@ -234,7 +238,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
      */
     bool is_estimate_force_request_finish()
     {
-        return (force_request.status != ONGOING);
+        return (force_request_.status != force_request_.ONGOING);
     }
 };
 
