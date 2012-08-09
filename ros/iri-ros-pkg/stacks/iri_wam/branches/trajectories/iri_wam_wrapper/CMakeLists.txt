@@ -43,6 +43,8 @@ INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ${comm_INCLUDE_DIR} ${CWamDriver_INC
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 rosbuild_add_executable(${PROJECT_NAME} src/wam_driver.cpp src/wam_driver_node.cpp)
 rosbuild_add_executable(simple_trajectory test/simple_trajectory/simple_trajectory.cpp)
+rosbuild_add_executable(lwpr_trajectory test/lwpr_trajectory/lwpr_trajectory.cpp)
 
 target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
 target_link_libraries(simple_trajectory ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
+target_link_libraries(lwpr_trajectory ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})

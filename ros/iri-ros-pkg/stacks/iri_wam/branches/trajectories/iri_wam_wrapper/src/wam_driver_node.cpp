@@ -4,7 +4,7 @@ using namespace Eigen;
 
 WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
  iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
-  lwpr_trajectory_server_aserver_(public_node_handle_, "lwpr_trajectory_server"),
+  lwpr_trajectory_server_aserver_(public_node_handle_, "lwpr_trajectory"),
   joint_trajectory_aserver_(public_node_handle_, "joint_trajectory"),
 // action_server_(nh,"iri_wam_pr2_controller/joint_trajectory_action",false),
  //action_server_follow_(nh,"iri_wam_pr2_controller/follow_joint_trajectory",false)
@@ -228,10 +228,10 @@ bool WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &r
 }
 
 /*  [action callbacks] */
-void WamDriverNode::lwpr_trajectory_serverStartCallback(const iri_wam_common_msgs::lwpr_trajectory_returning_forceGoalConstPtr& goal)
+void WamDriverNode::lwpr_trajectory_serverStartCallback(const iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationGoalConstPtr& goal)
 {
     driver_.lock();
-    driver_.move_trajectory_learnt_and_estimate_force(goal->model_filename, goal->point_filename);
+    driver_.move_trajectory_learnt_and_estimate_force(goal->model_filename, goal->points_filename);
     driver_.unlock();
 }
 
@@ -266,7 +266,7 @@ bool WamDriverNode::lwpr_trajectory_serverHasSucceedCallback(void)
   return ret; 
 } 
 
-void WamDriverNode::lwpr_trajectory_serverGetResultCallback(iri_wam_common_msgs::lwpr_trajectory_returning_forceResultPtr& result) 
+void WamDriverNode::lwpr_trajectory_serverGetResultCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationResultPtr& result) 
 { 
   driver_.lock(); 
     //update result data to be sent to client 
@@ -274,7 +274,7 @@ void WamDriverNode::lwpr_trajectory_serverGetResultCallback(iri_wam_common_msgs:
   driver_.unlock(); 
 } 
 
-void WamDriverNode::lwpr_trajectory_serverGetFeedbackCallback(iri_wam_common_msgs::lwpr_trajectory_returning_forceFeedbackPtr& feedback) 
+void WamDriverNode::lwpr_trajectory_serverGetFeedbackCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationFeedbackPtr& feedback) 
 { 
   driver_.lock(); 
     //keep track of feedback 
