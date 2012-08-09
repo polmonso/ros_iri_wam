@@ -247,7 +247,7 @@ bool WamDriverNode::lwpr_trajectory_serverIsFinishedCallback(void)
     bool ret = false;
 
     driver_.lock();
-    if (! driver_.is_estimate_force_request_finish())
+    if (driver_.is_estimate_force_request_finish())
          ret = true;
     driver_.unlock();
 

@@ -35,7 +35,7 @@ class RobotArm
         //! Sends the command to start a given trajectory
         void startTrajectory()
         {
-	    iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationGoal goal;
+            iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationGoal goal;
             goal.model_filename  = model_filename_;
             goal.points_filename = points_filename_; 
 
@@ -47,6 +47,12 @@ class RobotArm
         {
             return traj_client_->getState();
         }
+
+        double get_result()
+        {
+            LWPRTrajectoryReturningForceEstimationResultPtr r = traj_client_->getResult();
+            return r->force();
+        }
 };
 
 int main(int argc, char** argv)
@@ -56,7 +62,7 @@ int main(int argc, char** argv)
         std::cerr << "Usage: " << argv[0] << "<server_model_file_path> <server_point_file_path>" << std::endl;
         return 0;
     }
-    
+
     // Init the ROS node
     ros::init(argc, argv, "robot_driver");
 
@@ -67,5 +73,5 @@ int main(int argc, char** argv)
     while(!arm.getState().isDone() && ros::ok())
     {
         usleep(50000);
-     }
+    }
 }
