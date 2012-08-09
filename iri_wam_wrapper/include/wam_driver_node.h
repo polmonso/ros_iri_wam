@@ -39,6 +39,7 @@
 #include "iri_wam_common_msgs/pose_move.h"
 
 // [action server client headers]
+#include <iri_wam_common_msgs/lwpr_trajectory_returning_forceAction.h>
 #include <iri_action_server/iri_action_server.h>
 
 // [action server msgs]
@@ -96,6 +97,13 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
     // [client attributes]
 
     // [action server attributes]
+    IriActionServer<iri_wam_common_msgs::lwpr_trajectory_returning_forceAction> lwpr_trajectory_server_aserver_;
+    void lwpr_trajectory_serverStartCallback(const iri_wam_common_msgs::lwpr_trajectory_returning_forceGoalConstPtr& goal);
+    void lwpr_trajectory_serverStopCallback(void);
+    bool lwpr_trajectory_serverIsFinishedCallback(void);
+    bool lwpr_trajectory_serverHasSucceedCallback(void);
+    void lwpr_trajectory_serverGetResultCallback(iri_wam_common_msgs::lwpr_trajectory_returning_forceResultPtr& result);
+    void lwpr_trajectory_serverGetFeedbackCallback(iri_wam_common_msgs::lwpr_trajectory_returning_forceFeedbackPtr& feedback);
     IriActionServer<pr2_controllers_msgs::JointTrajectoryAction> joint_trajectory_aserver_;
     void joint_trajectoryStartCallback(const pr2_controllers_msgs::JointTrajectoryGoalConstPtr& goal);
     void joint_trajectoryStopCallback(void);

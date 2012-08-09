@@ -261,3 +261,19 @@ WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & tr
 
     this->wam->moveTrajectoryInJoints(&errormask, &low_level_trajectory);
 }
+
+void
+WamDriver::move_trajectory_learnt_and_estimate_force(const std::string model_filename,
+                                                     const std::string points_filename)
+{
+    force_request.init();
+    // TODO: implement the returning value from client-server
+    // TODO: implement error handling
+    this->wam->moveTrajectoryLearntAndEstimateForce(model_filename, points_filename);
+    force_request.success_response(69); 
+
+    return;
+}
+
+
+

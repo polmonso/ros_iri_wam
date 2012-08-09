@@ -32,6 +32,31 @@
 //include wam_driver main library
 #include "CWamDriver.h"
 
+struct ForceRequest
+{
+    enum Tstatus {
+        QUIET,
+        ONGOING,
+        FAILED,
+        SUCCESS
+    };
+
+    Tstatus status;
+    double force_value = 0.0;
+
+    void init()
+    {
+        status      = QUIET;
+        force_value = 0.0;
+    }
+
+    void success_response(double v)
+    {
+        status      = SUCCESS;
+        force_value = v;
+    }
+};
+
 /**
  * \brief IRI ROS Specific Driver Class
  *
@@ -188,6 +213,29 @@ class WamDriver : public iri_base_driver::IriBaseDriver
      * the joint positions.
      */
     void move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory);
+
+    /**
+     * \brief Ask the low level driver to perform a LWPR trajectory and return
+     * force estimation
+     *
+     * This function will send to the low level driver the request to use the
+     * files which contains an LWPR model and trajectory points. It will perform
+     * the trajectory and return the estimate force at the end
+     *
+     * \param model_filename: full server system path which contains the LWPR
+     * model
+     * \param points_filename: full server system path which contains the points
+     * for the trajectory
+     */
+    void move_trajectory_learnt_and_estimate_force(const std::string model_filename,
+                                                   const std::string points_filename);
+    /**
+     * \brief return if force request is ended
+     */
+    bool is_estimate_force_request_finish()
+    {
+        return (force_request.status != ONGOING);
+    }
 };
 
 #endif
