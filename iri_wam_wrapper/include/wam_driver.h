@@ -58,7 +58,7 @@ struct ForceRequest
 
     bool is_estimate_force_request_finish()
     {
-        return (status != force_request_.ONGOING);
+        return (status != ONGOING);
     }
 
     bool was_estimate_force_request_succedded()
@@ -97,7 +97,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     /**
       * Object for handling force estimation request process
       */
-    std::auto_ptr<ForceRequest> force_request_;
+    boost::shared_ptr<ForceRequest> force_request_;
 
     /**
      * \brief check if move in joints request is sane
@@ -247,7 +247,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     /**
      * \brief return a reference to current force request info
      */
-    const std::auto_ptr<ForceRequest> get_force_request_info()
+    const boost::shared_ptr<ForceRequest> get_force_request_info()
     {
         return force_request_;
     }

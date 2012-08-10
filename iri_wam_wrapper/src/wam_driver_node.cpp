@@ -259,7 +259,7 @@ bool WamDriverNode::lwpr_trajectory_serverHasSucceedCallback(void)
     bool ret = false;
 
     driver_.lock();
-    driver_.get_force_request_info()->was_estimate_force_request_succedded();
+    ret = driver_.get_force_request_info()->was_estimate_force_request_succedded();
     driver_.unlock();
 
     return ret;
