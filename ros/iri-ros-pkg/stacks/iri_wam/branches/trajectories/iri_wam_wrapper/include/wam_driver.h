@@ -55,6 +55,16 @@ struct ForceRequest
         status      = SUCCESS;
         force_value = v;
     }
+
+    bool is_estimate_force_request_finish()
+    {
+        return (status != force_request_.ONGOING);
+    }
+
+    bool was_estimate_force_request_succedded()
+    {
+        return (status == SUCCESS);
+    }
 };
 
 /**
@@ -87,7 +97,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     /**
       * Object for handling force estimation request process
       */
-    ForceRequest force_request_;
+    std::auto_ptr<ForceRequest> force_request_;
 
     /**
      * \brief check if move in joints request is sane
@@ -233,12 +243,13 @@ class WamDriver : public iri_base_driver::IriBaseDriver
      */
     void move_trajectory_learnt_and_estimate_force(const std::string model_filename,
                                                    const std::string points_filename);
+
     /**
-     * \brief return if force request is ended
+     * \brief return a reference to current force request info
      */
-    bool is_estimate_force_request_finish()
+    const std::auto_ptr<ForceRequest> get_force_request_info()
     {
-        return (force_request_.status != force_request_.ONGOING);
+        return force_request_;
     }
 };
 
