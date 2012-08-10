@@ -1,9 +1,11 @@
 #include "wam_driver.h"
+#include "wam_packet.h" // from wam low level driver
 
 using namespace std;
 using namespace XmlRpc;
 
-WamDriver::WamDriver()
+WamDriver::WamDriver() :
+    force_request_(new ForceRequest)
 {
  ros::NodeHandle nh("~");
 
@@ -135,6 +137,7 @@ void WamDriver::config_update(const Config& new_cfg, uint32_t level)
 
 WamDriver::~WamDriver()
 {
+	std::cout << "WamDriver destructor" << std::endl;
 }
 
 int WamDriver::get_num_joints(){
@@ -143,6 +146,15 @@ int WamDriver::get_num_joints(){
     return this->wam->getNumAngles();
   } 
   return 0;
+}
+
+bool
+WamDriver::is_moving()
+{
+    if (this->wam != NULL)
+        return this->wam->isMoving();
+
+    return false;
 }
 
 void WamDriver::wait_move_end(){
@@ -231,4 +243,38 @@ void WamDriver::hold_current_position(bool on){
   if(this->wam!=NULL){
     this->wam->holdCurrentPosition(on);
   } 
-}   
+}
+
+void
+WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory)
+{
+    uint16_t errormask = 0x00;
+    WAMJointTrajectory low_level_trajectory;
+
+    for (std::vector<trajectory_msgs::JointTrajectoryPoint>::const_iterator it = trajectory.points.begin();
+         it != trajectory.points.end(); it++) {
+            if (! is_joints_move_request_valid(it->positions)) {
+                ROS_ERROR("Joints angles were not valid. Refuse to move.");
+                return;
+            }
+
+            low_level_trajectory.push_back(it->positions);
+    }
+
+    this->wam->moveTrajectoryInJoints(&errormask, &low_level_trajectory);
+}
+
+void
+WamDriver::move_trajectory_learnt_and_estimate_force(const std::string model_filename,
+                                                     const std::string points_filename)
+{
+    // TODO: implement error handling
+    force_request_->init();
+    double response = this->wam->moveTrajectoryLearntAndEstimateForce(model_filename, points_filename);
+    force_request_->success_response(response);
+
+    return;
+}
+
+
+

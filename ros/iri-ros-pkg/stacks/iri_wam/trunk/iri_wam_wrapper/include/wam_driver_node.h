@@ -39,6 +39,8 @@
 #include "iri_wam_common_msgs/pose_move.h"
 
 // [action server client headers]
+#include <iri_wam_common_msgs/LWPRTrajectoryReturningForceEstimationAction.h>
+#include <iri_action_server/iri_action_server.h>
 
 // [action server msgs]
 #include <pr2_controllers_msgs/JointTrajectoryAction.h>
@@ -95,6 +97,20 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
     // [client attributes]
 
     // [action server attributes]
+    IriActionServer<iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationAction> lwpr_trajectory_server_aserver_;
+    void lwpr_trajectory_serverStartCallback(const iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationGoalConstPtr& goal);
+    void lwpr_trajectory_serverStopCallback(void);
+    bool lwpr_trajectory_serverIsFinishedCallback(void);
+    bool lwpr_trajectory_serverHasSucceedCallback(void);
+    void lwpr_trajectory_serverGetResultCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationResultPtr& result);
+    void lwpr_trajectory_serverGetFeedbackCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationFeedbackPtr& feedback);
+    IriActionServer<pr2_controllers_msgs::JointTrajectoryAction> joint_trajectory_aserver_;
+    void joint_trajectoryStartCallback(const pr2_controllers_msgs::JointTrajectoryGoalConstPtr& goal);
+    void joint_trajectoryStopCallback(void);
+    bool joint_trajectoryIsFinishedCallback(void);
+    bool joint_trajectoryHasSucceedCallback(void);
+    void joint_trajectoryGetResultCallback(pr2_controllers_msgs::JointTrajectoryResultPtr& result);
+    void joint_trajectoryGetFeedbackCallback(pr2_controllers_msgs::JointTrajectoryFeedbackPtr& feedback);
     ActionExecutor action_server_;
     void goalCB(GoalHandle gh);
     void cancelCB(GoalHandle gh);
