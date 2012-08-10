@@ -4,7 +4,8 @@
 using namespace std;
 using namespace XmlRpc;
 
-WamDriver::WamDriver()
+WamDriver::WamDriver() :
+    force_request_(new ForceRequest())
 {
  ros::NodeHandle nh("~");
 

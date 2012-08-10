@@ -236,18 +236,18 @@ void WamDriverNode::lwpr_trajectory_serverStartCallback(const iri_wam_common_msg
 }
 
 void WamDriverNode::lwpr_trajectory_serverStopCallback(void) 
-{ 
-  driver_.lock(); 
-    //stop action 
-  driver_.unlock(); 
-} 
+{
+    driver_.lock();
+    // TODO: not implemented yet
+    driver_.unlock();
+}
 
 bool WamDriverNode::lwpr_trajectory_serverIsFinishedCallback(void) 
 {
     bool ret = false;
 
     driver_.lock();
-    if (driver_.is_estimate_force_request_finish())
+    if (driver_.get_force_request_info()->is_estimate_force_request_finish())
          ret = true;
     driver_.unlock();
 
@@ -255,31 +255,30 @@ bool WamDriverNode::lwpr_trajectory_serverIsFinishedCallback(void)
 }
 
 bool WamDriverNode::lwpr_trajectory_serverHasSucceedCallback(void) 
-{ 
-  bool ret = false; 
+{
+    bool ret = false;
 
-  driver_.lock(); 
-    //if goal was accomplished 
-    //ret = true 
-  driver_.unlock(); 
+    driver_.lock();
+    driver_.get_force_request_info()->was_estimate_force_request_succedded();
+    driver_.unlock();
 
-  return ret; 
-} 
+    return ret;
+}
 
-void WamDriverNode::lwpr_trajectory_serverGetResultCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationResultPtr& result) 
-{ 
-  driver_.lock(); 
-    //update result data to be sent to client 
-    //result->data = data; 
-  driver_.unlock(); 
-} 
+void WamDriverNode::lwpr_trajectory_serverGetResultCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationResultPtr& result)
+{
+    driver_.lock();
+    result->force = driver_.get_force_request_info()->force_value;
+    driver_.unlock();
+}
 
 void WamDriverNode::lwpr_trajectory_serverGetFeedbackCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationFeedbackPtr& feedback) 
-{ 
-  driver_.lock(); 
-    //keep track of feedback 
+{
+    // TODO: not feedback provided at the moment
+    driver_.lock();
+   //keep track of feedback 
     //ROS_INFO("feedback: %s", feedback->data.c_str()); 
-  driver_.unlock(); 
+    driver_.unlock(); 
 }
 void
 WamDriverNode::joint_trajectoryStartCallback(const pr2_controllers_msgs::JointTrajectoryGoalConstPtr& goal)
