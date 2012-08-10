@@ -27,9 +27,45 @@
 
 #include <iri_base_driver/iri_base_driver.h>
 #include <iri_wam_wrapper/WamConfig.h>
+#include <trajectory_msgs/JointTrajectory.h>
 
 //include wam_driver main library
 #include "CWamDriver.h"
+
+struct ForceRequest
+{
+    enum Tstatus {
+        QUIET,
+        ONGOING,
+        FAILED,
+        SUCCESS
+    };
+
+    Tstatus status;
+    double force_value;
+
+    void init()
+    {
+        status      = QUIET;
+        force_value = 0.0;
+    }
+
+    void success_response(double v)
+    {
+        status      = SUCCESS;
+        force_value = v;
+    }
+
+    bool is_estimate_force_request_finish()
+    {
+        return (status != ONGOING);
+    }
+
+    bool was_estimate_force_request_succedded()
+    {
+        return (status == SUCCESS);
+    }
+};
 
 /**
  * \brief IRI ROS Specific Driver Class
@@ -58,6 +94,10 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     int server_port;
     int state_refresh_rate;
     CWamDriver *wam;
+    /**
+      * Object for handling force estimation request process
+      */
+    boost::shared_ptr<ForceRequest> force_request_;
 
     /**
      * \brief check if move in joints request is sane
@@ -166,6 +206,12 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     */
     ~WamDriver();
     int get_num_joints();
+
+    /**
+     * \brief check if the wam is moving right now
+     */
+    bool is_moving();
+
     void wait_move_end();
     void get_pose(std::vector<double> *pose);
     void get_joint_angles(std::vector<double> *angles);
@@ -173,6 +219,38 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     void move_in_cartesian(std::vector<double> *pose, double vel = 0, double acc = 0);
     void hold_current_position(bool on);
 
+    /**
+     * \brief Ask the low level driver to perform a trajectory in joints
+     *
+     * This functions will translate from joint trajectory message to low level
+     * driver types and sent the command to perform the trajectory given by
+     * the joint positions.
+     */
+    void move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory);
+
+    /**
+     * \brief Ask the low level driver to perform a LWPR trajectory and return
+     * force estimation
+     *
+     * This function will send to the low level driver the request to use the
+     * files which contains an LWPR model and trajectory points. It will perform
+     * the trajectory and return the estimate force at the end
+     *
+     * \param model_filename: full server system path which contains the LWPR
+     * model
+     * \param points_filename: full server system path which contains the points
+     * for the trajectory
+     */
+    void move_trajectory_learnt_and_estimate_force(const std::string model_filename,
+                                                   const std::string points_filename);
+
+    /**
+     * \brief return a reference to current force request info
+     */
+    const boost::shared_ptr<ForceRequest> get_force_request_info()
+    {
+        return force_request_;
+    }
 };
 
 #endif
