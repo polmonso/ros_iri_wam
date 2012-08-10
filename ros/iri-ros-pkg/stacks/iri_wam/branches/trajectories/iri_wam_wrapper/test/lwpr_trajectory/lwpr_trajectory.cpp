@@ -50,8 +50,7 @@ class RobotArm
 
         double get_result()
         {
-            LWPRTrajectoryReturningForceEstimationResultPtr r = traj_client_->getResult();
-            return r->force();
+            return traj_client_->getResult()->force;
         }
 };
 
@@ -74,4 +73,6 @@ int main(int argc, char** argv)
     {
         usleep(50000);
     }
+
+    std::cout << "Estimated force result: " << arm.get_result() << std::endl;
 }

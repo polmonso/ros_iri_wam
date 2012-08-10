@@ -5,7 +5,7 @@ using namespace std;
 using namespace XmlRpc;
 
 WamDriver::WamDriver() :
-    force_request_(new ForceRequest())
+    force_request_(new ForceRequest)
 {
  ros::NodeHandle nh("~");
 
@@ -137,6 +137,7 @@ void WamDriver::config_update(const Config& new_cfg, uint32_t level)
 
 WamDriver::~WamDriver()
 {
+	std::cout << "WamDriver destructor" << std::endl;
 }
 
 int WamDriver::get_num_joints(){
@@ -268,9 +269,9 @@ WamDriver::move_trajectory_learnt_and_estimate_force(const std::string model_fil
                                                      const std::string points_filename)
 {
     // TODO: implement error handling
-    force_request_.init();
+    force_request_->init();
     double response = this->wam->moveTrajectoryLearntAndEstimateForce(model_filename, points_filename);
-    force_request_.success_response(response);
+    force_request_->success_response(response);
 
     return;
 }
