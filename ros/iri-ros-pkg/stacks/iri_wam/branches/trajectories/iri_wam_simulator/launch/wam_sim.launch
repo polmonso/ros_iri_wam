@@ -4,7 +4,8 @@
   
   <!--Launch Navigation-->
 
-  <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation_testing.launch" output="screen"/>
-  <include file="$(find iri_wam_arm_navigation)/launch/move_iri_wam_sim.launch" output="screen"/>
+  <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation.launch"/>
+  <include file="$(find iri_wam_arm_navigation)/launch/move_iri_wam_sim.launch" />
 
+  
 </launch>

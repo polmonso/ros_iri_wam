@@ -65,7 +65,7 @@ class MoveInPose
 	 {
 	  (i < 4)? posicion[i-1]=strtod(argv[i],NULL):rotacion[i-4]=strtod(argv[i],NULL);
      }
-	 time_move= (argc == 9)?ros::Duration(strtod(argv[8],NULL)):ros::Duration(3.0);
+	 time_move= (argc == 9)?ros::Duration(strtod(argv[8],NULL)):ros::Duration(0.0);
 	}  
     //! Returns the current state of the action
     actionlib::SimpleClientGoalState getState()
