@@ -16,7 +16,7 @@
     j5_joint: {p: 50.0, d: 0.5, i: 0.5, i_clamp: 0.0}
     j6_joint: {p: 50.0, d: 0.5, i: 0.5, i_clamp: 0.0}
     j7_joint: {p: 8.0, d: 0.05, i: 0.1, i_clamp: 0.0}
-  joint_trajectory_action:
+  joint_trajectory_action_node:
     joints:
       - j1_joint 
       - j2_joint
@@ -26,7 +26,7 @@
       - j6_joint
       - j7_joint
     constraints:
-      goal_time: 0.6
+      goal_time: 1.0
       j1_joint:
         goal: 0.02
       j2_joint:
@@ -41,3 +41,4 @@
         goal: 0.02
       j7_joint:
         goal: 0.02
+      stopped_velocity_tolerance: 0.0

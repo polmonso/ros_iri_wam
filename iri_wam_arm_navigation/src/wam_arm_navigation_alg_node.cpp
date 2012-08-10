@@ -12,6 +12,7 @@ WamArmNavigationAlgNode::WamArmNavigationAlgNode(void) :
   // [init publishers]
   
   // [init subscribers]
+  this->simple_pose_topic_subscriber_ = this->public_node_handle_.subscribe("simple_pose_topic", 100, &WamArmNavigationAlgNode::simple_pose_topic_callback, this);
   
   // [init services]
   
@@ -47,6 +48,23 @@ void WamArmNavigationAlgNode::mainNodeThread(void)
 }
 
 /*  [subscriber callbacks] */
+void WamArmNavigationAlgNode::simple_pose_topic_callback(const iri_wam_arm_navigation::PoseSimple::ConstPtr& msg) 
+{ 
+  ROS_INFO("WamArmNavigationAlgNode::simple_pose_topic_callback: New Message Received"); 
+
+  //use appropiate mutex to shared variables if necessary 
+  this->alg_.lock(); 
+  //this->simple_pose_topic_mutex_.enter(); 
+    this->alg_.setTarget(msg->goal,msg->header.frame_id);
+    arm_navigation_msgs::MoveArmGoal move_arm;
+    makeMoveMsg(move_arm);
+    move_iri_wamMakeActionRequest(move_arm);
+  //std::cout << msg->data << std::endl; 
+
+  //unlock previously blocked shared variables 
+  this->alg_.unlock(); 
+  //this->simple_pose_topic_mutex_.exit(); 
+}
 
 /*  [service callbacks] */
 
@@ -91,8 +109,7 @@ void WamArmNavigationAlgNode::simple_pose_moveStartCallback(const iri_wam_arm_na
     makeMoveMsg(move_arm);
     move_iri_wamMakeActionRequest(move_arm);
     //execute goal 
-    ROS_WARN("£££££");
-  alg_.unlock(); 
+    alg_.unlock(); 
 } 
 
 void WamArmNavigationAlgNode::simple_pose_moveStopCallback(void) 

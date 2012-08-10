@@ -1,0 +1,13 @@
+<launch>
+		<param name="/use_sim_time" value="true" />
+       <include file="$(find iri_bhand_description)/launch/iri_bhand_description.launch"/>
+
+		<!-- Start Gazebo -->
+        <node name="gazebo" pkg="gazebo" type="gazebo" args="-s -1 -u $(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen"/>
+		
+		<!-- Spawm WAM innto Simulator -->
+         <node name="spawn_iri_wam_model" pkg="gazebo" type="spawn_model" args="$(optenv ROBOT_INITIAL_POSE) -pause -urdf -param bhand_description -model bhand -z 0.1" respawn="false" output="screen"/>
+
+        
+        
+</launch>
