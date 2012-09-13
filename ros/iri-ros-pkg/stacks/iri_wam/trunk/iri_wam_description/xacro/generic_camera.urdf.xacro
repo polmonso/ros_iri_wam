@@ -9,7 +9,9 @@ xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
     <property name="M_PI" value="3.1415926535897931" />
   
     <xacro:macro name="generic_camera" params="name parent *origin ros_topic cam_info_topic update_rate res_x res_y image_format hfov">
+
       <joint name="${name}_joint" type="fixed">
+        <origin xyz="0 0 0.09" rpy="0.0 ${-M_PI/2} 0.0" />
         <insert_block name="origin" />
         <parent link="${parent}"/>
         <child link="${name}_link"/>
@@ -31,7 +33,7 @@ xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
     </material>
         </visual>
         <collision>
-          <origin xyz="0 0 0" rpy="0 0 0" />
+          <origin xyz="0 0 0.09" rpy="0 0 0" />
           <geometry>
             <box size="0.01 0.01 0.01" />
           </geometry>
@@ -40,7 +42,7 @@ xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
       
       
     <joint name="${name}_optical_joint" type="fixed">
-      <origin xyz="0 0 0" rpy="0.0 0.0 ${-M_PI/2}" />
+      <origin xyz="0 0 0" rpy="0.0 ${+M_PI/2} 0.0" />
       <parent link="${name}_link" />
       <child link="${name}_optical_frame"/>
     </joint>
@@ -84,9 +86,16 @@ xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
           <interface:camera name="${name}_camera_iface" />
         </controller:gazebo_ros_camera>
       </sensor:camera>
-      <turnGravityOff>true</turnGravityOff>
+      <turnGravityOff>false</turnGravityOff>
       <material>PR2/Blue</material>
     </gazebo>
+
+<!--    <joint name="${name}_fix" type="fixed">
+        <origin xyz="0.0 0.0 0.08" rpy="0 0 0" />
+        <parent link="${parent}"/>
+        <child link="${name}_link"/>
+     </joint>
+-->
     </xacro:macro>
   </robot>
   

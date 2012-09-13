@@ -52,6 +52,8 @@ class WamArmNavigationAlgNode : public algorithm_base::IriBaseAlgorithm<WamArmNa
     // [subscriber attributes]
     ros::Subscriber simple_pose_topic_subscriber_;
     void simple_pose_topic_callback(const iri_wam_arm_navigation::PoseSimple::ConstPtr& msg);
+ 
+    bool aborted;
     CMutex simple_pose_topic_mutex_;
 
     // [service attributes]
@@ -76,7 +78,9 @@ class WamArmNavigationAlgNode : public algorithm_base::IriBaseAlgorithm<WamArmNa
     void move_iri_wamFeedback(const arm_navigation_msgs::MoveArmFeedbackConstPtr& feedback);
 
     arm_navigation_msgs::ArmNavigationErrorCodes code_result;
-    std::string state_msg;
+
+    std::string state_msg,state__;
+    bool END;
   public:
    /**
     * \brief Constructor
