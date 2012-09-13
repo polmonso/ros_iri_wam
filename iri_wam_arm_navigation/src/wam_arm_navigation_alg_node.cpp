@@ -81,7 +81,6 @@ void WamArmNavigationAlgNode::move_iri_wamDone(const actionlib::SimpleClientGoal
     aborted=false;
     state__="FREE";
     ROS_ERROR_STREAM("************************* FREE **********************************************************");
-    
   }
   else 
   {
@@ -89,7 +88,6 @@ void WamArmNavigationAlgNode::move_iri_wamDone(const actionlib::SimpleClientGoal
     aborted=true;
     state__="ABORTED";
     ROS_ERROR_STREAM("************************* ABORTED **********************************************************");
-    
   }
   code_result=result->error_code;
   //copy & work with requested result 
