@@ -16,7 +16,7 @@
   <include filename="$(find iri_wam_description)/xacro/wam5.urdf.xacro" />
   <include filename="$(find iri_wam_description)/xacro/wam6.urdf.xacro" />
   <include filename="$(find iri_wam_description)/xacro/wam7.urdf.xacro" />
-  <include filename="$(find iri_wam_description)/xacro/wamtcp.urdf.xacro" />
+  <include filename="$(find iri_wam_description)/xacro/wamtcp.urdf.xacro" /> 
   
   <!-- Forward facing camera -->
   <include filename="$(find iri_wam_description)/xacro/generic_camera.urdf.xacro" />
@@ -46,8 +46,10 @@
 
 <!-- Forward facing camera -->
   <xacro:generic_camera name="front_cam" parent="wam_link7" ros_topic="camera/image" cam_info_topic="camera/camera_info" update_rate="10" res_x="320" res_y="240" image_format="R8G8B8" hfov="90"> 
-  <origin xyz="0.05 0.0 -0.06" rpy="0 0 0"/>
-  </xacro:generic_camera>
+  <origin xyz="0.05 0.0 -0.06" rpy="0 0 0"/> 
+  </xacro:generic_camera> 
+
+
 
 </robot>
 

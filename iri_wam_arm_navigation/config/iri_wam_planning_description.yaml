@@ -35,7 +35,13 @@ default_collision_operations:
   - object1: wam_link7
     object2: wam_tcp
     operation: disable  # Adjacent in collision
-  - object1: wam_link0
+#  - object1: wam_link7
+#    object2: front_cam_link
+#    operation: disable  # Adjacent in collision
+#  - object1: front_cam_link
+#    object2: _optical_frame
+#    operation: disable  # Adjacent in collision
+#  - object1: wam_link0
     object2: wam_link2
     operation: disable  # Never in collision
   - object1: wam_link0

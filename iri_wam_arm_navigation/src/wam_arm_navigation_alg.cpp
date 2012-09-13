@@ -55,13 +55,23 @@ void WamArmNavigationAlgorithm::setPlannerRequestPose(arm_navigation_msgs::MoveA
 	
 	desired_pose.pose = pose_goal.pose;
 				
-	desired_pose.absolute_position_tolerance.x = 0.02;
-	desired_pose.absolute_position_tolerance.y = 0.02;
-	desired_pose.absolute_position_tolerance.z = 0.02;
-	
-	desired_pose.absolute_roll_tolerance = 0.04;
-	desired_pose.absolute_pitch_tolerance = 0.04;
-	desired_pose.absolute_yaw_tolerance = 0.04;
+// 	desired_pose.absolute_position_tolerance.x = 0.02;
+// 	desired_pose.absolute_position_tolerance.y = 0.02;
+// 	desired_pose.absolute_position_tolerance.z = 0.02;
+// 	
+// 	desired_pose.absolute_roll_tolerance = 0.04;
+// 	desired_pose.absolute_pitch_tolerance = 0.04;
+// 	desired_pose.absolute_yaw_tolerance = 0.04;
+
+  desired_pose.absolute_position_tolerance.x = 0.005;
+  desired_pose.absolute_position_tolerance.y = 0.005;
+  desired_pose.absolute_position_tolerance.z = 0.005;
+  
+  desired_pose.absolute_roll_tolerance = 0.005;
+  desired_pose.absolute_pitch_tolerance = 0.005;
+  desired_pose.absolute_yaw_tolerance = 0.005;
+  
+  
 	
 	addGoalConstraintToMoveArmGoal(desired_pose,goal);
 	

@@ -4,7 +4,7 @@
        xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
        name="iri_wam">
 
-  <include filename="$(find iri_wam_description)/xacro/wam.urdf.xacro" />
+  <include filename="$(find iri_wam_description)/xacro/wam_with_camera.urdf.xacro" />
 
   <gazebo>
 	<controller:gazebo_ros_controller_manager name="gazebo_ros_controller_manager" plugin="libgazebo_ros_controller_manager.so">
@@ -14,4 +14,5 @@
       <robotNamespace>/</robotNamespace>
     </controller:gazebo_ros_controller_manager>
   </gazebo>
+
  </robot>

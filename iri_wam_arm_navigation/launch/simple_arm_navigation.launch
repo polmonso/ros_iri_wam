@@ -1,3 +1,5 @@
 <launch>
-<node pkg="iri_wam_arm_navigation" type="iri_wam_arm_navigation" name="simple_arm_navigation"/>
+<node pkg="iri_wam_arm_navigation" type="iri_wam_arm_navigation" name="simple_arm_navigation" output="screen">
+<remap from="/simple_arm_navigation/simple_pose_topic" to="/iri_uncalibvs/Wam_Target"/> 
+</node>
 </launch>
