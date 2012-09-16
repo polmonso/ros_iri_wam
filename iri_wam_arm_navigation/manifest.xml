@@ -1,7 +1,8 @@
 <package>
 <description brief="iri_wam_arm_navigation">
 
-     This package contain the configurations files necessary to execute arm_navigation stack  with the phisics WAm
+     This package contain the configurations files necessary to execute arm_navigation stack  with the phisics and simulated WAm.
+     The main file is iri_wam_arm_navigation.launch. The other files are generated with wizard of ROS and are totally necessary to correct execution of arm navigation stack.
 
   </description>
   <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
