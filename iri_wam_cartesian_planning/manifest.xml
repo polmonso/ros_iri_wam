@@ -1,10 +1,11 @@
 <package>
   <description brief="iri_wam_cartesian_planning">
 
-     iri_wam_cartesian_planning
+     This package generated a trajectory where each point of this trajectory are Cartesian Coordinates.
+     
 
   </description>
-  <author>Ivan Rojas</author>
+  <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
   <license>LGPL</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_cartesian_planning</url>
