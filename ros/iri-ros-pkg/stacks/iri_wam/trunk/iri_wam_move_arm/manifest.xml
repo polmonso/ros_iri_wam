@@ -1,9 +1,9 @@
 <package>
   <description brief="iri_wam_move_arm">
 
-     iri_wam_move_arm
-
-  </description>
+This package is a wrapper of move arm (of arm navigation stack). Whith this package, can work with different WAM's tools only specifying 
+the measures in the X-axis, Y-axis and Z-axis of the tools, without the need of a mesh file of the tool.
+ </description>
   <author>irojas</author>
   <license>LGPL</license>
   <review status="unreviewed" notes=""/>
