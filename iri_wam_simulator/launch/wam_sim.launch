@@ -1,11 +1,6 @@
 <launch>
   <!--Base part for Simualtor-->
-  <include file="$(find iri_wam_simulator)/launch/wam_sim_base.launch" />
-  
+  <include file="$(find iri_wam_simulator)/launch/wam_sim_base.launch" />  
   <!--Launch Navigation-->
-
-  <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation.launch"/>
-  <include file="$(find iri_wam_arm_navigation)/launch/move_iri_wam_sim.launch" />
-
-  
+  <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation.launch"/>  
 </launch>
