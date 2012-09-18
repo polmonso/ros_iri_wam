@@ -16,7 +16,6 @@
   <depend package="geometry_msgs"/>
   <depend package="sensor_msgs"/>
   <depend package="control_msgs"/>
-  <depend package="eigen"/>
   <depend package="pr2_controllers_msgs"/>
   <depend package="trajectory_msgs"/>
 </package>

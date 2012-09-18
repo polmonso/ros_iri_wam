@@ -35,6 +35,9 @@ FIND_PACKAGE(CWamDriver REQUIRED)
 
 INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ${comm_INCLUDE_DIR} ${CWamDriver_INCLUDE_DIR} ./include)
 
+FIND_PACKAGE(Eigen REQUIRED)
+INCLUDE_DIRECTORIES(${EIGEN_INCLUDE_DIRS})
+ADD_DEFINITIONS(${EIGEN_DEFINITIONS})
 
 #common commands for building c++ executables and libraries
 #rosbuild_add_library(${PROJECT_NAME} src/example.cpp)
