@@ -15,7 +15,6 @@
   <depend package="geometry_msgs" /> 
   <depend package="iri_wam_common_msgs" /> 
   <depend package="tf"/>
-  <depend package="eigen"/>
   <depend package="sensor_msgs"/>
   <depend package="orocos_kdl"/>
 </package>
