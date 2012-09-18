@@ -30,6 +30,10 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 rosbuild_add_executable(wam_tutorial src/wam_tutorial.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
 
+FIND_PACKAGE(Eigen REQUIRED)
+INCLUDE_DIRECTORIES(${EIGEN_INCLUDE_DIRS})
+ADD_DEFINITIONS(${EIGEN_DEFINITIONS})
+
 MESSAGE(STATUS)
 MESSAGE(STATUS "IMPORTANT NOTE: This code is not well tested and probably incomplete")
 MESSAGE(STATUS "It can break your system and, certainly, eat your cat")
