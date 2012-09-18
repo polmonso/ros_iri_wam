@@ -12,8 +12,6 @@
   <depend package="geometry_msgs" /> 
   <depend package="iri_wam_common_msgs" /> 
   <depend package="tf"/>
-  <depend package="eigen"/> 
-
 </package>
 
 
