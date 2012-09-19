@@ -30,8 +30,12 @@ gencfg()
 # end dynamic reconfiguration
 
 FIND_PACKAGE(iriutils REQUIRED)
-
 INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ./include)
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(OMPL REQUIRED ompl)
+include_directories(${OMPL_INCLUDE_DIRS})
+link_directories(${OMPL_LIBRARY_DIRS})
 
 #common commands for building c++ executables and libraries
 #rosbuild_add_library(${PROJECT_NAME} src/example.cpp)
@@ -40,4 +44,4 @@ INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ./include)
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 rosbuild_add_executable(${PROJECT_NAME} src/wam_cartesian_planning_alg.cpp src/wam_cartesian_planning_alg_node.cpp)
 
-target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY})
+target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY} ${OMPL_LIBRARIES})

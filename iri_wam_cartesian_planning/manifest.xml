@@ -10,7 +10,7 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_cartesian_planning</url>
   <depend package="roscpp"/>
-  <depend package="ompl"/>
+  <depend package="ompl_ros_interface"/>
   <depend package="collada_urdf"/>
   <depend package="geometry_msgs"/>
   <depend package="iri_base_algorithm"/>

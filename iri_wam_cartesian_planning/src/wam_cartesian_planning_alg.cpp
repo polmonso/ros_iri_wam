@@ -80,15 +80,15 @@ void WamCartesianPlanningAlgorithm::planWithSimpleSetup(ob::ScopedState<ompl::ba
 void WamCartesianPlanningAlgorithm::omplToRos(og::PathGeometric& path, std::vector<geometry_msgs::PoseStamped>& vect)
 {	
 		geometry_msgs::PoseStamped msg;
-		for(size_t i=0; i <path.states.size(); ++i)
+		for(size_t i=0; i <path.getStates().size(); ++i)
 		{
-			msg.pose.position.x=path.states[i]->as<ob::SE3StateSpace::StateType>()->getX();
-			msg.pose.position.y=path.states[i]->as<ob::SE3StateSpace::StateType>()->getY();
-			msg.pose.position.z=path.states[i]->as<ob::SE3StateSpace::StateType>()->getZ();
-			msg.pose.orientation.x=path.states[i]->as<ob::SE3StateSpace::StateType>()->rotation().x;
-			msg.pose.orientation.y=path.states[i]->as<ob::SE3StateSpace::StateType>()->rotation().y;
-			msg.pose.orientation.z=path.states[i]->as<ob::SE3StateSpace::StateType>()->rotation().z;
-			msg.pose.orientation.w=path.states[i]->as<ob::SE3StateSpace::StateType>()->rotation().w;
+			msg.pose.position.x=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->getX();
+			msg.pose.position.y=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->getY();
+			msg.pose.position.z=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->getZ();
+			msg.pose.orientation.x=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->rotation().x;
+			msg.pose.orientation.y=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->rotation().y;
+			msg.pose.orientation.z=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->rotation().z;
+			msg.pose.orientation.w=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->rotation().w;
 			vect.push_back(msg);
 		}
 }
@@ -97,15 +97,15 @@ void WamCartesianPlanningAlgorithm::writeFile(og::PathGeometric& path,std::strin
 	std::ofstream traj;
 	traj.open(pathDir.c_str(), std::ofstream::out);
 	float tx,ty,tz,qx,qy,qz,qw;
-	for(size_t i=0; i <path.states.size(); ++i)
+	for(size_t i=0; i <path.getStates().size(); ++i)
 	{
-		tx=path.states[i]->as<ob::SE3StateSpace::StateType>()->getX();
-		ty=path.states[i]->as<ob::SE3StateSpace::StateType>()->getY();
-		tz=path.states[i]->as<ob::SE3StateSpace::StateType>()->getZ();
-		qx=path.states[i]->as<ob::SE3StateSpace::StateType>()->rotation().x;
-		qy=path.states[i]->as<ob::SE3StateSpace::StateType>()->rotation().y;
-		qz=path.states[i]->as<ob::SE3StateSpace::StateType>()->rotation().z;
-		qw=path.states[i]->as<ob::SE3StateSpace::StateType>()->rotation().w;
+		tx=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->getX();
+		ty=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->getY();
+		tz=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->getZ();
+		qx=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->rotation().x;
+		qy=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->rotation().y;
+		qz=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->rotation().z;
+		qw=path.getStates()[i]->as<ob::SE3StateSpace::StateType>()->rotation().w;
 		
 		traj<<tx<<" "<<ty<<" "<<tz<<" "<<qx<<" "<<qy<<" "<<qz<<" "<<qw<<"\n";
 		std::cout<<tx<<" "<<ty<<" "<<tz<<" "<<qx<<" "<<qy<<" "<<qz<<" "<<qw<<std::endl;
