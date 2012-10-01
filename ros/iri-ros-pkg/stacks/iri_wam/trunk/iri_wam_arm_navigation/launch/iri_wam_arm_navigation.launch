@@ -9,6 +9,6 @@
     <include file="$(find iri_wam_arm_navigation)/launch/ompl_planning.launch" />
     <include file="$(find iri_wam_arm_navigation)/launch/trajectory_filter_server.launch" />
     <include file="$(find iri_wam_arm_navigation)/launch/simple_arm_navigation.launch" /> 
-    <include file="$(find iri_wam_arm_navigation)/launch/move_groups.launch" />    
+    <include file="$(find iri_wam_arm_navigation)/launch/move_iri_wam.launch" />
     <include file="$(find iri_wam_move_arm)/launch/iri_wam_move_arm.launch" /> 
 </launch>
