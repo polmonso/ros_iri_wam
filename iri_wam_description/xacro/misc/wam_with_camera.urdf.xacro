@@ -17,10 +17,10 @@
   <include filename="$(find iri_wam_description)/xacro/wam6.urdf.xacro" />
   <include filename="$(find iri_wam_description)/xacro/wam7.urdf.xacro" />
   <include filename="$(find iri_wam_description)/xacro/wamtcp.urdf.xacro" /> 
-  
+
   <!-- Forward facing camera -->
-  <include filename="$(find iri_wam_description)/xacro/generic_camera.urdf.xacro" />
-  
+  <include filename="$(find iri_wam_description)/xacro/misc/generic_camera.urdf.xacro" />
+
 <!--
   <xacro:wambase>
   </xacro:wambase>

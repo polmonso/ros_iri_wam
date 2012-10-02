@@ -3,7 +3,7 @@
    <node name="gazebo" pkg="gazebo" type="gazebo" args="-s -1 -u $(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen"/>
    
    <!-- send table urdf to param server -->
-   <param name="table_description" command="$(find xacro)/xacro.py $(find iri_wam_description)/xacro/table.urdf.xacro" />
+   <param name="table_description" command="$(find xacro)/xacro.py $(find iri_wam_description)/xacro/misc/table.urdf.xacro" />
    <!-- push table_description to factory and spawn robot in gazebo -->
    <node name="spawn_table" pkg="gazebo" type="spawn_model" args="-urdf -pause -param table_description -z 0.00 -model table_model" respawn="false" output="screen" />
    
