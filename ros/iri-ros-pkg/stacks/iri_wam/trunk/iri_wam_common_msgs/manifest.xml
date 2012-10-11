@@ -18,6 +18,7 @@
   <depend package="actionlib"/>
   <depend package="actionlib_msgs"/>
   <depend package="arm_navigation_msgs"/>
+  <depend package="object_manipulation_msgs"/>
 
   <export>
     <cpp cflags="-I${prefix}/msg/cpp"/>
