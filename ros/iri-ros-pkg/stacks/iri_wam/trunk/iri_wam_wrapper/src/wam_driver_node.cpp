@@ -153,32 +153,27 @@ bool WamDriverNode::wam_servicesCallback(iri_wam_common_msgs::wamdriver::Request
 
   return true; 
 }
-bool WamDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_move::Request &req, iri_wam_common_msgs::joints_move::Response &res) 
-{ 
-  //lock access to driver if necessary 
-  bool result;
+bool WamDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_move::Request  & req,
+                                        iri_wam_common_msgs::joints_move::Response & res)
+{
+  //lock access to driver if necessary
   this->driver_.lock();
 
-  if(this->driver_.isRunning()){
-    //do operations with req and output on res 
-    //res.data2 = req.data1 + my_var; 
-    std::vector <double> joints(7,0);
-    for(int i=0; i< (int) req.joints.size();i++)
-       joints[i] = req.joints[i];
-
-    this->driver_.move_in_joints(&joints); //this call blocks if the wam faults. The mutex is not freed...!
-    //unlock driver if previously blocked 
-    this->driver_.unlock();
-    this->driver_.wait_move_end();
-    result = true;
-
-  }else{
+  if (! this->driver_.isRunning())
+  {
     ROS_ERROR("Driver is not running");
-    result = false;
     //unlock driver if previously blocked 
     this->driver_.unlock();
+    return false;
   }
-  return result;
+
+  //this call blocks if the wam faults. The mutex is not freed...!   
+  //unlock driver if previously blocked 
+  this->driver_.move_in_joints(& req.joints); 
+  this->driver_.unlock();
+  this->driver_.wait_move_end();
+
+  return true;
 }
 
 bool WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, iri_wam_common_msgs::pose_move::Response &res) 
