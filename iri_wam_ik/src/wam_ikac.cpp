@@ -11,7 +11,7 @@ WamIKAC::WamIKAC() {
   //init class attributes if necessary
   //this->loop_rate = 2;//in [Hz]
 
-  this->currentjoints.resize(7);
+  this->currentjoints_.resize(7);
 
   //string for port names
   std::string port_name;
@@ -29,6 +29,9 @@ WamIKAC::WamIKAC() {
   port_name = ros::names::append(ros::this_node::getName(), "wamik"); 
   this->wamik_server = this->nh_.advertiseService(port_name, &WamIKAC::wamikCallback, this);
   
+  port_name = ros::names::append(ros::this_node::getName(), "wamik_from_pose");
+  this->wamik_server_fromPose = this->nh_.advertiseService(port_name, &WamIKAC::wamikCallbackFromPose, this);
+
   // [init clients]
   port_name = ros::names::append(ros::this_node::getName(), "joints_move"); 
   joint_move_client = this->nh_.serviceClient<iri_wam_common_msgs::joints_move>(port_name);
@@ -51,11 +54,77 @@ void WamIKAC::ikPub(void)
 void WamIKAC::joint_states_callback(const sensor_msgs::JointState::ConstPtr& msg) { 
 
   for(int i=0;i<7;i++)
-    currentjoints[i] = msg->position[i]; 
+    currentjoints_[i] = msg->position[i]; 
 
 }
 
 /*  [service callbacks] */
+bool WamIKAC::wamikCallbackFromPose(iri_wam_common_msgs::wamInverseKinematicsFromPose::Request &req, iri_wam_common_msgs::wamInverseKinematicsFromPose::Response &res){
+
+  ROS_INFO("[WamIKAC] User Given Current Joints %s (j1, j2, j3, j4, j5, j6, j7): [ %f, %f, %f, %f, %f, %f, %f ]",
+            req.current_joints.header.frame_id.c_str(), 
+            req.current_joints.position[0], 
+            req.current_joints.position[1],
+            req.current_joints.position[2],
+            req.current_joints.position[3],
+            req.current_joints.position[4],
+            req.current_joints.position[5],
+            req.current_joints.position[6]);
+  
+  ROS_INFO("[WamIKAC] Received Pose from frame_id %s (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
+            req.desired_pose.header.frame_id.c_str(), 
+            req.desired_pose.pose.position.x, 
+            req.desired_pose.pose.position.y,
+            req.desired_pose.pose.position.z,
+            req.desired_pose.pose.orientation.x,
+            req.desired_pose.pose.orientation.y,
+            req.desired_pose.pose.orientation.z,
+            req.desired_pose.pose.orientation.w);
+  
+  // User defined current pose
+  std::vector<double> currentjoints;
+  for(int ii=0; ii<7; ii++)
+    currentjoints[ii] = req.current_joints.position[ii]; 
+
+  Quaternion<float> quat( req.desired_pose.pose.orientation.w, req.desired_pose.pose.orientation.x, req.desired_pose.pose.orientation.y, req.desired_pose.pose.orientation.z);
+  Matrix3f mat = quat.toRotationMatrix();
+
+  std::vector <double> desired_pose(16,0);
+  std::vector <double> desired_joints(7,0);
+
+  // Desired pose as a Homogeneous Transformation
+  desired_pose[3] = req.desired_pose.pose.position.x;
+  desired_pose[7] = req.desired_pose.pose.position.y;
+  desired_pose[11] = req.desired_pose.pose.position.z;
+  desired_pose[15] = 1;
+  for(int i=0; i<12; i++){
+   if(i%4 != 3){
+     desired_pose[i] = mat(i/4,i%4);
+   }
+  }
+  ROS_INFO("[WamIKAC] Received HRt:\n [ \t%f %f %f %f\n\t %f %f %f %f\n\t %f %f %f %f\n\t %f %f %f %f\n",
+            desired_pose[0], desired_pose[1], desired_pose[2], desired_pose[3],
+            desired_pose[4], desired_pose[5], desired_pose[6], desired_pose[7],
+            desired_pose[8], desired_pose[9], desired_pose[10], desired_pose[11],
+            desired_pose[12], desired_pose[13], desired_pose[14], desired_pose[15]);
+
+  if(!WamIKAC::ik(desired_pose, currentjoints, desired_joints)){
+      ROS_ERROR("[WamIKAC] IK solution not found. Is pose out of configuration space?");
+      return false;
+  }else{
+
+      ROS_INFO("[WamIKAC] Service computed joints:\n %f %f %f %f %f %f %f\n", desired_joints.at(0), desired_joints.at(1), desired_joints.at(2), desired_joints.at(3), desired_joints.at(4), desired_joints.at(5), desired_joints.at(6));
+    
+      res.desired_joints.position.resize(7);
+      joints_.resize(7);
+      for(int i=0; i<7; i++){
+        res.desired_joints.position[i] = desired_joints.at(i);
+        joints_(i) = desired_joints.at(i);
+      }
+  }
+  return true;
+}
+
 bool WamIKAC::wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &req, iri_wam_common_msgs::wamInverseKinematics::Response &res){
 
   ROS_INFO("[WamIKAC] Received Pose from frame_id %s (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
@@ -89,7 +158,7 @@ bool WamIKAC::wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &
             pose[8],pose[9],pose[10],pose[11],
             pose[12],pose[13],pose[14],pose[15]);
 
-  if(!WamIKAC::ik(pose, currentjoints, joints)){
+  if(!WamIKAC::ik(pose, currentjoints_, joints)){
       ROS_ERROR("[WamIKAC] IK solution not found. Is pose out of configuration space?");
       return false;
   }else{
@@ -665,8 +734,6 @@ void WamIKAC::soltrig(double a, double b, double c, MatrixXd& q2sol2){
 		q2sol2(1,0)=atan2(-(-a-c*(-a*c+sqrt(pow(c,2.)*pow(b,2.)-pow(b,2.)*pow(a,2.)+pow(b,4.)))/(pow(c,2.)+pow(b,2.)))/b,-(-a*c+sqrt(pow(c,2.)*pow(b,2.)-pow(b,2.)*pow(a,2.)+pow(b,4.)))/(pow(c,2.)+pow(b,2.)));
 	}
 }
-
-
 
 
 
