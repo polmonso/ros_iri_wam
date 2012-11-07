@@ -1,7 +1,7 @@
 <launch>
 
-<!-- Start Gazebo 
-   <include file="$(find iri_wam_simulator)/launch/wam_sim.launch" />-->
+<!-- Start Gazebo -->
+  <include file="$(find iri_wam_simulator)/launch/wam_sim.launch" />
 
   
   <include file="$(find iri_wam_simulator)/launch/misc/box.launch" >

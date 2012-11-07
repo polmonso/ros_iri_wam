@@ -15,7 +15,7 @@
 
 
  <!-- Gazebo -->
- <param name="$(arg name_obstacle_)" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/box.urdf.xacro'" />
+ <param name="$(arg name_obstacle_)" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/misc/box.urdf.xacro'" />
  <node name="spawn_simple_$(arg name_obstacle_)" pkg="gazebo" type="spawn_model" args="-urdf -param $(arg name_obstacle_) -model $(arg name_obstacle_) -x $(arg pos_box_x) -y $(arg pos_box_y) -z $(arg pos_box_z)" respawn="false" output="screen" />
 
  <!--		ROS			-->
