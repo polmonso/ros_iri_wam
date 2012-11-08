@@ -2,10 +2,10 @@
 
 WamArmNavigationAlgNode::WamArmNavigationAlgNode(void) :
   algorithm_base::IriBaseAlgorithm<WamArmNavigationAlgorithm>(),
-  move_iri_wam_client_("move_iri_wam", true),
-  simple_pose_move_aserver_(public_node_handle_, "simple_pose_move"),
-  state_msg(""),
   aborted(false),
+  simple_pose_move_aserver_(public_node_handle_, "simple_pose_move"),
+  move_iri_wam_client_("move_iri_wam", true),
+  state_msg(""),
   state__("")
 {
   //init class attributes if necessary
@@ -75,19 +75,16 @@ void WamArmNavigationAlgNode::simple_pose_topic_callback(const iri_wam_arm_navig
 void WamArmNavigationAlgNode::move_iri_wamDone(const actionlib::SimpleClientGoalState& state,  const arm_navigation_msgs::MoveArmResultConstPtr& result) 
 { 
   
-  if( state.toString().compare("SUCCEEDED") == 0 ) 
+  ROS_INFO("WamArmNavigationAlgNode::move_iri_wamDone: %s", state.toString().c_str()); 
+  if( state.state_ == actionlib::SimpleClientGoalState::SUCCEEDED ) 
   {
-    ROS_INFO("WamArmNavigationAlgNode::move_iri_wamDone: Goal Achieved!"); 
     aborted=false;
     state__="FREE";
-    ROS_ERROR_STREAM("************************* FREE **********************************************************");
   }
   else 
   {
-    ROS_INFO("WamArmNavigationAlgNode::move_iri_wamDone: %s", state.toString().c_str()); 
     aborted=true;
     state__="ABORTED";
-    ROS_ERROR_STREAM("************************* ABORTED **********************************************************");
   }
   code_result=result->error_code;
   //copy & work with requested result 
@@ -114,19 +111,20 @@ void WamArmNavigationAlgNode::move_iri_wamFeedback(const arm_navigation_msgs::Mo
     //ROS_INFO("WamArmNavigationAlgNode::move_iri_wamFeedback: Cancelling Action!"); 
   } 
 }
+
 void WamArmNavigationAlgNode::simple_pose_moveStartCallback(const iri_wam_arm_navigation::SimplePoseGoalConstPtr& goal)
 { 
-  alg_.lock(); 
+    alg_.lock(); 
     //check goal 
-    this->alg_.setTarget(goal->goal,goal->frame_id);
+    alg_.setTarget(goal->goal,goal->frame_id);
     arm_navigation_msgs::MoveArmGoal move_arm;
     makeMoveMsg(move_arm);
     move_iri_wamMakeActionRequest(move_arm);
     
-    ROS_ERROR_STREAM("************************* STARTING NON FREE **********************************************************");
     state__="NO FREE";
     aborted=false;
-    ROS_WARN_STREAM(goal->goal);
+    // Show the goal Pose
+    ROS_INFO_STREAM(goal->goal);
     //execute goal 
     alg_.unlock(); 
 } 
@@ -220,6 +218,8 @@ void WamArmNavigationAlgNode::move_iri_wamMakeActionRequest(const arm_navigation
               boost::bind(&WamArmNavigationAlgNode::move_iri_wamFeedback, this, _1)); 
   this->alg_.sendedPose();
   ROS_INFO("WamArmNavigationAlgNode::move_iri_wamMakeActionRequest: Goal Sent. Wait for Result!"); 
+  // Waiting for the result
+  //move_iri_wam_client_.waitForResult();
 }
 
 void WamArmNavigationAlgNode::node_config_update(Config &config, uint32_t level)
