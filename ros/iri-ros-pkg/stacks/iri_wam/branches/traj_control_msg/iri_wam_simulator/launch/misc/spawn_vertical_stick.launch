@@ -1,0 +1,8 @@
+<launch>
+  <!-- send vertical_stick urdf to param server -->
+  <param name="vertical_stick_description" command="$(find xacro)/xacro.py $(find iri_wam_description)/xacro/misc/vertical_stick.urdf.xacro" />
+
+  <!-- push vertical_stick_description to factory and spawn robot in gazebo -->
+  <node name="spawn_vertical_stick" pkg="gazebo" type="spawn_model" args="-urdf -param vertical_stick_description -x 0.5 -y 0.14 -z 0.1 -model vertical_stick_model" respawn="false" output="screen" />
+ 
+</launch>

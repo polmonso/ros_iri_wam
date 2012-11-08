@@ -1,0 +1,22 @@
+<launch> 
+<!-- Este es el Launch del nodo iri_wam_move_arm, Funciona como un wrapper del move_arm del stack del arm navigation
+ Y la porpiedad mas destacable que maneja el tamano de la herramienta a usar.
+ 
+ Para ello se necesitan modificar los parametros a continuacion, A destacar
+ que se debe modificar los tamanos desde el punto "tip" hasta la muneca del WAM, en este caso,(como ejemplo) 
+ coloco la medida de la mano,solo modifico Z ya que el punto esta ubicado dentro de la BHand que sigue el eje del robot
+ -->
+ 
+ <arg name="size_x" default="0" />
+ <arg name="size_y" default="0" />
+ <arg name="size_z" default="0.09" />
+ 
+ <remap from="/iri_wam_move_arm_node/move_arm" to="/move_iri_wam" />
+
+ <node name="iri_wam_move_arm_node"  type="iri_wam_move_arm"  pkg="iri_wam_move_arm" output="screen">
+  <param name="tool_x" value="$(arg size_x)"/>
+  <param name="tool_y" value="$(arg size_y)"/>
+  <param name="tool_z" value="$(arg size_z)"/>
+ </node>
+ 
+</launch> 

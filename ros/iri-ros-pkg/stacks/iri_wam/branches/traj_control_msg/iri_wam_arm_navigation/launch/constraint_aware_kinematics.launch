@@ -1,0 +1,9 @@
+<launch>
+    <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_planning_environment.launch" />
+    <node pkg="arm_kinematics_constraint_aware" type="arm_kinematics_constraint_aware" name="iri_wam_iri_wam_kinematics">
+        <param name="group" type="string" value="iri_wam" />
+        <param name="iri_wam/root_name" type="string" value="wam_link0" />
+        <param name="iri_wam/tip_name" type="string" value="wam_tcp" />
+        <param name="kinematics_solver" type="string" value="arm_kinematics_constraint_aware/KDLArmKinematicsPlugin" />
+    </node>
+</launch>
