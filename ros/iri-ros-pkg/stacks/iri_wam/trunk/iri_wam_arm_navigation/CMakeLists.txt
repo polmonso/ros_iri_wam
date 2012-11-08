@@ -41,6 +41,6 @@ INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ./include)
 #target_link_libraries(${PROJECT_NAME} another_library)
 #rosbuild_add_boost_directories()
 #rosbuild_link_boost(${PROJECT_NAME} thread)
+rosbuild_add_executable(box test/box.cpp)
 rosbuild_add_executable(${PROJECT_NAME} src/wam_arm_navigation_alg.cpp src/wam_arm_navigation_alg_node.cpp)
-
 target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY})
