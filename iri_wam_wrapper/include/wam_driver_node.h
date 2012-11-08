@@ -43,7 +43,6 @@
 #include <iri_action_server/iri_action_server.h>
 
 // [action server msgs]
-#include <pr2_controllers_msgs/JointTrajectoryAction.h>
 #include <control_msgs/FollowJointTrajectoryAction.h>
 #include <actionlib/server/action_server.h>
 
@@ -71,7 +70,7 @@
 class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
 {
   // JointTrajectoryAction(Diamondback & Electric) 	
-  typedef actionlib::ActionServer<pr2_controllers_msgs::JointTrajectoryAction> ActionExecutor;
+  typedef actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> ActionExecutor;
   typedef ActionExecutor::GoalHandle GoalHandle;
   //FollowJoinTrajectoryAction(Electric)
   typedef actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> ActionExecutorFollow;
@@ -104,13 +103,13 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
     bool lwpr_trajectory_serverHasSucceedCallback(void);
     void lwpr_trajectory_serverGetResultCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationResultPtr& result);
     void lwpr_trajectory_serverGetFeedbackCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationFeedbackPtr& feedback);
-    IriActionServer<pr2_controllers_msgs::JointTrajectoryAction> joint_trajectory_aserver_;
-    void joint_trajectoryStartCallback(const pr2_controllers_msgs::JointTrajectoryGoalConstPtr& goal);
+    IriActionServer<control_msgs::FollowJointTrajectoryAction> joint_trajectory_aserver_;
+    void joint_trajectoryStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal);
     void joint_trajectoryStopCallback(void);
     bool joint_trajectoryIsFinishedCallback(void);
     bool joint_trajectoryHasSucceedCallback(void);
-    void joint_trajectoryGetResultCallback(pr2_controllers_msgs::JointTrajectoryResultPtr& result);
-    void joint_trajectoryGetFeedbackCallback(pr2_controllers_msgs::JointTrajectoryFeedbackPtr& feedback);
+    void joint_trajectoryGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result);
+    void joint_trajectoryGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback);
     ActionExecutor action_server_;
     void goalCB(GoalHandle gh);
     void cancelCB(GoalHandle gh);

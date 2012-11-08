@@ -1,8 +1,8 @@
 #include <ros/ros.h>
-#include <pr2_controllers_msgs/JointTrajectoryAction.h>
+#include <control_msgs/FollowJointTrajectoryAction.h>
 #include <actionlib/client/simple_action_client.h>
 
-typedef actionlib::SimpleActionClient< pr2_controllers_msgs::JointTrajectoryAction > TrajClient;
+typedef actionlib::SimpleActionClient< control_msgs::FollowJointTrajectoryAction > TrajClient;
 
 class RobotArm
 {
@@ -31,7 +31,7 @@ public:
   }
 
   //! Sends the command to start a given trajectory
-  void startTrajectory(pr2_controllers_msgs::JointTrajectoryGoal goal)
+  void startTrajectory(control_msgs::FollowJointTrajectoryGoal goal)
   {
     // When to start the trajectory: 1s from now
     goal.trajectory.header.stamp = ros::Time::now() + ros::Duration(1.0);
@@ -44,10 +44,10 @@ public:
       be in its own trajectory - a trajectory can have one or more waypoints
       depending on the desired application.
   */
-  pr2_controllers_msgs::JointTrajectoryGoal armExtensionTrajectory()
+  control_msgs::FollowJointTrajectoryGoal armExtensionTrajectory()
   {
     //our goal variable
-    pr2_controllers_msgs::JointTrajectoryGoal goal;
+    control_msgs::FollowJointTrajectoryGoal goal;
 
     // We will have two waypoints in this goal trajectory
     goal.trajectory.points.resize(5);
