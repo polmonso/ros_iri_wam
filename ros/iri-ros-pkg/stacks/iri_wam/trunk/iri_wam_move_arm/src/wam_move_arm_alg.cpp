@@ -115,6 +115,8 @@ bool WamMoveArmAlgorithm::hasJoint(const arm_navigation_msgs::MoveArmGoal& goal)
 }
 void WamMoveArmAlgorithm::reconfigure(arm_navigation_msgs::MoveArmGoal& goal)
 {
-	if(hasPose(goal))reconfigure_points(goal.motion_plan_request.goal_constraints.position_constraints);
-	else if(hasJoint(goal))reconfigure_joint(goal.motion_plan_request.goal_constraints.joint_constraints,goal);
+	if(hasPose(goal))
+    reconfigure_points(goal.motion_plan_request.goal_constraints.position_constraints);
+	else if(hasJoint(goal))
+    reconfigure_joint(goal.motion_plan_request.goal_constraints.joint_constraints,goal);
 }

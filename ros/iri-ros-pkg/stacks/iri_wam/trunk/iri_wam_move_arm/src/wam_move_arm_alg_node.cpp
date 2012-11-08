@@ -57,11 +57,7 @@ void WamMoveArmAlgNode::mainNodeThread(void)
 
 void WamMoveArmAlgNode::syn_move_armDone(const actionlib::SimpleClientGoalState& state,  const arm_navigation_msgs::MoveArmResultConstPtr& result) 
 { 
-  if( state.toString().compare("SUCCEEDED") == 0 ) 
-    ROS_INFO("WamMoveArmAlgNode::syn_move_armDone: Goal Achieved!"); 
-    
-  else 
-    ROS_INFO("WamMoveArmAlgNode::syn_move_armDone: %s", state.toString().c_str()); 
+  ROS_INFO("WamMoveArmAlgNode::syn_move_armDone: %s", state.toString().c_str()); 
 
   error_code_move_arm=result->error_code;
   contact_information_move_arm=result->contacts;
@@ -81,16 +77,17 @@ void WamMoveArmAlgNode::syn_move_armFeedback(const arm_navigation_msgs::MoveArmF
 
   //analyze feedback 
   //my_var = feedback->var; 
- has_move_arm_feedback=true;
- state_move_arm_feedback=feedback->state;
- time_move_arm_feedback=feedback->time_to_completion;
+  has_move_arm_feedback = true;
+  state_move_arm_feedback = feedback->state;
+  time_move_arm_feedback = feedback->time_to_completion;
   //if feedback is not what expected, cancel requested goal 
   if( !feedback_is_ok ) 
   { 
     syn_move_arm_client_.cancelGoal(); 
     ROS_INFO("WamMoveArmAlgNode::syn_move_armFeedback: Cancelling Action!"); 
   } 
-  else move_feedback.time_to_completion= feedback->time_to_completion;
+  else 
+    move_feedback.time_to_completion = feedback->time_to_completion;
 }
 void WamMoveArmAlgNode::syn_move_armMakeActionRequest(const arm_navigation_msgs::MoveArmGoal& goal) 
 { 
