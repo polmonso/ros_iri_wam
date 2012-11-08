@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv) {
 
-  ros::init(argc, argv, "vertical_stick");
+  ros::init(argc, argv, "box");
 
   ros::NodeHandle nh;
 
