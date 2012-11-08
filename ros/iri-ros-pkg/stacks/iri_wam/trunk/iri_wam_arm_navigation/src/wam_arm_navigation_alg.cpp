@@ -38,44 +38,34 @@ void WamArmNavigationAlgorithm::sendedPose()
 //!Defined Motion Request Parameters
 void WamArmNavigationAlgorithm::setPlannerRequest(arm_navigation_msgs::MoveArmGoal& goal)
 {
-	goal.motion_plan_request.group_name="iri_wam";
-	goal.motion_plan_request.num_planning_attempts = 1;
+	goal.planner_service_name=std::string("ompl_planning/plan_kinematic_path");
+  goal.motion_plan_request.group_name="iri_wam";
+	goal.motion_plan_request.num_planning_attempts = 2;
 	goal.motion_plan_request.allowed_planning_time = ros::Duration(5.0);
 	goal.motion_plan_request.planner_id = std::string("");
-	goal.planner_service_name=std::string("ompl_planning/plan_kinematic_path");
-	goal.motion_plan_request.expected_path_dt = ros::Duration(5.0);
+	goal.motion_plan_request.expected_path_duration = ros::Duration(10.0);
+	goal.motion_plan_request.expected_path_dt = ros::Duration(0.2);
 }
+
 //!Defined Goal Constraint Parameters
 void WamArmNavigationAlgorithm::setPlannerRequestPose(arm_navigation_msgs::MoveArmGoal& goal)
 { 
 	
 	arm_navigation_msgs::SimplePoseConstraint desired_pose;
-	desired_pose.link_name=frame_id_target;
-	desired_pose.header.frame_id=pose_goal.header.frame_id;//pose header frame_id
-	
+	desired_pose.link_name = frame_id_target;
+	desired_pose.header.frame_id = pose_goal.header.frame_id;
 	desired_pose.pose = pose_goal.pose;
-				
-// 	desired_pose.absolute_position_tolerance.x = 0.02;
-// 	desired_pose.absolute_position_tolerance.y = 0.02;
-// 	desired_pose.absolute_position_tolerance.z = 0.02;
-// 	
-// 	desired_pose.absolute_roll_tolerance = 0.04;
-// 	desired_pose.absolute_pitch_tolerance = 0.04;
-// 	desired_pose.absolute_yaw_tolerance = 0.04;
-
-  desired_pose.absolute_position_tolerance.x = 0.005;
-  desired_pose.absolute_position_tolerance.y = 0.005;
-  desired_pose.absolute_position_tolerance.z = 0.005;
-  
-  desired_pose.absolute_roll_tolerance = 0.005;
-  desired_pose.absolute_pitch_tolerance = 0.005;
-  desired_pose.absolute_yaw_tolerance = 0.005;
-  
-  
+  desired_pose.absolute_position_tolerance.x = 0.05;
+  desired_pose.absolute_position_tolerance.y = 0.05;
+  desired_pose.absolute_position_tolerance.z = 0.05;
+  desired_pose.absolute_roll_tolerance = 0.05;
+  desired_pose.absolute_pitch_tolerance = 0.05;
+  desired_pose.absolute_yaw_tolerance = 0.05;
 	
-	addGoalConstraintToMoveArmGoal(desired_pose,goal);
+	addGoalConstraintToMoveArmGoal(desired_pose, goal);
 	
 }
+
 /**
  * 
  * 
@@ -84,7 +74,7 @@ void WamArmNavigationAlgorithm::addGoalConstraintToMoveArmGoal(const arm_navigat
 {
   arm_navigation_msgs::PositionConstraint position_constraint;
   arm_navigation_msgs::OrientationConstraint orientation_constraint;
-  arm_navigation_msgs::poseConstraintToPositionOrientationConstraints(pose_constraint,position_constraint,orientation_constraint);
+  arm_navigation_msgs::poseConstraintToPositionOrientationConstraints(pose_constraint, position_constraint, orientation_constraint);
   move_arm_goal.motion_plan_request.goal_constraints.position_constraints.push_back(position_constraint);
   move_arm_goal.motion_plan_request.goal_constraints.orientation_constraints.push_back(orientation_constraint);
 }
