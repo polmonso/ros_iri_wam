@@ -276,7 +276,7 @@ void WamDriverNode::lwpr_trajectory_serverGetFeedbackCallback(iri_wam_common_msg
     driver_.unlock(); 
 }
 void
-WamDriverNode::joint_trajectoryStartCallback(const pr2_controllers_msgs::JointTrajectoryGoalConstPtr& goal)
+WamDriverNode::joint_trajectoryStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal)
 {
     // Need to get the list of positions and send it to the driver
     driver_.lock();
@@ -318,12 +318,12 @@ bool WamDriverNode::joint_trajectoryHasSucceedCallback(void)
 } 
 
 void
-WamDriverNode::joint_trajectoryGetResultCallback(pr2_controllers_msgs::JointTrajectoryResultPtr& result) 
+WamDriverNode::joint_trajectoryGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result) 
 {
     // MSG has an empty result message
 }
 
-void WamDriverNode::joint_trajectoryGetFeedbackCallback(pr2_controllers_msgs::JointTrajectoryFeedbackPtr& feedback) 
+void WamDriverNode::joint_trajectoryGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback) 
 { 
   driver_.lock(); 
     //keep track of feedback 
