@@ -1,0 +1,14 @@
+<!-- Remember to set the IP argument of wam computer -->
+<launch> 
+    <arg name="IP" />
+
+    <!-- WAM low level driver -->
+    <include file="$(find iri_wam_base)/launch/wam_base.launch">
+       <arg name="IP" value="$(arg IP)"/>
+    </include>
+
+    <!-- Arm navigation -->
+    <param name="/iri_wam_move_arm/controller_action_name" type="string" value="/wam_wrapper/joint_trajectory" />
+    <remap from="/joint_states" to="/wam_wrapper/joint_states"/>
+    <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation.launch" /> 
+</launch>
