@@ -82,25 +82,13 @@ bool WamDriver::closeDriver(void)
 bool WamDriver::startDriver(void)
 {
   try{
-    //gravity and go to position?
     wam->setGravityCompensation(1.1);
     ROS_INFO("Switching to Running and going to default position.");
     wam->goToDefaultPosition();
     ROS_INFO("Waiting final position reach");
     wam->waitTillMotionDone();
-    ROS_INFO("Done!");
-//fix waitTillMotionDone
-    sleep(1);
-    ROS_INFO("arbitrary wait Done!");
-    wam->goToDefaultPosition();
-    ROS_INFO("Waiting final position reach");
-    wam->waitTillMotionDone();
-    ROS_INFO("Done!");
-//fix waitTillMotionDone
-    sleep(1);
-    ROS_INFO("arbitrary wait Done!");
-    //something i wanna try
-    wam->holdCurrentPosition(false);
+    ROS_INFO("All is ready to work now!");
+    wam->setGravityCompensation(1.1);
     this->state_ = RUNNING;
     return true;
   }catch(CException &e){
@@ -230,14 +218,11 @@ void WamDriver::move_in_joints(std::vector<double> *angles){
             ROS_ERROR("%s",err_msg.c_str());
             errormask = 0x00;
         }
-    }
+   }
 }
 
-void WamDriver::move_in_cartesian(std::vector<double> *pose, double vel, double acc){
-  if(this->wam!=NULL){
-    this->wam->moveInCartesian(pose, vel, acc);
-  } 
-}   
+void WamDriver::move_in_cartesian(std::vector<double> *pose, double vel, double acc)
+{ }
 
 void WamDriver::hold_current_position(bool on){
   if(this->wam!=NULL){
