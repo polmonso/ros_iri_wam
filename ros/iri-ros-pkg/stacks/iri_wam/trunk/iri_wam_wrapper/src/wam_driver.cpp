@@ -221,13 +221,28 @@ void WamDriver::move_in_joints(std::vector<double> *angles){
    }
 }
 
-void WamDriver::move_in_cartesian(std::vector<double> *pose, double vel, double acc)
-{ }
+void
+WamDriver::move_in_cartesian_pose(const geometry_msgs::Pose pose,const double vel,const double acc)
+{
+    if (this->wam == NULL)
+      return;
+
+    std::vector<double> low_level_pose;
+    low_level_pose.push_back(pose.position.x);
+    low_level_pose.push_back(pose.position.y);
+    low_level_pose.push_back(pose.position.z);
+    low_level_pose.push_back(pose.orientation.x);
+    low_level_pose.push_back(pose.orientation.y);
+    low_level_pose.push_back(pose.orientation.z);
+    low_level_pose.push_back(pose.orientation.w);
+
+    this->wam->moveInCartesianPose(&low_level_pose, vel, acc);
+}
 
 void WamDriver::hold_current_position(bool on){
   if(this->wam!=NULL){
     this->wam->holdCurrentPosition(on);
-  } 
+  }
 }
 
 void

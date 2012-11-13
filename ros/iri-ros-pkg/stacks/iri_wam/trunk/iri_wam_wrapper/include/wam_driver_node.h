@@ -87,11 +87,16 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
 
     // [service attributes]
     ros::ServiceServer wam_services_server_;
-    bool wam_servicesCallback(iri_wam_common_msgs::wamdriver::Request &req, iri_wam_common_msgs::wamdriver::Response &res);
+    bool wam_servicesCallback(iri_wam_common_msgs::wamdriver::Request  & req,
+                              iri_wam_common_msgs::wamdriver::Response & res);
+
     ros::ServiceServer joints_move_server;
-    bool joints_moveCallback(iri_wam_common_msgs::joints_move::Request &req, iri_wam_common_msgs::joints_move::Response &res);
+    bool joints_moveCallback(iri_wam_common_msgs::joints_move::Request  & req,
+                             iri_wam_common_msgs::joints_move::Response & res);
+
     ros::ServiceServer pose_move_server;
-    bool pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, iri_wam_common_msgs::pose_move::Response &res);
+    bool pose_moveCallback(iri_wam_common_msgs::pose_move::Request  & req,
+                           iri_wam_common_msgs::pose_move::Response & res);
 
     // [client attributes]
 

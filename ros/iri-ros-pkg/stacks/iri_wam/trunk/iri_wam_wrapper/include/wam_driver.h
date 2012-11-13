@@ -28,6 +28,7 @@
 #include <iri_base_driver/iri_base_driver.h>
 #include <iri_wam_wrapper/WamConfig.h>
 #include <trajectory_msgs/JointTrajectory.h>
+#include <geometry_msgs/Pose.h>
 
 //include wam_driver main library
 #include "CWamDriver.h"
@@ -216,8 +217,15 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     void get_pose(std::vector<double> *pose);
     void get_joint_angles(std::vector<double> *angles);
     void move_in_joints(std::vector<double> *angles);
-    void move_in_cartesian(std::vector<double> *pose, double vel = 0, double acc = 0);
     void hold_current_position(bool on);
+
+    /**
+     * \brief Ask the low level driver to perform a movement to reach cartesian pose
+     * 
+     * This funcion will translate from geometry_pose to low level format and
+     * call the low level driver function to perform the cartesian move
+     */
+    void move_in_cartesian_pose(const geometry_msgs::Pose pose, const double vel = 0, const double acc = 0);
 
     /**
      * \brief Ask the low level driver to perform a trajectory in joints
