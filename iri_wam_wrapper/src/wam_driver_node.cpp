@@ -29,13 +29,8 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
                                                               &WamDriverNode::wam_servicesCallback, this);
   joints_move_server   = public_node_handle_.advertiseService("joints_move",
                                                               &WamDriverNode::joints_moveCallback, this);
-  /* Pose movement in WAM is still not implemented.
-   * Disable service publication.
-   *
-   * pose_move_server     = public_node_handle_.advertiseService("pose_move",
-   *                                                           &WamDriverNode::pose_moveCallback, this);
-   */
-
+  pose_move_server     = public_node_handle_.advertiseService("pose_move",
+                                                              &WamDriverNode::pose_moveCallback, this);
   // [init clients]
 
   // [init action servers]
@@ -176,50 +171,34 @@ bool WamDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_move::Reques
   return true;
 }
 
-bool WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request &req, iri_wam_common_msgs::pose_move::Response &res) 
-{ 
-  bool result;
-  //lock access to driver if necessary 
-  this->driver_.lock();
-  if(this->driver_.isRunning()){
+bool
+WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request  & req,
+                                 iri_wam_common_msgs::pose_move::Response & res)
+{
+    bool result;
 
-     //do operations with req and output on res 
-     //res.data2 = req.data1 + my_var; 
-    Quaternion<float> quat(req.pose.orientation.w, req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z);
-    Matrix3f mat = quat.toRotationMatrix();
+    //lock access to driver if necessary 
+    this->driver_.lock();
+    if (this->driver_.isRunning())
+    {
 
-     std::vector <double> pose(16,0);
-      ROS_INFO("Received Quat: %f %f %f %f %f %f %f\n",
+        ROS_DEBUG("Received cartesian pose for movement: %f %f %f %f %f %f %f\n",
                 req.pose.position.x, req.pose.position.y, req.pose.position.z,
                 req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z, req.pose.orientation.w);
-     pose[3] = req.pose.position.x;
-     pose[7] = req.pose.position.y;
-     pose[11] = req.pose.position.z;
-     pose[15] = 1;
-     for(int i=0; i<12; i++){
-      if(i%4 != 3)
-        pose[i] = mat(i/4,i%4);
-     }
-      ROS_INFO("Received Pose:\n %f %f %f %f \n %f %f %f %f \n %f %f %f %f\n %f %f %f %f\n",
-            pose[0],pose[1],pose[2],pose[3],
-            pose[4],pose[5],pose[6],pose[7],
-            pose[8],pose[9],pose[10],pose[11],
-            pose[12],pose[13],pose[14],pose[15]);
 
-     this->driver_.move_in_cartesian(&pose);
-     this->driver_.unlock();
-     //do we want a blocking service?
-     this->driver_.wait_move_end();
-      result = true;
-
-  }else{
-    ROS_ERROR("Driver is not running at the moment");
-    result = false;
+        this->driver_.move_in_cartesian_pose(req.pose);
+        this->driver_.wait_move_end();
+        result = true;
+    }
+    else
+    {
+        ROS_ERROR("Driver is not running at the moment");
+        result = false;
+    }
     this->driver_.unlock();
-  }
 
-  res.success = result;
-  return result;
+    res.success = result;
+    return result;
 }
 
 /*  [action callbacks] */
