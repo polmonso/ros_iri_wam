@@ -45,6 +45,7 @@ ADD_DEFINITIONS(${EIGEN_DEFINITIONS})
 #rosbuild_add_boost_directories()
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 rosbuild_add_executable(${PROJECT_NAME} src/wam_driver.cpp src/wam_driver_node.cpp)
+rosbuild_add_executable(simple_80_points_trajectory test/simple_trajectory/simple_80_points_trajectory.cpp)
 rosbuild_add_executable(simple_trajectory test/simple_trajectory/simple_trajectory.cpp)
 rosbuild_add_executable(lwpr_trajectory test/lwpr_trajectory/lwpr_trajectory.cpp)
 
