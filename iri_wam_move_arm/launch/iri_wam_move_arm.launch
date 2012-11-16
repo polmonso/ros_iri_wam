@@ -11,7 +11,7 @@
  <arg name="size_y" default="0" />
  <arg name="size_z" default="0.09" />
  
- <remap from="/iri_wam_move_arm_node/move_arm" to="/move_iri_wam" />
+ <remap from="iri_wam_move_arm_node/move_arm" to="move_iri_wam" />
 
  <node name="iri_wam_move_arm_node"  type="iri_wam_move_arm"  pkg="iri_wam_move_arm" output="screen">
   <param name="tool_x" value="$(arg size_x)"/>

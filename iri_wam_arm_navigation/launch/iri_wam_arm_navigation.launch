@@ -9,7 +9,7 @@
     <include file="$(find iri_wam_arm_navigation)/launch/ompl_planning.launch" />
     <include file="$(find iri_wam_arm_navigation)/launch/trajectory_filter_server.launch" />
     <include file="$(find iri_wam_arm_navigation)/launch/move_iri_wam.launch" />
-    <include file="$(find iri_wam_move_arm)/launch/iri_wam_move_arm.launch" /> 
+    <include file="$(find iri_wam_move_arm)/launch/iri_wam_move_arm.launch" />
     <node name="simple_arm_navigation" 
           pkg="iri_wam_arm_navigation"
           type="iri_wam_arm_navigation"
