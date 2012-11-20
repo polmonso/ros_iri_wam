@@ -186,7 +186,7 @@ WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request  & req,
                 req.pose.position.x, req.pose.position.y, req.pose.position.z,
                 req.pose.orientation.x, req.pose.orientation.y, req.pose.orientation.z, req.pose.orientation.w);
 
-        this->driver_.move_in_cartesian_pose(req.pose);
+        this->driver_.move_in_cartesian_pose(req.pose, req.vel, req.acc);
         this->driver_.wait_move_end();
         result = true;
     }
