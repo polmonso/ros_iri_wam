@@ -9,7 +9,7 @@ int main(int argc, char** argv)
 
     if (argc != 9) {
         std::cerr << "Usage: " << argv[0]
-                  << " /wrapper/pose_move pos.x pos.y. pos.z quat.x quat.y quat.z quat.w" << std::endl;
+                  << " /wrapper/pose_move pos.x pos.y. pos.z quat.x quat.y quat.z quat.w vel acc (vel recomended 0.1) (acc recomended 0.2)" << std::endl;
         return 1;
     }
 
@@ -23,6 +23,8 @@ int main(int argc, char** argv)
     pose_srv.request.pose.orientation.y = atof(argv[p+4]);
     pose_srv.request.pose.orientation.y = atof(argv[p+5]);
     pose_srv.request.pose.orientation.z = atof(argv[p+6]);
+    pose_srv.request.vel = atof(argv[p+7]);
+    pose_srv.request.acc = atof(argv[p+8]);
 
     if (ros::service::call(argv[1], pose_srv))
     {
