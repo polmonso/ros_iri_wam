@@ -7,7 +7,7 @@ int main(int argc, char** argv)
     // Init the ROS node
     ros::init(argc, argv, "robot_driver");
 
-    if (argc != 9) {
+    if (argc != 11) {
         std::cerr << "Usage: " << argv[0]
                   << " /wrapper/pose_move pos.x pos.y. pos.z quat.x quat.y quat.z quat.w vel acc (vel recomended 0.1) (acc recomended 0.2)" << std::endl;
         return 1;
