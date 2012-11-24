@@ -18,7 +18,10 @@
 		<node name="gazebo" pkg="gazebo" type="gazebo" args="-c -1 -u $(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen"/>
 		 
 		<node name="gazebo_gui" pkg="gazebo" type="gui" respawn="false" output="screen"/>
-		
+
+		<!-- Name of Action Server (controllers) -->
+ 		<param name="/iri_wam_move_arm/controller_action_name" type="string" value="/iri_ros_controller/follow_joint_trajectory" />
+
 		<!-- Spawm WAM innto Simulator -->
 		<node name="spawn_iri_wam_model" pkg="gazebo" type="spawn_model" args="$(optenv ROBOT_INITIAL_POSE) -unpause -urdf -param robot_description -model iri_wam" respawn="false" output="screen"/>
 
