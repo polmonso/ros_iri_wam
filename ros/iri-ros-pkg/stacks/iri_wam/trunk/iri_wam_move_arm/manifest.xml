@@ -6,7 +6,7 @@
   measures in the X-axis, Y-axis and Z-axis of the tools, without the need
   of a mesh file of the tool.
  </description>
-  <author>Ivan Rojas (irojas@iri.upc.edu)</author>
+  <author>Ivan Rojas (ivan.rojas.j@gmail.com)</author>
   <license>LGPL</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_move_arm</url>
