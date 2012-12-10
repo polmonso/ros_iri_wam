@@ -5,7 +5,7 @@
     This package contain the PID configuration of real WAm to simulated WAM and contain the configuration for use the controller for Gazebo.
     The main launch is wam_sim.launch, and in misc directory you find a wam_sim_4boxes.launch, this is a demo with simulated robot and 4 boxes in the world.
   </description>
-  <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
+  <author>IRI Robotics Lab, Ivan Rojas (ivan.rojas.j@gmail.com)</author>
   <license>LGPL</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_simulator</url>
