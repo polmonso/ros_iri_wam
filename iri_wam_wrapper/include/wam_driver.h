@@ -216,7 +216,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     void wait_move_end();
     void get_pose(std::vector<double> *pose);
     void get_joint_angles(std::vector<double> *angles);
-    void move_in_joints(std::vector<double> *angles);
+    void move_in_joints(std::vector<double> *angles, std::vector<double>* vels = NULL, std::vector<double>* accs = NULL);
     void hold_current_position(bool on);
 
     /**
