@@ -203,7 +203,7 @@ bool WamDriver::is_joints_move_request_valid(const std::vector<double> & angles)
     return true;
 }
 
-void WamDriver::move_in_joints(std::vector<double> *angles){
+void WamDriver::move_in_joints(std::vector<double> *angles, std::vector<double>* vels, std::vector<double>* accs){
     uint16_t errormask = 0x00;
 
     if (this->wam!=NULL) {
@@ -212,7 +212,13 @@ void WamDriver::move_in_joints(std::vector<double> *angles){
             return;
         }
 
-        wam->moveInJoints(&errormask, angles);
+        // Check if there are vels and accs
+        if ((vels == NULL) || (accs == NULL)) {
+            wam->moveInJoints(&errormask, angles);
+        }
+        else {
+            wam->moveInJoints(&errormask, angles, vels, accs);
+        }
         if(errormask > 0x00){
             string err_msg = wam->errorToString(errormask);
             ROS_ERROR("%s",err_msg.c_str());

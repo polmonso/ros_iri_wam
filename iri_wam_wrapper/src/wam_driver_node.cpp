@@ -164,7 +164,10 @@ bool WamDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_move::Reques
 
   //this call blocks if the wam faults. The mutex is not freed...!   
   //unlock driver if previously blocked 
-  this->driver_.move_in_joints(& req.joints); 
+  if ((req.velocities.size() == 0) || (req.accelerations.size() == 0))
+    this->driver_.move_in_joints(& req.joints); 
+  else
+    this->driver_.move_in_joints(& req.joints, &req.velocities, &req.accelerations); 
   this->driver_.unlock();
   this->driver_.wait_move_end();
 
