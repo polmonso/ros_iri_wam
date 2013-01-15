@@ -2,6 +2,7 @@
 #define _WAM_IKAC_H_
 
 #include <math.h>
+#include <cstddef>
 #include <Eigen/StdVector>
 #include <Eigen/Dense>
 #include <string>
