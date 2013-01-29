@@ -34,6 +34,7 @@ include_directories(${EIGEN_INCLUDE_DIRS})
 #target_link_libraries(example ${PROJECT_NAME})
 
 rosbuild_add_executable(wam_ikac src/wam_ikac.cpp)
+rosbuild_add_executable(kuka_ikac src/kuka_ikac.cpp)
 #rosbuild_add_executable(wam_ikj src/wam_ikj.cpp)
 #rosbuild_add_executable(wam_ik_kdl src/wam_ik_kdl.cpp)
 
