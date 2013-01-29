@@ -15,6 +15,7 @@ WamTcpIkAlgNode::WamTcpIkAlgNode(void) :
   
   // [init services]
   get_ik_server_ = this->public_node_handle_.advertiseService( "get_wam_ik", &WamTcpIkAlgNode::get_ikCallback, this);
+  get_robot_pose_server_ = this->public_node_handle_.advertiseService( "get_wam_robot_pose", &WamTcpIkAlgNode::get_robotPoseCallback, this);
   
   // [init clients]
   get_ik_client_ = this->public_node_handle_.serviceClient<iri_wam_common_msgs::wamInverseKinematics>("wamik");
@@ -170,6 +171,105 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
 
   return result; 
 }
+
+bool WamTcpIkAlgNode::get_robotPoseCallback(iri_wam_common_msgs::wamGetRobotPoseFromToolPose::Request &req, iri_wam_common_msgs::wamGetRobotPoseFromToolPose::Response &res)
+{ 
+  //ROS_INFO("WamTcpIkAlgNode::get_robotPoseCallback:: New Request Received!"); 
+  
+  //use appropiate mutex to shared variables if necessary 
+  //this->alg_.lock(); 
+  //this->get_ik_mutex_.enter(); 
+  
+  // PREDEFINED_TCP TO WAM_TCP
+  try{
+    ros::Time now = ros::Time::now();
+    ros::Duration interval = ros::Duration(1.0);
+    if(!listener_.waitForTransform(frame_tcp_str_, "/wam_tcp", now, interval)){
+        ROS_ERROR("Timeout while waiting for transform between frames %s and /wam_tcp/ ", frame_tcp_str_.c_str()); 
+    }
+    listener_.lookupTransform(frame_tcp_str_, "/wam_tcp", now, tcp_H_wam7_);
+  }catch (tf::TransformException ex){
+    ROS_ERROR("lookup transform error: %s", ex.what());
+    return false;
+  }
+
+  ROS_INFO("[WamTcpIkAlgNode] %s_H_7 Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",frame_tcp_str_.c_str(),
+            tcp_H_wam7_.getOrigin().x(),
+            tcp_H_wam7_.getOrigin().y(),
+            tcp_H_wam7_.getOrigin().z(),
+            tcp_H_wam7_.getRotation().x(), 
+            tcp_H_wam7_.getRotation().y(), 
+            tcp_H_wam7_.getRotation().z(), 
+            tcp_H_wam7_.getRotation().w());
+
+  // RECEIVED POSE 
+  ROS_INFO("[WamTcpIkAlgNode] Received Pose from frame %s (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
+            req.tool_pose.header.frame_id.c_str(),
+            req.tool_pose.pose.position.x,
+            req.tool_pose.pose.position.y, 
+            req.tool_pose.pose.position.z,
+            req.tool_pose.pose.orientation.x,
+            req.tool_pose.pose.orientation.y,
+            req.tool_pose.pose.orientation.z,
+            req.tool_pose.pose.orientation.w);
+
+  // frame_id pose
+  tf::Quaternion world_quat_tcp( req.tool_pose.pose.orientation.x, req.tool_pose.pose.orientation.y, req.tool_pose.pose.orientation.z, req.tool_pose.pose.orientation.w);
+  tf::Vector3 world_pos_tcp( req.tool_pose.pose.position.x, req.tool_pose.pose.position.y, req.tool_pose.pose.position.z);
+  tf::Transform received_pose( world_quat_tcp, world_pos_tcp);
+
+  // TF from world wam7
+  try{
+    ros::Time now = ros::Time::now();
+    ros::Duration interval = ros::Duration(1.0);
+    if(!listener_.waitForTransform("/wam_link0", req.tool_pose.header.frame_id, now, interval)){
+        ROS_ERROR("Timeout while waiting for transform between frames /wam_link0 and %s ", req.tool_pose.header.frame_id.c_str()); 
+    }
+    listener_.lookupTransform("/wam_link0", req.tool_pose.header.frame_id, now, world_H_wam7_);
+  }catch (tf::TransformException ex){
+    ROS_ERROR("lookup transform error: %s", ex.what());
+    return false;
+  }
+ 
+  world_H_wam7_ *= received_pose;
+  world_H_wam7_ *= tcp_H_wam7_;
+ 
+  ROS_INFO("[WamTcpIkAlgNode] 0_H_7 Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
+           world_H_wam7_.getOrigin().x(),
+           world_H_wam7_.getOrigin().y(),
+           world_H_wam7_.getOrigin().z(),
+           world_H_wam7_.getRotation().x(), 
+           world_H_wam7_.getRotation().y(), 
+           world_H_wam7_.getRotation().z(), 
+           world_H_wam7_.getRotation().w());
+
+  res.robot_pose.header.frame_id = "/wam_link0"; 
+  res.robot_pose.pose.position.x    = world_H_wam7_.getOrigin().x(); 
+  res.robot_pose.pose.position.y    = world_H_wam7_.getOrigin().y(); 
+  res.robot_pose.pose.position.z    = world_H_wam7_.getOrigin().z(); 
+  res.robot_pose.pose.orientation.x    = world_H_wam7_.getRotation().x(); 
+  res.robot_pose.pose.orientation.y    = world_H_wam7_.getRotation().y(); 
+  res.robot_pose.pose.orientation.z    = world_H_wam7_.getRotation().z(); 
+  res.robot_pose.pose.orientation.w    = world_H_wam7_.getRotation().w(); 
+
+  //if(this->alg_.isRunning()) 
+  //{ 
+    //ROS_INFO("WamTcpIkAlgNode::get_ikCallback: Processin New Request!"); 
+    //do operations with req and output on res 
+    //res.data2 = req.data1 + my_var; 
+  //} 
+  //else 
+  //{ 
+    //ROS_INFO("WamTcpIkAlgNode::get_ikCallback: ERROR: alg is not on run mode yet."); 
+  //} 
+
+  //unlock previously blocked shared variables 
+  //this->alg_.unlock(); 
+  //this->get_ik_mutex_.exit(); 
+
+  return true; 
+}
+
 
 /*  [action callbacks] */
 

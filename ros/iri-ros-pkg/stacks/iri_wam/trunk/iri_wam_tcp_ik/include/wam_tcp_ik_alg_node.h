@@ -32,6 +32,7 @@
 
 // [service client headers]
 #include <iri_wam_common_msgs/wamInverseKinematics.h>
+#include <iri_wam_common_msgs/wamGetRobotPoseFromToolPose.h>
 
 // [action server client headers]
 
@@ -63,6 +64,10 @@ class WamTcpIkAlgNode : public algorithm_base::IriBaseAlgorithm<WamTcpIkAlgorith
     ros::ServiceServer get_ik_server_;
     bool get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &req, iri_wam_common_msgs::wamInverseKinematics::Response &res);
     CMutex get_ik_mutex_;
+
+    ros::ServiceServer get_robot_pose_server_;
+    bool get_robotPoseCallback(iri_wam_common_msgs::wamGetRobotPoseFromToolPose::Request &req, iri_wam_common_msgs::wamGetRobotPoseFromToolPose::Response &res);
+    CMutex get_robot_pose_mutex_;
 
     // [client attributes]
     ros::ServiceClient get_ik_client_;
