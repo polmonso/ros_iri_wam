@@ -75,7 +75,9 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
     return false;
   }
 
-  ROS_INFO("[WamTcpIkAlgNode] %s_H_7 Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",frame_tcp_str_.c_str(),
+  // Pose from wam_tcp To user_tcp
+  ROS_INFO("[WamTcpIkAlgNode] %s_H_7 Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
+            frame_tcp_str_.c_str(),
             tcp_H_wam7_.getOrigin().x(),
             tcp_H_wam7_.getOrigin().y(),
             tcp_H_wam7_.getOrigin().z(),
@@ -84,7 +86,7 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
             tcp_H_wam7_.getRotation().z(), 
             tcp_H_wam7_.getRotation().w());
 
-  // RECEIVED POSE 
+  // Destination cartesian pose in World coordinates 
   ROS_INFO("[WamTcpIkAlgNode] Received Pose from frame %s (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
             req.pose.header.frame_id.c_str(),
             req.pose.pose.position.x,
@@ -95,12 +97,16 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
             req.pose.pose.orientation.z,
             req.pose.pose.orientation.w);
 
-  // frame_id pose
+  // User frame_id pose
   tf::Quaternion world_quat_tcp( req.pose.pose.orientation.x, req.pose.pose.orientation.y, req.pose.pose.orientation.z, req.pose.pose.orientation.w);
   tf::Vector3 world_pos_tcp( req.pose.pose.position.x, req.pose.pose.position.y, req.pose.pose.position.z);
   tf::Transform received_pose( world_quat_tcp, world_pos_tcp);
 
-  // TF from world wam7
+  // TF from world(/wam_link0) 
+  // Usually, this transformation will be the identity.
+  // Because the frame_id of the requested pose will usually be "/wam_link0".
+  // But sometimes the user may ask for a pose that is referenced from another
+  // frame.
   try{
     ros::Time now = ros::Time::now();
     ros::Duration interval = ros::Duration(1.0);
