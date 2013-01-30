@@ -2,7 +2,7 @@
 
 WamMoveArmAlgNode::WamMoveArmAlgNode(void) :
   algorithm_base::IriBaseAlgorithm<WamMoveArmAlgorithm>(),
-    has_move_arm_feedback(false),
+  has_move_arm_feedback(false),
   move_arm_aserver_(public_node_handle_, "move_arm"),
   syn_move_arm_client_("syn_move_arm", true)
 {
@@ -25,9 +25,11 @@ WamMoveArmAlgNode::WamMoveArmAlgNode(void) :
   move_arm_aserver_.registerGetResultCallback(boost::bind(&WamMoveArmAlgNode::move_armGetResultCallback, this, _1)); 
   move_arm_aserver_.registerGetFeedbackCallback(boost::bind(&WamMoveArmAlgNode::move_armGetFeedbackCallback, this, _1)); 
   move_arm_aserver_.start();
- 	private_node_handle_.param<double>("tool_x", this->alg_.tool_x, 0.0);
-	private_node_handle_.param<double>("tool_y", this->alg_.tool_y, 0.0);
-	private_node_handle_.param<double>("tool_z", this->alg_.tool_z, 0.0);
+
+  private_node_handle_.param<double>("tool_x", this->alg_.tool_x, 0.0);
+  private_node_handle_.param<double>("tool_y", this->alg_.tool_y, 0.0);
+  private_node_handle_.param<double>("tool_z", this->alg_.tool_z, 0.0);
+
   // [init action clients]
 }
 
