@@ -5,38 +5,47 @@
 <!-- =================================================================================== -->
 <robot name="iri_wam" xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller" xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <!-- LINKS   -->
+  <!--  <include filename="$(find iri_wam_description)/xacro/wambase.urdf.xacro" />
+-->
+  <!--
+  <xacro:wambase>
+  </xacro:wambase>
+-->
   <link name="world"/>
-  <link name="wambase">
+  <link name="wam_link0">
     <inertial>
       <mass value="20"/>
-      <origin rpy="0 0 0" xyz="0.175 0.14 0.08"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
       <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry name="wambase_visual">
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry name="wam_link0_visual">
         <mesh filename="package://iri_wam_description/mesh/wambase.stl" scale="1.0 1.0 1.0"/>
       </geometry>
-      <material name="LightGrey">
+      <material name="Grey">
         <color rgba="0.75 0.75 0.75 1.0"/>
       </material>
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <geometry name="wambase_collision">
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <geometry name="wam_link0_collision">
         <mesh filename="package://iri_wam_description/mesh/wambase.stl" scale="1.0 1.0 1.0"/>
-        <!--        <box size="0.35 0.28 0.16"/>-->
+        <!--
+                <box size="0.20 0.40 0.40"/>
+-->
       </geometry>
       <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
     </collision>
   </link>
-  <gazebo reference="wambase">
+  <gazebo reference="wam_link0">
     <material>Gazebo/Grey</material>
     <selfCollide>true</selfCollide>
   </gazebo>
-  <joint name="base_fix" type="fixed">
+  <joint name="wam0_fix" type="fixed">
     <parent link="world"/>
-    <child link="wambase"/>
+    <child link="wam_link0"/>
+    <origin rpy="0 0 0" xyz="0.22 0.14 0.346"/>
   </joint>
   <link name="wam_link1">
     <inertial>
@@ -68,9 +77,9 @@
     <selfCollide>true</selfCollide>
   </gazebo>
   <joint name="j1_joint" type="revolute">
-    <parent link="wambase"/>
+    <parent link="wam_link0"/>
     <child link="wam_link1"/>
-    <origin rpy="0 0 0" xyz="0.22 0.14 0.346"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
     <axis xyz="0 0 1"/>
     <limit effort="30" lower="-2.6" upper="2.6" velocity="2.0"/>
     <!--  <safety_controller k_velocity="0.5"/>-->
@@ -346,4 +355,11 @@
     <motorTorqueConstant>1</motorTorqueConstant>
     <!--<pulsesPerRevolution>90000</pulsesPerRevolution>-->
   </transmission>
+  <link name="wam_tcp"/>
+  <joint name="wamtcp_fix" type="fixed">
+    <parent link="wam_link7"/>
+    <child link="wam_tcp"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.06"/>
+  </joint>
 </robot>
+
