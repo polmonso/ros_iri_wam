@@ -29,8 +29,8 @@ WamIKAC::WamIKAC() {
   port_name = ros::names::append(ros::this_node::getName(), "wamik"); 
   this->wamik_server = this->nh_.advertiseService(port_name, &WamIKAC::wamikCallback, this);
   
-  port_name = ros::names::append(ros::this_node::getName(), "wamik_from_pose");
-  this->wamik_server_fromPose = this->nh_.advertiseService(port_name, &WamIKAC::wamikCallbackFromPose, this);
+  port_name = ros::names::append(ros::this_node::getName(), "wamik_using_reference");
+  this->wamik_server_fromPose = this->nh_.advertiseService(port_name, &WamIKAC::wamikCallbackUsingReference, this);
 
   // [init clients]
   port_name = ros::names::append(ros::this_node::getName(), "joints_move"); 
@@ -59,17 +59,17 @@ void WamIKAC::joint_states_callback(const sensor_msgs::JointState::ConstPtr& msg
 }
 
 /*  [service callbacks] */
-bool WamIKAC::wamikCallbackFromPose(iri_wam_common_msgs::wamInverseKinematicsFromPose::Request &req, iri_wam_common_msgs::wamInverseKinematicsFromPose::Response &res){
+bool WamIKAC::wamikCallbackUsingReference(iri_wam_common_msgs::wamInverseKinematicsUsingReference::Request &req, iri_wam_common_msgs::wamInverseKinematicsUsingReference::Response &res){
 
   ROS_INFO("[WamIKAC] User Given Current Joints %s (j1, j2, j3, j4, j5, j6, j7): [ %f, %f, %f, %f, %f, %f, %f ]",
-            req.current_joints.header.frame_id.c_str(), 
-            req.current_joints.position[0], 
-            req.current_joints.position[1],
-            req.current_joints.position[2],
-            req.current_joints.position[3],
-            req.current_joints.position[4],
-            req.current_joints.position[5],
-            req.current_joints.position[6]);
+            req.reference_joints.header.frame_id.c_str(), 
+            req.reference_joints.position[0], 
+            req.reference_joints.position[1],
+            req.reference_joints.position[2],
+            req.reference_joints.position[3],
+            req.reference_joints.position[4],
+            req.reference_joints.position[5],
+            req.reference_joints.position[6]);
   
   ROS_INFO("[WamIKAC] Received Pose from frame_id %s (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
             req.desired_pose.header.frame_id.c_str(), 
@@ -84,7 +84,7 @@ bool WamIKAC::wamikCallbackFromPose(iri_wam_common_msgs::wamInverseKinematicsFro
   // User defined current pose
   std::vector<double> currentjoints;
   for(int ii=0; ii<7; ii++)
-    currentjoints[ii] = req.current_joints.position[ii]; 
+    currentjoints[ii] = req.reference_joints.position[ii]; 
 
   Quaternion<float> quat( req.desired_pose.pose.orientation.w, req.desired_pose.pose.orientation.x, req.desired_pose.pose.orientation.y, req.desired_pose.pose.orientation.z);
   Matrix3f mat = quat.toRotationMatrix();
