@@ -1,0 +1,24 @@
+<package>
+<description brief="iri_wam_arm_navigation">
+
+     This package contain the configurations files necessary to execute arm_navigation stack  with the phisics and simulated WAm.
+     The main file is iri_wam_arm_navigation.launch. The other files are generated with wizard of ROS and are totally necessary to correct execution of arm navigation stack.
+
+  </description>
+  <author>IRI Robotics Lab, Ivan Rojas (ivan.rojas.j@gmail.com)</author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_arm_navigation</url>
+  <depend package="roscpp"/>
+  <depend package="arm_navigation_msgs"/>
+  <depend package="iri_base_algorithm"/>
+  <depend package="actionlib"/>
+  <depend package="iri_action_server"/>
+  <depend package="geometry_msgs" />
+  <depend package="kdl" />
+ 
+  <!--<depend package="iri_wam_arm_navigation"/>-->
+
+</package>
+
+

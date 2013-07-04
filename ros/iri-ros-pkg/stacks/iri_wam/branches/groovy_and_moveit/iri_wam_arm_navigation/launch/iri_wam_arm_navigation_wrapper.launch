@@ -1,0 +1,5 @@
+<launch>
+  <remap from="/joint_states" to="/wam_wrapper/joint_states" />
+  <remap from="/action" to="/follow_joint_trajectory" />
+  <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation.launch" />
+</launch>

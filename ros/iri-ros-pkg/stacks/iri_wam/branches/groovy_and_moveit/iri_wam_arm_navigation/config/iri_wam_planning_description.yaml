@@ -1,0 +1,91 @@
+multi_dof_joints:
+  - name: world_joint
+    type: Floating
+    parent_frame_id: world
+    child_frame_id: world
+groups:
+  - name: iri_wam
+    base_link: wam_link0
+    tip_link: wam_tcp
+default_collision_operations:
+  - object1: world
+    object2: wam_link0
+    operation: disable  # Adjacent in collision
+  - object1: wam_link0
+    object2: wam_link1
+    operation: disable  # Adjacent in collision
+  - object1: wam_link1
+    object2: wam_link2
+    operation: disable  # Adjacent in collision
+  - object1: wam_link2
+    object2: wam_link3
+    operation: disable  # Adjacent in collision
+  - object1: wam_link3
+    object2: wam_link4
+    operation: disable  # Adjacent in collision
+  - object1: wam_link4
+    object2: wam_link5
+    operation: disable  # Adjacent in collision
+  - object1: wam_link5
+    object2: wam_link6
+    operation: disable  # Adjacent in collision
+  - object1: wam_link6
+    object2: wam_link7
+    operation: disable  # Adjacent in collision
+  - object1: wam_link7
+    object2: wam_tcp
+    operation: disable  # Adjacent in collision
+#  - object1: wam_link7
+#    object2: front_cam_link
+#    operation: disable  # Adjacent in collision
+#  - object1: front_cam_link
+#    object2: _optical_frame
+#    operation: disable  # Adjacent in collision
+#  - object1: wam_link0
+    object2: wam_link2
+    operation: disable  # Never in collision
+  - object1: wam_link0
+    object2: wam_link3
+    operation: disable  # Never in collision
+  - object1: wam_link1
+    object2: wam_link3
+    operation: disable  # Never in collision
+  - object1: wam_link1
+    object2: wam_link4
+    operation: disable  # Never in collision
+  - object1: wam_link1
+    object2: wam_link5
+    operation: disable  # Never in collision
+  - object1: wam_link1
+    object2: wam_link6
+    operation: disable  # Never in collision
+  - object1: wam_link1
+    object2: wam_link7
+    operation: disable  # Never in collision
+  - object1: wam_link2
+    object2: wam_link4
+    operation: disable  # Never in collision
+  - object1: wam_link2
+    object2: wam_link5
+    operation: disable  # Never in collision
+  - object1: wam_link2
+    object2: wam_link6
+    operation: disable  # Never in collision
+  - object1: wam_link2
+    object2: wam_link7
+    operation: disable  # Never in collision
+  - object1: wam_link3
+    object2: wam_link5
+    operation: disable  # Never in collision
+  - object1: wam_link3
+    object2: wam_link6
+    operation: disable  # Never in collision
+  - object1: wam_link3
+    object2: wam_link7
+    operation: disable  # Never in collision
+  - object1: wam_link4
+    object2: wam_link7
+    operation: disable  # Never in collision
+  - object1: wam_link5
+    object2: wam_link7
+    operation: disable  # Never in collision

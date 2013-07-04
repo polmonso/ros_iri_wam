@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="wam1" params="parent">
+
+    <link name="wam_link1">
+        <inertial>
+            <mass value="8.3936" />
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="1.0"  iyz="0.0"  izz="1.0" />
+        </inertial>
+        <visual>
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+            <geometry name="wam_link1_visual">
+                <mesh filename="package://iri_wam_description/mesh/wam1.stl" scale="1.0 1.0 1.0" />
+            </geometry>
+            <material name="Grey" >
+                <color rgba="0.75 0.75 0.75 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+            <geometry name="wam_link1_collision">
+                <mesh filename="package://iri_wam_description/mesh/wam1.stl" scale="1.0 1.0 1.0" />
+<!--                <box size="0.20 0.40 0.40"/>
+-->
+            </geometry>
+            <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+        </collision>
+    </link>
+    <gazebo reference="wam_link1">
+        <material>Gazebo/Grey</material>
+        <selfCollide>true</selfCollide>
+    </gazebo>
+
+    <joint name="j1_joint" type="revolute">
+        <parent link="${parent}"/>
+        <child link="wam_link1"/>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+        <axis xyz="0 0 1" />
+        <limit lower="-2.6" upper="2.6" effort="30" velocity="2.0"/>
+   <!--  <safety_controller k_velocity="0.5"/>-->
+        <dynamics damping="100"/>
+     </joint>
+
+    <transmission type="pr2_mechanism_model/SimpleTransmission" name="j1_transmission">
+      <actuator name="j1" />
+      <joint name="j1_joint" />
+      <mechanicalReduction>1</mechanicalReduction>
+      <motorTorqueConstant>1</motorTorqueConstant>
+    </transmission>
+
+  </xacro:macro>
+
+</robot>
