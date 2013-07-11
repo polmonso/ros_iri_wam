@@ -4,12 +4,8 @@ using namespace Eigen;
 
 WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
  iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
-  lwpr_trajectory_server_aserver_(public_node_handle_, "lwpr_trajectory"),
-  joint_trajectory_aserver_(public_node_handle_, "joint_trajectory"),
-// action_server_(nh,"iri_wam_pr2_controller/joint_trajectory_action",false),
- //action_server_follow_(nh,"iri_wam_pr2_controller/follow_joint_trajectory",false)
- action_server_(nh,"joint_trajectory_action",false),
- action_server_follow_(nh,"follow_joint_trajectory",false)
+ lwpr_trajectory_server_aserver_(public_node_handle_, "lwpr_trajectory"),
+ follow_joint_trajectory_server_(public_node_handle_, "follow_joint_trajectory")
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -19,8 +15,9 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   this->JointState_msg.position.resize(7); 
 
   // [init publishers]
-  this->pose_publisher = this->public_node_handle_.advertise<geometry_msgs::PoseStamped>("pose", 5);
-  this->joint_states_publisher = this->public_node_handle_.advertise<sensor_msgs::JointState>("joint_states", 5);
+  this->pose_publisher = this->public_node_handle_.advertise<geometry_msgs::PoseStamped>("pose", 1);
+  this->joint_states_publisher = this->public_node_handle_.advertise<sensor_msgs::JointState>("joint_states", 1);
+  this->current_robot_state_publisher_ = this->public_node_handle_.advertise<moveit_msgs::DisplayRobotState>("robot_state", 1);
 
   // [init subscribers]
 
@@ -42,20 +39,13 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   lwpr_trajectory_server_aserver_.registerGetFeedbackCallback(boost::bind(&WamDriverNode::lwpr_trajectory_serverGetFeedbackCallback, this, _1)); 
   lwpr_trajectory_server_aserver_.start();
 
-  joint_trajectory_aserver_.registerStartCallback(boost::bind(&WamDriverNode::joint_trajectoryStartCallback, this, _1));
-  joint_trajectory_aserver_.registerStopCallback(boost::bind(&WamDriverNode::joint_trajectoryStopCallback, this)); 
-  joint_trajectory_aserver_.registerIsFinishedCallback(boost::bind(&WamDriverNode::joint_trajectoryIsFinishedCallback, this)); 
-  joint_trajectory_aserver_.registerHasSucceedCallback(boost::bind(&WamDriverNode::joint_trajectoryHasSucceedCallback, this)); 
-  joint_trajectory_aserver_.registerGetResultCallback(boost::bind(&WamDriverNode::joint_trajectoryGetResultCallback, this, _1)); 
-  joint_trajectory_aserver_.registerGetFeedbackCallback(boost::bind(&WamDriverNode::joint_trajectoryGetFeedbackCallback, this, _1)); 
-  joint_trajectory_aserver_.start();
-
-  action_server_.registerGoalCallback(boost::bind(&WamDriverNode::goalCB, this, _1));
-  //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelCB, this, _1));
-  action_server_.start();
-  action_server_follow_.registerGoalCallback(boost::bind(&WamDriverNode::goalFollowCB, this, _1));
-  //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelFollowCB, this, _1));
-  action_server_follow_.start();
+  follow_joint_trajectory_server_.registerStartCallback(boost::bind(&WamDriverNode::joint_trajectoryStartCallback, this, _1));
+  follow_joint_trajectory_server_.registerStopCallback(boost::bind(&WamDriverNode::joint_trajectoryStopCallback, this)); 
+  follow_joint_trajectory_server_.registerIsFinishedCallback(boost::bind(&WamDriverNode::joint_trajectoryIsFinishedCallback, this)); 
+  follow_joint_trajectory_server_.registerHasSucceedCallback(boost::bind(&WamDriverNode::joint_trajectoryHasSucceedCallback, this)); 
+  follow_joint_trajectory_server_.registerGetResultCallback(boost::bind(&WamDriverNode::joint_trajectoryGetResultCallback, this, _1)); 
+  follow_joint_trajectory_server_.registerGetFeedbackCallback(boost::bind(&WamDriverNode::joint_trajectoryGetFeedbackCallback, this, _1)); 
+  follow_joint_trajectory_server_.start();
 
   // [init action clients]
 
@@ -69,7 +59,6 @@ void WamDriverNode::mainNodeThread(void)
 
   std::vector<double> angles(7,0.1);
   std::vector<double> pose(16,0);
-  char jname[9];
   Matrix3f rmat;
 
   // [fill msg Header if necessary]
@@ -77,6 +66,7 @@ void WamDriverNode::mainNodeThread(void)
   this->PoseStamped_msg.header.frame_id = "wam_fk/wam7";
 
   // [fill msg structures]
+  //this->DisplayRobotState_msg_.data = my_var;
   this->driver_.lock();
   this->driver_.get_pose(&pose);
   this->driver_.get_joint_angles(&angles);
@@ -99,16 +89,33 @@ void WamDriverNode::mainNodeThread(void)
 
   JointState_msg.header.stamp = ros::Time::now();
   for(int i=0;i<(int)angles.size();i++){
-      snprintf(jname, 9, "j%d_joint", i+1);
+      //char jname[9];
+      //snprintf(jname, 9, "j%d_joint", i+1);
+      char jname[12];
+      snprintf(jname, 12, "wam_joint_%d", i+1);
       JointState_msg.name[i] = jname;
       JointState_msg.position[i] = angles[i];
   }
+
+//  /* Load the robot model */
+//  robot_model_loader::RobotModelLoader robot_model_loader("robot_description");
+//
+//  /* Get a shared pointer to the model */
+//  robot_model::RobotModelPtr kinematic_model = robot_model_loader.getModel();
+//
+//  /* Create a kinematic state - this represents the configuration for the robot represented by kinematic_model */
+//  robot_state::RobotStatePtr kinematic_state(new robot_state::RobotState(kinematic_model));
+//
+//  /* Get the configuration for the joints in the right arm of the PR2*/
+//  robot_state::JointStateGroup* joint_state_group = kinematic_state->getJointStateGroup("arm1");
+
 
   // [fill srv structure and make request to the server]
   
   // [fill action structure and make request to the action server]
 
   // [publish messages]
+  this->current_robot_state_publisher_.publish(this->DisplayRobotState_msg_);
   this->joint_states_publisher.publish(this->JointState_msg);
   this->pose_publisher.publish(this->PoseStamped_msg);
 
@@ -312,24 +319,7 @@ void WamDriverNode::joint_trajectoryGetFeedbackCallback(control_msgs::FollowJoin
     //ROS_INFO("feedback: %s", feedback->data.c_str()); 
   driver_.unlock(); 
 }
-void WamDriverNode::goalCB(GoalHandle gh)
-{
-    gh.setAccepted();
-    bool state=false;
-    trajectory_msgs::JointTrajectory traj = gh.getGoal()->trajectory;
-    trajectory2follow(traj,state);
-    if(state) gh.setSucceeded();
-    else gh.setAborted();
-}
-void WamDriverNode::goalFollowCB(GoalHandleFollow gh)
-{
-    gh.setAccepted();
-    bool state=false;
-    trajectory_msgs::JointTrajectory traj = gh.getGoal()->trajectory;
-    trajectory2follow(traj,state);
-    if(state) gh.setSucceeded();
-    else gh.setAborted();
-}
+
 void WamDriverNode::trajectory2follow(trajectory_msgs::JointTrajectory traj, bool& state)
 {
 	this->driver_.lock();
@@ -337,7 +327,7 @@ void WamDriverNode::trajectory2follow(trajectory_msgs::JointTrajectory traj, boo
 	{
         if(this->driver_.isRunning())
         {
-	    ii=traj.points.size()-1;
+            //ii=traj.points.size()-1;
             this->driver_.move_in_joints(&traj.points[ii].positions); //this call blocks if the wam faults. The mutex is not freed...!
             this->driver_.unlock();
             this->driver_.wait_move_end();

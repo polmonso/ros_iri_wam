@@ -11,6 +11,7 @@
   <url>http://ros.org/wiki/iri_wam_wrapper</url>
   <depend package="roscpp"/>
   <depend package="iri_base_driver"/>
+  <depend package="moveit_msgs"/>
   <depend package="iri_action_server"/>
   <depend package="iri_wam_common_msgs"/> 
   <depend package="geometry_msgs"/>
