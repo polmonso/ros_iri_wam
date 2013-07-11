@@ -30,6 +30,7 @@
 #include <Eigen/Dense>
 
 // [publisher subscriber headers]
+#include <moveit_msgs/DisplayRobotState.h>
 #include "sensor_msgs/JointState.h"
 #include "geometry_msgs/PoseStamped.h"
 
@@ -44,7 +45,11 @@
 
 // [action server msgs]
 #include <control_msgs/FollowJointTrajectoryAction.h>
-#include <actionlib/server/action_server.h>
+#include <moveit/robot_model_loader/robot_model_loader.h>
+#include <moveit/robot_model/robot_model.h>
+#include <moveit/robot_state/robot_state.h>
+#include <moveit/robot_state/joint_state_group.h>
+
 
 #define HOLDON 0
 #define HOLDOFF 1
@@ -69,15 +74,11 @@
 
 class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
 {
-  // JointTrajectoryAction(Diamondback & Electric) 	
-  typedef actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> ActionExecutor;
-  typedef ActionExecutor::GoalHandle GoalHandle;
-  //FollowJoinTrajectoryAction(Electric)
-  typedef actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> ActionExecutorFollow;
-  typedef ActionExecutorFollow::GoalHandle GoalHandleFollow;
   
   private:
     // [publisher attributes]
+    ros::Publisher current_robot_state_publisher_;
+    moveit_msgs::DisplayRobotState DisplayRobotState_msg_;
     ros::Publisher joint_states_publisher;
     sensor_msgs::JointState JointState_msg;
     ros::Publisher pose_publisher;
@@ -108,20 +109,15 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
     bool lwpr_trajectory_serverHasSucceedCallback(void);
     void lwpr_trajectory_serverGetResultCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationResultPtr& result);
     void lwpr_trajectory_serverGetFeedbackCallback(iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationFeedbackPtr& feedback);
-    IriActionServer<control_msgs::FollowJointTrajectoryAction> joint_trajectory_aserver_;
+
+    IriActionServer<control_msgs::FollowJointTrajectoryAction> follow_joint_trajectory_server_;
     void joint_trajectoryStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal);
     void joint_trajectoryStopCallback(void);
     bool joint_trajectoryIsFinishedCallback(void);
     bool joint_trajectoryHasSucceedCallback(void);
     void joint_trajectoryGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result);
     void joint_trajectoryGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback);
-    ActionExecutor action_server_;
-    void goalCB(GoalHandle gh);
-    void cancelCB(GoalHandle gh);
     
-    ActionExecutorFollow action_server_follow_;
-    void goalFollowCB(GoalHandleFollow gh);
-    void canceFollowlCB(GoalHandleFollow gh);    
     // [action client attributes]
     
    /**
