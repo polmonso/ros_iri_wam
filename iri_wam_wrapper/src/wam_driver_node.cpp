@@ -17,7 +17,6 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   // [init publishers]
   this->pose_publisher = this->public_node_handle_.advertise<geometry_msgs::PoseStamped>("pose", 1);
   this->joint_states_publisher = this->public_node_handle_.advertise<sensor_msgs::JointState>("joint_states", 1);
-  this->current_robot_state_publisher_ = this->public_node_handle_.advertise<moveit_msgs::DisplayRobotState>("robot_state", 1);
 
   // [init subscribers]
 
@@ -72,7 +71,7 @@ void WamDriverNode::mainNodeThread(void)
   this->driver_.get_joint_angles(&angles);
   this->driver_.unlock();
 
-  rmat << pose.at(0), pose.at(1),pose.at(2),pose.at(4),pose.at(5),pose.at(6),pose.at(8),pose.at(9),pose.at(10);
+  rmat << pose.at(0), pose.at(1), pose.at(2), pose.at(4), pose.at(5), pose.at(6), pose.at(8), pose.at(9), pose.at(10);
 
   {
     Quaternion<float> quat(rmat);
@@ -86,36 +85,20 @@ void WamDriverNode::mainNodeThread(void)
     this->PoseStamped_msg.pose.orientation.w = quat.w();
   }
 
-
   JointState_msg.header.stamp = ros::Time::now();
+  std::string robot_name = this->driver_.get_robot_name();
   for(int i=0;i<(int)angles.size();i++){
-      //char jname[9];
-      //snprintf(jname, 9, "j%d_joint", i+1);
-      char jname[12];
-      snprintf(jname, 12, "wam_joint_%d", i+1);
-      JointState_msg.name[i] = jname;
+      std::stringstream ss_jname;
+      ss_jname << robot_name << "_joint_" << i+1;
+      JointState_msg.name[i] = ss_jname.str().c_str();
       JointState_msg.position[i] = angles[i];
   }
-
-//  /* Load the robot model */
-//  robot_model_loader::RobotModelLoader robot_model_loader("robot_description");
-//
-//  /* Get a shared pointer to the model */
-//  robot_model::RobotModelPtr kinematic_model = robot_model_loader.getModel();
-//
-//  /* Create a kinematic state - this represents the configuration for the robot represented by kinematic_model */
-//  robot_state::RobotStatePtr kinematic_state(new robot_state::RobotState(kinematic_model));
-//
-//  /* Get the configuration for the joints in the right arm of the PR2*/
-//  robot_state::JointStateGroup* joint_state_group = kinematic_state->getJointStateGroup("arm1");
-
 
   // [fill srv structure and make request to the server]
   
   // [fill action structure and make request to the action server]
 
   // [publish messages]
-  this->current_robot_state_publisher_.publish(this->DisplayRobotState_msg_);
   this->joint_states_publisher.publish(this->JointState_msg);
   this->pose_publisher.publish(this->PoseStamped_msg);
 
@@ -161,9 +144,9 @@ bool WamDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_move::Reques
   //lock access to driver if necessary
   this->driver_.lock();
 
-  if (! this->driver_.isRunning())
+  if (!this->driver_.isRunning())
   {
-    ROS_ERROR("Driver is not running");
+    ROS_ERROR("[JointsMoveCB] Driver is not running");
     //unlock driver if previously blocked 
     this->driver_.unlock();
     return false;
@@ -202,7 +185,7 @@ WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request  & req,
     }
     else
     {
-        ROS_ERROR("Driver is not running at the moment");
+        ROS_ERROR("[PoseMoveCB] Driver is not running");
         result = false;
     }
     this->driver_.unlock();
@@ -334,7 +317,7 @@ void WamDriverNode::trajectory2follow(trajectory_msgs::JointTrajectory traj, boo
         }
         else
         {
-		    ROS_FATAL("Driver is not running");
+		    ROS_FATAL("[Trajectory2follow] Driver is not running");
 		    state=false;
 	    }
     }

@@ -91,6 +91,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
 {
   private:
     // private attributes and methods
+    std::string robot_name_;
     std::string wamserver_ip;
     int server_port;
     int state_refresh_rate;
@@ -206,13 +207,13 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     *
     */
     ~WamDriver();
+    std::string get_robot_name();
     int get_num_joints();
 
     /**
      * \brief check if the wam is moving right now
      */
     bool is_moving();
-
     void wait_move_end();
     void get_pose(std::vector<double> *pose);
     void get_joint_angles(std::vector<double> *angles);
