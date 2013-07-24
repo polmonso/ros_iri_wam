@@ -17,7 +17,7 @@ public:
   {
     // tell the action client that we want to spin a thread by default
     //traj_client_ = new TrajClient("/wam_wrapper/follow_joint_trajectory", true);
-    traj_client_ = new TrajClient("/arm_controller/follow_joint_trajectory", true);
+    traj_client_ = new TrajClient("/iri_wam_controller/follow_joint_trajectory", true);
 
     // wait for action server to come up
     while(!traj_client_->waitForServer(ros::Duration(5.0))){

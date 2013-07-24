@@ -77,8 +77,6 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
   
   private:
     // [publisher attributes]
-    ros::Publisher current_robot_state_publisher_;
-    moveit_msgs::DisplayRobotState DisplayRobotState_msg_;
     ros::Publisher joint_states_publisher;
     sensor_msgs::JointState JointState_msg;
     ros::Publisher pose_publisher;

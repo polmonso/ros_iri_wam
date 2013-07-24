@@ -7,186 +7,188 @@ using namespace XmlRpc;
 WamDriver::WamDriver() :
     force_request_(new ForceRequest)
 {
- ros::NodeHandle nh("~");
+    ros::NodeHandle nh("~");
 
- XmlRpc::XmlRpcValue ip;
- XmlRpc::XmlRpcValue port;
- XmlRpc::XmlRpcValue rate;
+    XmlRpc::XmlRpcValue r_name;
+    XmlRpc::XmlRpcValue ip;
+    XmlRpc::XmlRpcValue port;
+    XmlRpc::XmlRpcValue rate;
 
- nh.getParam("wam_ip",ip);
- this->wamserver_ip=(std::string)ip;
- 
- if(!nh.hasParam("port"))
- {
-  ROS_WARN_STREAM("Port not defined, Defaults: "<<4321);
-  this->server_port=4321;
- } 
- else
- {
-  nh.getParam("port",port);
-  this->server_port=(int)port;
- }
- if(!nh.hasParam("refresh_rate"))
- {
-  ROS_WARN_STREAM("Refresh Rate not defined, Defaults: "<<100);
-  this->state_refresh_rate=100;
- } 
- else
- {
- nh.getParam("refresh_rate",rate);
- this->state_refresh_rate=(int)rate;
- }
- 
- ROS_INFO_STREAM("IP Address: "<<this->wamserver_ip);
- ROS_INFO_STREAM("Port Server: "<<this->server_port);
- ROS_INFO_STREAM("Refresh Rate: "<<this->state_refresh_rate);
+    nh.getParam("wam_ip",ip);
+    this->wamserver_ip=(std::string)ip;
+
+    if(!nh.hasParam("robot_name"))
+    {
+        ROS_WARN_STREAM("Robot name not defined. Default: " << "iri_wam");
+        robot_name_="iri_wam";
+    } 
+    else
+    {
+        nh.getParam("robot_name", r_name);
+        robot_name_=(std::string)r_name;
+    }
+    if(!nh.hasParam("port"))
+    {
+        ROS_WARN_STREAM("Port not defined. Defaults: "<<4321);
+        this->server_port=4321;
+    } 
+    else
+    {
+        nh.getParam("port",port);
+        this->server_port=(int)port;
+    }
+    if(!nh.hasParam("refresh_rate"))
+    {
+        ROS_WARN_STREAM("Refresh Rate not defined. Defaults: "<<100);
+        this->state_refresh_rate=100;
+    } 
+    else
+    {
+        nh.getParam("refresh_rate",rate);
+        this->state_refresh_rate=(int)rate;
+    }
+
+    ROS_INFO_STREAM("Robot Name: "   << this->robot_name_);
+    ROS_INFO_STREAM("IP Address: "   << this->wamserver_ip);
+    ROS_INFO_STREAM("Port Server: "  << this->server_port);
+    ROS_INFO_STREAM("Refresh Rate: " << this->state_refresh_rate);
 }
 
 bool WamDriver::openDriver(void)
 {
-  //setDriverId(driver string id);
-   string input;
-  //setDriverId(driver string id);
-  try{
-    if(this->state_ != OPENED){
-        this->wam = new CWamDriver(this->wamserver_ip, this->server_port, this->state_refresh_rate);
-        wam->open();
-        this->state_ = OPENED;
-        ROS_INFO("Wam opened, press shift+idle and enter.");
-        getchar();
+    //setDriverId(driver string id);
+    string input;
+    //setDriverId(driver string id);
+    try{
+        if(this->state_ != OPENED){
+            this->wam = new CWamDriver(this->wamserver_ip, this->server_port, this->state_refresh_rate);
+            wam->open();
+            this->state_ = OPENED;
+            ROS_INFO("Wam opened, press shift+idle and enter.");
+            getchar();
 
-        wam->create(); 
-        ROS_INFO("Wam created, press shift+activate and press enter.");
-        getchar(); 
-        wam->activate();
-        return true;
-    }else{
-        ROS_ERROR("WAM was already opened!");
+            wam->create(); 
+            ROS_INFO("Wam created, press shift+activate and press enter.");
+            getchar(); 
+            wam->activate();
+            return true;
+        }else{
+            ROS_ERROR("WAM was already opened!");
+            return false;
+        }
+    }catch(CException &e){
+        ROS_ERROR("%s",e.what().c_str());
         return false;
     }
-  }catch(CException &e){
-    ROS_ERROR("%s",e.what().c_str());
-    return false;
-  }
 }
 
 bool WamDriver::closeDriver(void)
 {
-  wam->close();
-  ROS_INFO("[APP] Wait until wam gets home, idle the wam and press enter.");
-  getchar();
-  this->state_ = CLOSED;
-  return true;
+    wam->close();
+    ROS_INFO("[APP] Wait until wam gets home, idle the wam and press enter.");
+    getchar();
+    this->state_ = CLOSED;
+    return true;
 }
 
 bool WamDriver::startDriver(void)
 {
-  try{
-    wam->setGravityCompensation(1.1);
-    ROS_INFO("Switching to Running and going to default position.");
-    wam->goToDefaultPosition();
-    ROS_INFO("Waiting final position reach");
-    wam->waitTillMotionDone();
-    ROS_INFO("All is ready to work now!");
-    wam->setGravityCompensation(1.1);
-    this->state_ = RUNNING;
+    try{
+        wam->setGravityCompensation(1.1);
+        ROS_INFO("Switching to Running and going to default position.");
+        wam->goToDefaultPosition();
+        ROS_INFO("Waiting final position reach");
+        wam->waitTillMotionDone();
+        ROS_INFO("All is ready to work now!");
+        wam->setGravityCompensation(1.1);
+        this->state_ = RUNNING;
+        return true;
+    }catch(CException &e){
+        ROS_ERROR("%s",e.what().c_str());
+        return false;
+    }
     return true;
-  }catch(CException &e){
-    ROS_ERROR("%s",e.what().c_str());
-    return false;
-  }
-  return true;
 }
 
 bool WamDriver::stopDriver(void)
 {
     //return to home but keep waiting for messages
-  wam->home();
-  wam->waitTillMotionDone();
-  this->state_ = OPENED;
-  return true;
+    wam->home();
+    wam->waitTillMotionDone();
+    this->state_ = OPENED;
+    return true;
 }
 
 void WamDriver::config_update(const Config& new_cfg, uint32_t level)
 {
-  this->lock();
-  //update driver with new_cfg data
-  if(isRunning()){
+    this->lock();
 
-    // save the current configuration
+    // depending on current state
+    // update driver with new_cfg data
+    switch(this->getState())
+    {
+      case WamDriver::CLOSED:
+        break;
+    
+      case WamDriver::OPENED:
+        break;
+    
+      case WamDriver::RUNNING:
+        break;
+    }
+
     this->config_=new_cfg;
 
-  }else{
-    ROS_ERROR("Driver is not running");
-  }
-
-  this->unlock();
+    this->unlock();
 }
 
 WamDriver::~WamDriver()
 {
-	std::cout << "WamDriver destructor" << std::endl;
+    std::cout << "WamDriver destructor" << std::endl;
 }
 
-int WamDriver::get_num_joints(){
+std::string WamDriver::get_robot_name() {
 
-  if(this->wam!=NULL){
-    return this->wam->getNumAngles();
-  } 
-  return 0;
+    return this->robot_name_;
 }
 
-bool
-WamDriver::is_moving()
-{
-    if (this->wam != NULL)
+int WamDriver::get_num_joints() {
+    if(this->wam!=NULL) {
+        return this->wam->getNumAngles();
+    } 
+    return 0;
+}
+
+bool WamDriver::is_moving() {
+    if (this->wam != NULL) {
         return this->wam->isMoving();
-
+    }
     return false;
 }
 
-void WamDriver::wait_move_end(){
-
-  if(this->wam!=NULL){
-    this->wam->waitTillMotionDone();
-  } 
+void WamDriver::wait_move_end() {
+    if(this->wam!=NULL) {
+        this->wam->waitTillMotionDone();
+    } 
 }
 
-void WamDriver::get_pose(std::vector<double> *pose){
-
-  if(this->wam!=NULL){
-    this->wam->getCartesianPose(pose);
-//        pose->clear();
-//        pose->push_back(0);
-//        pose->push_back(1);
-//        pose->push_back(0);
-//        pose->push_back(0.3);
-//        pose->push_back(1);
-//        pose->push_back(0);
-//        pose->push_back(0);
-//        pose->push_back(0.3);
-//        pose->push_back(0);
-//        pose->push_back(0);
-//        pose->push_back(1);
-//        pose->push_back(0.5);
-  } 
+void WamDriver::get_pose(std::vector<double> *pose) {
+    if(this->wam!=NULL) {
+        this->wam->getCartesianPose(pose);
+    }
 }
-void WamDriver::get_joint_angles(std::vector<double> *angles){
 
-  if(this->wam!=NULL){
-    this->wam->getJointAngles(angles);
-//    angles->clear();
-//    for(int i=0;i<get_num_joints();i++){
-//        angles->push_back(i*0.001);
-//    }
-  } 
+void WamDriver::get_joint_angles(std::vector<double> *angles) {
+    if(this->wam!=NULL) {
+        this->wam->getJointAngles(angles);
+    } 
 }
 
 bool WamDriver::is_joints_move_request_valid(const std::vector<double> & angles){
     // Check number of joints sent to the robot
     if (static_cast<signed int>(angles.size()) != get_num_joints()) {
         ROS_ERROR("Invalid request to move. Joint vector size is %i while the robot has %i joints", 
-                                                                     (int) angles.size(), get_num_joints());
+                (int) angles.size(), get_num_joints());
         return false;
     }
 
@@ -224,14 +226,14 @@ void WamDriver::move_in_joints(std::vector<double> *angles, std::vector<double>*
             ROS_ERROR("%s",err_msg.c_str());
             errormask = 0x00;
         }
-   }
+    }
 }
 
-void
+    void
 WamDriver::move_in_cartesian_pose(const geometry_msgs::Pose pose,const double vel,const double acc)
 {
     if (this->wam == NULL)
-      return;
+        return;
 
     std::vector<double> low_level_pose;
     low_level_pose.push_back(pose.position.x);
@@ -245,35 +247,41 @@ WamDriver::move_in_cartesian_pose(const geometry_msgs::Pose pose,const double ve
     this->wam->moveInCartesianPose(&low_level_pose, vel, acc);
 }
 
-void WamDriver::hold_current_position(bool on){
-  if(this->wam!=NULL){
-    this->wam->holdCurrentPosition(on);
-  }
+void WamDriver::hold_current_position(bool on) {
+    if(this->wam!=NULL){
+        this->wam->holdCurrentPosition(on);
+    }
 }
 
-void
-WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory)
-{
+void WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory) {
     uint16_t errormask = 0x00;
     WAMJointTrajectory low_level_trajectory;
+    WAMTrajectoryPoint point_trajectory;
 
     for (std::vector<trajectory_msgs::JointTrajectoryPoint>::const_iterator it = trajectory.points.begin();
-         it != trajectory.points.end(); it++) {
-            if (! is_joints_move_request_valid(it->positions)) {
-                ROS_ERROR("Joints angles were not valid. Refuse to move.");
-                return;
-            }
-
-            low_level_trajectory.push_back(it->positions);
+            it != trajectory.points.end(); it++) {
+        if (! is_joints_move_request_valid(it->positions)) {
+            ROS_ERROR("Joints angles were not valid. Refuse to move.");
+            return;
+        }
+        // Now low_level_trajectory contains angles, velocities, accelerations and time_from_start
+        point_trajectory.positions.clear();
+        point_trajectory.velocities.clear();
+        point_trajectory.accelerations.clear();
+        point_trajectory.time_from_start.clear();
+        point_trajectory.positions.insert(point_trajectory.positions.end(), it->positions.begin(), it->positions.end());
+        point_trajectory.velocities.insert(point_trajectory.velocities.end(), it->velocities.begin(), it->velocities.end());
+        point_trajectory.accelerations.insert(point_trajectory.accelerations.end(), it->accelerations.begin(), it->accelerations.end());
+        point_trajectory.time_from_start.push_back(it->time_from_start.sec);
+        point_trajectory.time_from_start.push_back(it->time_from_start.nsec);
+        low_level_trajectory.push_back(point_trajectory);
+        //low_level_trajectory.push_back(it->positions);
     }
 
     this->wam->moveTrajectoryInJoints(&errormask, &low_level_trajectory);
 }
 
-void
-WamDriver::move_trajectory_learnt_and_estimate_force(const std::string model_filename,
-                                                     const std::string points_filename)
-{
+void WamDriver::move_trajectory_learnt_and_estimate_force(const std::string model_filename, const std::string points_filename) {
     // TODO: implement error handling
     force_request_->init();
     double response = this->wam->moveTrajectoryLearntAndEstimateForce(model_filename, points_filename);
