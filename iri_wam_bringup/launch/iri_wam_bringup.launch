@@ -26,6 +26,7 @@
     <node pkg ="robot_state_publisher"
           type="state_publisher"
           name="robot_state_publisher">
+        <remap from="joint_states" to="/joint_states" />
       <!-- <param name="tf_prefix" value="$(arg ROBOT)" type="str" /> -->
     </node>
 
