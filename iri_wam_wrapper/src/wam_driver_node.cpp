@@ -16,7 +16,7 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
 
   // [init publishers]
   this->pose_publisher = this->public_node_handle_.advertise<geometry_msgs::PoseStamped>("pose", 1);
-  this->joint_states_publisher = this->public_node_handle_.advertise<sensor_msgs::JointState>("joint_states", 1);
+  this->joint_states_publisher = this->public_node_handle_.advertise<sensor_msgs::JointState>("/joint_states", 1);
 
   // [init subscribers]
 
