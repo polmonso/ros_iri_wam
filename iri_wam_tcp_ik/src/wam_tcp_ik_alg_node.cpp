@@ -4,7 +4,8 @@ WamTcpIkAlgNode::WamTcpIkAlgNode(void) :
   algorithm_base::IriBaseAlgorithm<WamTcpIkAlgorithm>()
 {
   // get the frame from the parameter server
-  public_node_handle_.param<std::string>("frame_tcp", frame_tcp_str_, "iri_wam_tcp_ik");
+  public_node_handle_.param<std::string>("tool_tcp", tool_tcp_str_, "tool_tcp_frame");
+  public_node_handle_.param<std::string>("robot_tcp", robot_tcp_str_, "robot_tcp_frame");
   
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -66,10 +67,10 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
   try{
     ros::Time now = ros::Time::now();
     ros::Duration interval = ros::Duration(1.0);
-    if(!listener_.waitForTransform(frame_tcp_str_, "/wam_tcp", now, interval)){
-        ROS_ERROR("Timeout while waiting for transform between frames %s and /wam_tcp/ ", frame_tcp_str_.c_str()); 
+    if(!listener_.waitForTransform(tool_tcp_str_, robot_tcp_str_, now, interval)){
+        ROS_ERROR("Timeout while waiting for transform between frames %s and %s ", tool_tcp_str_.c_str(), robot_tcp_str_.c_str()); 
     }
-    listener_.lookupTransform(frame_tcp_str_, "/wam_tcp", now, tcp_H_wam7_);
+    listener_.lookupTransform(tool_tcp_str_, robot_tcp_str_, now, tcp_H_wam7_);
   }catch (tf::TransformException ex){
     ROS_ERROR("lookup transform error: %s", ex.what());
     return false;
@@ -77,7 +78,7 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
 
   // Pose from wam_tcp To user_tcp
   ROS_INFO("[WamTcpIkAlgNode] %s_H_7 Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",
-            frame_tcp_str_.c_str(),
+            tool_tcp_str_.c_str(),
             tcp_H_wam7_.getOrigin().x(),
             tcp_H_wam7_.getOrigin().y(),
             tcp_H_wam7_.getOrigin().z(),
@@ -190,16 +191,16 @@ bool WamTcpIkAlgNode::get_robotPoseCallback(iri_wam_common_msgs::wamGetRobotPose
   try{
     ros::Time now = ros::Time::now();
     ros::Duration interval = ros::Duration(1.0);
-    if(!listener_.waitForTransform(frame_tcp_str_, "/wam_tcp", now, interval)){
-        ROS_ERROR("Timeout while waiting for transform between frames %s and /wam_tcp/ ", frame_tcp_str_.c_str()); 
+    if(!listener_.waitForTransform(tool_tcp_str_, robot_tcp_str_, now, interval)){
+        ROS_ERROR("Timeout while waiting for transform between frames %s and %s", tool_tcp_str_.c_str(), robot_tcp_str_.c_str()); 
     }
-    listener_.lookupTransform(frame_tcp_str_, "/wam_tcp", now, tcp_H_wam7_);
+    listener_.lookupTransform(tool_tcp_str_, robot_tcp_str_, now, tcp_H_wam7_);
   }catch (tf::TransformException ex){
     ROS_ERROR("lookup transform error: %s", ex.what());
     return false;
   }
 
-  ROS_INFO("[WamTcpIkAlgNode] %s_H_7 Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",frame_tcp_str_.c_str(),
+  ROS_INFO("[WamTcpIkAlgNode] %s_H_7 Pose (x, y, z, qx, qy, qz, qw): [ %f, %f, %f, %f, %f, %f, %f ]",tool_tcp_str_.c_str(),
             tcp_H_wam7_.getOrigin().x(),
             tcp_H_wam7_.getOrigin().y(),
             tcp_H_wam7_.getOrigin().z(),
@@ -285,10 +286,14 @@ void WamTcpIkAlgNode::node_config_update(Config &config, uint32_t level)
 {
   this->alg_.lock();
 
-  ROS_INFO("tcp frame change %s",config.frame_tcp.c_str());
-  frame_tcp_str_ = config.frame_tcp;
-  if(!listener_.frameExists(config.frame_tcp))
-      ROS_WARN("Frame %s does not exist, IK won't work until it is published",config.frame_tcp.c_str()); 
+  ROS_INFO("Tool tcp frame:  %s", config.tool_tcp.c_str());
+  ROS_INFO("Robot tcp frame: %s", config.tool_tcp.c_str());
+  tool_tcp_str_ = config.tool_tcp;
+  robot_tcp_str_ = config.robot_tcp;
+  if(!listener_.frameExists(config.tool_tcp))
+      ROS_WARN("Frame %s does not exist, IK won't work until it is published",config.tool_tcp.c_str()); 
+  if(!listener_.frameExists(config.robot_tcp))
+      ROS_WARN("Frame %s does not exist, IK won't work until it is published",config.robot_tcp.c_str()); 
   this->alg_.unlock();
 }
 
