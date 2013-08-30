@@ -30,6 +30,13 @@
       <!-- <param name="tf_prefix" value="$(arg ROBOT)" type="str" /> -->
     </node>
 
+    <!-- Tool center point for the TCP -->
+    <node name="$(arg ROBOT)_tcp_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik">
+       <param name="tool_tcp"  type="str" value="/$(arg ROBOT)_link_tcp" />
+       <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_base" />
+       <remap from="$(arg ROBOT)_tcp_ik/wamik" to="$(arg ROBOT)_ik/wamik" />
+    </node>
+
     <include file="$(find iri_wam_moveit_state_display)/launch/iri_wam_moveit_state_display.launch" if="$(arg moveit)">
        <arg name="ROBOT" value="$(arg ROBOT)"/>
     </include>
