@@ -2,5 +2,7 @@
 
 Reads and maintains the following parameters on the ROS server
 
-- \b "~frame_tcp" : \b [str] Frame that will moved to target pose min: , default: /bhand_tcp, max: 
+- \b "~robot_base" : \b [str] Robot reference tcp frame min: , default: /wam_link_0, max: 
+- \b "~robot_tcp" : \b [str] Robot reference tcp frame min: , default: /wam_tcp, max: 
+- \b "~tool_tcp" : \b [str] Tool tcp frame min: , default: /bhand_tcp, max: 
 

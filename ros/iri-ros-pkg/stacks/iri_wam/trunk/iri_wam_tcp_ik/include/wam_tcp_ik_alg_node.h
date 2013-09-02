@@ -49,7 +49,9 @@ class WamTcpIkAlgNode : public algorithm_base::IriBaseAlgorithm<WamTcpIkAlgorith
   private:
 
     //Dynamic reconfigure
-    std::string frame_tcp_str_;
+    std::string robot_base_str_;
+    std::string robot_tcp_str_;
+    std::string tool_tcp_str_;
 
     tf::TransformListener listener_; 
     tf::StampedTransform tcp_H_wam7_;
