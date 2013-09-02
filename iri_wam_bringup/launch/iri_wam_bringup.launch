@@ -32,8 +32,9 @@
 
     <!-- Tool center point for the TCP -->
     <node name="$(arg ROBOT)_tcp_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik">
+       <param name="robot_base" type="str" value="/$(arg ROBOT)_link_0" />
+       <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_7" />
        <param name="tool_tcp"  type="str" value="/$(arg ROBOT)_link_tcp" />
-       <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_base" />
        <remap from="$(arg ROBOT)_tcp_ik/wamik" to="$(arg ROBOT)_ik/wamik" />
     </node>
 
