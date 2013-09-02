@@ -45,9 +45,11 @@ rosbuild_add_executable(test_simple_trajectory test/simple_trajectory/simple_tra
 rosbuild_add_executable(test_simple_80_points_trajectory test/simple_trajectory/simple_80_points_trajectory.cpp)
 rosbuild_add_executable(test_lwpr_trajectory test/lwpr_trajectory/lwpr_trajectory.cpp)
 rosbuild_add_executable(test_simple_cartesian_move test/simple_cartesian_move/simple_cartesian.cpp)
+rosbuild_add_executable(test_simple_dmp_trajectory test/dmp_trajectory/dmp_simple_trajectory.cpp)
 
 target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
 target_link_libraries(test_simple_trajectory ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
 target_link_libraries(test_simple_80_points_trajectory ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
 target_link_libraries(test_lwpr_trajectory ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
 target_link_libraries(test_simple_cartesian_move ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
+target_link_libraries(test_simple_dmp_trajectory ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})

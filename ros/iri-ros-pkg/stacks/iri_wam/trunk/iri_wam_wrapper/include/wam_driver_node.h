@@ -30,6 +30,7 @@
 #include <Eigen/Dense>
 
 // [publisher subscriber headers]
+#include <trajectory_msgs/JointTrajectoryPoint.h>
 #include "sensor_msgs/JointState.h"
 #include "geometry_msgs/PoseStamped.h"
 
@@ -39,6 +40,7 @@
 #include "iri_wam_common_msgs/pose_move.h"
 
 // [action server client headers]
+#include <iri_wam_common_msgs/DMPTrackerAction.h>
 #include <iri_wam_common_msgs/LWPRTrajectoryReturningForceEstimationAction.h>
 #include <iri_action_server/iri_action_server.h>
 
@@ -84,6 +86,9 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
     geometry_msgs::PoseStamped PoseStamped_msg;
 
     // [subscriber attributes]
+    ros::Subscriber DMPTrackerNewGoal_subscriber_;
+    void DMPTrackerNewGoal_callback(const trajectory_msgs::JointTrajectoryPoint::ConstPtr& msg);
+    CMutex DMPTrackerNewGoal_mutex_;
 
     // [service attributes]
     ros::ServiceServer wam_services_server_;
@@ -101,6 +106,13 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
     // [client attributes]
 
     // [action server attributes]
+    IriActionServer<iri_wam_common_msgs::DMPTrackerAction> DMPTracker_aserver_;
+    void DMPTrackerStartCallback(const iri_wam_common_msgs::DMPTrackerGoalConstPtr& goal);
+    void DMPTrackerStopCallback(void);
+    bool DMPTrackerIsFinishedCallback(void);
+    bool DMPTrackerHasSucceedCallback(void);
+    void DMPTrackerGetResultCallback(iri_wam_common_msgs::DMPTrackerResultPtr& result);
+    void DMPTrackerGetFeedbackCallback(iri_wam_common_msgs::DMPTrackerFeedbackPtr& feedback);
     IriActionServer<iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationAction> lwpr_trajectory_server_aserver_;
     void lwpr_trajectory_serverStartCallback(const iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationGoalConstPtr& goal);
     void lwpr_trajectory_serverStopCallback(void);

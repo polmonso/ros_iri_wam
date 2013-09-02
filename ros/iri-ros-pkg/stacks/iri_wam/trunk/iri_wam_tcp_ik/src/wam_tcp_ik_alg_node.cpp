@@ -58,7 +58,7 @@ void WamTcpIkAlgNode::mainNodeThread(void)
 /*  [service callbacks] */
 bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &req, iri_wam_common_msgs::wamInverseKinematics::Response &res) 
 { 
-  //ROS_INFO("WamTcpIkAlgNode::get_ikCallback: New Request Received!"); 
+  ROS_INFO("WamTcpIkAlgNode::get_ikCallback: New Request Received!"); 
   
   //use appropiate mutex to shared variables if necessary 
   //this->alg_.lock(); 
