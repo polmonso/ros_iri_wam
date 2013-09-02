@@ -10,6 +10,10 @@
   <url>http://ros.org/wiki/iri_wam_dmp_tracker</url>
   <depend package="roscpp"/>
   <depend package="iri_base_driver"/>
+  <depend package="actionlib"/>
+  <depend package="geometry_msgs"/>
+  <depend package="iri_wam_common_msgs"/>
+  <depend package="trajectory_msgs"/>
 
 </package>
 

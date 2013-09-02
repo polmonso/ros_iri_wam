@@ -29,10 +29,16 @@
 #include "wam_dmp_tracker_driver.h"
 
 // [publisher subscriber headers]
+#include <geometry_msgs/PoseStamped.h>
+#include <trajectory_msgs/JointTrajectoryPoint.h>
 
 // [service client headers]
+#include <iri_wam_common_msgs/wamInverseKinematics.h>
 
 // [action server client headers]
+#include <actionlib/client/simple_action_client.h>
+#include <actionlib/client/terminal_state.h>
+#include <iri_wam_common_msgs/DMPTrackerAction.h>
 
 /**
  * \brief IRI ROS Specific Driver Class
@@ -55,16 +61,30 @@ class WamDmpTrackerDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDmp
 {
   private:
     // [publisher attributes]
+    ros::Publisher DMPTrackerNewGoal_publisher_;
+    trajectory_msgs::JointTrajectoryPoint JointTrajectoryPoint_msg_;
 
     // [subscriber attributes]
+    ros::Subscriber pose_surface_subscriber_;
+    void pose_surface_callback(const geometry_msgs::PoseStamped::ConstPtr& msg);
+    CMutex pose_surface_mutex_;
 
     // [service attributes]
 
     // [client attributes]
+    ros::ServiceClient wamik_client_;
+    iri_wam_common_msgs::wamInverseKinematics wamik_srv_;
 
     // [action server attributes]
 
     // [action client attributes]
+    actionlib::SimpleActionClient<iri_wam_common_msgs::DMPTrackerAction> DMPTracker_client_;
+    iri_wam_common_msgs::DMPTrackerGoal DMPTracker_goal_;
+    void DMPTrackerMakeActionRequest();
+    void DMPTrackerDone(const actionlib::SimpleClientGoalState& state,  const iri_wam_common_msgs::DMPTrackerResultConstPtr& result);
+    void DMPTrackerActive();
+    void DMPTrackerFeedback(const iri_wam_common_msgs::DMPTrackerFeedbackConstPtr& feedback);
+
 
    /**
     * \brief post open hook

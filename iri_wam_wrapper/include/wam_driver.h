@@ -91,6 +91,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
 {
   private:
     // private attributes and methods
+    std::string robot_name_;
     std::string wamserver_ip;
     int server_port;
     int state_refresh_rate;
@@ -206,6 +207,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     *
     */
     ~WamDriver();
+    std::string get_robot_name();
     int get_num_joints();
 
     /**
@@ -259,6 +261,13 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     {
         return force_request_;
     }
+    
+    /**
+     * \brief Starts the DMP tracker
+     */
+    void start_dmp_tracker(const std::vector<double> * initial, const std::vector<double> * goal);
+    
+    void dmp_tracker_new_goal(const std::vector<double> * new_goal);
 };
 
 #endif
