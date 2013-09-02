@@ -19,7 +19,7 @@
 #include "iri_wam_common_msgs/pose_move.h"
 #include "iri_wam_common_msgs/joints_move.h"
 #include "iri_wam_common_msgs/wamInverseKinematics.h"
-#include "iri_wam_common_msgs/wamInverseKinematicsUsingReference.h"
+#include "iri_wam_common_msgs/wamInverseKinematicsFromPose.h"
 
 // [action server client headers]
 
@@ -43,7 +43,7 @@ class WamIKAC {
 
     // [service attributes]
     ros::ServiceServer wamik_server_fromPose;
-    bool wamikCallbackUsingReference(iri_wam_common_msgs::wamInverseKinematicsUsingReference::Request &req, iri_wam_common_msgs::wamInverseKinematicsUsingReference::Response &res);
+    bool wamikCallbackFromPose(iri_wam_common_msgs::wamInverseKinematicsFromPose::Request &req, iri_wam_common_msgs::wamInverseKinematicsFromPose::Response &res);
     ros::ServiceServer wamik_server;
     bool wamikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &req, iri_wam_common_msgs::wamInverseKinematics::Response &res);
 
