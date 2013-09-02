@@ -1,0 +1,14 @@
+<launch>
+
+  <arg name="ROBOT" default="iri_wam" />
+
+  <!-- Publish Inverse Kinematics -->
+  <node pkg ="iri_wam_ik"
+        type="wam_ikac"
+        name="$(arg ROBOT)_ik"
+        output="screen">
+    <remap from="~joint_states"  to="/joint_states"/>
+    <remap from="~joints_move"   to="/$(arg ROBOT)_controller/joints_move"/>
+  </node>
+
+</launch>
