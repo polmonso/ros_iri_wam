@@ -1,0 +1,16 @@
+# Sep 2013 - G. Alenya
+#
+# This action starts the DMP tracker
+# This behaviour goes to the initial position and then
+# starts a DMP generated trajectory to the goal
+# A new goal can be sent via topic and a new trajectory is recomputed
+
+#goal
+trajectory_msgs/JointTrajectoryPoint initial
+trajectory_msgs/JointTrajectoryPoint goal
+---
+#result
+float32 distance
+---
+#feedback
+
