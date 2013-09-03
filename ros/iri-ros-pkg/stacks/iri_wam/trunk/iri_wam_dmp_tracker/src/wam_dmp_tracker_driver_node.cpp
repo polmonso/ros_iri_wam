@@ -80,6 +80,10 @@ void WamDmpTrackerDriverNode::pose_surface_callback(const geometry_msgs::PoseSta
   //[fill srv structure and make request to the server]
   wamik_srv_.request.pose.header.frame_id = msg->header.frame_id;
   wamik_srv_.request.pose.pose = msg->pose;
+  wamik_srv_.request.pose.pose.orientation.x =  0.147;
+  wamik_srv_.request.pose.pose.orientation.y =  0.651;
+  wamik_srv_.request.pose.pose.orientation.z = -0.048;
+  wamik_srv_.request.pose.pose.orientation.w =  0.742;
   ROS_INFO("WamDmpTrackerDriverNode:: Response: %f %f %f %f %f %f %f", 
 	                                               wamik_srv_.request.pose.pose.position.x,
                                                        wamik_srv_.request.pose.pose.position.y,
@@ -189,13 +193,13 @@ void WamDmpTrackerDriverNode::DMPTrackerMakeActionRequest()
     DMPTracker_goal_.initial.positions[6] = 0.0192133;
     */
     DMPTracker_goal_.initial.positions.resize(7);   
-    DMPTracker_goal_.initial.positions[0] = 0.2;
-    DMPTracker_goal_.initial.positions[1] = 0.0;
-    DMPTracker_goal_.initial.positions[2] = 0.0;
-    DMPTracker_goal_.initial.positions[3] = 2.2;
-    DMPTracker_goal_.initial.positions[4] = 0.0;
-    DMPTracker_goal_.initial.positions[5] = 0.0;
-    DMPTracker_goal_.initial.positions[6] = 0.0;
+    DMPTracker_goal_.initial.positions[0] = 0.9;
+    DMPTracker_goal_.initial.positions[1] = 1.7;
+    DMPTracker_goal_.initial.positions[2] = -1.57;
+    DMPTracker_goal_.initial.positions[3] = 2.23;
+    DMPTracker_goal_.initial.positions[4] = 0.21;
+    DMPTracker_goal_.initial.positions[5] = -1.09; 
+    DMPTracker_goal_.initial.positions[6] = 1.7;
      
     /*DMPTracker_goal_.goal.positions.resize(7); 
     DMPTracker_goal_.goal.positions[0] = 0.160557;
@@ -206,13 +210,13 @@ void WamDmpTrackerDriverNode::DMPTrackerMakeActionRequest()
     DMPTracker_goal_.goal.positions[5] = -0.812694;
     */
     DMPTracker_goal_.goal.positions.resize(7); 
-    DMPTracker_goal_.goal.positions[0] = -0.2; 
-    DMPTracker_goal_.goal.positions[1] = 0.0; 
-    DMPTracker_goal_.goal.positions[2] = 0.0; 
-    DMPTracker_goal_.goal.positions[3] = 2.2; 
-    DMPTracker_goal_.goal.positions[4] = 0.0; 
-    DMPTracker_goal_.goal.positions[5] = 0.0; 
-    DMPTracker_goal_.goal.positions[6] = 0.0; 
+    DMPTracker_goal_.goal.positions[0] = 1.11; 
+    DMPTracker_goal_.goal.positions[1] = 1.6;
+    DMPTracker_goal_.goal.positions[2] = -1.49; 
+    DMPTracker_goal_.goal.positions[3] = 2.55; 
+    DMPTracker_goal_.goal.positions[4] = 0.21; 
+    DMPTracker_goal_.goal.positions[5] = -1.16;
+    DMPTracker_goal_.goal.positions[6] = 1.66;
   DMPTracker_client_.sendGoal(DMPTracker_goal_, 
               boost::bind(&WamDmpTrackerDriverNode::DMPTrackerDone,     this, _1, _2), 
               boost::bind(&WamDmpTrackerDriverNode::DMPTrackerActive,   this), 
