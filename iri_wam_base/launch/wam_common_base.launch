@@ -1,39 +1,28 @@
 <launch> 
+
+    <arg name="ROBOT" default="iri_wam"/>
+    <arg name="controller_name" default="wam_wrapper" />
+
     <!-- Load URDF WAM model -->
     <include file="$(find iri_wam_description)/launch/iri_wam_description.launch" />
 
-    <!-- TODO: Check if Control Manager is really needed. 
-         Not sure why we use the Controller Manager instead of 
-         robot_state_publisher node. It is possible that it is required
-         for the simulation of the robot in Gazebo -->
-    <!-- Controller Manager >
-    <group>
-      <remap from="joint_states" to="wam_wrapper/joint_states"/>
-      <include file="$(find pr2_controller_manager)/controller_manager.launch" />
-    </group>
-    -->
-
-    <group>
-      <remap from="joint_states" to="wam_wrapper/joint_states"/>
-
-      <!-- robot state publisher node -->
-      <!-- published topics: -->
-      <!-- subscribed topics: $(env ROBOT)/joint_states -->
-      <!-- service clients: -->
-      <!-- service servers: -->
-      <!-- action clients: -->
-      <!-- action servers: -->
-      <node pkg ="robot_state_publisher"
-            type="state_publisher"
-            name="robot_state_publisher">
-        <!-- <param name="tf_prefix" value="/$(env ROBOT)" type="str" /> -->
-      </node>
-    </group>
-
+    <!-- Robot state publisher node -->
+    <!-- published topics: -->
+    <!-- subscribed topics: $(env ROBOT)/joint_states -->
+    <!-- service clients: -->
+    <!-- service servers: -->
+    <!-- action clients: -->
+    <!-- action servers: -->
+    <node pkg ="robot_state_publisher"
+          type="state_publisher"
+          name="robot_state_publisher">
+      <!-- <param name="tf_prefix" value="$(arg ROBOT)" type="str" /> -->
+    </node>
 
     <!-- Publish Inverse Kinematics -->
     <node name="wam_ik" pkg="iri_wam_ik" type="wam_ikac">
-      <remap from="wam_ik/joint_states"  to="wam_wrapper/joint_states"/>
-      <remap from="wam_ik/joints_move"   to="wam_wrapper/joints_move"/>
+      <remap from="wam_ik/joint_states"  to="/joint_states"/>
+      <remap from="wam_ik/joints_move"   to="/$(arg controller_name)/joints_move"/>
     </node>
+
 </launch>
