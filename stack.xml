@@ -13,5 +13,6 @@
   <depend stack="ros_comm" /> <!-- std_msgs, roscpp -->
   <depend stack="vision_opencv" /> <!-- opencv2, cv_bridge -->
   <depend stack="arm_navigation" />
+  <depend stack="pr2_simulator" /> <!-- pr2_gazebo_plugins -->
 
 </stack>
