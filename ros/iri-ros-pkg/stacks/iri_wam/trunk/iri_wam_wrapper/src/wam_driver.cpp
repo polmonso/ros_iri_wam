@@ -250,15 +250,26 @@ WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & tr
 {
     uint16_t errormask = 0x00;
     WAMJointTrajectory low_level_trajectory;
+    WAMTrajectoryPoint point_trajectory;
 
     for (std::vector<trajectory_msgs::JointTrajectoryPoint>::const_iterator it = trajectory.points.begin();
-         it != trajectory.points.end(); it++) {
-            if (! is_joints_move_request_valid(it->positions)) {
-                ROS_ERROR("Joints angles were not valid. Refuse to move.");
-                return;
-            }
-
-            low_level_trajectory.push_back(it->positions);
+            it != trajectory.points.end(); it++) {
+        if (! is_joints_move_request_valid(it->positions)) {
+            ROS_ERROR("Joints angles were not valid. Refuse to move.");
+            return;
+        }
+        // Now low_level_trajectory contains angles, velocities, accelerations and time_from_start
+        point_trajectory.positions.clear();
+        point_trajectory.velocities.clear();
+        point_trajectory.accelerations.clear();
+        point_trajectory.time_from_start.clear();
+        point_trajectory.positions.insert(point_trajectory.positions.end(), it->positions.begin(), it->positions.end());
+        point_trajectory.velocities.insert(point_trajectory.velocities.end(), it->velocities.begin(), it->velocities.end());
+        point_trajectory.accelerations.insert(point_trajectory.accelerations.end(), it->accelerations.begin(), it->accelerations.end());
+        point_trajectory.time_from_start.push_back(it->time_from_start.sec);
+        point_trajectory.time_from_start.push_back(it->time_from_start.nsec);
+        low_level_trajectory.push_back(point_trajectory);
+        //low_level_trajectory.push_back(it->positions);
     }
 
     this->wam->moveTrajectoryInJoints(&errormask, &low_level_trajectory);

@@ -6,7 +6,7 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
  iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
  DMPTracker_aserver_(public_node_handle_, "DMPTracker"),
  lwpr_trajectory_server_aserver_(public_node_handle_, "lwpr_trajectory"),
- joint_trajectory_aserver_(public_node_handle_, "joint_trajectory"),
+ follow_joint_trajectory_server_(public_node_handle_, "follow_joint_trajectory")
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -48,13 +48,13 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   lwpr_trajectory_server_aserver_.registerGetFeedbackCallback(boost::bind(&WamDriverNode::lwpr_trajectory_serverGetFeedbackCallback, this, _1)); 
   lwpr_trajectory_server_aserver_.start();
 
-  joint_trajectory_aserver_.registerStartCallback(boost::bind(&WamDriverNode::joint_trajectoryStartCallback, this, _1));
-  joint_trajectory_aserver_.registerStopCallback(boost::bind(&WamDriverNode::joint_trajectoryStopCallback, this)); 
-  joint_trajectory_aserver_.registerIsFinishedCallback(boost::bind(&WamDriverNode::joint_trajectoryIsFinishedCallback, this)); 
-  joint_trajectory_aserver_.registerHasSucceedCallback(boost::bind(&WamDriverNode::joint_trajectoryHasSucceedCallback, this)); 
-  joint_trajectory_aserver_.registerGetResultCallback(boost::bind(&WamDriverNode::joint_trajectoryGetResultCallback, this, _1)); 
-  joint_trajectory_aserver_.registerGetFeedbackCallback(boost::bind(&WamDriverNode::joint_trajectoryGetFeedbackCallback, this, _1)); 
-  joint_trajectory_aserver_.start();
+  follow_joint_trajectory_server_.registerStartCallback(boost::bind(&WamDriverNode::joint_trajectoryStartCallback, this, _1));
+  follow_joint_trajectory_server_.registerStopCallback(boost::bind(&WamDriverNode::joint_trajectoryStopCallback, this)); 
+  follow_joint_trajectory_server_.registerIsFinishedCallback(boost::bind(&WamDriverNode::joint_trajectoryIsFinishedCallback, this)); 
+  follow_joint_trajectory_server_.registerHasSucceedCallback(boost::bind(&WamDriverNode::joint_trajectoryHasSucceedCallback, this)); 
+  follow_joint_trajectory_server_.registerGetResultCallback(boost::bind(&WamDriverNode::joint_trajectoryGetResultCallback, this, _1)); 
+  follow_joint_trajectory_server_.registerGetFeedbackCallback(boost::bind(&WamDriverNode::joint_trajectoryGetFeedbackCallback, this, _1)); 
+  follow_joint_trajectory_server_.start();
 
   // [init action clients]
 
@@ -80,7 +80,7 @@ void WamDriverNode::mainNodeThread(void)
   this->driver_.get_joint_angles(&angles);
   this->driver_.unlock();
 
-  rmat << pose.at(0), pose.at(1),pose.at(2),pose.at(4),pose.at(5),pose.at(6),pose.at(8),pose.at(9),pose.at(10);
+  rmat << pose.at(0), pose.at(1), pose.at(2), pose.at(4), pose.at(5), pose.at(6), pose.at(8), pose.at(9), pose.at(10);
 
   {
     Quaternion<float> quat(rmat);
@@ -167,9 +167,9 @@ bool WamDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_move::Reques
   //lock access to driver if necessary
   this->driver_.lock();
 
-  if (! this->driver_.isRunning())
+  if (!this->driver_.isRunning())
   {
-    ROS_ERROR("Driver is not running");
+    ROS_ERROR("[JointsMoveCB] Driver is not running");
     //unlock driver if previously blocked 
     this->driver_.unlock();
     return false;
@@ -208,7 +208,7 @@ WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request  & req,
     }
     else
     {
-        ROS_ERROR("Driver is not running at the moment");
+        ROS_ERROR("[PoseMoveCB] Driver is not running");
         result = false;
     }
     this->driver_.unlock();
@@ -405,14 +405,14 @@ void WamDriverNode::trajectory2follow(trajectory_msgs::JointTrajectory traj, boo
 	{
         if(this->driver_.isRunning())
         {
-	    ii=traj.points.size()-1;
+            //ii=traj.points.size()-1;
             this->driver_.move_in_joints(&traj.points[ii].positions); //this call blocks if the wam faults. The mutex is not freed...!
             this->driver_.unlock();
             this->driver_.wait_move_end();
         }
         else
         {
-		    ROS_FATAL("Driver is not running");
+		    ROS_FATAL("[Trajectory2follow] Driver is not running");
 		    state=false;
 	    }
     }
