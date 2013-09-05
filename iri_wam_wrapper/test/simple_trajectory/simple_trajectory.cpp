@@ -16,7 +16,8 @@ public:
   RobotArm() 
   {
     // tell the action client that we want to spin a thread by default
-    traj_client_ = new TrajClient("/wam_wrapper/joint_trajectory", true);
+    //traj_client_ = new TrajClient("/wam_wrapper/follow_joint_trajectory", true);
+    traj_client_ = new TrajClient("/iri_wam_controller/follow_joint_trajectory", true);
 
     // wait for action server to come up
     while(!traj_client_->waitForServer(ros::Duration(5.0))){
@@ -48,8 +49,20 @@ public:
   {
     //our goal variable
     control_msgs::FollowJointTrajectoryGoal goal;
+    
+    // frame_id
+    goal.trajectory.header.frame_id = "/wam_link_footprint";
+    // joint names
+    goal.trajectory.joint_names.resize(7);
+    goal.trajectory.joint_names[0] = "wam_joint_1";
+    goal.trajectory.joint_names[1] = "wam_joint_2";
+    goal.trajectory.joint_names[2] = "wam_joint_3";
+    goal.trajectory.joint_names[3] = "wam_joint_4";
+    goal.trajectory.joint_names[4] = "wam_joint_5";
+    goal.trajectory.joint_names[5] = "wam_joint_6";
+    goal.trajectory.joint_names[6] = "wam_joint_7";
 
-    // We will have two waypoints in this goal trajectory
+    // Waypoints in this goal trajectory
     goal.trajectory.points.resize(5);
 
     // First trajectory point

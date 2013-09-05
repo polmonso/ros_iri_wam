@@ -13,6 +13,7 @@
   <depend package="iri_base_driver"/>
   <depend package="iri_action_server"/>
   <depend package="iri_wam_common_msgs"/> 
+  <depend package="iri_wam_ik"/> 
   <depend package="geometry_msgs"/>
   <depend package="sensor_msgs"/>
   <depend package="control_msgs"/>
