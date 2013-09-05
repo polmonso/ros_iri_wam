@@ -121,25 +121,15 @@ bool WamDriver::stopDriver(void)
 
 void WamDriver::config_update(const Config& new_cfg, uint32_t level)
 {
-    this->lock();
-
-    // depending on current state
-    // update driver with new_cfg data
-    switch(this->getState())
-    {
-      case WamDriver::CLOSED:
-        break;
-    
-      case WamDriver::OPENED:
-        break;
-    
-      case WamDriver::RUNNING:
-        break;
-    }
-
+  this->lock();
+  //update driver with new_cfg data
+  if(isRunning()){
+    // save the current configuration
     this->config_=new_cfg;
-
-    this->unlock();
+  }else{
+    ROS_ERROR("Driver is not running");
+  }
+  this->unlock();
 }
 
 WamDriver::~WamDriver()
@@ -229,7 +219,7 @@ void WamDriver::move_in_joints(std::vector<double> *angles, std::vector<double>*
     }
 }
 
-    void
+void
 WamDriver::move_in_cartesian_pose(const geometry_msgs::Pose pose,const double vel,const double acc)
 {
     if (this->wam == NULL)
@@ -247,13 +237,17 @@ WamDriver::move_in_cartesian_pose(const geometry_msgs::Pose pose,const double ve
     this->wam->moveInCartesianPose(&low_level_pose, vel, acc);
 }
 
-void WamDriver::hold_current_position(bool on) {
+void
+WamDriver::hold_current_position(bool on)
+{
     if(this->wam!=NULL){
         this->wam->holdCurrentPosition(on);
     }
 }
 
-void WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory) {
+void
+WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory)
+{
     uint16_t errormask = 0x00;
     WAMJointTrajectory low_level_trajectory;
     WAMTrajectoryPoint point_trajectory;
@@ -281,7 +275,10 @@ void WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory
     this->wam->moveTrajectoryInJoints(&errormask, &low_level_trajectory);
 }
 
-void WamDriver::move_trajectory_learnt_and_estimate_force(const std::string model_filename, const std::string points_filename) {
+void
+WamDriver::move_trajectory_learnt_and_estimate_force(const std::string model_filename,
+                                                     const std::string points_filename)
+{
     // TODO: implement error handling
     force_request_->init();
     double response = this->wam->moveTrajectoryLearntAndEstimateForce(model_filename, points_filename);
@@ -290,5 +287,69 @@ void WamDriver::move_trajectory_learnt_and_estimate_force(const std::string mode
     return;
 }
 
+void
+WamDriver::start_dmp_tracker(const std::vector<double> * initial, const std::vector<double> * goal)
+{
+    uint16_t errormask = 0x00;
+
+    if (this->wam!=NULL) {
+        if (! is_joints_move_request_valid(* initial)) {
+            ROS_ERROR("Initial joints angles were not valid. Refuse to move.");
+            return;
+        }
+        if (! is_joints_move_request_valid(* goal)) {
+            ROS_ERROR("Goal joints angles were not valid. Refuse to move.");
+            return;
+        }
+std::vector<double> nc_initial, nc_goal;
+nc_initial= *initial;
+nc_goal = *goal;
+        ROS_DEBUG("Send values %f %f %f %f %f %f %f",nc_initial[0],nc_initial[0],nc_initial[0],nc_initial[0],nc_initial[0],nc_initial[0],nc_initial[0]);
+        ROS_DEBUG("Send values %f %f %f %f %f %f %f",nc_goal[0],nc_goal[0],nc_goal[0],nc_goal[0],nc_goal[0],nc_goal[0],nc_goal[0]);
+        this->wam->trackGoalDMP(&errormask, &nc_initial, &nc_goal);
+       
+        if(errormask > 0x00){
+            string err_msg = wam->errorToString(errormask);
+            ROS_ERROR("%s",err_msg.c_str());
+            errormask = 0x00;
+        }
+   }
+  /*
+  uint16_t errormask = 0x00;
+    std::vector<double> low_level_initial, low_level_goal;    
+    for (std::vector<trajectory_msgs::JointTrajectoryPoint>::const_iterator it = initial.positions.begin();
+         it != initial.positions.end(); it++) {
+        low_level_initial.push_back(it->positions);
+    }
+    for (std::vector<trajectory_msgs::JointTrajectoryPoint>::const_iterator it = goal.positions.begin();
+         it != goal.positions.end(); it++) {
+        low_level_goal.push_back(it->positions);
+    }
+    */
+ }
+ 
+void 
+WamDriver::dmp_tracker_new_goal(const std::vector<double> * new_goal)
+{
+    uint16_t errormask = 0x00;
+
+    if (this->wam!=NULL) { 
+        if (! is_joints_move_request_valid(* new_goal)) {
+            ROS_ERROR("Initial joints angles were not valid. Refuse to move.");
+            return;
+        }
+        
+	std::vector<double> nc_new_goal;
+	nc_new_goal = *new_goal;
+
+	this->wam->trackGoalDMPNewGoal(&errormask, &nc_new_goal);
+	
+	if(errormask > 0x00){
+            string err_msg = wam->errorToString(errormask);
+            ROS_ERROR("%s",err_msg.c_str());
+            errormask = 0x00;
+        }
+    }
+ }
 
 

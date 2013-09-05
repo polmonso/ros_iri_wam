@@ -260,6 +260,13 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     {
         return force_request_;
     }
+    
+    /**
+     * \brief Starts the DMP tracker
+     */
+    void start_dmp_tracker(const std::vector<double> * initial, const std::vector<double> * goal);
+    
+    void dmp_tracker_new_goal(const std::vector<double> * new_goal);
 };
 
 #endif

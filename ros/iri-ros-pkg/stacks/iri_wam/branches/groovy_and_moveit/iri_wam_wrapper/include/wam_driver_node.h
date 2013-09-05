@@ -30,7 +30,7 @@
 #include <Eigen/Dense>
 
 // [publisher subscriber headers]
-#include <moveit_msgs/DisplayRobotState.h>
+#include <trajectory_msgs/JointTrajectoryPoint.h>
 #include "sensor_msgs/JointState.h"
 #include "geometry_msgs/PoseStamped.h"
 
@@ -40,16 +40,17 @@
 #include "iri_wam_common_msgs/pose_move.h"
 
 // [action server client headers]
+#include <iri_wam_common_msgs/DMPTrackerAction.h>
 #include <iri_wam_common_msgs/LWPRTrajectoryReturningForceEstimationAction.h>
 #include <iri_action_server/iri_action_server.h>
 
 // [action server msgs]
 #include <control_msgs/FollowJointTrajectoryAction.h>
+#include <actionlib/server/action_server.h>
 #include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/robot_model/robot_model.h>
 #include <moveit/robot_state/robot_state.h>
 #include <moveit/robot_state/joint_state_group.h>
-
 
 #define HOLDON 0
 #define HOLDOFF 1
@@ -74,6 +75,12 @@
 
 class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
 {
+  //JointTrajectoryAction(Diamondback & Electric) 	
+  typedef actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> ActionExecutor;
+  typedef ActionExecutor::GoalHandle GoalHandle;
+  //FollowJoinTrajectoryAction(Electric)
+  typedef actionlib::ActionServer<control_msgs::FollowJointTrajectoryAction> ActionExecutorFollow;
+  typedef ActionExecutorFollow::GoalHandle GoalHandleFollow;
   
   private:
     // [publisher attributes]
@@ -83,6 +90,9 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
     geometry_msgs::PoseStamped PoseStamped_msg;
 
     // [subscriber attributes]
+    ros::Subscriber DMPTrackerNewGoal_subscriber_;
+    void DMPTrackerNewGoal_callback(const trajectory_msgs::JointTrajectoryPoint::ConstPtr& msg);
+    CMutex DMPTrackerNewGoal_mutex_;
 
     // [service attributes]
     ros::ServiceServer wam_services_server_;
@@ -100,6 +110,14 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
     // [client attributes]
 
     // [action server attributes]
+    IriActionServer<iri_wam_common_msgs::DMPTrackerAction> DMPTracker_aserver_;
+    void DMPTrackerStartCallback(const iri_wam_common_msgs::DMPTrackerGoalConstPtr& goal);
+    void DMPTrackerStopCallback(void);
+    bool DMPTrackerIsFinishedCallback(void);
+    bool DMPTrackerHasSucceedCallback(void);
+    void DMPTrackerGetResultCallback(iri_wam_common_msgs::DMPTrackerResultPtr& result);
+    void DMPTrackerGetFeedbackCallback(iri_wam_common_msgs::DMPTrackerFeedbackPtr& feedback);
+
     IriActionServer<iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationAction> lwpr_trajectory_server_aserver_;
     void lwpr_trajectory_serverStartCallback(const iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationGoalConstPtr& goal);
     void lwpr_trajectory_serverStopCallback(void);
@@ -115,7 +133,12 @@ class WamDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDriver>
     bool joint_trajectoryHasSucceedCallback(void);
     void joint_trajectoryGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result);
     void joint_trajectoryGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback);
+
+    void goalCB(GoalHandle gh);
+    void cancelCB(GoalHandle gh);
     
+    void goalFollowCB(GoalHandleFollow gh);
+    void canceFollowlCB(GoalHandleFollow gh);    
     // [action client attributes]
     
    /**
