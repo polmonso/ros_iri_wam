@@ -4,6 +4,7 @@ using namespace Eigen;
 
 WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
  iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
+ DMPTracker_aserver_(public_node_handle_, "DMPTracker"),
  lwpr_trajectory_server_aserver_(public_node_handle_, "lwpr_trajectory"),
  follow_joint_trajectory_server_(public_node_handle_, "follow_joint_trajectory")
 {
@@ -19,6 +20,7 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   this->joint_states_publisher = this->public_node_handle_.advertise<sensor_msgs::JointState>("/joint_states", 1);
 
   // [init subscribers]
+  this->DMPTrackerNewGoal_subscriber_ = this->public_node_handle_.subscribe("DMPTrackerNewGoal", 1, &WamDriverNode::DMPTrackerNewGoal_callback, this);
 
   // [init services]
   wam_services_server_ = public_node_handle_.advertiseService("wam_services",
@@ -30,6 +32,14 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   // [init clients]
 
   // [init action servers]
+  DMPTracker_aserver_.registerStartCallback(boost::bind(&WamDriverNode::DMPTrackerStartCallback, this, _1)); 
+  DMPTracker_aserver_.registerStopCallback(boost::bind(&WamDriverNode::DMPTrackerStopCallback, this)); 
+  DMPTracker_aserver_.registerIsFinishedCallback(boost::bind(&WamDriverNode::DMPTrackerIsFinishedCallback, this)); 
+  DMPTracker_aserver_.registerHasSucceedCallback(boost::bind(&WamDriverNode::DMPTrackerHasSucceedCallback, this)); 
+  DMPTracker_aserver_.registerGetResultCallback(boost::bind(&WamDriverNode::DMPTrackerGetResultCallback, this, _1)); 
+  DMPTracker_aserver_.registerGetFeedbackCallback(boost::bind(&WamDriverNode::DMPTrackerGetFeedbackCallback, this, _1)); 
+  DMPTracker_aserver_.start();
+  
   lwpr_trajectory_server_aserver_.registerStartCallback(boost::bind(&WamDriverNode::lwpr_trajectory_serverStartCallback, this, _1)); 
   lwpr_trajectory_server_aserver_.registerStopCallback(boost::bind(&WamDriverNode::lwpr_trajectory_serverStopCallback, this)); 
   lwpr_trajectory_server_aserver_.registerIsFinishedCallback(boost::bind(&WamDriverNode::lwpr_trajectory_serverIsFinishedCallback, this)); 
@@ -65,7 +75,6 @@ void WamDriverNode::mainNodeThread(void)
   this->PoseStamped_msg.header.frame_id = "wam_fk/wam7";
 
   // [fill msg structures]
-  //this->DisplayRobotState_msg_.data = my_var;
   this->driver_.lock();
   this->driver_.get_pose(&pose);
   this->driver_.get_joint_angles(&angles);
@@ -107,6 +116,20 @@ void WamDriverNode::mainNodeThread(void)
 }
 
 /*  [subscriber callbacks] */
+void WamDriverNode::DMPTrackerNewGoal_callback(const trajectory_msgs::JointTrajectoryPoint::ConstPtr& msg) 
+{ 
+  ROS_INFO("WamDriverNode::DMPTrackerNewGoal_callback: New Message Received"); 
+
+  //use appropiate mutex to shared variables if necessary 
+  //this->driver_.lock(); 
+  //this->DMPTrackerNewGoal_mutex_.enter(); 
+  driver_.dmp_tracker_new_goal(&msg->positions);
+  //std::cout << msg->data << std::endl; 
+
+  //unlock previously blocked shared variables 
+  //this->driver_.unlock(); 
+  //this->DMPTrackerNewGoal_mutex_.exit(); 
+}
 
 /*  [service callbacks] */
 bool WamDriverNode::wam_servicesCallback(iri_wam_common_msgs::wamdriver::Request &req, iri_wam_common_msgs::wamdriver::Response &res) 
@@ -195,6 +218,61 @@ WamDriverNode::pose_moveCallback(iri_wam_common_msgs::pose_move::Request  & req,
 }
 
 /*  [action callbacks] */
+void WamDriverNode::DMPTrackerStartCallback(const iri_wam_common_msgs::DMPTrackerGoalConstPtr& goal)
+{ 
+  driver_.lock(); 
+    //check goal 
+    //execute goal 
+  driver_.start_dmp_tracker(&goal->initial.positions,&goal->goal.positions);
+  driver_.unlock(); 
+} 
+
+void WamDriverNode::DMPTrackerStopCallback(void) 
+{ 
+  driver_.lock(); 
+    //stop action 
+  driver_.unlock(); 
+} 
+
+bool WamDriverNode::DMPTrackerIsFinishedCallback(void) 
+{ 
+  bool ret = false; 
+
+  driver_.lock(); 
+    //if action has finish for any reason 
+    //ret = true; 
+  driver_.unlock(); 
+
+  return ret; 
+} 
+
+bool WamDriverNode::DMPTrackerHasSucceedCallback(void) 
+{ 
+  bool ret = false; 
+
+  driver_.lock(); 
+    //if goal was accomplished 
+    //ret = true; 
+  driver_.unlock(); 
+
+  return ret; 
+} 
+
+void WamDriverNode::DMPTrackerGetResultCallback(iri_wam_common_msgs::DMPTrackerResultPtr& result) 
+{ 
+  driver_.lock(); 
+    //update result data to be sent to client 
+    //result->data = data; 
+  driver_.unlock(); 
+} 
+
+void WamDriverNode::DMPTrackerGetFeedbackCallback(iri_wam_common_msgs::DMPTrackerFeedbackPtr& feedback) 
+{ 
+  driver_.lock(); 
+    //keep track of feedback 
+    //ROS_INFO("feedback: %s", feedback->data.c_str()); 
+  driver_.unlock(); 
+}
 void WamDriverNode::lwpr_trajectory_serverStartCallback(const iri_wam_common_msgs::LWPRTrajectoryReturningForceEstimationGoalConstPtr& goal)
 {
     driver_.lock();
@@ -302,7 +380,24 @@ void WamDriverNode::joint_trajectoryGetFeedbackCallback(control_msgs::FollowJoin
     //ROS_INFO("feedback: %s", feedback->data.c_str()); 
   driver_.unlock(); 
 }
-
+void WamDriverNode::goalCB(GoalHandle gh)
+{
+    gh.setAccepted();
+    bool state=false;
+    trajectory_msgs::JointTrajectory traj = gh.getGoal()->trajectory;
+    trajectory2follow(traj,state);
+    if(state) gh.setSucceeded();
+    else gh.setAborted();
+}
+void WamDriverNode::goalFollowCB(GoalHandleFollow gh)
+{
+    gh.setAccepted();
+    bool state=false;
+    trajectory_msgs::JointTrajectory traj = gh.getGoal()->trajectory;
+    trajectory2follow(traj,state);
+    if(state) gh.setSucceeded();
+    else gh.setAborted();
+}
 void WamDriverNode::trajectory2follow(trajectory_msgs::JointTrajectory traj, bool& state)
 {
 	this->driver_.lock();
