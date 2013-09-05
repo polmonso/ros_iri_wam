@@ -4,13 +4,9 @@ using namespace Eigen;
 
 WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
  iri_base_driver::IriBaseNodeDriver<WamDriver>(nh),
-  DMPTracker_aserver_(public_node_handle_, "DMPTracker"),
-  lwpr_trajectory_server_aserver_(public_node_handle_, "lwpr_trajectory"),
-  joint_trajectory_aserver_(public_node_handle_, "joint_trajectory"),
-// action_server_(nh,"iri_wam_pr2_controller/joint_trajectory_action",false),
- //action_server_follow_(nh,"iri_wam_pr2_controller/follow_joint_trajectory",false)
- action_server_(nh,"joint_trajectory_action",false),
- action_server_follow_(nh,"follow_joint_trajectory",false)
+ DMPTracker_aserver_(public_node_handle_, "DMPTracker"),
+ lwpr_trajectory_server_aserver_(public_node_handle_, "lwpr_trajectory"),
+ joint_trajectory_aserver_(public_node_handle_, "joint_trajectory"),
 {
   //init class attributes if necessary
   //this->loop_rate_ = 2;//in [Hz]
@@ -60,13 +56,6 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   joint_trajectory_aserver_.registerGetFeedbackCallback(boost::bind(&WamDriverNode::joint_trajectoryGetFeedbackCallback, this, _1)); 
   joint_trajectory_aserver_.start();
 
-  action_server_.registerGoalCallback(boost::bind(&WamDriverNode::goalCB, this, _1));
-  //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelCB, this, _1));
-  action_server_.start();
-  action_server_follow_.registerGoalCallback(boost::bind(&WamDriverNode::goalFollowCB, this, _1));
-  //action_server_.registerCancelCallback(boost::bind(&WamDriverNode::cancelFollowCB, this, _1));
-  action_server_follow_.start();
-
   // [init action clients]
 
   ROS_INFO("Wam node started"); 
@@ -79,7 +68,6 @@ void WamDriverNode::mainNodeThread(void)
 
   std::vector<double> angles(7,0.1);
   std::vector<double> pose(16,0);
-  char jname[9];
   Matrix3f rmat;
 
   // [fill msg Header if necessary]
@@ -105,7 +93,6 @@ void WamDriverNode::mainNodeThread(void)
     this->PoseStamped_msg.pose.orientation.z = quat.z();
     this->PoseStamped_msg.pose.orientation.w = quat.w();
   }
-
 
   JointState_msg.header.stamp = ros::Time::now();
   std::string robot_name = this->driver_.get_robot_name();

@@ -7,7 +7,7 @@ using namespace XmlRpc;
 WamDriver::WamDriver() :
     force_request_(new ForceRequest)
 {
- ros::NodeHandle nh("~");
+    ros::NodeHandle nh("~");
 
     XmlRpc::XmlRpcValue r_name;
     XmlRpc::XmlRpcValue ip;
@@ -124,20 +124,17 @@ void WamDriver::config_update(const Config& new_cfg, uint32_t level)
   this->lock();
   //update driver with new_cfg data
   if(isRunning()){
-
     // save the current configuration
     this->config_=new_cfg;
-
   }else{
     ROS_ERROR("Driver is not running");
   }
-
   this->unlock();
 }
 
 WamDriver::~WamDriver()
 {
-	std::cout << "WamDriver destructor" << std::endl;
+    std::cout << "WamDriver destructor" << std::endl;
 }
 
 std::string WamDriver::get_robot_name() {
@@ -219,14 +216,14 @@ void WamDriver::move_in_joints(std::vector<double> *angles, std::vector<double>*
             ROS_ERROR("%s",err_msg.c_str());
             errormask = 0x00;
         }
-   }
+    }
 }
 
 void
 WamDriver::move_in_cartesian_pose(const geometry_msgs::Pose pose,const double vel,const double acc)
 {
     if (this->wam == NULL)
-      return;
+        return;
 
     std::vector<double> low_level_pose;
     low_level_pose.push_back(pose.position.x);
@@ -240,7 +237,9 @@ WamDriver::move_in_cartesian_pose(const geometry_msgs::Pose pose,const double ve
     this->wam->moveInCartesianPose(&low_level_pose, vel, acc);
 }
 
-void WamDriver::hold_current_position(bool on){
+void
+WamDriver::hold_current_position(bool on)
+{
   if(this->wam!=NULL){
     this->wam->holdCurrentPosition(on);
   }
