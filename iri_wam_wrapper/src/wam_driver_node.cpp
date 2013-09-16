@@ -71,8 +71,12 @@ void WamDriverNode::mainNodeThread(void)
   Matrix3f rmat;
 
   // [fill msg Header if necessary]
+  std::string robot_name = this->driver_.get_robot_name();
+  std::stringstream ss_tcp_link_name;
+  ss_tcp_link_name << robot_name << "_link_tcp";
+
   this->PoseStamped_msg.header.stamp = ros::Time::now();
-  this->PoseStamped_msg.header.frame_id = "wam_fk/wam7";
+  this->PoseStamped_msg.header.frame_id = ss_tcp_link_name.str().c_str();
 
   // [fill msg structures]
   this->driver_.lock();
@@ -95,7 +99,6 @@ void WamDriverNode::mainNodeThread(void)
   }
 
   JointState_msg.header.stamp = ros::Time::now();
-  std::string robot_name = this->driver_.get_robot_name();
   for(int i=0;i<(int)angles.size();i++){
       std::stringstream ss_jname;
       ss_jname << robot_name << "_joint_" << i+1;
