@@ -4,6 +4,7 @@
     <arg name="IP" />
     <arg name="IK"     default="True" />
     <arg name="moveit" default="False"/>
+    <arg name="Kinect" default="False"/>
 
     <!-- Load URDF WAM model -->
     <include file="$(find iri_wam_description)/launch/iri_wam_description.launch" />
@@ -39,6 +40,11 @@
     </node>
 
     <include file="$(find iri_wam_moveit_state_display)/launch/iri_wam_moveit_state_display.launch" if="$(arg moveit)">
+       <arg name="ROBOT" value="$(arg ROBOT)"/>
+    </include>
+
+    <!-- WAM ROS driver -->
+    <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup_kinect.launch" if="$(arg Kinect)">
        <arg name="ROBOT" value="$(arg ROBOT)"/>
     </include>
 
