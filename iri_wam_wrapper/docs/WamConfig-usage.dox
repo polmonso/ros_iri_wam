@@ -1,6 +1,0 @@
-\subsubsection usage Usage
-\verbatim
-<node name="WamDriver" pkg="iri_wam_wrapper" type="WamDriver">
-</node>
-\endverbatim
-
