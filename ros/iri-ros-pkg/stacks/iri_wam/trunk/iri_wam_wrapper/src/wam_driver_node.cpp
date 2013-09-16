@@ -16,7 +16,7 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   this->JointState_msg.position.resize(7); 
 
   // [init publishers]
-  this->pose_publisher = this->public_node_handle_.advertise<geometry_msgs::PoseStamped>("pose", 1);
+  this->pose_publisher = this->public_node_handle_.advertise<geometry_msgs::PoseStamped>("libbarrett_link_tcp", 1);
   this->joint_states_publisher = this->public_node_handle_.advertise<sensor_msgs::JointState>("/joint_states", 1);
 
   // [init subscribers]
@@ -73,7 +73,7 @@ void WamDriverNode::mainNodeThread(void)
   // [fill msg Header if necessary]
   std::string robot_name = this->driver_.get_robot_name();
   std::stringstream ss_tcp_link_name;
-  ss_tcp_link_name << robot_name << "_link_tcp";
+  ss_tcp_link_name << robot_name << "_link_base";
 
   this->PoseStamped_msg.header.stamp = ros::Time::now();
   this->PoseStamped_msg.header.frame_id = ss_tcp_link_name.str().c_str();
