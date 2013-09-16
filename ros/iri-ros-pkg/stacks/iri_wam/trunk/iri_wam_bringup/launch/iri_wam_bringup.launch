@@ -43,7 +43,7 @@
        <arg name="ROBOT" value="$(arg ROBOT)"/>
     </include>
 
-    <!-- WAM ROS driver -->
+    <!-- Adding Kinect camera -->
     <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup_kinect.launch" if="$(arg Kinect)" />
 
 </launch>
