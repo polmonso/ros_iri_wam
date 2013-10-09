@@ -95,11 +95,13 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     std::string wamserver_ip;
     int server_port;
     int state_refresh_rate;
-    CWamDriver *wam;
+    CWamDriver *wam_;
     /**
       * Object for handling force estimation request process
       */
     boost::shared_ptr<ForceRequest> force_request_;
+
+    trajectory_msgs::JointTrajectoryPoint desired_joint_trajectory_point_;
 
     /**
      * \brief check if move in joints request is sane
@@ -214,12 +216,12 @@ class WamDriver : public iri_base_driver::IriBaseDriver
      * \brief check if the wam is moving right now
      */
     bool is_moving();
+    bool is_joint_trajectory_result_succeeded();
     void wait_move_end();
     void get_pose(std::vector<double> *pose);
     void get_joint_angles(std::vector<double> *angles);
     void move_in_joints(std::vector<double> *angles, std::vector<double>* vels = NULL, std::vector<double>* accs = NULL);
     void hold_current_position(bool on);
-
     /**
      * \brief Ask the low level driver to perform a movement to reach cartesian pose
      * 
@@ -229,6 +231,12 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     void move_in_cartesian_pose(const geometry_msgs::Pose pose, const double vel = 0, const double acc = 0);
 
     /**
+     * \brief Returns the current desired joint trajectory point
+     *
+     */
+    trajectory_msgs::JointTrajectoryPoint get_desired_joint_trajectory_point();
+
+    /**
      * \brief Ask the low level driver to perform a trajectory in joints
      *
      * This functions will translate from joint trajectory message to low level
@@ -236,6 +244,8 @@ class WamDriver : public iri_base_driver::IriBaseDriver
      * the joint positions.
      */
     void move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory);
+
+    void stop_trajectory_in_joints();
 
     /**
      * \brief Ask the low level driver to perform a LWPR trajectory and return

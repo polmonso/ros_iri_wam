@@ -332,27 +332,37 @@ void
 WamDriverNode::joint_trajectoryStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal)
 {
     // Need to get the list of positions and send it to the driver
+    ROS_INFO("[WamDriverNode]: New FollowJointTrajectoryGoal RECEIVED!"); 
     driver_.lock();
     driver_.move_trajectory_in_joints(goal->trajectory);
     driver_.unlock();
+    ROS_INFO("[WamDriverNode]: FollowJointTrajectoryGoal SENT TO ROBOT!"); 
 }
 
 void
 WamDriverNode::joint_trajectoryStopCallback(void) 
 {
-  driver_.lock();
-  //stop action 
-  driver_.unlock();
+    ROS_INFO("[WamDriverNode]: New CancelFollowJointTrajectoryAction RECEIVED!"); 
+    driver_.lock();
+    driver_.stop_trajectory_in_joints();
+    driver_.unlock();
+    ROS_INFO("[WamDriverNode]: CancelFollowJointTrajectoryAction SENT TO ROBOT!"); 
 }
 
 bool
 WamDriverNode::joint_trajectoryIsFinishedCallback(void) 
 {
     bool ret = false;
+    ROS_INFO("[WamDriverNode]: FollowJointTrajectory NOT FINISHED"); 
+
+    // This sleep assures that the robot receives the trajectory and starts moving
+    sleep(1);
 
     driver_.lock();
-    if (! driver_.is_moving())
+    if (! driver_.is_moving()){
         ret = true;
+        ROS_INFO("[WamDriverNode]: FollowJointTrajectory FINISHED!"); 
+    }
     driver_.unlock();
 
     return ret;
@@ -363,9 +373,12 @@ bool WamDriverNode::joint_trajectoryHasSucceedCallback(void)
   bool ret = false; 
 
   driver_.lock();
-    //if goal was accomplished 
-    //ret = true 
+  //This callback is called when the trajectory is Finished so by
+  // default is always true
+  ret = true;
   driver_.unlock(); 
+
+  ROS_INFO("[WamDriverNode]: FollowJointTrajectory SUCCEEDED!");
 
   return ret; 
 } 
@@ -374,6 +387,13 @@ void
 WamDriverNode::joint_trajectoryGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result) 
 {
     // MSG has an empty result message
+    driver_.lock();
+    if (driver_.is_joint_trajectory_result_succeeded()) {
+      result->error_code = 0;
+    } else {
+      result->error_code = -1;
+    }
+    driver_.unlock();
 }
 
 void WamDriverNode::joint_trajectoryGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback) 
@@ -381,6 +401,8 @@ void WamDriverNode::joint_trajectoryGetFeedbackCallback(control_msgs::FollowJoin
   driver_.lock(); 
     //keep track of feedback 
     //ROS_INFO("feedback: %s", feedback->data.c_str()); 
+  feedback->desired = driver_.get_desired_joint_trajectory_point();
+
   driver_.unlock(); 
 }
 void WamDriverNode::goalCB(GoalHandle gh)
