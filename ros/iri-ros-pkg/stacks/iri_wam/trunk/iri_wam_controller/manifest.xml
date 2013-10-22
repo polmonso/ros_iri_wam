@@ -1,0 +1,16 @@
+<package>
+  <description brief="iri_wam_controller">
+
+     iri_wam_controller
+
+  </description>
+  <author>galenya</author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_controller</url>
+  <depend package="roscpp"/>
+  <depend package="iri_base_driver"/>
+
+</package>
+
+
