@@ -1,5 +1,5 @@
 // Copyright (C) 2010-2011 Institut de Robotica i Informatica Industrial, CSIC-UPC.
-// Author 
+// Author
 // All rights reserved.
 //
 // This file is part of iri-ros-pkg
@@ -15,8 +15,8 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-// 
-// IMPORTANT NOTE: This code has been generated through a script from the 
+//
+// IMPORTANT NOTE: This code has been generated through a script from the
 // iri_ros_scripts. Please do NOT delete any comments to guarantee the correctness
 // of the scripts. ROS topics can be easly add by using those scripts. Please
 // refer to the IRI wiki page for more information:
@@ -31,7 +31,8 @@
 #include <geometry_msgs/Pose.h>
 
 //include wam_driver main library
-#include "CWamDriver.h"
+//#include "CWamDriver.h"
+#include "wamdriver.h"
 
 struct ForceRequest
 {
@@ -72,17 +73,17 @@ struct ForceRequest
  * \brief IRI ROS Specific Driver Class
  *
  * This class inherits from the IRI Base class IriBaseDriver, which provides the
- * guidelines to implement any specific driver. The IriBaseDriver class offers an 
+ * guidelines to implement any specific driver. The IriBaseDriver class offers an
  * easy framework to integrate functional drivers implemented in C++ with the
  * ROS driver structure. ROS driver_base state transitions are already managed
  * by IriBaseDriver.
  *
  * The WamDriver class must implement all specific driver requirements to
- * safetely open, close, run and stop the driver at any time. It also must 
+ * safetely open, close, run and stop the driver at any time. It also must
  * guarantee an accessible interface for all driver's parameters.
  *
  * The WamConfig.cfg needs to be filled up with those parameters suitable
- * to be changed dynamically by the ROS dyanmic reconfigure application. The 
+ * to be changed dynamically by the ROS dyanmic reconfigure application. The
  * implementation of the CIriNode class will manage those parameters through
  * methods like postNodeOpenHook() and reconfigureNodeHook().
  *
@@ -95,7 +96,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     std::string wamserver_ip;
     int server_port;
     int state_refresh_rate;
-    CWamDriver *wam_;
+    wamDriver *wam_;
     /**
       * Object for handling force estimation request process
       */
@@ -142,7 +143,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     * \brief open driver
     *
     * In this function, the driver must be openned. Openning errors must be
-    * taken into account. This function is automatically called by 
+    * taken into account. This function is automatically called by
     * IriBaseDriver::doOpen(), an state transition is performed if return value
     * equals true.
     *
@@ -155,7 +156,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     *
     * In this function, the driver must be closed. Variables related to the
     * driver state must also be taken into account. This function is automatically
-    * called by IriBaseDriver::doClose(), an state transition is performed if 
+    * called by IriBaseDriver::doClose(), an state transition is performed if
     * return value equals true.
     *
     * \return bool successful
@@ -166,8 +167,8 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     * \brief start driver
     *
     * After this function, the driver and its thread will be started. The driver
-    * and related variables should be properly setup. This function is 
-    * automatically called by IriBaseDriver::doStart(), an state transition is  
+    * and related variables should be properly setup. This function is
+    * automatically called by IriBaseDriver::doStart(), an state transition is
     * performed if return value equals true.
     *
     * \return bool successful
@@ -178,8 +179,8 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     * \brief stop driver
     *
     * After this function, the driver's thread will stop its execution. The driver
-    * and related variables should be properly setup. This function is 
-    * automatically called by IriBaseDriver::doStop(), an state transition is  
+    * and related variables should be properly setup. This function is
+    * automatically called by IriBaseDriver::doStop(), an state transition is
     * performed if return value equals true.
     *
     * \return bool successful
@@ -190,7 +191,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     * \brief config update
     *
     * In this function the driver parameters must be updated with the input
-    * config variable. Then the new configuration state will be stored in the 
+    * config variable. Then the new configuration state will be stored in the
     * Config attribute.
     *
     * \param new_cfg the new driver configuration state
@@ -224,7 +225,7 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     void hold_current_position(bool on);
     /**
      * \brief Ask the low level driver to perform a movement to reach cartesian pose
-     * 
+     *
      * This funcion will translate from geometry_pose to low level format and
      * call the low level driver function to perform the cartesian move
      */
@@ -270,12 +271,12 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     {
         return force_request_;
     }
-    
+
     /**
      * \brief Starts the DMP tracker
      */
     void start_dmp_tracker(const std::vector<double> * initial, const std::vector<double> * goal);
-    
+
     void dmp_tracker_new_goal(const std::vector<double> * new_goal);
 };
 
