@@ -1,5 +1,5 @@
 #include "wam_driver.h"
-#include "wam_packet.h" // from wam low level driver
+//#include "wam_packet.h" // from wam low level driver
 
 using namespace std;
 using namespace XmlRpc;
@@ -10,13 +10,13 @@ WamDriver::WamDriver() :
     ros::NodeHandle nh("~");
 
     XmlRpc::XmlRpcValue r_name;
-    XmlRpc::XmlRpcValue ip;
+/*    XmlRpc::XmlRpcValue ip;
     XmlRpc::XmlRpcValue port;
     XmlRpc::XmlRpcValue rate;
 
     nh.getParam("wam_ip",ip);
     this->wamserver_ip=(std::string)ip;
-
+*/
     if(!nh.hasParam("robot_name"))
     {
         ROS_WARN_STREAM("Robot name not defined. Default: " << "iri_wam");
@@ -27,7 +27,7 @@ WamDriver::WamDriver() :
         nh.getParam("robot_name", r_name);
         robot_name_=(std::string)r_name;
     }
-    if(!nh.hasParam("port"))
+ /*   if(!nh.hasParam("port"))
     {
         ROS_WARN_STREAM("Port not defined. Defaults: "<<4321);
         this->server_port=4321;
@@ -52,7 +52,7 @@ WamDriver::WamDriver() :
     ROS_INFO_STREAM("IP Address: "   << this->wamserver_ip);
     ROS_INFO_STREAM("Port Server: "  << this->server_port);
     ROS_INFO_STREAM("Refresh Rate: " << this->state_refresh_rate);
-}
+*/}
 
 bool WamDriver::openDriver(void)
 {
@@ -61,7 +61,8 @@ bool WamDriver::openDriver(void)
     //setDriverId(driver string id);
     try{
         if(this->state_ != OPENED){
-            this->wam_ = new CWamDriver(this->wamserver_ip, this->server_port, this->state_refresh_rate);
+            //this->wam_ = new wamDriver(this->wamserver_ip, this->server_port, this->state_refresh_rate);
+            this->wam_ = new wamDriver();
             wam_->open();
             this->state_ = OPENED;
             ROS_INFO("Wam opened, press shift+idle and enter.");
@@ -76,8 +77,9 @@ bool WamDriver::openDriver(void)
             ROS_ERROR("WAM was already opened!");
             return false;
         }
-    }catch(CException &e){
-        ROS_ERROR("%s",e.what().c_str());
+    }catch(const std::exception &e){
+        //ROS_ERROR("%s",e.what().c_str());
+        ROS_ERROR("Exception in openDriver");
         return false;
     }
 }
@@ -103,8 +105,9 @@ bool WamDriver::startDriver(void)
         wam_->setGravityCompensation(1.1);
         this->state_ = RUNNING;
         return true;
-    }catch(CException &e){
-        ROS_ERROR("%s",e.what().c_str());
+    }catch(const std::exception &e){
+        //ROS_ERROR("%s",e.what().c_str());
+        ROS_ERROR("Exception in startDriver");
         return false;
     }
     return true;
@@ -127,7 +130,7 @@ void WamDriver::config_update(const Config& new_cfg, uint32_t level)
     // save the current configuration
     this->config_=new_cfg;
   }else{
-    ROS_ERROR("Driver is not running");
+    ROS_ERROR("[WAM_DRIVER] config update while driver is not running yet");
   }
   this->unlock();
 }
@@ -144,14 +147,14 @@ std::string WamDriver::get_robot_name() {
 
 int WamDriver::get_num_joints() {
     if(this->wam_!=NULL) {
-        return this->wam_->getNumAngles();
+        return NJOINTS;
     } 
     return 0;
 }
 
 bool WamDriver::is_moving() {
     if (this->wam_ != NULL) {
-        return this->wam_->isMoving();
+//        return this->wam_->isMoving();
     }
     return false;
 }
@@ -222,8 +225,8 @@ void WamDriver::move_in_joints(std::vector<double> *angles, std::vector<double>*
             wam_->moveInJoints(&errormask, angles, vels, accs);
         }
         if(errormask > 0x00){
-            string err_msg = wam_->errorToString(errormask);
-            ROS_ERROR("%s",err_msg.c_str());
+//            string err_msg = wam_->errorToString(errormask);
+//            ROS_ERROR("%s",err_msg.c_str());
             errormask = 0x00;
         }
     }
@@ -244,7 +247,7 @@ WamDriver::move_in_cartesian_pose(const geometry_msgs::Pose pose,const double ve
     low_level_pose.push_back(pose.orientation.z);
     low_level_pose.push_back(pose.orientation.w);
 
-    this->wam_->moveInCartesianPose(&low_level_pose, vel, acc);
+//    this->wam_->moveInCartesianPose(&low_level_pose, vel, acc);
 }
 
 void
@@ -264,7 +267,7 @@ trajectory_msgs::JointTrajectoryPoint WamDriver::get_desired_joint_trajectory_po
 void
 WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory)
 {
-    uint16_t errormask = 0x00;
+/*    uint16_t errormask = 0x00;
     WAMJointTrajectory low_level_trajectory;
     WAMTrajectoryPoint point_trajectory;
 
@@ -288,30 +291,30 @@ WamDriver::move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & tr
     }
 
     this->wam_->moveTrajectoryInJoints(&errormask, &low_level_trajectory);
-}
+*/}
 
 void
 WamDriver::stop_trajectory_in_joints()
 {
-    this->wam_->cancelTrajectoryInJoints();
+//    this->wam_->cancelTrajectoryInJoints();
 }
 
 void
 WamDriver::move_trajectory_learnt_and_estimate_force(const std::string model_filename,
                                                      const std::string points_filename)
 {
-    // TODO: implement error handling
+/*    // TODO: implement error handling
     force_request_->init();
     double response = this->wam_->moveTrajectoryLearntAndEstimateForce(model_filename, points_filename);
     force_request_->success_response(response);
-
+*/
     return;
 }
 
 void
 WamDriver::start_dmp_tracker(const std::vector<double> * initial, const std::vector<double> * goal)
 {
-    uint16_t errormask = 0x00;
+/*    uint16_t errormask = 0x00;
 
     if (this->wam_!=NULL) {
         if (! is_joints_move_request_valid(* initial)) {
@@ -352,7 +355,7 @@ nc_goal = *goal;
 void 
 WamDriver::dmp_tracker_new_goal(const std::vector<double> * new_goal)
 {
-    uint16_t errormask = 0x00;
+/*    uint16_t errormask = 0x00;
 
     if (this->wam_!=NULL) { 
         if (! is_joints_move_request_valid(* new_goal)) {
@@ -371,6 +374,6 @@ WamDriver::dmp_tracker_new_goal(const std::vector<double> * new_goal)
             errormask = 0x00;
         }
     }
- }
+*/ }
 
 
