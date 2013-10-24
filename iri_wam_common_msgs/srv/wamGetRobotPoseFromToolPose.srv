@@ -1,5 +1,0 @@
-#request
-geometry_msgs/PoseStamped tool_pose
----
-#response
-geometry_msgs/PoseStamped robot_pose

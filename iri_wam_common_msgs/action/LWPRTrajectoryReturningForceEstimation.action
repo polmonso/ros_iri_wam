@@ -1,8 +1,0 @@
-# goal
-string model_filename
-string points_filename
----
-# result
-float32 force
----
-# feedback

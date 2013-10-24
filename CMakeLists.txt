@@ -1,17 +1,55 @@
 cmake_minimum_required(VERSION 2.4.6)
 include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
-# Append to CPACK_SOURCE_IGNORE_FILES a semicolon-separated list of
-# directories (or patterns, but directories should suffice) that should
-# be excluded from the distro.  This is not the place to put things that
-# should be ignored everywhere, like "build" directories; that happens in
-# rosbuild/rosbuild.cmake.  Here should be listed packages that aren't
-# ready for inclusion in a distro.
-#
-# This list is combined with the list in rosbuild/rosbuild.cmake.  Note
-# that CMake 2.6 may be required to ensure that the two lists are combined
-# properly.  CMake 2.4 seems to have unpredictable scoping rules for such
-# variables.
-#list(APPEND CPACK_SOURCE_IGNORE_FILES /core/experimental)
+set(PROJECT_NAME wam_driver_node)
 
-rosbuild_make_distribution(0.1.0)
+# Set the build type.  Options are:
+#  Coverage       : w/ debug symbols, w/o optimization, w/ code-coverage
+#  Debug          : w/ debug symbols, w/o optimization
+#  Release        : w/o debug symbols, w/ optimization
+#  RelWithDebInfo : w/ debug symbols, w/ optimization
+#  MinSizeRel     : w/o debug symbols, w/ optimization, stripped binaries
+#set(ROS_BUILD_TYPE RelWithDebInfo)
+
+rosbuild_init()
+
+#set the default path for built executables to the "bin" directory
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+#set the default path for built libraries to the "lib" directory
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
+#uncomment if you have defined messages
+#rosbuild_genmsg()
+#uncomment if you have defined services
+#rosbuild_gensrv()
+
+# added to include support for dynamic reconfiguration
+rosbuild_find_ros_package(dynamic_reconfigure)
+include(${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake)
+gencfg()
+# end dynamic reconfiguration
+
+FIND_PACKAGE(iriutils REQUIRED)
+FIND_PACKAGE(comm)
+FIND_PACKAGE(CWamDriver REQUIRED)
+
+INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ${comm_INCLUDE_DIR} ${CWamDriver_INCLUDE_DIR} ./include)
+
+FIND_PACKAGE(Eigen REQUIRED)
+INCLUDE_DIRECTORIES(${EIGEN_INCLUDE_DIRS})
+ADD_DEFINITIONS(${EIGEN_DEFINITIONS})
+
+#common commands for building c++ executables and libraries
+rosbuild_add_executable(${PROJECT_NAME} src/wam_driver.cpp src/wam_driver_node.cpp)
+rosbuild_add_executable(test_simple_trajectory test/simple_trajectory/simple_trajectory.cpp)
+rosbuild_add_executable(test_simple_80_points_trajectory test/simple_trajectory/simple_80_points_trajectory.cpp)
+rosbuild_add_executable(test_lwpr_trajectory test/lwpr_trajectory/lwpr_trajectory.cpp)
+rosbuild_add_executable(test_simple_cartesian_move test/simple_cartesian_move/simple_cartesian.cpp)
+rosbuild_add_executable(test_simple_dmp_trajectory test/dmp_trajectory/dmp_simple_trajectory.cpp)
+
+target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
+target_link_libraries(test_simple_trajectory ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
+target_link_libraries(test_simple_80_points_trajectory ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
+target_link_libraries(test_lwpr_trajectory ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
+target_link_libraries(test_simple_cartesian_move ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})
+target_link_libraries(test_simple_dmp_trajectory ${iriutils_LIBRARY} ${comm_LIBRARY} ${cwamdriver_LIBRARY})

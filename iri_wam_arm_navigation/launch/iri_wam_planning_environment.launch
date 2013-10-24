@@ -1,3 +1,0 @@
-<launch>
-    <rosparam command="load" ns="robot_description_planning" file="$(find iri_wam_arm_navigation)/config/iri_wam_planning_description.yaml" />
-</launch>
