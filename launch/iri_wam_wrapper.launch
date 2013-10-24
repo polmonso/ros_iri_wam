@@ -1,8 +1,6 @@
 <launch>
 
   <arg name="ROBOT"           default="iri_wam" />
-  <arg name="IP" />
-  <arg name="port"            default="4321" />
   <arg name="refresh_rate"    default="100" />
   <arg name="IK"              default="True" />
 
@@ -11,8 +9,6 @@
         name="$(arg ROBOT)_controller"
         output="screen">
     <param name="robot_name"   value="$(arg ROBOT)" />
-    <param name="wam_ip"       value="$(arg IP)" />
-    <param name="port"         value="$(arg port)" />
     <param name="refresh_rate" value="$(arg refresh_rate)" />
   </node>
 
