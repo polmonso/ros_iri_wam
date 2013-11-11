@@ -27,11 +27,13 @@
 
 #include <iri_base_driver/iri_base_driver.h>
 #include <iri_wam_controller/WamControllerConfig.h>
+#include <trajectory_msgs/JointTrajectory.h> 
 
 //include wam_controller_driver main library
+#include "wamdriver.h"
 
 /**
- * \brief IRI ROS Specific Driver Class
+ * \irief IRI ROS Specific Driver Class
  *
  * This class inherits from the IRI Base class IriBaseDriver, which provides the
  * guidelines to implement any specific driver. The IriBaseDriver class offers an 
@@ -53,7 +55,9 @@ class WamControllerDriver : public iri_base_driver::IriBaseDriver
 {
   private:
     // private attributes and methods
-
+    std::string robot_name_; ///< Robot name is needed to name the robot links
+    wamDriver *wam_; ///< The low level robot
+    trajectory_msgs::JointTrajectoryPoint desired_joint_trajectory_point_;  
   public:
    /**
     * \brief define config type
@@ -152,6 +156,42 @@ class WamControllerDriver : public iri_base_driver::IriBaseDriver
     *
     */
     ~WamControllerDriver(void);
-};
+    
+    
+    void get_pose(std::vector<double> *pose);
+    void get_joint_angles(std::vector<double> *angles);
+
+    std::string get_robot_name(); 
+    inline size_t get_num_joints() {return NJOINTS;};
+    /**
+     * Checks if the lenght of the vector is correct and if NaN are present
+     */
+    bool is_joints_move_request_valid(const std::vector<double> & angles);
+
+    /**
+     * \brief check if the wam is moving right now after a moveTo
+     */
+    bool is_moving();
+    bool is_joint_trajectory_result_succeeded();
+
+    /**
+     * \brief Returns the current desired joint trajectory point
+     *
+     */
+    trajectory_msgs::JointTrajectoryPoint get_desired_joint_trajectory_point();
+
+    /**
+     * \brief Ask the low level driver to perform a trajectory in joints
+     *
+     * @ trajectory: list of joints, 
+                     can include only position or positions/velocities/accelerations
+     */
+    void move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory);
+    void stop_trajectory_in_joints();
+    /**
+     * after a /move_trajectory_in_joints
+     */
+    bool is_moving_trajectory();
+ };
 
 #endif
