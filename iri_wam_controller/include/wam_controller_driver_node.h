@@ -27,12 +27,17 @@
 
 #include <iri_base_driver/iri_base_driver_node.h>
 #include "wam_controller_driver.h"
+#include <Eigen/Dense>
 
 // [publisher subscriber headers]
+#include <geometry_msgs/PoseStamped.h>
+#include <sensor_msgs/JointState.h>
 
 // [service client headers]
 
 // [action server client headers]
+#include <iri_action_server/iri_action_server.h>
+#include <control_msgs/FollowJointTrajectoryAction.h>
 
 /**
  * \brief IRI ROS Specific Driver Class
@@ -55,6 +60,10 @@ class WamControllerDriverNode : public iri_base_driver::IriBaseNodeDriver<WamCon
 {
   private:
     // [publisher attributes]
+    ros::Publisher libbarrett_link_tcp_publisher_;
+    geometry_msgs::PoseStamped PoseStamped_msg_;
+    ros::Publisher joint_states_publisher_;
+    sensor_msgs::JointState JointState_msg_;
 
     // [subscriber attributes]
 
@@ -63,6 +72,13 @@ class WamControllerDriverNode : public iri_base_driver::IriBaseNodeDriver<WamCon
     // [client attributes]
 
     // [action server attributes]
+    IriActionServer<control_msgs::FollowJointTrajectoryAction> follow_joint_trajectory_aserver_;
+    void follow_joint_trajectoryStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal);
+    void follow_joint_trajectoryStopCallback(void);
+    bool follow_joint_trajectoryIsFinishedCallback(void);
+    bool follow_joint_trajectoryHasSucceedCallback(void);
+    void follow_joint_trajectoryGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result);
+    void follow_joint_trajectoryGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback);
 
     // [action client attributes]
 
