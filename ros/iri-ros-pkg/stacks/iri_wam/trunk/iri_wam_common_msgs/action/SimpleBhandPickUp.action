@@ -24,10 +24,10 @@ geometry_msgs/PoseStamped grasp_pose
 # pre movement relative to the grasp_pose
 geometry_msgs/Pose pre_grasp_modifier
 # Direction and distance to lift from the grasp_pose
-object_manipulation_msgs/GripperTranslation lift
+manipulation_msgs/GripperTranslation lift
 ---
 # result
-object_manipulation_msgs/GraspResult grasp_result
+manipulation_msgs/GraspResult grasp_result
 
 ---
 # feedback
