@@ -30,15 +30,18 @@ gencfg()
 # end dynamic reconfiguration
 
 FIND_PACKAGE(iriutils REQUIRED)
-FIND_PACKAGE(wamdriver REQUIRED)
+INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ./include)
+
+FIND_PACKAGE(WamDriver REQUIRED)
+INCLUDE_DIRECTORIES(${WamDriver_INCLUDE_DIR})
+
+FIND_PACKAGE(Xenomai REQUIRED)
+INCLUDE_DIRECTORIES(${XENOMAI_INCLUDE_DIR})
 
 FIND_PACKAGE(Eigen2 REQUIRED)
-FIND_PACKAGE(Xenomai REQUIRED)
-
 INCLUDE_DIRECTORIES(${EIGEN2_INCLUDE_DIR})
 ADD_DEFINITIONS(${EIGEN2_DEFINITIONS})
 
-INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ${XENOMAI_INCLUDE_DIR} ./include)
 
 #common commands for building c++ executables and libraries
 #rosbuild_add_library(${PROJECT_NAME} src/example.cpp)
@@ -46,10 +49,9 @@ INCLUDE_DIRECTORIES(${iriutils_INCLUDE_DIR} ${XENOMAI_INCLUDE_DIR} ./include)
 #rosbuild_add_boost_directories()
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 rosbuild_add_executable(${PROJECT_NAME} src/wam_controller_driver.cpp src/wam_controller_driver_node.cpp)
+target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY} ${WamDriver_LIBRARY} ${EIGEN2_LIBRARY} ${XENOMAI_LIBRARY_NATIVE} ${XENOAMI_LIBRARY_XENOMAI} ${XENOMAI_LIBRARY_RDTM})
 rosbuild_add_executable(test_simple_trajectory test/simple_trajectory/simple_trajectory.cpp)
+target_link_libraries(test_simple_trajectory ${iriutils_LIBRARY} ${WamDriver_LIBRARY})
 rosbuild_add_executable(test_simple_80_points_trajectory test/simple_trajectory/simple_80_points_trajectory.cpp)
-
-target_link_libraries(${PROJECT_NAME} ${iriutils_LIBRARY} ${cwamdriver_LIBRARY} ${EIGEN2_LIBRARY} ${XENOMAI_LIBRARY_NATIVE} ${XENOAMI_LIBRARY_XENOMAI} ${XENOMAI_LIBRARY_RDTM})
-target_link_libraries(test_simple_trajectory ${iriutils_LIBRARY} ${cwamdriver_LIBRARY})
-target_link_libraries(test_simple_80_points_trajectory ${iriutils_LIBRARY} ${cwamdriver_LIBRARY})
+target_link_libraries(test_simple_80_points_trajectory ${iriutils_LIBRARY} ${WamDriver_LIBRARY})
 

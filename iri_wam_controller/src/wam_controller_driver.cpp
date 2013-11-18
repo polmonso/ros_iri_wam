@@ -114,8 +114,8 @@ WamControllerDriver::~WamControllerDriver(void)
 bool WamControllerDriver::is_joints_move_request_valid(const std::vector<double> & angles){
     // Check number of joints sent to the robot
     if (static_cast<unsigned int>(angles.size()) != get_num_joints()) {
-        ROS_ERROR("Invalid request to move. Joint vector size is %d while the robot has %d joints",
-                (int) angles.size(), get_num_joints());
+        ROS_ERROR("Invalid request to move. Joint vector size is %d while the robot has %u joints",
+                (int)angles.size(), (unsigned int)get_num_joints());
         return false;
     }
 
