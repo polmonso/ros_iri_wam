@@ -1,19 +1,23 @@
 <launch> 
 
-    <arg name="ROBOT"  default="iri_wam"/>
-    <arg name="IP" />
-    <arg name="IK"     default="True" />
-    <arg name="MOVEIT" default="False"/>
-    <arg name="KINECT" default="False"/>
+    <arg name="IK"        default="True"  />
+    <arg name="SPADMETER" default="True"  />
+    <arg name="CAMBOARD"  default="True"  />
+    <arg name="BHAND"     default="True" />
+    <arg name="GRIPPER"   default="True" />
+    <arg name="KINECT"    default="False" />
+    <arg name="NO_TOOL"   default="False" />
+    <arg name="MOVEIT"    default="False" />
+
+    <!-- Machine definition -->
+    <include file="$(find iri_wam_bringup)/machines/$(env ROBOT).machine" />
 
     <!-- Load URDF WAM model -->
     <include file="$(find iri_wam_description)/launch/iri_wam_description.launch" />
 
     <!-- IRI WAM ROS driver -->
     <!-- WAM ROS driver -->
-    <include file="$(find iri_wam_wrapper)/launch/iri_wam_wrapper.launch">
-       <arg name="ROBOT" value="$(arg ROBOT)"/>
-       <arg name="IP" value="$(arg IP)"/>
+    <include file="$(find iri_wam_controller)/launch/iri_wam_controller.launch">
        <arg name="IK" value="$(arg IK)"/>
     </include>
     
@@ -28,11 +32,23 @@
           type="state_publisher"
           name="robot_state_publisher">
         <remap from="joint_states" to="/joint_states" />
-      <!-- <param name="tf_prefix" value="$(arg ROBOT)" type="str" /> -->
+      <!-- <param name="tf_prefix" value="$(env ROBOT)" type="str" /> -->
     </node>
 
+    <!-- Spadmeter IK settings -->
+    <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup_spadmeter.launch" if="$(arg SPADMETER)" />
+ 
+    <!-- PMD Camboard settings -->
+    <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup_camboard.launch" if="$(arg CAMBOARD)" />
+
+    <!-- Barrett Hand settings -->
+    <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup_bhand.launch" if="$(arg BHAND)" />
+
+    <!-- Gripper settings -->
+    <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup_gripper.launch" if="$(arg GRIPPER)" />
+
     <include file="$(find iri_wam_moveit_state_display)/launch/iri_wam_moveit_state_display.launch" if="$(arg MOVEIT)">
-       <arg name="ROBOT" value="$(arg ROBOT)"/>
+       <arg name="ROBOT" value="$(env ROBOT)"/>
     </include>
 
     <!-- Optional: Adding Kinect camera -->

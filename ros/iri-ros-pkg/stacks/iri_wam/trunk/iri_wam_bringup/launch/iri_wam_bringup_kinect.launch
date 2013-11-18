@@ -12,7 +12,7 @@
        	<node pkg="tf"
               type="static_transform_publisher"
               name="kinect"
-              args="0.9014760 -0.0594 0.7251720 -0.6411 0.0380 0.7730 0.0043 /iri_wam_link_base camera_link 300" >
+              args="0.9014760 -0.0594 0.7251720 -0.6411 0.0380 0.7730 0.0043 /$(env ROBOT)_link_base camera_link 300" >
         </node>
 
         <!-- Kinect -->
