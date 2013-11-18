@@ -2,9 +2,9 @@
 
     <arg name="IK"        default="True"  />
     <arg name="SPADMETER" default="True"  />
-    <arg name="CAMBOARD"  default="True"  />
-    <arg name="BHAND"     default="True" />
-    <arg name="GRIPPER"   default="True" />
+    <arg name="CAMBOARD"  default="False"  />
+    <arg name="BHAND"     default="False" />
+    <arg name="GRIPPER"   default="False" />
     <arg name="KINECT"    default="False" />
     <arg name="NO_TOOL"   default="False" />
     <arg name="MOVEIT"    default="False" />
@@ -14,6 +14,8 @@
 
     <!-- Load URDF WAM model -->
     <include file="$(find iri_wam_description)/launch/iri_wam_description.launch" />
+
+<group ns="$(env ROBOT)">
 
     <!-- IRI WAM ROS driver -->
     <!-- WAM ROS driver -->
@@ -53,6 +55,8 @@
 
     <!-- Optional: Adding Kinect camera -->
     <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup_kinect.launch" if="$(arg KINECT)" />
+
+</group>
 
 </launch>
 
