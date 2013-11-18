@@ -4,7 +4,7 @@
     <node name="camboard_tcp_tf"
           pkg="tf"
           type="static_transform_publisher"
-          args="-0.1569 -0.0327 0.0536 0.2464 0.0178 -1.5397 /$(env ROBOT)_link_tcp /$(env ROBOT)_link_camboard_tcp 100" >
+          args="-0.1569 -0.0327 0.0536 -1.5397 0.0178 0.2464 /$(env ROBOT)_link_tcp /$(env ROBOT)_link_camboard_tcp 100" >
     </node>
 
     <!-- Starts PMD Camboard camera node -->
