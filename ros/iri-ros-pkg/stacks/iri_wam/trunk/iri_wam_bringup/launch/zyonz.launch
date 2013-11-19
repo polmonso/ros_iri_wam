@@ -1,0 +1,15 @@
+<launch> 
+
+    <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup.launch" >
+    	<arg name="IK"        value="True"  />
+    	<arg name="SPADMETER" value="True"  />
+    	<arg name="CAMBOARD"  value="True"  />
+    	<arg name="BHAND"     value="False" />
+    	<arg name="GRIPPER"   value="False" />
+    	<arg name="KINECT"    value="False" />
+    	<arg name="NO_TOOL"   value="False" />
+    	<arg name="MOVEIT"    value="False" />
+    </include>
+
+</launch>
+
