@@ -18,6 +18,7 @@ WamControllerDriverNode::WamControllerDriverNode(ros::NodeHandle &nh) :
   // [init subscribers]
   
   // [init services]
+  this->joints_move_server_ = this->public_node_handle_.advertiseService("joints_move", &WamControllerDriverNode::joints_moveCallback, this);
   
   // [init clients]
   
@@ -95,6 +96,31 @@ void WamControllerDriverNode::mainNodeThread(void)
 /*  [subscriber callbacks] */
 
 /*  [service callbacks] */
+bool WamControllerDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_move::Request &req, iri_wam_common_msgs::joints_move::Response &res) 
+{ 
+  ROS_INFO("WamControllerDriverNode::joints_moveCallback: New Request Received!"); 
+
+  //use appropiate mutex to shared variables if necessary 
+  this->driver_.lock(); 
+  //this->joints_move_mutex_.enter(); 
+
+  //if(this->driver_.isRunning()) 
+  //{ 
+    //ROS_INFO("WamControllerDriverNode::joints_moveCallback: Processin New Request!"); 
+    //do operations with req and output on res 
+    //res.data2 = req.data1 + my_var; 
+  //} 
+  //else 
+  //{ 
+    //ROS_INFO("WamControllerDriverNode::joints_moveCallback: ERROR: driver is not on run mode yet."); 
+  //} 
+
+  //unlock previously blocked shared variables 
+  this->driver_.unlock(); 
+  //this->joints_move_mutex_.exit(); 
+
+  return true; 
+}
 
 /*  [action callbacks] */
 

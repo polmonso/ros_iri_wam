@@ -34,6 +34,7 @@
 #include <sensor_msgs/JointState.h>
 
 // [service client headers]
+#include <iri_wam_common_msgs/joints_move.h>
 
 // [action server client headers]
 #include <iri_action_server/iri_action_server.h>
@@ -68,6 +69,9 @@ class WamControllerDriverNode : public iri_base_driver::IriBaseNodeDriver<WamCon
     // [subscriber attributes]
 
     // [service attributes]
+    ros::ServiceServer joints_move_server_;
+    bool joints_moveCallback(iri_wam_common_msgs::joints_move::Request &req, iri_wam_common_msgs::joints_move::Response &res);
+    CMutex joints_move_mutex_;
 
     // [client attributes]
 

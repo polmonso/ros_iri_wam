@@ -10,6 +10,7 @@
   <url>http://ros.org/wiki/iri_wam_controller</url>
   <depend package="roscpp"/>
   <depend package="iri_base_driver"/>
+  <depend package="iri_wam_common_msgs"/>
   <depend package="geometry_msgs"/>
   <depend package="sensor_msgs"/>
   <depend package="iri_action_server"/>
