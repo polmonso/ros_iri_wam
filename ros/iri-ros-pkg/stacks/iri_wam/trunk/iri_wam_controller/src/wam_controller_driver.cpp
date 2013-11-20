@@ -281,13 +281,14 @@ WamControllerDriver::move_in_joints(std::vector<double> *angles, std::vector<dou
         }
 
         // Check if there are vels and accs
+	bool blocking(true);
         if ((vels == NULL) || (accs == NULL))
         {
-            this->wam_->moveInJoints(&errormask, angles);
+            this->wam_->moveInJoints(angles, blocking);
         }
         else
         {
-            this->wam_->moveInJoints(&errormask, angles, vels, accs);
+            this->wam_->moveInJoints(angles, blocking, vels, accs);
         }
         if(errormask > 0x00)
         {
