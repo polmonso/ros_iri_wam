@@ -98,28 +98,35 @@ void WamControllerDriverNode::mainNodeThread(void)
 /*  [service callbacks] */
 bool WamControllerDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_move::Request &req, iri_wam_common_msgs::joints_move::Response &res) 
 { 
-  ROS_INFO("WamControllerDriverNode::joints_moveCallback: New Request Received!"); 
+	ROS_INFO("WamControllerDriverNode::joints_moveCallback: New Request Received!"); 
 
-  //use appropiate mutex to shared variables if necessary 
-  this->driver_.lock(); 
-  //this->joints_move_mutex_.enter(); 
+	//use appropiate mutex to shared variables if necessary 
+	this->driver_.lock(); 
+	//this->joints_move_mutex_.enter(); 
 
-  //if(this->driver_.isRunning()) 
-  //{ 
-    //ROS_INFO("WamControllerDriverNode::joints_moveCallback: Processin New Request!"); 
-    //do operations with req and output on res 
-    //res.data2 = req.data1 + my_var; 
-  //} 
-  //else 
-  //{ 
-    //ROS_INFO("WamControllerDriverNode::joints_moveCallback: ERROR: driver is not on run mode yet."); 
-  //} 
+	if(!this->driver_.isRunning()) 
+	{ 
+		ROS_INFO("WamControllerDriverNode::joints_moveCallback: ERROR: driver is not on run mode yet."); 
+		this->driver_.unlock(); 
+		return false; 
+	} 
 
-  //unlock previously blocked shared variables 
-  this->driver_.unlock(); 
-  //this->joints_move_mutex_.exit(); 
+	//this call blocks if the wam faults. The mutex is not freed...!   
+	if ((req.velocities.size() == 0) || (req.accelerations.size() == 0))
+	{
+		this->driver_.move_in_joints(& req.joints);
+	}
+	else
+	{
+		this->driver_.move_in_joints(& req.joints, &req.velocities, &req.accelerations);
+	}
 
-  return true; 
+	//unlock previously blocked shared variables 
+	this->driver_.unlock();
+	//this->driver_.wait_move_end();
+	//this->joints_move_mutex_.exit(); 
+
+	return true; 
 }
 
 /*  [action callbacks] */

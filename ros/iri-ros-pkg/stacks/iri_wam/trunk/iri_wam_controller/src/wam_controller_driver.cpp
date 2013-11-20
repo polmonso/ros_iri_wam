@@ -291,9 +291,7 @@ WamControllerDriver::move_in_joints(std::vector<double> *angles, std::vector<dou
         }
         if(errormask > 0x00)
         {
-            string err_msg = wam_->errorToString(errormask);
-            ROS_ERROR("%s",err_msg.c_str());
-            errormask = 0x00;
+            ROS_ERROR("%u", errormask);
         }
     }
 }
