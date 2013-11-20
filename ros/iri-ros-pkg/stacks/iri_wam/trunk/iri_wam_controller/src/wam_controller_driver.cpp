@@ -268,6 +268,37 @@ WamControllerDriver::stop_trajectory_in_joints(){
   this->wam_->stopTrajectoryInJoints();
 }
 
+void
+WamControllerDriver::move_in_joints(std::vector<double> *angles, std::vector<double>* vels, std::vector<double>* accs){
+    uint16_t errormask = 0x00;
+
+    if (this->wam_!=NULL)
+    {
+        if (! this->is_joints_move_request_valid(* angles))
+        {
+            ROS_ERROR("Joints angles were not valid. Refuse to move.");
+            return;
+        }
+
+        // Check if there are vels and accs
+        if ((vels == NULL) || (accs == NULL))
+        {
+            this->wam_->moveInJoints(&errormask, angles);
+        }
+        else
+        {
+            this->wam_->moveInJoints(&errormask, angles, vels, accs);
+        }
+        if(errormask > 0x00)
+        {
+            string err_msg = wam_->errorToString(errormask);
+            ROS_ERROR("%s",err_msg.c_str());
+            errormask = 0x00;
+        }
+    }
+}
+
+
 
 
 
