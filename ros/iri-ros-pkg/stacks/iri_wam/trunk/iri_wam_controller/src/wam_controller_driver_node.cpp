@@ -108,6 +108,7 @@ bool WamControllerDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_mo
 	{ 
 		ROS_INFO("WamControllerDriverNode::joints_moveCallback: ERROR: driver is not on run mode yet."); 
 		this->driver_.unlock(); 
+    res.success = false;
 		return false; 
 	} 
 
@@ -126,7 +127,7 @@ bool WamControllerDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_mo
 	//this->joints_move_mutex_.exit(); 
 
 	this->driver_.wait_move_end();
-
+  res.success = true;
 	return true; 
 }
 
