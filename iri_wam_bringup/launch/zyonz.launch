@@ -1,6 +1,7 @@
 <launch> 
 
     <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup.launch" >
+    	<arg name="ROBOT"     value="zyonz"  />
     	<arg name="IK"        value="True"  />
     	<arg name="SPADMETER" value="True"  />
     	<arg name="CAMBOARD"  value="True"  />

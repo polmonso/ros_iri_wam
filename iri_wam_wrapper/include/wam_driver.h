@@ -278,6 +278,9 @@ class WamDriver : public iri_base_driver::IriBaseDriver
     void start_dmp_tracker(const std::vector<double> * initial, const std::vector<double> * goal);
 
     void dmp_tracker_new_goal(const std::vector<double> * new_goal);
+
+    void jnt_pos_cmd_callback(const std::vector<float> * joints,
+                              const std::vector<float> * rate_limits);
 };
 
 #endif

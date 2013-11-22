@@ -10,12 +10,13 @@ private:
   // used to trigger the arm movement action
   ros::NodeHandle n;
   ros::ServiceClient client;
+  std::string srv_name_;
 
 public:
   //! Initialize the action client and wait for action server to come up
-  RobotArm() 
+  RobotArm():srv_name_("/iri_wam_controller/joints_move")
   {
-    client = n.serviceClient<iri_wam_common_msgs::joints_move>("/iri_wam_controller/joints_move");
+    client = n.serviceClient<iri_wam_common_msgs::joints_move>(this->srv_name_.c_str());
   }
 
   //! Clean up the action client
@@ -28,7 +29,7 @@ public:
   {
 	  if (!this->client.call(srv))
 	  {
-		  ROS_ERROR("Failed to call service add_two_ints");
+		  ROS_ERROR("Failed to call service %s", this->srv_name_.c_str());
 		  return false;
 	  }
 	return true;

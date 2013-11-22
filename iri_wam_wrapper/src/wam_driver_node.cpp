@@ -20,6 +20,7 @@ WamDriverNode::WamDriverNode(ros::NodeHandle &nh) :
   this->joint_states_publisher = this->public_node_handle_.advertise<sensor_msgs::JointState>("/joint_states", 1);
 
   // [init subscribers]
+  this->jnt_pos_cmd_subscriber_ = this->public_node_handle_.subscribe("jnt_pos_cmd", 1, &WamDriverNode::jnt_pos_cmd_callback, this);
   this->DMPTrackerNewGoal_subscriber_ = this->public_node_handle_.subscribe("DMPTrackerNewGoal", 1, &WamDriverNode::DMPTrackerNewGoal_callback, this);
 
   // [init services]
@@ -119,6 +120,21 @@ void WamDriverNode::mainNodeThread(void)
 }
 
 /*  [subscriber callbacks] */
+void WamDriverNode::jnt_pos_cmd_callback(const wam_msgs::RTJointPos::ConstPtr& msg) 
+{ 
+  ROS_INFO("WamDriverNode::jnt_pos_cmd_callback: New Message Received"); 
+
+  //use appropiate mutex to shared variables if necessary 
+  //this->driver_.lock(); 
+  //this->jnt_pos_cmd_mutex_.enter(); 
+
+  //std::cout << msg->data << std::endl; 
+
+  driver_.jnt_pos_cmd_callback(&msg->joints,&msg->rate_limits);
+  //unlock previously blocked shared variables 
+  //this->driver_.unlock(); 
+  //this->jnt_pos_cmd_mutex_.exit(); 
+}
 void WamDriverNode::DMPTrackerNewGoal_callback(const trajectory_msgs::JointTrajectoryPoint::ConstPtr& msg) 
 { 
   ROS_INFO("WamDriverNode::DMPTrackerNewGoal_callback: New Message Received"); 

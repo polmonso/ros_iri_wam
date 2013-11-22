@@ -1,15 +1,17 @@
 <launch>
 
+    <arg name="ROBOT"    default="iri_wam" />
+
     <!-- publish spadmeter_tcp tf -->
     <node name="spad_tcp_tf" pkg="tf" type="static_transform_publisher"
-          args="-0.09 -0.025 0.17 0 0 0 1 /$(env ROBOT)_link_tcp /$(env ROBOT)_link_spad_tcp 100" />
+          args="-0.09 -0.025 0.17 0 0 0 1 /$(arg ROBOT)_link_tcp /$(arg ROBOT)_link_spad_tcp 100" />
 
     <!-- Tool center point for the spadmeter -->
-    <node name="$(env ROBOT)_spad_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik">
-       <param name="robot_base" type="str" value="/$(env ROBOT)_link_1" />
-       <param name="robot_tcp" type="str" value="/$(env ROBOT)_link_7" />
-       <param name="tool_tcp"  type="str" value="/$(env ROBOT)_link_spad_tcp" />
-       <remap from="$(env ROBOT)_spad_ik/wamik" to="$(env ROBOT)_ik/wamik" />
+    <node name="$(arg ROBOT)_spad_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik">
+       <param name="robot_base" type="str" value="/$(arg ROBOT)_link_1" />
+       <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_7" />
+       <param name="tool_tcp"  type="str" value="/$(arg ROBOT)_link_spad_tcp" />
+       <remap from="$(arg ROBOT)_spad_ik/wamik" to="$(arg ROBOT)_ik/wamik" />
     </node>
 
 </launch>
