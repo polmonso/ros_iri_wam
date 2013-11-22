@@ -2,15 +2,15 @@
 <robot name="estirabot" xmlns:xacro="http://ros.org/wiki/xacro" >
   
   <!-- Set up definitions of parts of the robot body -->  
-  <xacro:include filename="$(find iri_wam_description)/xacro/wambase.urdf.xacro" />
-  <xacro:include filename="$(find iri_wam_description)/xacro/wam1.urdf.xacro" />
-  <xacro:include filename="$(find iri_wam_description)/xacro/wam2.urdf.xacro" />
-  <xacro:include filename="$(find iri_wam_description)/xacro/wam3.urdf.xacro" />
-  <xacro:include filename="$(find iri_wam_description)/xacro/wam4.urdf.xacro" />
-  <xacro:include filename="$(find iri_wam_description)/xacro/wam5.urdf.xacro" />
-  <xacro:include filename="$(find iri_wam_description)/xacro/wam6.urdf.xacro" />
-  <xacro:include filename="$(find iri_wam_description)/xacro/wam7.urdf.xacro" />
-  <xacro:include filename="$(find iri_wam_description)/xacro/wamtcp.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_base.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_1.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_2.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_3.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_4.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_5.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_6.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_7.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_tcp.urdf.xacro" />
 
   <!-- The first use of a macro.  This one was defined in wambase.urdf.xacro above.
        A macro like this will expand to a set of link and joint definitions, and to additional
