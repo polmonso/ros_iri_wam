@@ -16,7 +16,7 @@ public:
   RobotArm() 
   {
     // tell the action client that we want to spin a thread by default
-    traj_client_ = new TrajClient("/iri_wam_controller/joint_trajectory", true);
+    traj_client_ = new TrajClient("/iri_wam_controller/follow_joint_trajectory", true);
 
     // wait for action server to come up
     while(!traj_client_->waitForServer(ros::Duration(5.0))){
@@ -70,13 +70,13 @@ public:
     for(int ind = 1; ind < trajectory_points;  ind++)
     {
         goal.trajectory.points[ind].positions.resize(7);
-        goal.trajectory.points[ind].positions[0] =  0.49259;
-        goal.trajectory.points[ind].positions[1] =  0.212558;
-        goal.trajectory.points[ind].positions[2] = -0.169996;
-        goal.trajectory.points[ind].positions[3] =  2.09482;
-        goal.trajectory.points[ind].positions[4] = -0.14391;
-        goal.trajectory.points[ind].positions[5] =  0.919756;
-        goal.trajectory.points[ind].positions[6] = -0.0255835;
+        goal.trajectory.points[ind].positions[0] =  0.0;
+        goal.trajectory.points[ind].positions[1] =  (0.2*ind/trajectory_points);
+        goal.trajectory.points[ind].positions[2] =  0.0;
+        goal.trajectory.points[ind].positions[3] =  (2.0*ind/trajectory_points);
+        goal.trajectory.points[ind].positions[4] =  0.0;
+        goal.trajectory.points[ind].positions[5] =  0.0;
+        goal.trajectory.points[ind].positions[6] =  0.0;
     }
 
     return goal;
