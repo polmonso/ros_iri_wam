@@ -104,9 +104,9 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
   tf::Vector3 world_pos_tcp( req.pose.pose.position.x, req.pose.pose.position.y, req.pose.pose.position.z);
   tf::Transform received_pose( world_quat_tcp, world_pos_tcp);
 
-  // TF from world(/wam_link_0) 
+  // TF from world(/iri_wam_link_base) 
   // Usually, this transformation will be the identity.
-  // Because the frame_id of the requested pose will usually be "/wam_link0".
+  // Because the frame_id of the requested pose will usually be "/iri_wam_link_base".
   // But sometimes the user may ask for a pose that is referenced from another
   // frame.
   try{
