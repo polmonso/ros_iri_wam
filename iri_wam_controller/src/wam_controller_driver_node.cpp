@@ -123,8 +123,9 @@ bool WamControllerDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_mo
 
 	//unlock previously blocked shared variables 
 	this->driver_.unlock();
-	//this->driver_.wait_move_end();
 	//this->joints_move_mutex_.exit(); 
+
+	this->driver_.wait_move_end();
 
 	return true; 
 }
