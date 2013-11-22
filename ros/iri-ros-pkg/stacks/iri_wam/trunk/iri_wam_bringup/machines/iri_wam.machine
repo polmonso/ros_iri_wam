@@ -1,0 +1,3 @@
+<launch>
+  <machine name="bawse" address="localhost" env-loader="/opt/ros/hydro/setup.sh" default="true" />
+</launch>
