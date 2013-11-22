@@ -11,6 +11,7 @@
   <depend package="iri_wam_controller" />
   <depend package="iri_wam_ik" />
   <depend package="iri_wam_tcp_ik" />
+  <depend package="robot_state_publisher" />
 </package>
 
 

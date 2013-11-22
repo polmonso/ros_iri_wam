@@ -8,7 +8,7 @@
 
     <!-- Tool center point for the spadmeter -->
     <node name="$(arg ROBOT)_spad_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik">
-       <param name="robot_base" type="str" value="/$(arg ROBOT)_link_1" />
+       <param name="robot_base" type="str" value="/$(arg ROBOT)_link_base" />
        <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_7" />
        <param name="tool_tcp"  type="str" value="/$(arg ROBOT)_link_spad_tcp" />
        <remap from="$(arg ROBOT)_spad_ik/wamik" to="$(arg ROBOT)_ik/wamik" />

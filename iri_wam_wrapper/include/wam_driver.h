@@ -32,7 +32,7 @@
 
 //include wam_driver main library
 //#include "CWamDriver.h"
-#include "wamdriver.h"
+//#include "wamdriver.h"
 
 struct ForceRequest
 {
