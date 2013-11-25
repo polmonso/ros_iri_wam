@@ -9,7 +9,7 @@
     <!-- Tool center point for the gripper -->
     <node name="$(arg ROBOT)_gripper_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik">
        <param name="robot_base" type="str" value="/$(arg ROBOT)_link_base" />
-       <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_7" />
+       <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_tcp" />
        <param name="tool_tcp"  type="str" value="/$(arg ROBOT)_link_gripper_tcp" />
        <remap from="$(arg ROBOT)_gripper_ik/wamik" to="$(arg ROBOT)_ik/wamik" />
     </node>
