@@ -4,7 +4,7 @@
 
     <!-- publish spadmeter_tcp tf -->
     <node name="spad_tcp_tf" pkg="tf" type="static_transform_publisher"
-          args="-0.09 -0.025 0.12 0 0 0 1 /$(arg ROBOT)_link_tcp /$(arg ROBOT)_link_spad_tcp 100" />
+          args="-0.09 -0.025 0.140 0 0 0 1 /$(arg ROBOT)_link_tcp /$(arg ROBOT)_link_spad_tcp 100" />
 
     <!-- Tool center point for the spadmeter -->
     <node name="$(arg ROBOT)_spad_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik">
@@ -23,12 +23,12 @@
   	        respawn="true">
   	    <remap from="/zyonz_chlorophyll_meter/take_sample"
                  to="/take_sample" />
-  	    <param name="bus_id" value="0" />
-  	    <param name="baudrate" value="1000000" />
-  	    <param name="servo_id" value="50" />
-  	    <param name="max_angle" value="125.0" />
-  	    <param name="min_angle" value="105.0" />
-  	    <param name="effort" value="30.0" />
+  	    <param name="bus_id"    value="0" />
+  	    <param name="baudrate"  value="1000000" />
+  	    <param name="servo_id"  value="50" />
+  	    <param name="max_angle" value="-25" />
+  	    <param name="min_angle" value="-50" />
+  	    <param name="effort"    value="70.0" />
       </node>
     </group>
  
