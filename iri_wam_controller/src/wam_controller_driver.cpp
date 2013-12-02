@@ -144,13 +144,11 @@ WamControllerDriver::get_joint_angles(std::vector<double> *angles)
     if(this->wam_!=NULL) this->wam_->getJointAngles(angles);
 }
 
-
 std::string 
 WamControllerDriver::get_robot_name() 
 {
   return this->robot_name_;
 }
-
 
 //TODO:
 bool
@@ -303,6 +301,15 @@ WamControllerDriver::wait_move_end()
     if(this->wam_!=NULL)
     {
         this->wam_->waitTillMotionDone();
+    }
+}
+
+void
+WamControllerDriver::hold_on(bool holdon)
+{
+    if(this->wam_!=NULL)
+    {
+        this->wam_->holdCurrentPostion(holdon);
     }
 }
 

@@ -18,6 +18,7 @@ WamControllerDriverNode::WamControllerDriverNode(ros::NodeHandle &nh) :
   // [init subscribers]
   
   // [init services]
+  this->hold_on_server_ = this->public_node_handle_.advertiseService("hold_on", &WamControllerDriverNode::hold_onCallback, this);
   this->joints_move_server_ = this->public_node_handle_.advertiseService("joints_move", &WamControllerDriverNode::joints_moveCallback, this);
   
   // [init clients]
@@ -96,6 +97,38 @@ void WamControllerDriverNode::mainNodeThread(void)
 /*  [subscriber callbacks] */
 
 /*  [service callbacks] */
+bool WamControllerDriverNode::hold_onCallback(iri_wam_common_msgs::wamholdon::Request &req, iri_wam_common_msgs::wamholdon::Response &res) 
+{ 
+    ROS_INFO("WamControllerDriverNode::hold_onCallback: New Request Received!"); 
+
+    //use appropiate mutex to shared variables if necessary 
+    this->driver_.lock(); 
+    //this->hold_on_mutex_.enter(); 
+    if(!this->driver_.isRunning()) 
+    { 
+        ROS_INFO("WamControllerDriverNode::hold_onCallback: ERROR: driver is not on run mode yet."); 
+        this->driver_.unlock(); 
+        res.success = false;
+        return false;
+    } 
+    //unlock previously blocked shared variables 
+    switch (req.holdon)
+    {
+        case HOLDON:
+            this->driver_.hold_on(true);
+            break;
+        case HOLDOFF:
+            this->driver_.hold_on(false);
+            break;
+        default:
+            ROS_ERROR("WamControllerDriverNode::hold_onCallback: ERROR: Invalid service call."); 
+            break; 
+    }
+    this->driver_.unlock(); 
+    //this->hold_on_mutex_.exit(); 
+    return true; 
+}
+
 bool WamControllerDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_move::Request &req, iri_wam_common_msgs::joints_move::Response &res) 
 { 
 	ROS_INFO("WamControllerDriverNode::joints_moveCallback: New Request Received!"); 
