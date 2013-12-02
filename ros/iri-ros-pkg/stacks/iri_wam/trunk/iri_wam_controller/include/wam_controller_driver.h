@@ -190,6 +190,7 @@ class WamControllerDriver : public iri_base_driver::IriBaseDriver
     void stop_trajectory_in_joints();
     void move_in_joints(std::vector<double> *angles, std::vector<double>* vels = NULL, std::vector<double>* accs = NULL);
     void wait_move_end();
+    void hold_on(bool holdon);
     /**
      * after a /move_trajectory_in_joints
      */
