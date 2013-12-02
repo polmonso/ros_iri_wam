@@ -115,10 +115,10 @@ bool WamControllerDriverNode::hold_onCallback(iri_wam_common_msgs::wamholdon::Re
     switch (req.holdon)
     {
         case HOLDON:
-            this->driver_.hold_on(true);
+            this->driver_.hold_on();
             break;
         case HOLDOFF:
-            this->driver_.hold_on(false);
+            this->driver_.hold_off();
             break;
         default:
             ROS_ERROR("WamControllerDriverNode::hold_onCallback: ERROR: Invalid service call."); 
@@ -126,6 +126,7 @@ bool WamControllerDriverNode::hold_onCallback(iri_wam_common_msgs::wamholdon::Re
     }
     this->driver_.unlock(); 
     //this->hold_on_mutex_.exit(); 
+    res.success = true;
     return true; 
 }
 

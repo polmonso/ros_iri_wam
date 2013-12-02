@@ -305,11 +305,20 @@ WamControllerDriver::wait_move_end()
 }
 
 void
-WamControllerDriver::hold_on(bool holdon)
+WamControllerDriver::hold_on()
 {
     if(this->wam_!=NULL)
     {
-        this->wam_->holdCurrentPostion(holdon);
+        this->wam_->holdOnCurrentPosition();
+    }
+}
+
+void
+WamControllerDriver::hold_off()
+{
+    if(this->wam_!=NULL)
+    {
+        this->wam_->holdOffCurrentPosition();
     }
 }
 
