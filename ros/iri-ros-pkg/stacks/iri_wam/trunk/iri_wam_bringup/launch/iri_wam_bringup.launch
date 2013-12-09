@@ -2,8 +2,9 @@
 
     <arg name="ROBOT"     default="iri_wam"  />
     <arg name="IK"        default="True"  />
-    <arg name="SPADMETER" default="True"  />
-    <arg name="CAMBOARD"  default="False"  />
+    <arg name="SPADMETER" default="False" />
+    <arg name="CAMSPAD"   default="False" />
+    <arg name="CAMBOARD"  default="False" />
     <arg name="BHAND"     default="False" />
     <arg name="GRIPPER"   default="False" />
     <arg name="KINECT"    default="False" />
@@ -40,12 +41,17 @@
         <remap from="joint_states" to="/joint_states" />
     </node>
 
-    <!-- Spadmeter IK settings -->
+    <!-- Spadmeter settings -->
     <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup_spadmeter.launch" if="$(arg SPADMETER)" >
        <arg name="ROBOT" value="$(arg ROBOT)"/>
     </include>
  
-    <!-- PMD Camboard settings -->
+    <!-- Spadmeter PMD Camboard settings -->
+    <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup_camboard_spad.launch" if="$(arg CAMSPAD)" >
+       <arg name="ROBOT" value="$(arg ROBOT)"/>
+    </include>
+
+    <!-- Central configuration PMD Camboard settings -->
     <include file="$(find iri_wam_bringup)/launch/iri_wam_bringup_camboard.launch" if="$(arg CAMBOARD)" >
        <arg name="ROBOT" value="$(arg ROBOT)"/>
     </include>
