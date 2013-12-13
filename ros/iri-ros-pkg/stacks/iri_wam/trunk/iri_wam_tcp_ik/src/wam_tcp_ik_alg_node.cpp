@@ -58,10 +58,12 @@ void WamTcpIkAlgNode::mainNodeThread(void)
 /*  [service callbacks] */
 bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::Request &req, iri_wam_common_msgs::wamInverseKinematics::Response &res) 
 { 
+  bool result(false);
+
   ROS_INFO("WamTcpIkAlgNode::get_ikCallback: New Request Received!"); 
   
   //use appropiate mutex to shared variables if necessary 
-  //this->alg_.lock(); 
+  this->alg_.lock(); 
   //this->get_ik_mutex_.enter(); 
   
   // PREDEFINED_TCP TO WAM_TCP
@@ -142,39 +144,28 @@ bool WamTcpIkAlgNode::get_ikCallback(iri_wam_common_msgs::wamInverseKinematics::
            world_H_wam7_.getRotation().z(), 
            world_H_wam7_.getRotation().w());
 
-  bool result;
-  if(get_ik_client_.call(base_pose_msg_)){
-    res.joints.position.resize(7);
-    for(int ii=0; ii < 7; ++ii)
-      res.joints.position[ii] = base_pose_msg_.response.joints.position[ii];
-    ROS_INFO("[WamTcpIkAlgNode] Joints readings: (%f, %f, %f, %f, %f, %f, %f)",
-        base_pose_msg_.response.joints.position[0], 
-        base_pose_msg_.response.joints.position[1], 
-        base_pose_msg_.response.joints.position[2], 
-        base_pose_msg_.response.joints.position[3], 
-        base_pose_msg_.response.joints.position[4],
-        base_pose_msg_.response.joints.position[5], 
-        base_pose_msg_.response.joints.position[6] );
-    result = true;
-  }else{
+  if(!get_ik_client_.call(base_pose_msg_)){
     ROS_ERROR("Failed to call service %s", get_ik_client_.getService().c_str());
     result = false;
   }
   
-
-  //if(this->alg_.isRunning()) 
-  //{ 
-    //ROS_INFO("WamTcpIkAlgNode::get_ikCallback: Processin New Request!"); 
-    //do operations with req and output on res 
-    //res.data2 = req.data1 + my_var; 
-  //} 
-  //else 
-  //{ 
-    //ROS_INFO("WamTcpIkAlgNode::get_ikCallback: ERROR: alg is not on run mode yet."); 
-  //} 
+  res.joints.position.resize(7);
+  for(int ii=0; ii < 7; ++ii)
+  {
+      res.joints.position[ii] = base_pose_msg_.response.joints.position[ii];
+  }
+  ROS_INFO("[WamTcpIkAlgNode] Joints readings: (%f, %f, %f, %f, %f, %f, %f)",
+          base_pose_msg_.response.joints.position[0], 
+          base_pose_msg_.response.joints.position[1], 
+          base_pose_msg_.response.joints.position[2], 
+          base_pose_msg_.response.joints.position[3], 
+          base_pose_msg_.response.joints.position[4],
+          base_pose_msg_.response.joints.position[5], 
+          base_pose_msg_.response.joints.position[6] );
+  result = true;
 
   //unlock previously blocked shared variables 
-  //this->alg_.unlock(); 
+  this->alg_.unlock(); 
   //this->get_ik_mutex_.exit(); 
 
   return result; 
