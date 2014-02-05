@@ -195,6 +195,7 @@ class WamControllerDriver : public iri_base_driver::IriBaseDriver
     void wait_move_end();
     void hold_on();
     void hold_off();
+    void dmp_tracker_new_goal(const std::vector<double> * new_goal);
     /**
      * after a /move_trajectory_in_joints
      */
