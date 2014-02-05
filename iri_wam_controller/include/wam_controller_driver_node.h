@@ -30,6 +30,7 @@
 #include <Eigen/Dense>
 
 // [publisher subscriber headers]
+#include <trajectory_msgs/JointTrajectoryPoint.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <sensor_msgs/JointState.h>
 
@@ -68,6 +69,9 @@ class WamControllerDriverNode : public iri_base_driver::IriBaseNodeDriver<WamCon
     sensor_msgs::JointState JointState_msg_;
 
     // [subscriber attributes]
+    ros::Subscriber DMPTrackerNewGoal_subscriber_;
+    void DMPTrackerNewGoal_callback(const trajectory_msgs::JointTrajectoryPoint::ConstPtr& msg);
+    CMutex DMPTrackerNewGoal_mutex_;
 
     // [service attributes]
     ros::ServiceServer hold_on_server_;

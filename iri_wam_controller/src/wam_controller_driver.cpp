@@ -322,3 +322,21 @@ WamControllerDriver::hold_off()
     }
 }
 
+void
+WamControllerDriver::dmp_tracker_new_goal(const std::vector<double> * new_goal)
+{
+    uint16_t errormask = 0x00;
+
+    if (this->wam_!=NULL) { 
+        if (! is_joints_move_request_valid(* new_goal)) {
+            ROS_ERROR("Initial joints angles were not valid. Refuse to move.");
+            return;
+        }
+        jp_type goal;
+        goal << new_goal[0], new_goal[1], new_goal[2], new_goal[3], new_goal[4], new_goal[5], new_goal[6];
+
+        this->wam_->moveToTrajectoryDMPNewGoal(goal);
+
+    }
+}
+

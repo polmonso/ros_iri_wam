@@ -16,6 +16,7 @@ WamControllerDriverNode::WamControllerDriverNode(ros::NodeHandle &nh) :
   this->joint_states_publisher_ = this->public_node_handle_.advertise<sensor_msgs::JointState>("/joint_states", 1);
   
   // [init subscribers]
+  this->DMPTrackerNewGoal_subscriber_ = this->public_node_handle_.subscribe("DMPTrackerNewGoal", 1, &WamControllerDriverNode::DMPTrackerNewGoal_callback, this);
   
   // [init services]
   this->hold_on_server_ = this->public_node_handle_.advertiseService("hold_on", &WamControllerDriverNode::hold_onCallback, this);
@@ -95,6 +96,22 @@ void WamControllerDriverNode::mainNodeThread(void)
 }
 
 /*  [subscriber callbacks] */
+void WamControllerDriverNode::DMPTrackerNewGoal_callback(const trajectory_msgs::JointTrajectoryPoint::ConstPtr& msg) 
+{ 
+  ROS_INFO("WamControllerDriverNode::DMPTrackerNewGoal_callback: New Message Received"); 
+
+  //use appropiate mutex to shared variables if necessary 
+  this->driver_.lock(); 
+  this->DMPTrackerNewGoal_mutex_.enter(); 
+
+  driver_.dmp_tracker_new_goal(&msg->positions); 
+
+  //std::cout << msg->data << std::endl; 
+
+  //unlock previously blocked shared variables 
+  this->driver_.unlock(); 
+  this->DMPTrackerNewGoal_mutex_.exit(); 
+}
 
 /*  [service callbacks] */
 bool WamControllerDriverNode::hold_onCallback(iri_wam_common_msgs::wamholdon::Request &req, iri_wam_common_msgs::wamholdon::Response &res) 
