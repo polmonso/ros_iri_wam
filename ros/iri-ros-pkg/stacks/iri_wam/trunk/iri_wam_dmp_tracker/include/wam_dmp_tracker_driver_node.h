@@ -67,7 +67,7 @@ class WamDmpTrackerDriverNode : public iri_base_driver::IriBaseNodeDriver<WamDmp
     // [subscriber attributes]
     ros::Subscriber pose_surface_subscriber_;
     void pose_surface_callback(const geometry_msgs::PoseStamped::ConstPtr& msg);
-    CMutex pose_surface_mutex_;
+    //CMutex pose_surface_mutex_;
 
     // [service attributes]
 
