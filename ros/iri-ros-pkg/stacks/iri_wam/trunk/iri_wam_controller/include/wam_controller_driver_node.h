@@ -39,6 +39,7 @@
 #include <iri_wam_common_msgs/joints_move.h>
 
 // [action server client headers]
+#include <iri_wam_common_msgs/DMPTrackerAction.h>
 #include <iri_action_server/iri_action_server.h>
 #include <control_msgs/FollowJointTrajectoryAction.h>
 
@@ -71,19 +72,26 @@ class WamControllerDriverNode : public iri_base_driver::IriBaseNodeDriver<WamCon
     // [subscriber attributes]
     ros::Subscriber DMPTrackerNewGoal_subscriber_;
     void DMPTrackerNewGoal_callback(const trajectory_msgs::JointTrajectoryPoint::ConstPtr& msg);
-    CMutex DMPTrackerNewGoal_mutex_;
+    //CMutex DMPTrackerNewGoal_mutex_;
 
     // [service attributes]
     ros::ServiceServer hold_on_server_;
     bool hold_onCallback(iri_wam_common_msgs::wamholdon::Request &req, iri_wam_common_msgs::wamholdon::Response &res);
-    CMutex hold_on_mutex_;
+    //CMutex hold_on_mutex_;
     ros::ServiceServer joints_move_server_;
     bool joints_moveCallback(iri_wam_common_msgs::joints_move::Request &req, iri_wam_common_msgs::joints_move::Response &res);
-    CMutex joints_move_mutex_;
+    //CMutex joints_move_mutex_;
 
     // [client attributes]
 
     // [action server attributes]
+    IriActionServer<iri_wam_common_msgs::DMPTrackerAction> dmp_joint_tracker_aserver_;
+    void dmp_joint_trackerStartCallback(const iri_wam_common_msgs::DMPTrackerGoalConstPtr& goal);
+    void dmp_joint_trackerStopCallback(void);
+    bool dmp_joint_trackerIsFinishedCallback(void);
+    bool dmp_joint_trackerHasSucceedCallback(void);
+    void dmp_joint_trackerGetResultCallback(iri_wam_common_msgs::DMPTrackerResultPtr& result);
+    void dmp_joint_trackerGetFeedbackCallback(iri_wam_common_msgs::DMPTrackerFeedbackPtr& feedback);
     IriActionServer<control_msgs::FollowJointTrajectoryAction> follow_joint_trajectory_aserver_;
     void follow_joint_trajectoryStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal);
     void follow_joint_trajectoryStopCallback(void);

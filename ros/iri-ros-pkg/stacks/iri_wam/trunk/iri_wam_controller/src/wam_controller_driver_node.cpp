@@ -3,6 +3,7 @@ using namespace Eigen;
 
 WamControllerDriverNode::WamControllerDriverNode(ros::NodeHandle &nh) : 
   iri_base_driver::IriBaseNodeDriver<WamControllerDriver>(nh),
+  dmp_joint_tracker_aserver_(public_node_handle_, "dmp_joint_tracker"),
   follow_joint_trajectory_aserver_(public_node_handle_, "follow_joint_trajectory")
 {
   //init class attributes if necessary
@@ -25,6 +26,14 @@ WamControllerDriverNode::WamControllerDriverNode(ros::NodeHandle &nh) :
   // [init clients]
   
   // [init action servers]
+  dmp_joint_tracker_aserver_.registerStartCallback(boost::bind(&WamControllerDriverNode::dmp_joint_trackerStartCallback, this, _1)); 
+  dmp_joint_tracker_aserver_.registerStopCallback(boost::bind(&WamControllerDriverNode::dmp_joint_trackerStopCallback, this)); 
+  dmp_joint_tracker_aserver_.registerIsFinishedCallback(boost::bind(&WamControllerDriverNode::dmp_joint_trackerIsFinishedCallback, this)); 
+  dmp_joint_tracker_aserver_.registerHasSucceedCallback(boost::bind(&WamControllerDriverNode::dmp_joint_trackerHasSucceedCallback, this)); 
+  dmp_joint_tracker_aserver_.registerGetResultCallback(boost::bind(&WamControllerDriverNode::dmp_joint_trackerGetResultCallback, this, _1)); 
+  dmp_joint_tracker_aserver_.registerGetFeedbackCallback(boost::bind(&WamControllerDriverNode::dmp_joint_trackerGetFeedbackCallback, this, _1)); 
+  dmp_joint_tracker_aserver_.start();
+
   follow_joint_trajectory_aserver_.registerStartCallback(boost::bind(&WamControllerDriverNode::follow_joint_trajectoryStartCallback, this, _1)); 
   follow_joint_trajectory_aserver_.registerStopCallback(boost::bind(&WamControllerDriverNode::follow_joint_trajectoryStopCallback, this)); 
   follow_joint_trajectory_aserver_.registerIsFinishedCallback(boost::bind(&WamControllerDriverNode::follow_joint_trajectoryIsFinishedCallback, this)); 
@@ -92,7 +101,7 @@ void WamControllerDriverNode::mainNodeThread(void)
   this->joint_states_publisher_.publish(this->JointState_msg_);
 
   //unlock access to driver if previously blocked
-  this->driver_.unlock();
+  //this->driver_.unlock();
 }
 
 /*  [subscriber callbacks] */
@@ -102,7 +111,7 @@ void WamControllerDriverNode::DMPTrackerNewGoal_callback(const trajectory_msgs::
 
   //use appropiate mutex to shared variables if necessary 
   this->driver_.lock(); 
-  this->DMPTrackerNewGoal_mutex_.enter(); 
+  //this->DMPTrackerNewGoal_mutex_.enter(); 
 
   driver_.dmp_tracker_new_goal(&msg->positions); 
 
@@ -110,7 +119,7 @@ void WamControllerDriverNode::DMPTrackerNewGoal_callback(const trajectory_msgs::
 
   //unlock previously blocked shared variables 
   this->driver_.unlock(); 
-  this->DMPTrackerNewGoal_mutex_.exit(); 
+  //this->DMPTrackerNewGoal_mutex_.exit(); 
 }
 
 /*  [service callbacks] */
@@ -184,8 +193,66 @@ bool WamControllerDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_mo
 
 /*  [action callbacks] */
 
+/************************  DMP_joint_tracker  ************************/
 
-/************       follow_joint_trajectory  ************************/
+void WamControllerDriverNode::dmp_joint_trackerStartCallback(const iri_wam_common_msgs::DMPTrackerGoalConstPtr& goal)
+{ 
+  driver_.lock(); 
+    //check goal 
+    //execute goal 
+  driver_.start_dmp_tracker(&goal->initial.positions, &goal->goal.positions);
+  driver_.unlock(); 
+} 
+
+void WamControllerDriverNode::dmp_joint_trackerStopCallback(void) 
+{ 
+  driver_.lock(); 
+    //stop action 
+  driver_.unlock(); 
+} 
+
+bool WamControllerDriverNode::dmp_joint_trackerIsFinishedCallback(void) 
+{ 
+  bool ret = false; 
+
+  driver_.lock(); 
+    //if action has finish for any reason 
+    //ret = true; 
+  driver_.unlock(); 
+
+  return ret; 
+} 
+
+bool WamControllerDriverNode::dmp_joint_trackerHasSucceedCallback(void) 
+{ 
+  bool ret = false; 
+
+  driver_.lock(); 
+    //if goal was accomplished 
+    //ret = true; 
+  driver_.unlock(); 
+
+  return ret; 
+} 
+
+void WamControllerDriverNode::dmp_joint_trackerGetResultCallback(iri_wam_common_msgs::DMPTrackerResultPtr& result) 
+{ 
+  driver_.lock(); 
+    //update result data to be sent to client 
+    //result->data = data; 
+  driver_.unlock(); 
+} 
+
+void WamControllerDriverNode::dmp_joint_trackerGetFeedbackCallback(iri_wam_common_msgs::DMPTrackerFeedbackPtr& feedback) 
+{ 
+  driver_.lock(); 
+    //keep track of feedback 
+    //ROS_INFO("feedback: %s", feedback->data.c_str()); 
+  driver_.unlock(); 
+}
+
+
+/************************  follow_joint_trajectory  ************************/
 
 void WamControllerDriverNode::follow_joint_trajectoryStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal)
 {

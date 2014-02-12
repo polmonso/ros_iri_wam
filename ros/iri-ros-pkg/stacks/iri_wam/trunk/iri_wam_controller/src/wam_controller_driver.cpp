@@ -28,7 +28,6 @@ bool WamControllerDriver::openDriver(void)
             this->state_ = OPENED;
             ROS_INFO("Wam opened, press shift+idle and enter.");
             getchar();
-
             wam_->create();
             ROS_INFO("Wam created, press shift+activate and press enter.");
             getchar();
@@ -47,9 +46,9 @@ bool WamControllerDriver::openDriver(void)
 
 bool WamControllerDriver::closeDriver(void)
 {
-  wam_->close();
   ROS_INFO("[APP] Wait until wam gets home, idle the wam and press enter.");
-  getchar();
+  wam_->close();
+  //getchar();
   this->state_ = CLOSED;
   return true;
 }
@@ -323,20 +322,41 @@ WamControllerDriver::hold_off()
 }
 
 void
-WamControllerDriver::dmp_tracker_new_goal(const std::vector<double> * new_goal)
+WamControllerDriver::start_dmp_tracker(const std::vector<double> * initial, const std::vector<double> * goal)
 {
-    uint16_t errormask = 0x00;
-
-    if (this->wam_!=NULL) { 
-        if (! is_joints_move_request_valid(* new_goal)) {
+    if (this->wam_!=NULL)
+    {
+        if (! is_joints_move_request_valid(*initial))
+        {
             ROS_ERROR("Initial joints angles were not valid. Refuse to move.");
             return;
         }
-        jp_type goal;
-        goal << new_goal[0], new_goal[1], new_goal[2], new_goal[3], new_goal[4], new_goal[5], new_goal[6];
+        if (! is_joints_move_request_valid(*goal))
+        {
+            ROS_ERROR("Goal joints angles were not valid. Refuse to move.");
+            return;
+        }
+        ROS_DEBUG("Initial joint values: %f %f %f %f %f %f %f", initial->at(0), initial->at(1), initial->at(2), initial->at(3), initial->at(4), initial->at(5), initial->at(6));
+        ROS_DEBUG("Goal joint values: %f %f %f %f %f %f %f", goal->at(0), goal->at(1), goal->at(2), goal->at(3), goal->at(4), goal->at(5), goal->at(6));
 
-        this->wam_->moveToTrajectoryDMPNewGoal(goal);
+        this->wam_->trackGoalDMP(initial, goal);
+    }
+}
 
+
+void
+WamControllerDriver::dmp_tracker_new_goal(const std::vector<double> * new_goal)
+{
+    if (this->wam_!=NULL)
+    { 
+        if (! is_joints_move_request_valid(*new_goal))
+        {
+            ROS_ERROR("New goal joints angles were not valid. Refuse to move.");
+            return;
+        }
+        ROS_DEBUG("New goal joint values: %f %f %f %f %f %f %f", new_goal->at(0), new_goal->at(1), new_goal->at(2), new_goal->at(3), new_goal->at(4), new_goal->at(5), new_goal->at(6));
+
+        this->wam_->trackGoalDMPNewGoal(new_goal);
     }
 }
 
