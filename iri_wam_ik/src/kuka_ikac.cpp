@@ -606,7 +606,7 @@ void KukaIKAC::bestsol(MatrixXd qsol,VectorXd sol,VectorXd qref,VectorXd& q,doub
 	potbest=100000; /*high initial potential value*/
 	double potq;
 	VectorXd qact;
-	for(int i=1;i<qsol.rows();i++){
+	for(int i=0;i<qsol.rows();i++){
 		if (sol(i)!=0.0){
 			qact=qsol.block<1,7>(i,0);
 			KukaIKAC::potentialfunction(qref,qact,potq);
