@@ -1,0 +1,27 @@
+<!--
+  ATI Force sensor 
+-->
+<launch>
+
+    <arg name="ROBOT" default="iri_wam" />
+
+    <group ns="$(arg ROBOT)">
+
+        <!-- ATI Force sensor Transformation -->
+        <node pkg="tf"
+              type="static_transform_publisher"
+              name="forceframe_broadcaster"
+              args="0.0 0.0 0.04 0.0 0.0 0.0 1.0 /$(arg ROBOT)_link_tcp /forceframe 10" >
+        </node>
+    
+        <!-- ATI -->
+        <node pkg="iri_ati_force_sensor"
+              type="iri_ati_force_sensor"
+              name="iri_ati_force_sensor"
+              output="screen"
+              respawn="true">
+        </node>
+
+    </group>
+
+</launch>
