@@ -8,7 +8,7 @@
         <node pkg="tf"
               type="static_transform_publisher"
               name="gripper_tcp_tf"
-              args="0 0 0.10 0 0 0 1 /$(arg ROBOT)_link_tcp /$(arg ROBOT)_link_gripper_tcp 100"
+              args="0 0 0.10 0 0 0 1 /$(arg ROBOT)_link_tcp /$(arg ROBOT)_link_gripper_tcp 100" >
         </node>
 
         <!-- Tool center point for the gripper -->
