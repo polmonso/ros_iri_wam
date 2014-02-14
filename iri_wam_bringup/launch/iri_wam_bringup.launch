@@ -1,16 +1,16 @@
 <launch> 
 
-    <arg name="ROBOT"     default="iri_wam"  />
-    <arg name="IK"        default="True"  />
-    <arg name="SPADMETER" default="False" />
-    <arg name="CAMSPAD"   default="False" />
-    <arg name="CAMBOARD"  default="False" />
-    <arg name="BHAND"     default="False" />
+    <arg name="ROBOT"      default="iri_wam"  />
+    <arg name="IK"         default="True"  />
+    <arg name="SPADMETER"  default="False" />
+    <arg name="CAMSPAD"    default="False" />
+    <arg name="CAMBOARD"   default="False" />
+    <arg name="BHAND"      default="False" />
     <arg name="GRIPPER_NC" default="False" />
-    <arg name="KINECT"    default="False" />
-    <arg name="ATI"       default="False" />
-    <arg name="NO_TOOL"   default="False" />
-    <arg name="MOVEIT"    default="False" />
+    <arg name="KINECT"     default="False" />
+    <arg name="ATI"        default="False" />
+    <arg name="NO_TOOL"    default="False" />
+    <arg name="MOVEIT"     default="False" />
 
     <!-- Machine definition -->
     <include file="$(find iri_wam_bringup)/machines/$(arg ROBOT).machine" />

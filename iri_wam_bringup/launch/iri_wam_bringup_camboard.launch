@@ -3,7 +3,6 @@
     <arg name="ROBOT" default="iri_wam" />
 
     <group ns="$(arg ROBOT)">
-
         <!-- publish camboard_tcp tf -->
         <node name="camboard_tcp_tf"
               pkg="tf"
