@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <!-- 
      XACRO file to launch wam simulator 
 
@@ -8,21 +7,15 @@
      the gazebo controller plugin. The URDF is used by other applications
      so the controller plugin can not be integrated there.
 -->
-
-  <robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
-       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
-       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
-       name="iri_wam">
-
-    <include filename="$(find iri_wam_description)/xacro/wam.urdf.xacro" />
-
+  <robot name="iri_wam" xmlns:xacro="http://ros.org/wiki/xacro">
     <gazebo>
-	    <controller:gazebo_ros_controller_manager name="gazebo_ros_controller_manager" plugin="libgazebo_ros_controller_manager.so">
+      <plugin name="gazebo_ros_control" plugin="libgazebo_ros_control.so">
         <alwaysOn>true</alwaysOn>
         <updateRate>1000.0</updateRate>
         <robotParam>robot_description</robotParam>
         <robotNamespace>/</robotNamespace>
-      </controller:gazebo_ros_controller_manager>
+      <plugin>
     </gazebo>
 
+    <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam.urdf.xacro" />
   </robot>

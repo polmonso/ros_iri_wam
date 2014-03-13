@@ -6,5 +6,5 @@
   <param name="/iri_wam_move_arm/controller_action_name" type="string" value="/iri_ros_controller/follow_joint_trajectory" />
 
   <!--Launch Navigation-->
-  <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation.launch"/>  
+<!--  <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_arm_navigation.launch"/>  -->
 </launch>
