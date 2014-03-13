@@ -1,42 +1,19 @@
 <?xml version="1.0"?>
-<robot name="table"
-       xmlns:xi="http://www.w3.org/2001/XInclude"
-       xmlns:gazebo="http://playerstage.sourceforge.net/gazebo/xmlschema/#gz"
-       xmlns:model="http://playerstage.sourceforge.net/gazebo/xmlschema/#model"
-       xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
-       xmlns:body="http://playerstage.sourceforge.net/gazebo/xmlschema/#body"
-       xmlns:geom="http://playerstage.sourceforge.net/gazebo/xmlschema/#geom"
-       xmlns:joint="http://playerstage.sourceforge.net/gazebo/xmlschema/#joint"
-       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
-       xmlns:rendering="http://playerstage.sourceforge.net/gazebo/xmlschema/#rendering"
-       xmlns:renderable="http://playerstage.sourceforge.net/gazebo/xmlschema/#renderable"
-       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
-       xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics"
-       xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="table" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <property name="table_height" value="0.892" />
-  <property name="table_width" value="1.14" />
+  <property name="table_height" value="0.9" />
+  <property name="table_width" value="1.2" />
   <property name="table_depth" value="0.5" />
-
   
   <property name="table_x" value="0.0" />
   <property name="table_y" value="0.0" />
   <property name="table_z" value="0.0" />
-  <!-- tabletop height is .55+.01+.025=.585 -->
   <property name="table_top_thickness" value="0.05"/>
 
   <property name="M_PI" value="3.1415926535897931" />
   
-    <include filename="$(find iri_wam_description)/xacro/wam0_2.urdf.xacro" />
-    <include filename="$(find iri_wam_description)/xacro/wam1_2.urdf.xacro" />
-    <include filename="$(find iri_wam_description)/xacro/wam2_2.urdf.xacro" />
-    <include filename="$(find iri_wam_description)/xacro/wam3_2.urdf.xacro" />
-    <include filename="$(find iri_wam_description)/xacro/wam4_2.urdf.xacro" />
-    <include filename="$(find iri_wam_description)/xacro/wam5_2.urdf.xacro" />
-    <include filename="$(find iri_wam_description)/xacro/wam6_2.urdf.xacro" />
-    
-  
   <link name ="world" />
+
   <link name="leg_1">
     <inertial>
       <mass value="1.0" />
@@ -55,19 +32,20 @@
         <box size="${table_depth} ${table_width} ${table_top_thickness}" />
       </geometry>
     </collision>
-   </link>
-  <gazebo reference="leg_1">
-		<material>Gazebo/LightWood</material>
-		<mu1>50.0</mu1>
-		 <mu2>50.0</mu2>
-		<kp>1000000.0</kp>
-		<kd>1.0</kd>
-	</gazebo>
+  </link>
   <joint name="table_fix1" type="fixed">
      <parent link="world"/>
      <child link="leg_1"/>
      <origin xyz="0 0 ${table_depth/2}" rpy="0 0 0" />
   </joint> 
+  <gazebo reference="leg_1">
+    <material>Gazebo/LightWood</material>
+    <mu1>50.0</mu1>
+    <mu2>50.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+  </gazebo>
+
   <link name="table_top_link">
     <inertial>
       <mass value="1.0" />
@@ -87,18 +65,19 @@
       </geometry>
     </collision>
   </link>
-  <gazebo reference="table_top_link">
-		<material>Gazebo/LightWood</material>
-		<mu1>50.0</mu1>
-		 <mu2>50.0</mu2>
-		<kp>1000000.0</kp>
-		<kd>1.0</kd>
-	</gazebo>
   <joint name="table_fix2" type="fixed">
-     <parent link="leg_1"/>
-     <child link="table_top_link"/>
-     <origin xyz="0 0 ${table_depth}" rpy="0 0 0" />
+    <parent link="leg_1"/>
+    <child link="table_top_link"/>
+    <origin xyz="0 0 ${table_depth}" rpy="0 0 0" />
   </joint> 
+  <gazebo reference="table_top_link">
+    <material>Gazebo/LightWood</material>
+    <mu1>50.0</mu1>
+    <mu2>50.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+  </gazebo>
+
   <link name="leg_2">
     <inertial>
       <mass value="1.0" />
@@ -117,25 +96,18 @@
         <box size="${table_width} ${table_depth} ${table_top_thickness}" />
       </geometry>
     </collision>
-   </link>
-  <gazebo reference="leg_2">
-		<material>Gazebo/LightWood</material>
-		<mu1>50.0</mu1>
-		 <mu2>50.0</mu2>
-		<kp>1000000.0</kp>
-		<kd>1.0</kd>
-	</gazebo>
+  </link>
   <joint name="table_fix3" type="fixed">
-     <parent link="table_top_link"/>
-     <child link="leg_2"/>
-     <origin xyz="${table_depth-table_top_thickness} 0 0" rpy="${M_PI /2} 0 ${M_PI /2}" />
+    <parent link="table_top_link"/>
+    <child link="leg_2"/>
+    <origin xyz="${table_depth-table_top_thickness} 0 0" rpy="${M_PI /2} 0 ${M_PI /2}" />
   </joint> 
- 
-  <xacro:wam0 parent="table_top_link" rot="0 0 0" trasl="${table_depth/2+table_top_thickness/2} 0 -${table_depth/2- table_top_thickness}"></xacro:wam0>
- <!--  <xacro:wam1 parent="wam_link0" rot ="0 0 0" trasl="0 0 0.05"></xacro:wam1>
- <xacro:wam2 parent="wam_link1" rot ="-${M_PI /2} 0 0" trasl="0 -0.1 0"></xacro:wam2>
-  <xacro:wam3 parent="wam_link2" rot= "${M_PI /2} 0 0" trasl="-${table_depth/2-table_top_thickness+0.22+0.03} ${table_x} ${table_depth+table_top_thickness+0.1}"></xacro:wam3>
-  <xacro:wam4 parent="wam_link3" rot= "-${M_PI /2} 0 0" trasl="-${table_depth/2-table_top_thickness+0.195} -${table_depth+table_top_thickness+0.65} ${table_x}"></xacro:wam4>
-  <xacro:wam5 parent="wam_link4" rot= "${M_PI /2} 0 0" trasl="-${table_depth/2-table_top_thickness+0.24} ${table_x} ${table_depth+table_top_thickness+0.955}"></xacro:wam5>
-  <xacro:wam6 parent="wam_link5" rot= "-${M_PI /2} 0 0" trasl="-${table_depth/2-table_top_thickness+0.24} -${table_depth+table_top_thickness+0.955} ${table_x} "></xacro:wam6> -->
+  <gazebo reference="leg_2">
+    <material>Gazebo/LightWood</material>
+    <mu1>50.0</mu1>
+    <mu2>50.0</mu2>
+    <kp>1000000.0</kp>
+    <kd>1.0</kd>
+  </gazebo>
+
 </robot>

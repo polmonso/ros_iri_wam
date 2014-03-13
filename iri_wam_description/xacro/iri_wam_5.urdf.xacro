@@ -50,7 +50,7 @@
     <transmission name="tran_5">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}_joint_5"/>
-      <actuator name="motor1">
+      <actuator name="motor_5">
         <hardwareInterface>EffortJointInterface</hardwareInterface>
       	<mechanicalReduction>1</mechanicalReduction>
         <motorTorqueConstant>1</motorTorqueConstant>
