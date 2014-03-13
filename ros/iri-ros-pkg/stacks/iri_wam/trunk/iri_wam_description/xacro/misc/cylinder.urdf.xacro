@@ -1,20 +1,5 @@
 <?xml version="1.0"?>
-<robot name="table"
-       xmlns:xi="http://www.w3.org/2001/XInclude"
-       xmlns:gazebo="http://playerstage.sourceforge.net/gazebo/xmlschema/#gz"
-       xmlns:model="http://playerstage.sourceforge.net/gazebo/xmlschema/#model"
-       xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
-       xmlns:body="http://playerstage.sourceforge.net/gazebo/xmlschema/#body"
-       xmlns:geom="http://playerstage.sourceforge.net/gazebo/xmlschema/#geom"
-       xmlns:joint="http://playerstage.sourceforge.net/gazebo/xmlschema/#joint"
-       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
-       xmlns:rendering="http://playerstage.sourceforge.net/gazebo/xmlschema/#rendering"
-       xmlns:renderable="http://playerstage.sourceforge.net/gazebo/xmlschema/#renderable"
-       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
-       xmlns:physics="http://playerstage.sourceforge.net/gazebo/xmlschema/#physics">
-
-  <property name="table_z" value="0.0" />
-  <property name="table_height" value="0.55" />
+<robot name="cylinder" xmlns:xacro="http://ros.org/wiki/xacro">
 
   <property name="object_1_x" value="0.0" />
   <property name="object_1_y" value="0.0" />
@@ -26,7 +11,7 @@
   <property name="object_1_mass"        value="0.2" /> 
   <property name="object_1_mu"          value="500.0" /> 
 
-  <link name="stick">
+  <link name="cylinder">
     <inertial>
       <mass value="${object_1_mass/2.0}" />
       <origin xyz="0 0 ${object_1_height/2}" />
@@ -47,14 +32,16 @@
       </geometry>
     </collision>
   </link>
-  <gazebo reference="stick">
+
+  <gazebo reference="cylinder">
     <material>Gazebo/BumpyMetal</material>
     <mu1>${object_1_mu}</mu1>
     <mu2>${object_1_mu}</mu2>
     <kp>100000000.0</kp>
     <kd>1.0</kd>
     <selfCollide>true</selfCollide>
-    <turnGravityOff>true</turnGravityOff>
+    <turnGravityOff>false</turnGravityOff>
     <dampingFactor>0.001</dampingFactor>
   </gazebo>
+
 </robot>

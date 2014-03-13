@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
-<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
-       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
-       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
-       xmlns:xacro="http://ros.org/wiki/xacro"
-       name="simple_box">
+<robot name="box" xmlns:xacro="http://ros.org/wiki/xacro">
+
   <xacro:property name="box_tx" value="0.0" />
   <xacro:property name="box_ty" value="0.0" />
   <xacro:property name="box_tz" value="0.0" />
@@ -42,9 +39,7 @@
   </link>
   <gazebo reference="box">
     <material>Gazebo/Blue</material>
-    <turnGravityOff>true</turnGravityOff>
+    <turnGravityOff>false</turnGravityOff>
   </gazebo>
-       
-       
        
  </robot>
