@@ -11,14 +11,17 @@
   <arg name="rot_box_z" default="0.0"   />
   <arg name="rot_box_w" default="1.0"   />
 
-  <arg name="name_obstacle_" default="box1"   />
-
+  <arg name="name_obstacle_" default="box"   />
 
  <!-- Gazebo -->
  <param name="$(arg name_obstacle_)" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/misc/box.urdf.xacro'" />
- <node name="spawn_simple_$(arg name_obstacle_)" pkg="gazebo" type="spawn_model" args="-urdf -param $(arg name_obstacle_) -model $(arg name_obstacle_) -x $(arg pos_box_x) -y $(arg pos_box_y) -z $(arg pos_box_z)" respawn="false" output="screen" />
 
- <!--		ROS			-->
+ <!-- Run a python script to the send a service call to gazebo_ros to spawn a box -->
+ <node name="box_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+       args="-urdf -model $(arg name_obstacle_) -param $(arg name_obstacle_) -x $(arg pos_box_x) -y $(arg pos_box_y) -z $(arg pos_box_z)"/>
+
+ <!-- ROS -->
+ <!-- 
  <node name="make_obstacles_$(arg name_obstacle_)" pkg="iri_wam_arm_navigation" type="box" output="screen" >
 	<param name="posicion_x"   value="$(arg pos_box_x)" />
 	<param name="posicion_y"   value="$(arg pos_box_y)" />
@@ -32,9 +35,9 @@
 	<param name="length"   value="$(arg length_)" />
 	<param name="height"   value="$(arg height_)" />
  </node>
- 
- <node pkg="tf" type="static_transform_publisher" name="box_broadcaster_$(arg name_obstacle_)" args="$(arg pos_box_x) $(arg pos_box_y) $(arg pos_box_z) $(arg rot_box_x) $(arg rot_box_y) $(arg rot_box_z) $(arg rot_box_w) /world /box 100" />
- 
- 
+ -->
+
+ <node name="box_broadcaster_$(arg name_obstacle_)" pkg="tf" type="static_transform_publisher"
+       args="$(arg pos_box_x) $(arg pos_box_y) $(arg pos_box_z) $(arg rot_box_x) $(arg rot_box_y) $(arg rot_box_z) $(arg rot_box_w) /world /box 100" />
  
 </launch>

@@ -1,15 +1,17 @@
 <launch>
-   <!-- Start Gazebo -->
-   <node name="gazebo" pkg="gazebo" type="gazebo" args="-s -1 -u $(find gazebo_worlds)/worlds/empty.world" respawn="false" output="screen"/>
-   
-   <!-- send table urdf to param server -->
-   <param name="table_description" command="$(find xacro)/xacro.py $(find iri_wam_description)/xacro/misc/table.urdf.xacro" />
-   <!-- push table_description to factory and spawn robot in gazebo -->
-   <node name="spawn_table" pkg="gazebo" type="spawn_model" args="-urdf -pause -param table_description -z 0.00 -model table_model" respawn="false" output="screen" />
-   
-   <!-- Load WAM DESCRIPTION 
-   <param name="/robot_description" command="$(find xacro)/xacro.py '$(find iri_wam_simulator)/gazebo/xacro/iri_wam.gazebo.xacro'" />  -->
-   <!-- Spawm WAM innto Simulator 
-   <node name="spawn_iri_wam_model" pkg="gazebo" type="spawn_model" args="$(optenv ROBOT_INITIAL_POSE) -pause -urdf -param robot_description -model iri_wam -x -0.430 -y 0.645 -z 0.55" respawn="false" output="screen" /> -->
-   
+
+  <arg name="pos_table_x" default="1.0" />
+  <arg name="pos_table_y" default="0.0" />
+  <arg name="pos_table_z" default="0.0" />
+
+  <arg name="name_obstacle_" default="table"   />
+  <!-- Gazebo -->
+  <!-- send table urdf to param server -->
+  <param name="$(arg name_obstacle_)" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/misc/table.urdf.xacro'" />
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a table -->
+  <node name="table_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -model $(arg name_obstacle_) -param $(arg name_obstacle_) -x $(arg pos_table_x) -y $(arg pos_table_y) -z $(arg pos_table_z)"/>
+
+
+
 </launch>
