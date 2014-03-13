@@ -11,9 +11,12 @@
   <license>LGPL</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/iri_wam_simulator</url>
+  <depend package="controller_manager"/>
+  <depend package="robot_state_publisher"/>
   <depend package="effort_controllers"/>
   <depend package="joint_state_controller"/>
-  <depend package="pr2_gazebo_plugins"/>
+  <depend package="gazebo_ros"/>
+  <depend package="xacro"/>
 </package>
 
 
