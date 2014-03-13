@@ -4,6 +4,49 @@ iri_wam:
     type: joint_state_controller/JointStateController
     publish_rate: 50
 
+  # Joint Trajectory Controller ---------------------------------------
+  iri_wam_controller:
+    type: "effort_controllers/JointTrajectoryController" 
+    joints:
+      - iri_wam_joint_1 
+      - iri_wam_joint_2
+      - iri_wam_joint_3
+      - iri_wam_joint_4
+      - iri_wam_joint_5
+      - iri_wam_joint_6
+      - iri_wam_joint_7
+
+    constraints:
+      goal_time: 1.0
+      stopped_velocity_tolerance: 0.02
+      iri_wam_joint_1:
+        goal: 0.02
+      iri_wam_joint_2:
+        goal: 0.02
+      iri_wam_joint_3:
+        goal: 0.02
+      iri_wam_joint_4:
+        goal: 0.02
+      iri_wam_joint_5:
+        goal: 0.02
+      iri_wam_joint_6:
+        goal: 0.02
+      iri_wam_joint_7:
+        goal: 0.02
+
+    gains:
+      iri_wam_joint_1: {p: 900.0, d: 10.0, i: 2.5, i_clamp: 0.0}
+      iri_wam_joint_2: {p: 2500.0, d: 20.0, i: 5.0, i_clamp: 0.0}
+      iri_wam_joint_3: {p: 600.0, d: 5.0, i: 2.0, i_clamp: 0.0}
+      iri_wam_joint_4: {p: 500.0, d: 2.0, i: 0.5, i_clamp: 0.0}
+      iri_wam_joint_5: {p: 50.0, d: 0.5, i: 0.5, i_clamp: 0.0}
+      iri_wam_joint_6: {p: 50.0, d: 0.5, i: 0.5, i_clamp: 0.0}
+      iri_wam_joint_7: {p: 8.0, d: 0.05, i: 0.1, i_clamp: 0.0}
+
+    state_publish_rate: 50
+    action_monitor_rate: 30
+    stop_trajectory_duration: 0
+
   # Position Controllers ---------------------------------------
   joint1_position_controller:
     type: effort_controllers/JointPositionController

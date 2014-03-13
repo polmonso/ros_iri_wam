@@ -1,8 +1,0 @@
-iri_ros_pose_controller:
-  type: "robot_mechanism_controllers/CartesianPoseController"
-  root_name: wam_link0
-  tip_name: wam_link7
-  fb_trans:
-    p: 20.0
-  fb_rot:
-    p: 0.5
