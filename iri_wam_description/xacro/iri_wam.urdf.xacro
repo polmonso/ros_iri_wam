@@ -1,6 +1,16 @@
 <?xml version="1.0"?>
 <robot name="iri_wam" xmlns:xacro="http://ros.org/wiki/xacro" >
   
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>1000.0</updateRate>
+      <robotParam>robot_description</robotParam>
+      <robotNamespace>/iri_wam</robotNamespace>
+    </plugin>
+  </gazebo>
+
   <!-- Set up definitions of parts of the robot body -->  
   <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_base.urdf.xacro" />
   <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_1.urdf.xacro" />

@@ -47,12 +47,15 @@
         <dynamics damping="100"/>
     </joint>
 
-    <transmission type="pr2_mechanism_model/SimpleTransmission" name="j1_transmission">
-      <actuator name="j1" />
-      <joint name="${prefix}_joint_1" />
-      <mechanicalReduction>1</mechanicalReduction>
-      <motorTorqueConstant>1</motorTorqueConstant>
+    <transmission name="tran_1">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}_joint_1"/>
+      <actuator name="motor1">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+      	<mechanicalReduction>1</mechanicalReduction>
+        <motorTorqueConstant>1</motorTorqueConstant>
       <!-- <pulsesPerRevolution>90000</pulsesPerRevolution> -->
+      </actuator>
     </transmission>
 
   </xacro:macro>
