@@ -43,6 +43,8 @@
 #include <iri_action_server/iri_action_server.h>
 #include <control_msgs/FollowJointTrajectoryAction.h>
 
+typedef enum {TRAJ_DONE, TRAJ_RUNNING, TRAJ_ERROR} traj_status_t;
+
 /**
  * \brief IRI ROS Specific Driver Class
  *
@@ -92,6 +94,8 @@ class WamControllerDriverNode : public iri_base_driver::IriBaseNodeDriver<WamCon
     bool dmp_joint_trackerHasSucceedCallback(void);
     void dmp_joint_trackerGetResultCallback(iri_wam_common_msgs::DMPTrackerResultPtr& result);
     void dmp_joint_trackerGetFeedbackCallback(iri_wam_common_msgs::DMPTrackerFeedbackPtr& feedback);
+
+    traj_status_t traj_in_joints_status_;
     IriActionServer<control_msgs::FollowJointTrajectoryAction> follow_joint_trajectory_aserver_;
     void follow_joint_trajectoryStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal);
     void follow_joint_trajectoryStopCallback(void);

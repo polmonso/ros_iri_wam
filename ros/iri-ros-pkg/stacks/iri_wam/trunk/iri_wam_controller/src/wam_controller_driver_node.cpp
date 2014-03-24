@@ -1,4 +1,6 @@
 #include "wam_controller_driver_node.h"
+#include "wam_exceptions.h"
+
 using namespace Eigen;
 
 WamControllerDriverNode::WamControllerDriverNode(ros::NodeHandle &nh) : 
@@ -113,7 +115,7 @@ void WamControllerDriverNode::DMPTrackerNewGoal_callback(const trajectory_msgs::
   this->driver_.lock(); 
   //this->DMPTrackerNewGoal_mutex_.enter(); 
 
-  driver_.dmp_tracker_new_goal(&msg->positions); 
+  //driver_.dmp_tracker_new_goal(&msg->positions); 
 
   //std::cout << msg->data << std::endl; 
 
@@ -158,37 +160,35 @@ bool WamControllerDriverNode::hold_onCallback(iri_wam_common_msgs::wamholdon::Re
 
 bool WamControllerDriverNode::joints_moveCallback(iri_wam_common_msgs::joints_move::Request &req, iri_wam_common_msgs::joints_move::Response &res) 
 { 
-	ROS_INFO("WamControllerDriverNode::joints_moveCallback: New Request Received!"); 
+    ROS_INFO("WamControllerDriverNode::joints_moveCallback: New Request Received!"); 
+    ROS_INFO("Vel: %f, Acc: %f", req.velocity, req.acceleration); 
 
-	//use appropiate mutex to shared variables if necessary 
-	this->driver_.lock(); 
-	//this->joints_move_mutex_.enter(); 
+    //use appropiate mutex to shared variables if necessary 
+    this->driver_.lock(); 
+    //this->joints_move_mutex_.enter(); 
 
-	if(!this->driver_.isRunning()) 
-	{ 
-		ROS_INFO("WamControllerDriverNode::joints_moveCallback: ERROR: driver is not on run mode yet."); 
-		this->driver_.unlock(); 
-    res.success = false;
-		return false; 
-	} 
+    if(!this->driver_.isRunning()) 
+    { 
+        ROS_INFO("WamControllerDriverNode::joints_moveCallback: ERROR: driver is not on run mode yet.");
+        this->driver_.unlock();
+        res.success = false;
+        return false;
+    }
 
-	//this call blocks if the wam faults. The mutex is not freed...!   
-	if ((req.velocities.size() == 0) || (req.accelerations.size() == 0))
-	{
-		this->driver_.move_in_joints(& req.joints);
-	}
-	else
-	{
-		this->driver_.move_in_joints(& req.joints, &req.velocities, &req.accelerations);
-	}
+    if (!this->driver_.move_in_joints(&req.joints, req.velocity, req.acceleration))
+    {
+        ROS_INFO("WamControllerDriverNode::joints_moveCallback: ERROR: movement not possible.");
+        this->driver_.unlock();
+        res.success = false;
+        return false;
+    }
 
-	//unlock previously blocked shared variables 
-	this->driver_.unlock();
-	//this->joints_move_mutex_.exit(); 
-
-	this->driver_.wait_move_end();
-  res.success = true;
-	return true; 
+    //unlock previously blocked shared variables 
+    this->driver_.unlock();
+    //this->joints_move_mutex_.exit(); 
+    this->driver_.wait_move_end();
+    res.success = true;
+    return true;
 }
 
 /*  [action callbacks] */
@@ -256,54 +256,71 @@ void WamControllerDriverNode::dmp_joint_trackerGetFeedbackCallback(iri_wam_commo
 
 void WamControllerDriverNode::follow_joint_trajectoryStartCallback(const control_msgs::FollowJointTrajectoryGoalConstPtr& goal)
 {
-  ROS_DEBUG("[WamDriverNode]: New FollowJointTrajectoryGoal RECEIVED!"); 
-  driver_.lock(); 
-    //check goal 
-    //execute goal 
-  driver_.move_trajectory_in_joints(goal->trajectory);
-  driver_.unlock(); 
-  ROS_DEBUG("[WamDriverNode]: FollowJointTrajectoryGoal SENT TO ROBOT!");
-} 
+    ROS_DEBUG("[WamDriverNode]: New FollowJointTrajectoryGoal RECEIVED!");
+    bool blocking(false);
+    bool compliant(false);
+    driver_.lock();
+    try {
+        if (!driver_.move_trajectory_in_joints(goal->trajectory, blocking, compliant))
+        {
+            this->traj_in_joints_status_ = TRAJ_ERROR;
+        } else {
+            this->traj_in_joints_status_ = TRAJ_DONE;
+        }
+    } catch(CWamException &e) {
+        ROS_INFO("%s", e.what().c_str());
+    }
+    driver_.unlock();
+    ROS_DEBUG("[WamDriverNode]: FollowJointTrajectoryGoal SENT TO ROBOT!");
+}
 
-void WamControllerDriverNode::follow_joint_trajectoryStopCallback(void) 
-{ 
+void WamControllerDriverNode::follow_joint_trajectoryStopCallback(void)
+{
   ROS_DEBUG("[WamDriverNode]: New CancelFollowJointTrajectoryAction RECEIVED!");
   driver_.lock();
   driver_.stop_trajectory_in_joints();
   driver_.unlock();
   ROS_DEBUG("[WamDriverNode]: CancelFollowJointTrajectoryAction SENT TO ROBOT!");
-} 
+}
 
-bool WamControllerDriverNode::follow_joint_trajectoryIsFinishedCallback(void) 
-{ 
-  bool ret = false; 
-  ROS_DEBUG("[WamDriverNode]: FollowJointTrajectory NOT FINISHED");
+bool WamControllerDriverNode::follow_joint_trajectoryIsFinishedCallback(void)
+{
+  bool ret = false;
   // This sleep "assures" that the robot receives the trajectory and starts moving
-  sleep(1);
-
+  sleep(0.5f);
   driver_.lock();
-  if (! driver_.is_moving_trajectory()){
-    ret = true;
+  if (!driver_.is_moving())
+  {
     ROS_INFO("[WamDriverNode]: FollowJointTrajectory FINISHED!");
+    ret = true;
+  } else {
+    ROS_INFO("[WamDriverNode]: FollowJointTrajectory NOT FINISHED");
+    ret = false;
   }
-  driver_.unlock(); 
-  return ret; 
-} 
+  driver_.unlock();
+  return ret;
+}
 
-bool WamControllerDriverNode::follow_joint_trajectoryHasSucceedCallback(void) 
-{ 
-  bool ret = false; 
+bool WamControllerDriverNode::follow_joint_trajectoryHasSucceedCallback(void)
+{
+  bool ret = false;
+  // This sleep "assures" that the robot receives the trajectory and starts moving
+  sleep(0.5f);
+  driver_.lock();
+  if (!driver_.is_moving() && (traj_in_joints_status_== TRAJ_DONE))
+  {
+    ROS_INFO("[WamDriverNode]: FollowJointTrajectory SUCCEEDED!");
+    ret = true;
+  } else {
+    ROS_INFO("[WamDriverNode]: FollowJointTrajectory NOT SUCCEEDED");
+    ret = false;
+  }
+  driver_.unlock();
+  return ret;
+}
 
-  driver_.lock(); 
-    //if goal was accomplished 
-    //ret = true; 
-  driver_.unlock(); 
-
-  return ret; 
-} 
-
-void WamControllerDriverNode::follow_joint_trajectoryGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result) 
-{ 
+void WamControllerDriverNode::follow_joint_trajectoryGetResultCallback(control_msgs::FollowJointTrajectoryResultPtr& result)
+{
   // MSG has an empty result message
   driver_.lock();
   if (driver_.is_joint_trajectory_result_succeeded()) {
@@ -311,17 +328,18 @@ void WamControllerDriverNode::follow_joint_trajectoryGetResultCallback(control_m
   } else {
     result->error_code = -1;
   }
-  driver_.unlock(); 
-} 
+  driver_.unlock();
+}
 
-void WamControllerDriverNode::follow_joint_trajectoryGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback) 
-{ 
-  driver_.lock(); 
-    //keep track of feedback 
+void WamControllerDriverNode::follow_joint_trajectoryGetFeedbackCallback(control_msgs::FollowJointTrajectoryFeedbackPtr& feedback)
+{
+  driver_.lock();
+  //keep track of feedback 
   feedback->desired = driver_.get_desired_joint_trajectory_point();
   //ROS_DEBUG("feedback: %s", feedback->data.c_str()); 
-  driver_.unlock(); 
+  driver_.unlock();
 }
+
 
 /**************************************************************/
 
