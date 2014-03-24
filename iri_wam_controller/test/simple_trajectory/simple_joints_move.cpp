@@ -2,7 +2,6 @@
 #include <iri_wam_common_msgs/joints_move.h>
 #include <actionlib/client/simple_action_client.h>
 
-
 class RobotArm
 {
 private:
@@ -14,7 +13,7 @@ private:
 
 public:
   //! Initialize the action client and wait for action server to come up
-  RobotArm():srv_name_("/iri_wam_controller/joints_move")
+  RobotArm():srv_name_("/iri_wam/iri_wam_controller/joints_move")
   {
     client = n.serviceClient<iri_wam_common_msgs::joints_move>(this->srv_name_.c_str());
   }
@@ -22,6 +21,7 @@ public:
   //! Clean up the action client
   ~RobotArm()
   {
+
   }
 
   //! Sends the command to start a given joints position
@@ -42,8 +42,6 @@ public:
     //our Joints move position variable
     iri_wam_common_msgs::joints_move srv;
     srv.request.joints.resize(7);
-    srv.request.velocities.resize(7);
-    srv.request.accelerations.resize(7);
     srv.request.joints[0] = 0.0;
     srv.request.joints[1] = 0.0;
     srv.request.joints[2] = 0.0;
@@ -51,20 +49,8 @@ public:
     srv.request.joints[4] = 0.0;
     srv.request.joints[5] = 0.0;
     srv.request.joints[6] = 0.0;
-    srv.request.velocities[0] = 0.0;
-    srv.request.velocities[1] = 0.0;
-    srv.request.velocities[2] = 0.0;
-    srv.request.velocities[3] = 0.0;
-    srv.request.velocities[4] = 0.0;
-    srv.request.velocities[5] = 0.0;
-    srv.request.velocities[6] = 0.0;
-    srv.request.accelerations[0] = 0.0;
-    srv.request.accelerations[1] = 0.0;
-    srv.request.accelerations[2] = 0.0;
-    srv.request.accelerations[3] = 0.0;
-    srv.request.accelerations[4] = 0.0;
-    srv.request.accelerations[5] = 0.0;
-    srv.request.accelerations[6] = 0.0;
+    srv.request.velocity = 0.2;
+    srv.request.acceleration = 0.2;
 
     return srv;
   }
@@ -74,8 +60,6 @@ public:
     //our Joints move position variable
     iri_wam_common_msgs::joints_move srv;
     srv.request.joints.resize(7);
-    srv.request.velocities.resize(7);
-    srv.request.accelerations.resize(7);
     srv.request.joints[0] = 0.0;
     srv.request.joints[1] = 0.0;
     srv.request.joints[2] = 0.0;
@@ -83,20 +67,8 @@ public:
     srv.request.joints[4] = 0.0;
     srv.request.joints[5] = 0.0;
     srv.request.joints[6] = 0.0;
-    srv.request.velocities[0] = 0.0;
-    srv.request.velocities[1] = 0.0;
-    srv.request.velocities[2] = 0.0;
-    srv.request.velocities[3] = 0.0;
-    srv.request.velocities[4] = 0.0;
-    srv.request.velocities[5] = 0.0;
-    srv.request.velocities[6] = 0.0;
-    srv.request.accelerations[0] = 0.0;
-    srv.request.accelerations[1] = 0.0;
-    srv.request.accelerations[2] = 0.0;
-    srv.request.accelerations[3] = 0.0;
-    srv.request.accelerations[4] = 0.0;
-    srv.request.accelerations[5] = 0.0;
-    srv.request.accelerations[6] = 0.0;
+    srv.request.velocity = 1.5;
+    srv.request.acceleration = 1.5;
 
     return srv;
   }
@@ -113,6 +85,5 @@ int main(int argc, char** argv)
   // Start the trajectory
   arm.startJointsMove(arm.armAtHomePosition());
   arm.startJointsMove(arm.armAtInitialPosition());
-  
 }
 

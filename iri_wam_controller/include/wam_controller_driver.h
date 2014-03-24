@@ -169,7 +169,7 @@ class WamControllerDriver : public iri_base_driver::IriBaseDriver
     /**
      * Checks if the lenght of the vector is correct and if NaN are present
      */
-    bool is_joints_move_request_valid(const std::vector<double> & angles);
+    bool is_joint_vector_valid(const std::vector<double> & angles);
 
     /**
      * \brief check if the wam is moving right now after a moveTo
@@ -189,9 +189,9 @@ class WamControllerDriver : public iri_base_driver::IriBaseDriver
      * @ trajectory: list of joints, 
                      can include only position or positions/velocities/accelerations
      */
-    void move_trajectory_in_joints(const trajectory_msgs::JointTrajectory & trajectory);
+    bool move_trajectory_in_joints(const trajectory_msgs::JointTrajectory &trajectory, const bool &blocking=false, const bool &compliant=false);
     void stop_trajectory_in_joints();
-    void move_in_joints(std::vector<double> *angles, std::vector<double>* vels = NULL, std::vector<double>* accs = NULL);
+    bool move_in_joints(std::vector<double> *angles, const double &vel=0.5f, const double &accel=0.5f);
     void wait_move_end();
     void hold_on();
     void hold_off();
