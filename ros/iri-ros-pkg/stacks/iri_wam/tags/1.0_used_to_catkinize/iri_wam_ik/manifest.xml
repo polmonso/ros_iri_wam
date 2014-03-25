@@ -1,0 +1,21 @@
+<package>
+   <description brief="iri_wam_ik">
+    <p>Inverse Kinematic package for the barret WAM arm</p>
+    <p>It currently support the following kinematics implementations:</p>
+    <ul>
+       <li>wam_ikac: analitic kinematic by Adria Colomer</li>
+       <li>wam_ikj: closed-loop kinematic by Adria Colomer</li>
+       <li>wam_ik_kdl: KDL kinematic</li>
+    </ul>
+  </description>
+  <author>Adria Colomer</author>
+  <license>LGPL</license>
+  <url>http://ros.org/wiki/iri_wam_ik</url>
+  <depend package="roscpp"/>
+  <depend package="geometry_msgs" /> 
+  <depend package="iri_wam_common_msgs" /> 
+  <depend package="tf"/>
+  <depend package="sensor_msgs"/>
+  <depend package="orocos_kdl"/>
+</package>
+

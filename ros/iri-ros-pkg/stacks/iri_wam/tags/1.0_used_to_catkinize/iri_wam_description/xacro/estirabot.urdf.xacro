@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot name="estirabot" xmlns:xacro="http://ros.org/wiki/xacro" >
+  
+  <!-- Set up definitions of parts of the robot body -->  
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_base.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_1.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_2.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_3.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_4.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_5.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_6.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_7.urdf.xacro" />
+  <xacro:include filename="$(find iri_wam_description)/xacro/iri_wam_tcp.urdf.xacro" />
+
+  <!-- The first use of a macro.  This one was defined in wambase.urdf.xacro above.
+       A macro like this will expand to a set of link and joint definitions, and to additional
+       Gazebo-related extensions (sensor plugins, etc).  The macro takes an argument, name, 
+       that equals "base", and uses it to generate names for its component links and joints 
+       (e.g., base_link).  The included origin block is also an argument to the macro.  By convention, 
+       the origin block defines where the component is w.r.t its parent (in this case the parent 
+       is the world frame). For more, see http://www.ros.org/wiki/xacro -->
+
+  <property name="ref1" value="estirabot"/>
+
+  <xacro:wambase prefix="${ref1}"/>
+  <xacro:wam1 prefix="${ref1}" parent="${ref1}_link_base"/>
+  <xacro:wam2 prefix="${ref1}" parent="${ref1}_link_1"/>
+  <xacro:wam3 prefix="${ref1}" parent="${ref1}_link_2"/>
+  <xacro:wam4 prefix="${ref1}" parent="${ref1}_link_3"/>
+  <xacro:wam5 prefix="${ref1}" parent="${ref1}_link_4"/>
+  <xacro:wam6 prefix="${ref1}" parent="${ref1}_link_5"/>
+  <xacro:wam7 prefix="${ref1}" parent="${ref1}_link_6"/>
+  <xacro:wamtcp prefix="${ref1}" parent="${ref1}_link_7"/>
+
+</robot>
+

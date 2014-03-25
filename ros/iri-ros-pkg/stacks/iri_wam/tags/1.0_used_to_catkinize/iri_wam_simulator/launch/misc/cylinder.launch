@@ -1,0 +1,42 @@
+<launch>
+
+
+  <arg name="radius_"  default="0.25"   />
+  <arg name="length_" default="0.25"   />
+  
+  <arg name="pos_stick_x" default="0.775" />
+  <arg name="pos_stick_y" default="-0.5"   />
+  <arg name="pos_stick_z" default="0.25"  />
+  <arg name="rot_roll" default="-90"   />
+  <arg name="rot_pitch" default="90"   />
+  <arg name="rot_yaw" default="0"   />
+
+  <arg name="name_obstacle_" default="cylinder" />
+
+  <!-- Gazebo -->
+  <param name="$(arg name_obstacle_)" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/misc/cylinder.urdf.xacro'" />
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a cylinder -->
+  <node name="box_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -model $(arg name_obstacle_) -param $(arg name_obstacle_) -x $(arg pos_stick_x) -y $(arg pos_stick_y) -z $(arg pos_stick_z) -r $(arg rot_roll) -p $(arg rot_pitch) -y $(arg rot_yaw)"/>
+ 
+  <!--ROS-->
+<!--
+  <node name="make_obstacles_$(arg name_obstacle_)" pkg="iri_wam_arm_navigation" type="stick" output="screen" >
+ 	<param name="rpy"          value="true"				  />
+ 	<param name="quaternion"   value="false"			  />
+ 	<param name="posicion_x"   value="$(arg pos_stick_x)" />
+ 	<param name="posicion_y"   value="$(arg pos_stick_y)" />
+ 	<param name="posicion_z"   value="$(arg pos_stick_z)" />
+ 	<param name="roll"         value="$(arg rot_roll)" />
+ 	<param name="pitch"        value="$(arg rot_pitch)" />
+ 	<param name="yaw"          value="$(arg rot_yaw)" />
+ 	<param name="name_obstacle" value="$(arg name_obstacle_)"/>
+ 	<param name="radius"    value="$(arg radius_)"  />
+ 	<param name="length"   value="$(arg length_)" />
+  </node>
+-->
+  
+  <node name="stick_broadcaster_$(arg name_obstacle_)" pkg="tf" type="static_transform_publisher"
+        args="$(arg pos_stick_x) $(arg pos_stick_y) $(arg pos_stick_z) $(arg rot_roll) $(arg rot_pitch) $(arg rot_yaw) /world /stick 100" />
+ 
+</launch>

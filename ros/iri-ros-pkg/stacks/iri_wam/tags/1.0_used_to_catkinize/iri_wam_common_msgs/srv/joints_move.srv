@@ -1,0 +1,8 @@
+# Mandatory
+float64[] joints
+
+# Optional.
+float64 velocity
+float64 acceleration
+---
+int8 success

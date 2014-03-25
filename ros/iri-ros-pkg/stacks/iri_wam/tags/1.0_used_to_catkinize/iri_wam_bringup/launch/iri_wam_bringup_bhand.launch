@@ -1,0 +1,26 @@
+<launch>
+
+    <arg name="ROBOT" default="iri_wam" />
+
+    <group ns="$(arg ROBOT)">
+
+        <!-- publish barrett_hand_tcp tf -->
+        <node pkg="tf" 
+              type="static_transform_publisher"
+              name="bhand_tcp_tf"
+              args="0 0 0.10 0 0 0 1 /$(arg ROBOT)_link_tcp /$(arg ROBOT)_link_bhand_tcp 100"
+        </node>
+
+        <!-- Tool center point for the barrett_hand -->
+        <node pkg="iri_wam_tcp_ik"
+              type="iri_wam_tcp_ik"
+              name="$(arg ROBOT)_bhand_ik" >
+            <param name="robot_base" type="str" value="/$(arg ROBOT)_link_base" />
+            <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_tcp" />
+            <param name="tool_tcp"  type="str" value="/$(arg ROBOT)_link_bhand_tcp" />
+            <remap from="$(arg ROBOT)_bhand_ik/wamik" to="$(arg ROBOT)_ik/wamik" />
+        </node>
+
+    </group>
+
+</launch>

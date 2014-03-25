@@ -1,0 +1,9 @@
+int32 filterID
+int32 zone
+---
+geometry_msgs/PoseStamped graspPose
+geometry_msgs/PoseStamped maxWrinkle
+float32 wrinkleness
+geometry_msgs/PoseStamped higherPoint
+geometry_msgs/PoseStamped maxWrinkleBiggerObject
+geometry_msgs/PoseStamped maxWrinkleIntersection

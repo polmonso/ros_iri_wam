@@ -1,0 +1,8 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~robot_base" : \b [str] Robot reference tcp frame min: , default: /iri_wam_link_base, max: 
+- \b "~robot_tcp" : \b [str] Robot reference tcp frame min: , default: /iri_wam_tcp, max: 
+- \b "~tool_tcp" : \b [str] Tool tcp frame min: , default: /bhand_tcp, max: 
+

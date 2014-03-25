@@ -1,0 +1,36 @@
+<launch>
+
+    <arg name="ROBOT" default="iri_wam" />
+
+    <group ns="$(arg ROBOT)" >
+
+        <!-- publish gripper_tcp tf -->
+        <node pkg="tf"
+              type="static_transform_publisher"
+              name="gripper_tcp_tf"
+              args="0 0 0.10 0 0 0 1 /$(arg ROBOT)_link_tcp /$(arg ROBOT)_link_gripper_tcp 100" >
+        </node>
+
+        <!-- Tool center point for the gripper -->
+        <node pkg="iri_wam_tcp_ik"
+              type="iri_wam_tcp_ik"
+              name="$(arg ROBOT)_gripper_ik">
+           <param name="robot_base" type="str" value="/$(arg ROBOT)_link_base" />
+           <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_tcp" />
+           <param name="tool_tcp"  type="str" value="/$(arg ROBOT)_link_gripper_tcp" />
+           <remap from="$(arg ROBOT)_gripper_ik/wamik" to="$(arg ROBOT)_ik/wamik" />
+        </node>
+
+        <!-- IRI Gripper -->
+        <node pkg="iri_dynamixel_nc_gripper"
+              type="iri_dynamixel_nc_gripper"
+              name="gripper"
+              output="screen"
+              respawn="true">
+           <param name="XML_path" value="$(find iri_dynamixel_nc_gripper)/" />
+        </node>
+
+    </group>
+
+</launch>
+

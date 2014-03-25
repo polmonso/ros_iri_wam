@@ -1,0 +1,17 @@
+<launch>
+    <param name="ompl_planning/publish_diagnostics" type="bool" value="true"/>
+    <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_planning_environment.launch" />
+    <include file="$(find planning_environment)/launch/environment_server.launch">
+        <arg name="use_monitor" value="true" />
+        <arg name="use_collision_map" value="false" />
+    </include>
+    <include file="$(find iri_wam_arm_navigation)/launch/constraint_aware_kinematics.launch" />
+    <include file="$(find iri_wam_arm_navigation)/launch/ompl_planning.launch" />
+    <include file="$(find iri_wam_arm_navigation)/launch/trajectory_filter_server.launch" />
+    <include file="$(find iri_wam_arm_navigation)/launch/move_iri_wam.launch" />
+    <include file="$(find iri_wam_move_arm)/launch/iri_wam_move_arm.launch" /> 
+    <node name="simple_arm_navigation" 
+          pkg="iri_wam_arm_navigation"
+          type="iri_wam_arm_navigation"
+          output="screen" />
+</launch>

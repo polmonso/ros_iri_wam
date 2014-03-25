@@ -1,0 +1,4 @@
+<launch>
+  <machine name="bawseclon" address="192.168.101.19" env-loader="/opt/ros/hydro/setup.sh" default="true" />
+  <!-- <machine name="quadser" address="192.168.100.102" env-loader="/opt/ros/hydro/setup.sh" default="true" /> -->
+</launch>

@@ -1,0 +1,15 @@
+<package>
+  <description brief="iri_bhand_simulator">
+
+     This package contain the necessary to launch barret hand into gazebo.
+     Note:Under Construction
+
+  </description>
+  <author>irojas</author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes="Under Construction"/>
+  <url>http://ros.org/wiki/iri_bhand_simulator</url>
+
+</package>
+
+

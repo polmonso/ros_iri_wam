@@ -1,0 +1,6 @@
+geometry_msgs/PoseStamped init_pose
+geometry_msgs/PoseStamped goal_pose
+int16 states
+---
+geometry_msgs/PoseStamped[] poses_solution
+bool solution_found

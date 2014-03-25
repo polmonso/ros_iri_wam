@@ -1,0 +1,28 @@
+<launch> 
+
+    <arg name="ROBOT" default="iri_wam"/>
+    <arg name="controller_name" default="wam_wrapper" />
+
+    <!-- Load URDF WAM model -->
+    <include file="$(find iri_wam_description)/launch/iri_wam_description.launch" />
+
+    <!-- Robot state publisher node -->
+    <!-- published topics: -->
+    <!-- subscribed topics: $(env ROBOT)/joint_states -->
+    <!-- service clients: -->
+    <!-- service servers: -->
+    <!-- action clients: -->
+    <!-- action servers: -->
+    <node pkg ="robot_state_publisher"
+          type="state_publisher"
+          name="robot_state_publisher">
+      <!-- <param name="tf_prefix" value="$(arg ROBOT)" type="str" /> -->
+    </node>
+
+    <!-- Publish Inverse Kinematics -->
+    <node name="wam_ik" pkg="iri_wam_ik" type="wam_ikac">
+      <remap from="wam_ik/joint_states"  to="/joint_states"/>
+      <remap from="wam_ik/joints_move"   to="/$(arg controller_name)/joints_move"/>
+    </node>
+
+</launch>

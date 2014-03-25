@@ -1,0 +1,27 @@
+<!--
+  Example launch file for octomap_server mapping:
+  Listens to incoming PointCloud2 data and incrementally builds an octomap.
+  The data is sent out in different representations.
+
+  Copy this file into your workspace and adjust as needed, see
+  www.ros.org/wiki/octomap_server for details
+-->
+<launch>
+
+    <arg name="ROBOT" default="iri_wam" />
+
+    <group ns="$(arg ROBOT)" >
+
+        <!-- Kinect Camera Transformation -->
+        <node pkg="tf"
+              type="static_transform_publisher"
+              name="kinect"
+              args="0.9014760 -0.0594 0.7251720 -0.6411 0.0380 0.7730 0.0043 /$(arg ROBOT)_link_base camera_link 300" >
+        </node>
+
+        <!-- Kinect -->
+        <include file="$(find openni_launch)/launch/openni.launch" />
+
+    </group>
+
+</launch>

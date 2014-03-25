@@ -1,0 +1,8 @@
+<launch>
+    <include file="$(find iri_wam_arm_navigation)/launch/iri_wam_planning_environment.launch" />
+    <node pkg="ompl_ros_interface" type="ompl_ros" name="ompl_planning" output="screen">
+        <param name="default_planner_config" type="string" value="SBLkConfig1" />
+        <param name="publish_diagnostics" type="bool" value="true" />
+        <rosparam command="load" file="$(find iri_wam_arm_navigation)/config/ompl_planning.yaml" />
+    </node>
+</launch>

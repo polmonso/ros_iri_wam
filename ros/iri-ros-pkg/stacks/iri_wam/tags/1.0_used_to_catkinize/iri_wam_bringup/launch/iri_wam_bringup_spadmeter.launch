@@ -1,0 +1,31 @@
+<launch>
+
+    <arg name="ROBOT"    default="iri_wam" />
+
+    <!-- publish spadmeter_tcp tf -->
+    <node name="spad_tcp_tf" pkg="tf" type="static_transform_publisher"
+          args="-0.09 -0.025 0.150 0 0 0 1 /$(arg ROBOT)_link_tcp /$(arg ROBOT)_link_spad_tcp 100" />
+
+    <!-- Tool center point for the spadmeter -->
+    <node name="$(arg ROBOT)_spad_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik">
+       <param name="robot_base" type="str" value="/$(arg ROBOT)_link_base" />
+       <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_tcp" />
+       <param name="tool_tcp"  type="str" value="/$(arg ROBOT)_link_spad_tcp" />
+       <remap from="$(arg ROBOT)_spad_ik/wamik" to="$(arg ROBOT)_ik/wamik" />
+    </node>
+    
+    <group ns="skills">
+  	  <!-- Chlophyll Meter Server node -->
+  	  <node name="chlorophyll_meter"
+            pkg="zyonz_chlorophyll_meter"
+  	        type="zyonz_chlorophyll_meter"
+  	        output="screen"
+  	        respawn="true">
+  	    <remap from="/zyonz_chlorophyll_meter/take_sample"
+                 to="/take_sample" />
+        <param name="XML_path" value="$(find zyonz_chlorophyll_meter)/" />
+      </node>
+    </group>
+ 
+
+</launch>

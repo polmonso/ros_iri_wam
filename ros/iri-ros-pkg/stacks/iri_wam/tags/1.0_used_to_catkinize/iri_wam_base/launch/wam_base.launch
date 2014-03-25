@@ -1,0 +1,28 @@
+<!-- Remember to set the name of the ROBOT and its IP address. -->
+<launch> 
+
+    <arg name="ROBOT"  default="iri_wam"/>
+    <arg name="IP" />
+    <arg name="moveit" default="False"/>
+
+    <arg unless="$(arg moveit)" name="controller_name" value="wam_wrapper" />
+    <arg if="$(arg moveit)" name="controller_name" value="iri_wam_controller" />
+
+    <!-- WAM ROS driver -->
+    <include file="$(find iri_wam_wrapper)/launch/iri_wam_wrapper.launch">
+       <arg name="ROBOT" value="$(arg ROBOT)"/>
+       <arg name="IP" value="$(arg IP)"/>
+       <arg name="controller_name" value="$(arg ROBOT)"/>
+    </include>
+
+    <!-- Common base part -->
+    <include file="$(find iri_wam_base)/launch/wam_common_base.launch">
+       <arg name="ROBOT" value="$(arg ROBOT)"/>
+       <arg name="controller_name" value="$(arg controller_name)"/>
+    </include>
+
+    <include file="$(find iri_wam_moveit_state_display)/launch/iri_wam_moveit_state_display.launch" if="$(arg moveit)">
+       <arg name="ROBOT" value="$(arg ROBOT)"/>
+    </include>
+
+</launch>

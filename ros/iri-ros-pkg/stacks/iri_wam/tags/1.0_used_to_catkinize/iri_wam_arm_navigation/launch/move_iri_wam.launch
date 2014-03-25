@@ -1,0 +1,7 @@
+<launch>
+	<remap from="/move_iri_wam" to="/syn_move_arm" />
+    <node pkg="move_arm" type="move_arm_simple_action" name="iri_wam_move_arm">
+        <param name="group" type="string" value="iri_wam" />
+        <remap from="arm_ik" to="iri_wam_iri_wam_kinematics/get_constraint_aware_ik" />
+    </node>
+ </launch>

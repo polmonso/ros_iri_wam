@@ -1,0 +1,7 @@
+<launch>
+    <node name="iri_wam_dmp_tracker" pkg="iri_wam_dmp_tracker" type="iri_wam_dmp_tracker" >
+    <remap from="~DMPTracker_output" to="/estirabot/estirabot_controller/DMPTrackerNewGoal"/>
+    <remap from="~DMP_ik" to="/estirabot/estirabot_bhand_ik/get_wam_ik"/>
+    <remap from="~pose_surface" to="/pose_surface"/>
+    </node>
+</launch>

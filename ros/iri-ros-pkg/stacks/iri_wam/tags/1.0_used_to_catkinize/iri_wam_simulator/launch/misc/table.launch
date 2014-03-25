@@ -1,0 +1,17 @@
+<launch>
+
+  <arg name="pos_table_x" default="1.0" />
+  <arg name="pos_table_y" default="0.0" />
+  <arg name="pos_table_z" default="0.0" />
+
+  <arg name="name_obstacle_" default="table"   />
+  <!-- Gazebo -->
+  <!-- send table urdf to param server -->
+  <param name="$(arg name_obstacle_)" command="$(find xacro)/xacro.py '$(find iri_wam_description)/xacro/misc/table.urdf.xacro'" />
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a table -->
+  <node name="table_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -model $(arg name_obstacle_) -param $(arg name_obstacle_) -x $(arg pos_table_x) -y $(arg pos_table_y) -z $(arg pos_table_z)"/>
+
+
+
+</launch>

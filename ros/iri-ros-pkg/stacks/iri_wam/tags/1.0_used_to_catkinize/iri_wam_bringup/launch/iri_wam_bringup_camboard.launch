@@ -1,0 +1,33 @@
+<launch>
+
+    <arg name="ROBOT" default="iri_wam" />
+
+    <group ns="$(arg ROBOT)">
+        <!-- publish camboard_tcp tf -->
+        <node name="camboard_tcp_tf"
+              pkg="tf"
+              type="static_transform_publisher"
+              args="0.0 0.0 0.072 -0.0167 0.0126 -0.6892 0.7242 /$(arg ROBOT)_link_tcp /$(arg ROBOT)_link_camboard_tcp 100" >
+        </node>
+
+        <!-- Starts PMD Camboard camera node -->
+        <include file="$(find iri_pmdcamera)/launch/camboard_images_rectified.launch" >
+            <arg name="camera"           value="camboard" />
+            <arg name="frame_id"         value="/$(arg ROBOT)_link_camboard_tcp" />
+            <arg name="camera_type"      value="1" />
+            <arg name="integration_time" value="700" />
+            <arg name="modulation_freq"  value="21000000" />
+            <arg name="respawn"          value="true" />
+        </include> 
+        
+        <!-- Tool center point for camboard camera -->
+        <node name="$(arg ROBOT)_camboard_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik" respawn="true">
+           <param name="robot_base" type="str" value="/$(arg ROBOT)_link_base" />
+           <param name="robot_tcp"  type="str" value="/$(arg ROBOT)_link_tcp" />
+           <param name="tool_tcp"   type="str" value="/$(arg ROBOT)_link_camboard_tcp" />
+           <remap from="$(arg ROBOT)_camboard_ik/wamik" to="$(arg ROBOT)_ik/wamik" />
+        </node>
+
+    </group>
+
+</launch>

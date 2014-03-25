@@ -1,0 +1,14 @@
+<package>
+  <description brief="iri_bhand_description">
+
+     This packages is a description of the Barret Hand in XACRO
+	Note:Under Construction
+  </description>
+  <author>IRI Robotics Lab, Ivan Rojas (irojas@iri.upc.edu)</author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes="Under construction"/>
+  <url>http://ros.org/wiki/iri_bhand_description</url>
+
+</package>
+
+

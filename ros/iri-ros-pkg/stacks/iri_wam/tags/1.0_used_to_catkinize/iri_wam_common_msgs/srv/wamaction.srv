@@ -1,0 +1,7 @@
+int32 action
+int32 hand
+int32 zone
+int32 pointDescription
+bool intersection
+---
+int8 success

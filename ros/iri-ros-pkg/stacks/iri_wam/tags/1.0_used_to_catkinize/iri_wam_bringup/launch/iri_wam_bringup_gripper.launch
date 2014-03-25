@@ -1,0 +1,47 @@
+<launch>
+
+    <arg name="ROBOT" default="iri_wam" />
+
+    <group ns="$(arg ROBOT)" >
+
+        <!-- publish gripper_tcp tf -->
+        <node name="gripper_tcp_tf" pkg="tf" type="static_transform_publisher"
+              args="0 0 0.10 0 0 0 1 /$(arg ROBOT)_link_tcp /$(arg ROBOT)_link_gripper_tcp 100" />
+
+        <!-- Tool center point for the gripper -->
+        <node name="$(arg ROBOT)_gripper_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik">
+           <param name="robot_base" type="str" value="/$(arg ROBOT)_link_base" />
+           <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_tcp" />
+           <param name="tool_tcp"  type="str" value="/$(arg ROBOT)_link_gripper_tcp" />
+           <remap from="$(arg ROBOT)_gripper_ik/wamik" to="$(arg ROBOT)_ik/wamik" />
+        </node>
+
+        <!-- IRI Gripper -->
+        <node pkg="iri_dynamixel_nc_gripper"
+              type="iri_dynamixel_nc_gripper"
+              name="gripper"
+              output="screen"
+              respawn="true">
+           <param name="XML_path" value="$(find iri_dynamixel_nc_gripper)/" />
+        </node>
+
+        <!-- Skills -->
+        <group ns="skills">
+
+            <!-- Grasp actions -->
+            <node pkg="iri_grasp_actions"
+                  type="iri_grasp_actions"
+                  name="grasp">
+                <remap from="close_gripper"   to="/$(arg ROBOT)/gripper/tool_close_action" />
+                <remap from="open_gripper"   to="/$(arg ROBOT)/gripper/tool_open_action" />
+                <remap from="grasp/joints_move" to="/$(arg ROBOT)/$(arg ROBOT)_controller/joints_move" />
+                <remap from="grasp/get_wam_ik" to="/$(arg ROBOT)/$(arg ROBOT)_gripper_ik/get_wam_ik" />
+                <param name="using_bhand" value="false" />
+            </node>
+            
+        </group>
+
+    </group>
+
+</launch>
+

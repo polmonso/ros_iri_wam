@@ -1,0 +1,9 @@
+\subsubsection usage Usage
+\verbatim
+<node name="WamTcpIkAlgorithm" pkg="iri_wam_tcp_ik" type="WamTcpIkAlgorithm">
+  <param name="robot_base" type="str" value="/iri_wam_link_base" />
+  <param name="robot_tcp" type="str" value="/iri_wam_tcp" />
+  <param name="tool_tcp" type="str" value="/bhand_tcp" />
+</node>
+\endverbatim
+

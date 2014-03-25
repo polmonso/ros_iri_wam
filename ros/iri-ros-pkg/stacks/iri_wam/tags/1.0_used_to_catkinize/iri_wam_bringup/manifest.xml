@@ -1,0 +1,17 @@
+<package>
+  <description brief="iri_wam_bringup">
+    <p>
+        This package contains the required launches to easily configure and launch the iri_wam_wrapper.
+   </p>
+  </description>
+  <author>IRI Robotics Lab, Sergi Foix (sfoix@iri.upc.edu)</author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_bringup</url>
+  <depend package="iri_wam_controller" />
+  <depend package="iri_wam_ik" />
+  <depend package="iri_wam_tcp_ik" />
+  <depend package="robot_state_publisher" />
+</package>
+
+

@@ -1,0 +1,28 @@
+<launch>
+
+  <arg name="ROBOT"           default="iri_wam" />
+  <arg name="refresh_rate"    default="100" />
+  <arg name="IK"              default="True" />
+
+  <node pkg ="iri_wam_wrapper"
+        type="iri_wam_wrapper"
+        name="$(arg ROBOT)_controller"
+        output="screen">
+    <param name="robot_name"   value="$(arg ROBOT)" />
+    <param name="refresh_rate" value="$(arg refresh_rate)" />
+  </node>
+
+  <!-- Publish Robot Inverse Kinematics -->
+  <include file="$(find iri_wam_ik)/launch/iri_wam_ik.launch" if="$(arg IK)" >
+    <arg name="ROBOT" value="$(arg ROBOT)"/>
+  </include>
+
+  <!-- Publish TCP Robot Inverse Kinematics -->
+  <node name="$(arg ROBOT)_tcp_ik" pkg="iri_wam_tcp_ik" type="iri_wam_tcp_ik" if="$(arg IK)" >
+    <param name="robot_base" type="str" value="/$(arg ROBOT)_link_base" />
+    <param name="robot_tcp" type="str" value="/$(arg ROBOT)_link_7" />
+    <param name="tool_tcp"  type="str" value="/$(arg ROBOT)_link_tcp" />
+    <remap from="$(arg ROBOT)_tcp_ik/wamik" to="$(arg ROBOT)_ik/wamik" />
+  </node>
+
+</launch>

@@ -1,0 +1,17 @@
+<package>
+  <description brief="iri_wam_tutorial">
+
+     iri_wam_tutorial
+
+  </description>
+  <author></author>
+  <license>LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_tutorial</url>
+  <depend package="roscpp"/>
+  <depend package="geometry_msgs" /> 
+  <depend package="iri_wam_common_msgs" /> 
+  <depend package="tf"/>
+</package>
+
+

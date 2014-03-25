@@ -1,0 +1,6 @@
+\subsubsection usage Usage
+\verbatim
+<node name="WamMoveArmAlgorithm" pkg="iri_wam_move_arm" type="WamMoveArmAlgorithm">
+</node>
+\endverbatim
+

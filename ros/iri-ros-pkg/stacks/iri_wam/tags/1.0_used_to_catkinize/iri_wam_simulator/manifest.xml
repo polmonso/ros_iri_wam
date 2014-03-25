@@ -1,0 +1,22 @@
+<package>
+  <name>iri_wam_simulator</name>
+  <version>1.0.0</version>
+  <description brief="iri_wam_simulator">
+    The iri_wam_simulator contain configuration of controllers (pr2_controllers) and Simulated WAM in Gazebo.
+    This package contain the PID configuration of real WAm to simulated WAM and contain the configuration for use the controller for Gazebo.
+    The main launch is wam_sim.launch, and in misc directory you find a wam_sim_4boxes.launch, this is a demo with simulated robot and 4 boxes in the world.
+  </description>
+  <author>IRI Robotics Lab, Ivan Rojas (ivan.rojas.j@gmail.com)</author>
+  <maintainer email="sfoix@iri.upc.edu"> Sergi Foix</maintainer>
+  <license>LGPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/iri_wam_simulator</url>
+  <depend package="controller_manager"/>
+  <depend package="robot_state_publisher"/>
+  <depend package="effort_controllers"/>
+  <depend package="joint_state_controller"/>
+  <depend package="gazebo_ros"/>
+  <depend package="xacro"/>
+</package>
+
+
