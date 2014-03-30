@@ -4,7 +4,7 @@
     	<arg name="ROBOT"     value="zyonz" />
     	<arg name="IK"        value="True"  />
     	<arg name="SPADMETER" value="True" />
-      <arg name="CAMSPAD"   value="False" />
+        <arg name="CAMSPAD"   value="False" />
     	<arg name="CAMBOARD"  value="False" />
     	<arg name="BHAND"     value="False" />
     	<arg name="GRIPPER"   value="False" />
