@@ -15,6 +15,7 @@
   <depend package="robot_state_publisher"/>
   <depend package="effort_controllers"/>
   <depend package="joint_state_controller"/>
+  <depend package="joint_trajectory_controller"/>
   <depend package="gazebo_ros"/>
   <depend package="xacro"/>
 </package>
