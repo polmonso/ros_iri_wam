@@ -1,8 +1,17 @@
 <launch>
-    <node name="iri_wam_dmp_tracker" pkg="iri_wam_dmp_tracker" type="iri_wam_dmp_tracker" >
-        <remap from="~DMPTracker_output" to="/iri_wam/iri_wam_controller/DMPTrackerNewGoal"/>
-        <remap from="~DMP_ik" to="/iri_wam/iri_wam_tcp_ik/get_wam_ik"/>
-        <remap from="~pose_surface" to="/pose_keyboard_teleop/output_pose"/>
-        <!-- <remap from="~pose_surface" to="/pose_st"/> -->
+
+<arg name="ROBOT" default="iri_wam" />
+
+  <group ns="$(arg ROBOT)">
+
+    <node name="$(arg ROBOT)_dmp_tracker" pkg="iri_wam_dmp_tracker" type="iri_wam_dmp_tracker" >
+        <remap from="~DMPTracker_output" to="/$(arg ROBOT)/$(arg ROBOT)_controller/DMPTrackerNewGoal"/>
+
+        <remap from="~DMP_ik" to="/$(arg ROBOT)/$(arg ROBOT)_tcp_ik/get_wam_ik"/>
+        <!-- <remap from="~pose_surface" to="/pose_keyboard_teleop/output_pose"/> -->
+        <remap from="~pose_surface" to="/pose_st"/>
     </node>
+
+  </group>
+
 </launch>
